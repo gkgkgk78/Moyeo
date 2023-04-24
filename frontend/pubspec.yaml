@@ -95,6 +95,14 @@ dependencies:
   # splash screen for under Android 12
   flutter_native_splash: ^2.2.19
 
+  # flutter gradient color package
+  flutter_gradient_colors: ^2.1.1
+
+  # main carousel/card
+  carousel_slider: ^4.2.1
+  image_card: ^0.0.4
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

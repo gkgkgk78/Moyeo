@@ -4,6 +4,7 @@ import 'package:danim/views/search_bar_view.dart';
 import 'package:danim/views/timeline_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import '../view_models/app_view_model.dart';
 
@@ -42,6 +43,9 @@ class HomeFeedPage extends StatelessWidget {
                       right: 0,
                       bottom: 0,
                       child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black)
+                        ),
                         margin:
                             const EdgeInsets.only(left: 10, right: 10, top: 10),
                         child: ChangeNotifierProvider<SearchBarViewModel>(

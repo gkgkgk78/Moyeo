@@ -24,12 +24,11 @@ Future<Dio> authDio(BuildContext context) async {
 
   dio.interceptors.add(
     InterceptorsWrapper(
-      // UI 변경하려고 해둠 나중에 주석 해제 필수
-      // onRequest: (options, handler) async {
-      //   final accessToken = await storage.read(key: 'accessToken');
-      //   options.headers['Authorization'] = 'Bearer $accessToken';
-      //   return handler.next(options);
-      // },
+      onRequest: (options, handler) async {
+        final accessToken = await storage.read(key: 'accessToken');
+        options.headers['Authorization'] = 'Bearer $accessToken';
+        return handler.next(options);
+      },
       onError: (error, handler) async {
         // accessToken 만료 됐을 때
         // 401이 SocketException 으로 와서 어쩔 수 없이 이렇게 처리
