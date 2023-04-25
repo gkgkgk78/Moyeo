@@ -114,9 +114,18 @@ class TimelineDetailPage extends StatelessWidget {
                             (!viewModel
                                 .timelineDetails[timelineIndex].isExpand),
                         lineXY: 0.1,
+                        beforeLineStyle: const LineStyle(
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                        afterLineStyle: const LineStyle(
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
                         indicatorStyle: IndicatorStyle(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
+                          color: Colors.grey,
                           indicator: ExtendedImage.network(
                             viewModel.timelineDetails[timelineIndex].flag,
                             fit: BoxFit.cover,
