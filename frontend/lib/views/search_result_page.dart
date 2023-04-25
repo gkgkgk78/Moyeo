@@ -53,6 +53,7 @@ class SearchResultView extends StatelessWidget {
                                                   constraints.maxWidth * 0.32,
                                               child: GestureDetector(
                                                 child: ExtendedImage.network(
+                                                  borderRadius: BorderRadius.circular(15),
                                                   fit: BoxFit.cover,
                                                   viewModel.searchedPosts[index]
                                                       .thumbnailUrl,
