@@ -74,6 +74,17 @@ class TimelineListItem extends StatelessWidget {
                           )),
                       Expanded(
                         child: Container(
+                          // 티켓 디자인 추가
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(colors:
+                              [
+                                Color(0xff4B75C9),
+                                Color(0xc9D16DDA),
+                                Color(0xffFFBB66),
+                                Color(0xffFF8E00)
+                              ]
+                            )
+                          ),
                           padding: const EdgeInsets.only(
                               top: 10, right: 10, bottom: 10),
                           child: Row(
