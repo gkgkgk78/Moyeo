@@ -1,7 +1,7 @@
 import 'package:danim/view_models/home_feed_view_model.dart';
 import 'package:danim/view_models/search_bar_view_model.dart';
 import 'package:danim/views/search_bar_view.dart';
-import 'package:danim/views/timeline_list_page.dart';
+import 'package:danim/views/timeline_list_page_main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class HomeFeedPage extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 65.0),
-                        child: TimelineListPage(
+                        child: TimelineListPageMain(
                           pagingController: viewModel.pagingController,
                         ),
                       ),
@@ -43,9 +43,9 @@ class HomeFeedPage extends StatelessWidget {
                       right: 0,
                       bottom: 0,
                       child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)
-                        ),
+                        // decoration: BoxDecoration(
+                        //   border: Border.all(color: Colors.black)
+                        // ),
                         margin:
                             const EdgeInsets.only(left: 10, right: 10, top: 10),
                         child: ChangeNotifierProvider<SearchBarViewModel>(

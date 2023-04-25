@@ -35,8 +35,8 @@ class TimelineListItemMain extends StatelessWidget {
                 ? timeline.imageUrl
                 :'assets/images/default_image.png'
             ),
-            title: timeline.title(color:Colors.white),
-          ),
+            title: Text(timeline.title),
+            ),
           ),
         );
     });
