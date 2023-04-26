@@ -40,7 +40,7 @@ public class Post extends BaseTime{
 	@Column(length = 100)
 	private String text;
 	private Double voiceLength;
-	@Column(length = 100)
+	@Column(length = 150)
 	private String voiceUrl;
 
 	// private String nationUrl;
