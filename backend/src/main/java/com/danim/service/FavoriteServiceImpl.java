@@ -1,6 +1,7 @@
 package com.danim.service;
 
 import com.danim.entity.Favorite;
+import com.danim.entity.FavoriteID;
 import com.danim.entity.Post;
 import com.danim.entity.User;
 import com.danim.exception.BaseException;
@@ -26,9 +27,16 @@ public class FavoriteServiceImpl implements FavoriteService {
     public boolean isFavorite (Long postId, Long userUid) throws Exception {
         Post post = postRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        Favorite favorite = favoriteRepository.findFirstByPostIdAndUserUid(post, user);
+
+        // (수정) 복합키로 변경됐기 때문에 삭제 다시 구현
+        FavoriteID favoriteID = new FavoriteID();
+        favoriteID.setPostId(post);
+        favoriteID.setUserUid(user);
+
+        // Favorite favorite = favoriteRepository.findFirstByPostIdAndUserUid(post, user);
         // 좋아요 누른 적 없는 경우 - Favorite 생성 및 저장
-        if (favorite == null) {
+        // if (favorite == null) {
+        if (favoriteRepository.findById(favoriteID).isEmpty()) {
             Favorite newFavorite = new Favorite();
             newFavorite.setPostId(post);
             newFavorite.setUserUid(user);
@@ -37,8 +45,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         }
         // 좋아요 누른 적 있는 경우 - 해당 Favorite 삭제
         // favoriteRepository.deleteById(favorite.getFavoriteId());
-        // (수정) 복합키로 변경됐기 때문에 삭제 다시 구현
 
+        favoriteRepository.deleteById(favoriteID);
 
         return false;
     };
