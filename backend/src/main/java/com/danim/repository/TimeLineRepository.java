@@ -31,7 +31,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     Page<TimeLine> findAll(Pageable pageable);
 
     //공개되지 않은 것들 중에, 완료가 된것만 찾아내야함
-    Page<TimeLine> findAllByCompleteAndTimelinePublic(Boolean complete, Boolean public1, Pageable pageable);
+    Page<TimeLine> findAllByIsCompleteAndTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
 
     Page<TimeLine> findAllByUserUidOrderByCreateTimeDesc(User u, Pageable pageable);
 
@@ -40,10 +40,10 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query("update TimeLine set complete= :now")
+    @Query("update TimeLine set is_complete= :now")
     void changeTimeline(Boolean now);
 
-    TimeLine findAllByUserUidAndComplete(User u, Boolean flag);
+    TimeLine findAllByUserUidAndIsComplete(User u, Boolean flag);
 
     // @Query(value = "select u from User u where u.nickname like %:search% order by u.nickname")
     @Query(value = "select timeline_id from time_line order by timeline_id desc limit 1", nativeQuery = true)

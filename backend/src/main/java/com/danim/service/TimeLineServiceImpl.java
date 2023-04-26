@@ -32,6 +32,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     private final PhotoRepository photoRepository;
 
     private final FavoriteRepository favoriteRepository;
+    private final NationRepository nationRepository;
 
     private final UtilService utilService;
     private final TimeLineRedisRepository repo;
@@ -74,7 +75,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         //딕셔너리 형태로 해서 있으면 넣고 없으면 제외를 하도록 하자
         //타임 라인 하나를 넘겨 주는데 어떻게 넘겨 줄지 문제가 되네
         TimelinePostOuter timelineouter = new TimelinePostOuter();
-        timelineouter.setIsComplete(now.getComplete());
+        timelineouter.setIsComplete(now.getIsComplete());
         timelineouter.setIsPublic(now.getTimelinePublic());
 
         List<MyPostDtoRes> postlist = new ArrayList<>();
@@ -128,7 +129,11 @@ public class TimeLineServiceImpl implements TimeLineService {
                 postlist = new ArrayList<>();
                 temptimeline = new TimelinePostInner();
                 temptimeline.setStartDate(utilService.invertLocalDate(p.getCreateTime()));
-                temptimeline.setFlag(p.getNationUrl());
+                // temptimeline.setFlag(p.getNationUrl());
+
+                Nation nation = p.getNationId();
+                temptimeline.setFlag(nation.getNationUrl());
+
                 temptimeline.setNation(NationName);
                 //temptimeline.setIsMine(isMine);
                 tempnow.add(NationName);
@@ -210,7 +215,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         //타임라인 완료 변경 작업 진행
         if (!now.getUserUid().getUserUid().equals(user.getUserUid()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
-        now.setComplete(Boolean.TRUE);
+        now.setIsComplete(Boolean.TRUE);
         now.setFinishTime(LocalDateTime.now());
         now.setTitle(title);
 
@@ -269,7 +274,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             return entity.getList();
         } catch (NoSuchElementException e) {
             log.info("레디스 데이터 존재하지 않을 때 timeLineRepository 실행");
-            Page<TimeLine> timeline = timeLineRepository.findAllByCompleteAndTimelinePublic(true, true, pageable);
+            Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndTimelinePublic(true, true, pageable);
 
 
             if (pageable.getPageNumber() != 0 && timeline.getContent().size() == 0) {
@@ -408,7 +413,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         User user = userRepository.getByUserUid(uid);
         TimeLine timeLine;
         try {
-            timeLine = timeLineRepository.findAllByUserUidAndComplete(user, false);
+            timeLine = timeLineRepository.findAllByUserUidAndIsComplete(user, false);
         } catch (Exception e) {
             return null;
         }

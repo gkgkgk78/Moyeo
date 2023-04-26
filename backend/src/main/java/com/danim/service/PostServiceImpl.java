@@ -54,7 +54,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post createPost(AddPostReq addPostReq) throws Exception {
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
-        if (timeline.getComplete() == true) {
+        if (timeline.getIsComplete() == true) {
             new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
         }
 
@@ -186,7 +186,7 @@ public class PostServiceImpl implements PostService {
         savedPost.setPhotoList(photoList);
         savedPost.setVoiceUrl(voiceUrl);
         savedPost.setVoiceLength(durationInSeconds);
-        savedPost.setNationUrl(nation.getNationUrl());
+        // savedPost.setNationUrl(nation.getNationUrl());
         savedPost.setAddress1(addPostReq.getAddress1());
         savedPost.setAddress2(addPostReq.getAddress2());
         savedPost.setAddress3(addPostReq.getAddress3());
@@ -227,7 +227,7 @@ public class PostServiceImpl implements PostService {
         savedPost.setPhotoList(photoList);
         savedPost.setVoiceUrl("테스트url");
         savedPost.setVoiceLength(77.44);
-        savedPost.setNationUrl(nation.getNationUrl());
+        // savedPost.setNationUrl(nation.getNationUrl());
         savedPost.setAddress1(addPostReq.getAddress1());
         savedPost.setAddress2(addPostReq.getAddress2());
         savedPost.setAddress3(addPostReq.getAddress3());
@@ -262,7 +262,7 @@ public class PostServiceImpl implements PostService {
         for (Post post : postList) {
 
             // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-            if (post.getTimelineId().getComplete() == true && post.getTimelineId().getTimelinePublic() == true ) {
+            if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getTimelinePublic() == true ) {
                 Long totalFavorite = favoriteRepository.countByPostId(post);
                 getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
             }
@@ -279,7 +279,7 @@ public class PostServiceImpl implements PostService {
         for (Post post : postList) {
 
             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
-            if (post.getTimelineId().getComplete() == true  && post.getTimelineId().getUserUid().getUserUid() == userUid) {
+            if (post.getTimelineId().getIsComplete() == true  && post.getTimelineId().getUserUid().getUserUid() == userUid) {
                 Long totalFavorite = favoriteRepository.countByPostId(post);
                 getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
             }
