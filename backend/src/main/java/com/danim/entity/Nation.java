@@ -31,12 +31,12 @@ public class Nation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "TINYINT")
     private Integer nationId;
+    @Column(length = 60)
+    private String name;
 
     @Column(length = 100)
     private String nationUrl;
 
-    @Column(length = 60)
-    private String name;
 
 
 }

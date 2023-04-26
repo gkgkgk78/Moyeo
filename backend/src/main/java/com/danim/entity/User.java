@@ -24,20 +24,23 @@ public class User implements UserDetails {
     @Column
     private Long userUid;
 
-    @Column(length = 30)
-    private String nickname;
-
     @Column(length = 30, unique = true, nullable = false)
     private String clientId;
 
-    //@ApiModelProperty(hidden = true)
-    private String role;
+    @Column(length = 30)
+    private String nickname;
+
     @Column(length = 100)
-    private String refreshToken;
+    private String password;
     @Column(length = 100)
     private String profileImageUrl;
-    @Column(length = 30)
-    private String password;
+
+    @Column(length = 100)
+    private String refreshToken;
+
+    //@ApiModelProperty(hidden = true)
+    private String role;
+
 
     // 계정이 가지고 있는 권한 목록을 리턴
     @Override

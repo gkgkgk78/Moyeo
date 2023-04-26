@@ -32,14 +32,11 @@ public class TimeLine extends BaseTime {
     @ColumnDefault("0")
     private Boolean isComplete = false;
 
+    private LocalDateTime finishTime;//완료시간
 
     @Builder.Default
     @ColumnDefault("1")
     private Boolean timelinePublic = true;
-
-
-    private LocalDateTime finishTime;//완료시간
-
 
     //not null그대로 가져와야함.....
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
