@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@IdClass(FavoriteID.class)
 public class Favorite {
     // @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,7 @@
 package com.danim.repository;
 
 import com.danim.entity.Favorite;
+import com.danim.entity.FavoriteID;
 import com.danim.entity.Post;
 import com.danim.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
+public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteID> {
     // 해당 포스트에 해당 유저가 좋아요 눌렀는지 여부 검색
     Favorite findFirstByPostIdAndUserUid(Post post, User user);
 
