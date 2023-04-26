@@ -18,6 +18,11 @@ public class Photo {
     @Column(name = "photoId", nullable = false)
     private Long photoId;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    @JsonIgnore
+    private Post postId;
+
     @Column(length = 100, unique = true, nullable = false)
     private String photoUrl;
 
@@ -26,8 +31,4 @@ public class Photo {
     // @ColumnDefault("0")
     // private Boolean isLive = false;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    @JsonIgnore
-    private Post postId;
 }
