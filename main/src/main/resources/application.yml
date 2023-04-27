@@ -1,5 +1,5 @@
 spring:
-  port : 8000
+  port : 5000
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/moyeo?serverTimezone=UTC&characterEncoding=UTF-8
