@@ -1,13 +1,28 @@
 package com.moyeo.entity;
 
-import lombok.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -17,11 +32,11 @@ import java.util.List;
 @Builder
 @ToString
 @DynamicInsert
-public class Post extends BaseTime{
+public class MoyeoPost extends BaseTime{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "post_id", nullable = false)
-	private Long postId;
+	@Column(name = "moyeo_post_id", nullable = false)
+	private Long moyeoPostId;
 
 	@Column(length = 50)
 	private String address1;
@@ -32,18 +47,16 @@ public class Post extends BaseTime{
 	@Column(length = 50)
 	private String address4;
 
-	@OneToMany(mappedBy = "postId",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "moyeoPostId",fetch = FetchType.EAGER)
 	@Builder.Default
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private List<Photo> photoList = new ArrayList<>(); // photoId 리스트
+	private List<MoyeoPhoto> moyeoPhotoList = new ArrayList<>();
 
 	@Column(length = 100)
 	private String text;
 	private Double voiceLength;
 	@Column(length = 120)
 	private String voiceUrl;
-
-	// private String nationUrl;
 
 	// Post 테이블과 Nation 테이블 FK
 	@ManyToOne
@@ -53,18 +66,12 @@ public class Post extends BaseTime{
 
 	// Post 테이블과 TimeLine 테이블 FK
 	@ManyToOne
-	@JoinColumn(name="timeline_id")
+	@JoinColumn(name="moyeo_timeline_id")
 	@ToString.Exclude
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private TimeLine timelineId;
-
-	// TODO
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User userId;
+	private MoyeoTimeLine moyeoTimelineId;
 
 	@Column(columnDefinition = "MEDIUMINT")
 	private Integer favoriteCount;
-
 
 }

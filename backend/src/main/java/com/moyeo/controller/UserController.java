@@ -53,7 +53,7 @@ public class UserController {
 
         if(auth != null && auth.getPrincipal() != null){
             User user = (User)auth.getPrincipal();
-            UserInfoRes result = userService.getNicknameAndProfileImage(user.getUserUid());
+            UserInfoRes result = userService.getNicknameAndProfileImage(user.getUserId());
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -74,7 +74,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null && auth.getPrincipal() != null) {
             User user = (User) auth.getPrincipal();
-            UserInfoRes userInfoRes = userService.updateUserInfo(user.getUserUid(), profileImage, nickname);
+            UserInfoRes userInfoRes = userService.updateUserInfo(user.getUserId(), profileImage, nickname);
             return new ResponseEntity<>(userInfoRes, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
