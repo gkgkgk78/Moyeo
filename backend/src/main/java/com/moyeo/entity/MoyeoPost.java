@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -72,6 +73,7 @@ public class MoyeoPost extends BaseTime{
 	private MoyeoTimeLine moyeoTimelineId;
 
 	@Column(columnDefinition = "MEDIUMINT")
-	private Integer favoriteCount;
+	@ColumnDefault("0")
+	private Long favoriteCount;
 
 }

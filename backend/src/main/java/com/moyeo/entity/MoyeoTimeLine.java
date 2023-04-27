@@ -52,7 +52,7 @@ public class MoyeoTimeLine extends BaseTime {
     private Boolean isTimelinePublic = true;
 
     @Column(columnDefinition = "MEDIUMINT")
-    private Integer membersCount;
+    private Long membersCount;
 
 }
 

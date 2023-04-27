@@ -42,6 +42,7 @@ public class FavoriteController {
         res.setPostId(changeFavoriteStatusReq.getPostId());
         res.setFavorite(favoriteService.isFavorite(changeFavoriteStatusReq.getPostId(), userUid));
         res.setTotalFavorite(favoriteService.countFavorite(changeFavoriteStatusReq.getPostId()));
+
         return ResponseEntity.ok(res);
     }
 

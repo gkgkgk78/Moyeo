@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MoyeoMembersID implements Serializable {
 	private Long moyeoMembersId;
-	private User userId;
+	private Long userId;
 
 }

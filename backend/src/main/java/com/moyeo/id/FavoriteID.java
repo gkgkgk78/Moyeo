@@ -9,11 +9,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data               // equals, hashCode 생성용 Lombok Annotation
-@NoArgsConstructor  // 기본 생성자 생성용 Lombok Annotation
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteID implements Serializable {
-	private Post postId;
-	private User userId;
+	private Long postId;
+	private Long userId;
 
 }
