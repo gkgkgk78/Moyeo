@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/moyeo?serverTimezone=UTC
+    url: jdbc:mysql://k8a107.p.ssafy.io/:3306/moyeo?serverTimezone=UTC
     username: root
     password: admin1234
   jpa:
