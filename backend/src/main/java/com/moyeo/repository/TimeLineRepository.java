@@ -23,7 +23,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     Optional<List<TimeLine>> findAllByUserUidOrderByCreateTimeDesc(User u);
 
-    Optional<List<TimeLine>> findAllByUserUidAndTimelinePublic(User u, Boolean flag);
+    Optional<List<TimeLine>> findAllByUserUidAndIsTimelinePublic(User u, Boolean flag);
 
     Optional<List<TimeLine>> findAllByUserUid(User u);
     Integer countAllByUserUid(User u);
@@ -31,11 +31,11 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     Page<TimeLine> findAll(Pageable pageable);
 
     //공개되지 않은 것들 중에, 완료가 된것만 찾아내야함
-    Page<TimeLine> findAllByIsCompleteAndTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
+    Page<TimeLine> findAllByIsCompleteAndIsTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
 
     Page<TimeLine> findAllByUserUidOrderByCreateTimeDesc(User u, Pageable pageable);
 
-    Page<TimeLine> findAllByUserUidAndTimelinePublic(User u, Boolean flag, Pageable pageable);
+    Page<TimeLine> findAllByUserUidAndIsTimelinePublic(User u, Boolean flag, Pageable pageable);
 
 
     @Modifying(clearAutomatically = true)

@@ -259,7 +259,7 @@ public class PostServiceImpl implements PostService {
         for (Post post : postList) {
 
             // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-            if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getTimelinePublic() == true ) {
+            if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getIsTimelinePublic() == true ) {
                 Long totalFavorite = favoriteRepository.countByPostId(post);
                 getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
             }
