@@ -1,10 +1,10 @@
 spring:
-  port : 5000
+  port : 8080
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/moyeo?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://k8a107.p.ssafy.io:3306/moyeo?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
-    password: admin1234
+    password: tiger
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
