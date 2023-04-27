@@ -11,6 +11,6 @@ public class TestController {
 
     @GetMapping("{name}")
     public ResponseEntity<?> hello(@PathVariable String name){
-        return ResponseEntity.ok("hello"+name);
+        return ResponseEntity.ok("안녕 도커 나는 "+name);
     }
 }
