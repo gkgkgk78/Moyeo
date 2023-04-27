@@ -55,7 +55,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public List<TimeLine> searchTimelineNotPublic(Long uid) throws BaseException {
         User now = userRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        List<TimeLine> timeline = timeLineRepository.findAllByUserUidAndTimelinePublic(now, true).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        List<TimeLine> timeline = timeLineRepository.findAllByUserUidAndIsTimelinePublic(now, true).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         return timeline;
     }
 
@@ -74,7 +74,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         //타임 라인 하나를 넘겨 주는데 어떻게 넘겨 줄지 문제가 되네
         TimelinePostOuter timelineouter = new TimelinePostOuter();
         timelineouter.setIsComplete(now.getIsComplete());
-        timelineouter.setIsPublic(now.getTimelinePublic());
+        timelineouter.setIsPublic(now.getIsTimelinePublic());
 
         List<MyPostDtoRes> postlist = new ArrayList<>();
 
@@ -243,14 +243,14 @@ public class TimeLineServiceImpl implements TimeLineService {
         if (!now.getUserUid().getUserUid().equals(user.getUserUid()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
 
-        Boolean temp = now.getTimelinePublic();
+        Boolean temp = now.getIsTimelinePublic();
         Boolean check = false;
         //완료->비완료 , 비완료->완료 로 변경하는 작업
         if (temp) {
-            now.setTimelinePublic(false);
+            now.setIsTimelinePublic(false);
             check = false;
         } else {
-            now.setTimelinePublic(true);
+            now.setIsTimelinePublic(true);
             check = true;
         }
         timeLineRepository.save(now);
@@ -272,7 +272,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             return entity.getList();
         } catch (NoSuchElementException e) {
             log.info("레디스 데이터 존재하지 않을 때 timeLineRepository 실행");
-            Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndTimelinePublic(true, true, pageable);
+            Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndIsTimelinePublic(true, true, pageable);
 
 
             if (pageable.getPageNumber() != 0 && timeline.getContent().size() == 0) {
@@ -363,7 +363,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public List<MainTimelinePhotoDtoRes> searchTimelineNotPublicWithPaging(Long uid, Pageable pageable) throws BaseException {
         User user = userRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        Page<TimeLine> timeline = timeLineRepository.findAllByUserUidAndTimelinePublic(user, true, pageable);
+        Page<TimeLine> timeline = timeLineRepository.findAllByUserUidAndIsTimelinePublic(user, true, pageable);
         if (timeline.getContent().size() == 0) {
             return new ArrayList<>();
             //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE);

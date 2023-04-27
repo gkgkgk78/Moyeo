@@ -36,7 +36,7 @@ public class TimeLine extends BaseTime {
 
     @Builder.Default
     @ColumnDefault("1")
-    private Boolean timelinePublic = true;
+    private Boolean isTimelinePublic = true;
 
     //not null그대로 가져와야함.....
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
