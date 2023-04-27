@@ -34,7 +34,7 @@ public class Nation {
     @Column(length = 60)
     private String name;
 
-    @Column(length = 150)
+    @Column(length = 120)
     private String nationUrl;
 
 }
