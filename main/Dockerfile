@@ -2,7 +2,7 @@
 FROM openjdk:11-jdk
 
 # 5000번 포트 노출
-ENV PORT 8080
+ENV PORT 8000
 EXPOSE $PORT
 
 # 빌드후 생성된 jar 파일을 컨테이너 내부에 복사
