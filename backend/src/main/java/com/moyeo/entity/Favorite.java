@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
+import com.moyeo.id.FavoriteID;
+
 @Entity
 @Getter
 @Setter
@@ -29,7 +31,7 @@ public class Favorite {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
-    private User userUid;
+    private User userId;
 
 
 }

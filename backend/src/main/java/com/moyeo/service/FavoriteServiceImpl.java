@@ -1,7 +1,7 @@
 package com.moyeo.service;
 
 import com.moyeo.entity.Favorite;
-import com.moyeo.entity.FavoriteID;
+import com.moyeo.id.FavoriteID;
 import com.moyeo.entity.Post;
 import com.moyeo.entity.User;
 import com.moyeo.exception.BaseException;
@@ -31,7 +31,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         // (수정) 복합키로 변경됐기 때문에 삭제 다시 구현
         FavoriteID favoriteID = new FavoriteID();
         favoriteID.setPostId(post);
-        favoriteID.setUserUid(user);
+        favoriteID.setUserId(user);
 
         // Favorite favorite = favoriteRepository.findFirstByPostIdAndUserUid(post, user);
         // 좋아요 누른 적 없는 경우 - Favorite 생성 및 저장
@@ -39,7 +39,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         if (favoriteRepository.findById(favoriteID).isEmpty()) {
             Favorite newFavorite = new Favorite();
             newFavorite.setPostId(post);
-            newFavorite.setUserUid(user);
+            newFavorite.setUserId(user);
             favoriteRepository.save(newFavorite);
             return true;
         }
@@ -63,7 +63,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<Post> findFavoritePost (Long userUid) throws Exception {
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        List<Favorite> favoriteList = favoriteRepository.findAllByUserUid(user).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER_FAV_POST));
+        List<Favorite> favoriteList = favoriteRepository.findAllByUserId(user).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER_FAV_POST));
 
         List<Post> favoritePostList = new ArrayList<>();
         for (Favorite favorite : favoriteList) {

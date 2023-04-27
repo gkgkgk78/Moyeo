@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoRes updateUserInfo(Long userUid, MultipartFile profileImage, String nickname) throws Exception {
-        User user = userRepository.getByUserUid(userUid);
+        User user = userRepository.getByUserId(userUid);
 
         if (profileImage == null) {
             log.info("프로필 이미지 변경 X, 닉네임만 변경");
@@ -126,21 +126,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoRes getNicknameAndProfileImage(Long userUid) throws Exception {
-        User user = userRepository.getByUserUid(userUid);
+        User user = userRepository.getByUserId(userUid);
 
         return entityToResponseDTO(user);
     }
 
     // User 객체를 UserInfoRes로 변환
     private UserInfoRes entityToResponseDTO(User user) {
-        Integer timelineNum = timeLineRepository.countAllByUserUid(user);
+        Integer timelineNum = timeLineRepository.countAllByUserId(user);
         Long timeLineId = -1L;
-        if(timeLineService.isTraveling(user.getUserUid()) != null){
-            timeLineId = timeLineService.isTraveling(user.getUserUid()).getTimelineId();
+        if(timeLineService.isTraveling(user.getUserId()) != null){
+            timeLineId = timeLineService.isTraveling(user.getUserId()).getTimelineId();
         }
 
         return UserInfoRes.builder()
-                .userUid(user.getUserUid())
+                .userUid(user.getUserId())
                 .nickname(user.getNickname())
                 .profileImageUrl((user.getProfileImageUrl()))
                 .timeLineId(timeLineId)

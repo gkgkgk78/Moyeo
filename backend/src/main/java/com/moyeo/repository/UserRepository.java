@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User getByUserUid(Long userUid);
+    User getByUserId(Long userId);
 
     User getByClientId(String clientId);
 

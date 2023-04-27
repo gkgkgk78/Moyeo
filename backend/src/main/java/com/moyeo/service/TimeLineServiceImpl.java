@@ -47,7 +47,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     //나의 타임라인 얻어옴 , 페이징 x
     public List<TimeLine> searchMyTimeline(Long uid, User now) throws BaseException {
-        List<TimeLine> timeline = timeLineRepository.findAllByUserUid(now).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        List<TimeLine> timeline = timeLineRepository.findAllByUserId(now).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         return timeline;
     }
 
@@ -55,7 +55,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public List<TimeLine> searchTimelineNotPublic(Long uid) throws BaseException {
         User now = userRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        List<TimeLine> timeline = timeLineRepository.findAllByUserUidAndIsTimelinePublic(now, true).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        List<TimeLine> timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublic(now, true).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         return timeline;
     }
 
@@ -89,7 +89,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         Favorite favorite_temp = null;
         Boolean favorite = false;
         Boolean isMine = false;
-        Long nowUserUid = user.getUserUid();
+        Long nowUserUid = user.getUserId();
         int check = 0;
         Post last = null;
         for (Post p : post) {
@@ -98,7 +98,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             String NationName = p.getNationId().getName();
             isMine = false;
             favorite_count = favoriteRepository.countByPostId(p);
-            favorite_temp = favoriteRepository.findFirstByPostIdAndUserUid(p, user);
+            favorite_temp = favoriteRepository.findFirstByPostIdAndUserId(p, user);
 
             if (favorite_temp == null)
                 favorite = false;
@@ -106,7 +106,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
             TimeLine timelinetemp = p.getTimelineId();
 
-            if (nowUserUid.equals(timelinetemp.getUserUid().getUserUid()))
+            if (nowUserUid.equals(timelinetemp.getUserId().getUserId()))
                 isMine = true;
 
             if (!temp.containsKey(NationName)) {//해당 부분은 여행 국가가 새로 나타난 형태를 의미를 함
@@ -165,7 +165,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timelineouter.setTitle(now.getTitle());
         if (post.size() == 0) {
             timelineouter.setTimeline(null);
-            if (now.getUserUid().getUserUid().equals(user.getUserUid()))
+            if (now.getUserId().getUserId().equals(user.getUserId()))
                 isMine = true;
         }
         timelineouter.setIsMine(isMine);
@@ -180,7 +180,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         TimeLine timeline = new TimeLine();
 
         //새로운 타임라인 생성이 가능한다
-        timeline.setUserUid(now);
+        timeline.setUserId(now);
         timeLineRepository.save(timeline);
         Long u1 = timeLineRepository.findLastTimelineId();
         //System.out.println(u1);
@@ -192,9 +192,9 @@ public class TimeLineServiceImpl implements TimeLineService {
     public void makenewTimelineTemp() throws BaseException {
         //여기서 넘어온 uid는 User의 uid아이디 입니다.
         TimeLine timeline = new TimeLine();
-        User now = userRepository.getByUserUid(1L);
+        User now = userRepository.getByUserId(1L);
         //새로운 타임라인 생성이 가능한다
-        timeline.setUserUid(now);
+        timeline.setUserId(now);
         timeLineRepository.save(timeline);
 
     }
@@ -211,7 +211,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         //타임라인 완료 변경 작업 진행
-        if (!now.getUserUid().getUserUid().equals(user.getUserUid()))
+        if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
         now.setIsComplete(Boolean.TRUE);
         now.setFinishTime(LocalDateTime.now());
@@ -225,7 +225,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     public void deleteTimeline(Long uid, User user) throws Exception {
 
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        if (!now.getUserUid().getUserUid().equals(user.getUserUid()))
+        if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
         List<Post> post_list = postRepository.findAllByTimelineId(now);
         for (Post p : post_list) {
@@ -240,7 +240,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     public Boolean changePublic(Long uid, User user) throws BaseException {
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
-        if (!now.getUserUid().getUserUid().equals(user.getUserUid()))
+        if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
 
         Boolean temp = now.getIsTimelinePublic();
@@ -298,7 +298,7 @@ public class TimeLineServiceImpl implements TimeLineService {
                     throw new BaseException(ErrorMessage.NOT_EXIST_PHOTO);
                 Photo photo = photoRepository.findById(startpost.getPhotoList().get(0).getPhotoId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_PHOTO));
                 //Long uid = time.getTimelineId();
-                User user = userRepository.findById(time.getUserUid().getUserUid()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+                User user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
                 MainTimelinePhotoDtoRes temp = MainTimelinePhotoDtoRes.builder(time, startpost, lastpost, photo, user).build();
                 list.add(temp);
             }
@@ -320,7 +320,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         Post post = null;
         MainTimelinePhotoDtoRes temp = null;
 
-        Page<TimeLine> timeline = timeLineRepository.findAllByUserUidOrderByCreateTimeDesc(now, pageable);
+        Page<TimeLine> timeline = timeLineRepository.findAllByUserIdOrderByCreateTimeDesc(now, pageable);
         if (timeline.getContent().size() == 0) {
             return new ArrayList<>();
             //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING);
@@ -345,13 +345,13 @@ public class TimeLineServiceImpl implements TimeLineService {
                     lastpost = new Post();
                     lastpost.setAddress2("");
                 }
-                user = userRepository.findById(time.getUserUid().getUserUid()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+                user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
                 temp = MainTimelinePhotoDtoRes.builder(time, startpost, lastpost, photo, user).build();
                 list.add(temp);
             } else {
                 //현재는 우선 임시로 작업을 하여 넣어 줄것으로 생각을 하고 있다.
                 photo = photoRepository.findById(startpost.getPhotoList().get(0).getPhotoId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_PHOTO));
-                user = userRepository.findById(time.getUserUid().getUserUid()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+                user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
                 temp = MainTimelinePhotoDtoRes.builder(time, startpost, lastpost, photo, user).build();
                 list.add(temp);
             }
@@ -363,7 +363,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public List<MainTimelinePhotoDtoRes> searchTimelineNotPublicWithPaging(Long uid, Pageable pageable) throws BaseException {
         User user = userRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        Page<TimeLine> timeline = timeLineRepository.findAllByUserUidAndIsTimelinePublic(user, true, pageable);
+        Page<TimeLine> timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublic(user, true, pageable);
         if (timeline.getContent().size() == 0) {
             return new ArrayList<>();
             //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE);
@@ -408,10 +408,10 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public TimeLine isTraveling(Long uid) {
-        User user = userRepository.getByUserUid(uid);
+        User user = userRepository.getByUserId(uid);
         TimeLine timeLine;
         try {
-            timeLine = timeLineRepository.findAllByUserUidAndIsComplete(user, false);
+            timeLine = timeLineRepository.findAllByUserIdAndIsComplete(user, false);
         } catch (Exception e) {
             return null;
         }

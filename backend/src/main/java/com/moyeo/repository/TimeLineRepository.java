@@ -21,21 +21,21 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     TimeLine getById(Long aLong);
 
 
-    Optional<List<TimeLine>> findAllByUserUidOrderByCreateTimeDesc(User u);
+    Optional<List<TimeLine>> findAllByUserIdOrderByCreateTimeDesc(User u);
 
-    Optional<List<TimeLine>> findAllByUserUidAndIsTimelinePublic(User u, Boolean flag);
+    Optional<List<TimeLine>> findAllByUserIdAndIsTimelinePublic(User u, Boolean flag);
 
-    Optional<List<TimeLine>> findAllByUserUid(User u);
-    Integer countAllByUserUid(User u);
+    Optional<List<TimeLine>> findAllByUserId(User u);
+    Integer countAllByUserId(User u);
 
     Page<TimeLine> findAll(Pageable pageable);
 
     //공개되지 않은 것들 중에, 완료가 된것만 찾아내야함
     Page<TimeLine> findAllByIsCompleteAndIsTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
 
-    Page<TimeLine> findAllByUserUidOrderByCreateTimeDesc(User u, Pageable pageable);
+    Page<TimeLine> findAllByUserIdOrderByCreateTimeDesc(User u, Pageable pageable);
 
-    Page<TimeLine> findAllByUserUidAndIsTimelinePublic(User u, Boolean flag, Pageable pageable);
+    Page<TimeLine> findAllByUserIdAndIsTimelinePublic(User u, Boolean flag, Pageable pageable);
 
 
     @Modifying(clearAutomatically = true)
@@ -43,7 +43,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query("update TimeLine set is_complete= :now")
     void changeTimeline(Boolean now);
 
-    TimeLine findAllByUserUidAndIsComplete(User u, Boolean flag);
+    TimeLine findAllByUserIdAndIsComplete(User u, Boolean flag);
 
     // @Query(value = "select u from User u where u.nickname like %:search% order by u.nickname")
     @Query(value = "select timeline_id from time_line order by timeline_id desc limit 1", nativeQuery = true)

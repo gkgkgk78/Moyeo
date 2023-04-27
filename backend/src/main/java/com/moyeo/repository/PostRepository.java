@@ -15,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 //    List<Post> findByLocation(String location);
 
-    //Optional<List<TimeLine>> findAllByUserUidOrderByCreateTimeDesc(User u);
+    //Optional<List<TimeLine>> findAllByUserIdOrderByCreateTimeDesc(User u);
 
     List<Post> findByTimelineIdOrderByCreateTimeAsc(TimeLine timeline) ;
 

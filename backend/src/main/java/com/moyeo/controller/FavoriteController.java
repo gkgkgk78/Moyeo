@@ -34,7 +34,7 @@ public class FavoriteController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null && auth.getPrincipal() != null) {
             User user = (User) auth.getPrincipal();
-            userUid = user.getUserUid();
+            userUid = user.getUserId();
         }
 
         // 응답
