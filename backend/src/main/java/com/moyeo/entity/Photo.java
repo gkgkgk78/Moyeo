@@ -22,7 +22,7 @@ public class Photo {
     @JsonIgnore
     private Post postId;
 
-    @Column(length = 150, unique = true, nullable = false)
+    @Column(length = 120, unique = true, nullable = false)
     private String photoUrl;
 
 
