@@ -2,7 +2,7 @@ spring:
   port : 8080
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://k8a107.p.ssafy.io:3306/moyeo?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/moyeo?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: tiger
   jpa:
