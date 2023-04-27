@@ -9,4 +9,4 @@ EXPOSE $PORT
 COPY /build/libs/main-0.0.1-SNAPSHOT.jar
 
 # jar 파일 실행(= BE 서버 실행)
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "main-0.0.1-SNAPSHOT.jar"]
