@@ -1,6 +1,8 @@
 package com.moyeo.entity;
 
 import lombok.*;
+
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -64,7 +66,14 @@ public class Post extends BaseTime{
 	private User userId;
 
 	@Column(columnDefinition = "MEDIUMINT")
-	private Integer favoriteCount;
+	@ColumnDefault("0")
+	private Long favoriteCount;
 
+	public void updateFavoriteCount(Integer amount) {
+		this.favoriteCount += amount;
+		if (this.favoriteCount < 0) {
+			this.favoriteCount = 0L;
+		}
+	}
 
 }

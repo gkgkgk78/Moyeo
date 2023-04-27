@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
@@ -24,15 +26,12 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     // 해당 유저가 포스트에 좋아요 누른 여부 확인하기 (좋아요 기능)
     @Override
+    @Transactional
     public boolean isFavorite (Long postId, Long userUid) throws Exception {
         Post post = postRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
 
-        // (수정) 복합키로 변경됐기 때문에 삭제 다시 구현
-        FavoriteID favoriteID = new FavoriteID();
-        favoriteID.setPostId(post);
-        favoriteID.setUserId(user);
-
+        FavoriteID favoriteID = new FavoriteID(post.getPostId(), user.getUserId());
         // Favorite favorite = favoriteRepository.findFirstByPostIdAndUserUid(post, user);
         // 좋아요 누른 적 없는 경우 - Favorite 생성 및 저장
         // if (favorite == null) {
@@ -41,12 +40,15 @@ public class FavoriteServiceImpl implements FavoriteService {
             newFavorite.setPostId(post);
             newFavorite.setUserId(user);
             favoriteRepository.save(newFavorite);
+
+            post.updateFavoriteCount(1);
+
             return true;
         }
         // 좋아요 누른 적 있는 경우 - 해당 Favorite 삭제
         // favoriteRepository.deleteById(favorite.getFavoriteId());
-
         favoriteRepository.deleteById(favoriteID);
+        post.updateFavoriteCount(-1);
 
         return false;
     };
@@ -55,7 +57,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public Long countFavorite (Long postId) throws Exception{
         Post post = postRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
-        Long TotalFavoriteNum = favoriteRepository.countByPostId(post);
+        // Long TotalFavoriteNum = favoriteRepository.countByPostId(post);
+        Long TotalFavoriteNum = post.getFavoriteCount();
         return TotalFavoriteNum;
     }
 

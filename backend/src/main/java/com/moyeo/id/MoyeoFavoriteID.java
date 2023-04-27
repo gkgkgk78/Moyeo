@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor  // 기본 생성자 생성용 Lombok Annotation
 @AllArgsConstructor
 public class MoyeoFavoriteID implements Serializable {
-	private MoyeoPost moyeoPostId;
-	private User userId;
+	private Long moyeoPostId;
+	private Long userId;
 
 }
