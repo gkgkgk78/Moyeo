@@ -28,8 +28,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         Theme(
           data: Theme.of(context).copyWith(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
+            highlightColor: Colors.white,
+            splashColor: Colors.white,
           ),
           child: PopupMenuButton(
             tooltip: '',
@@ -94,7 +94,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         appViewModel.title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black),
       ),
       centerTitle: true,
       // 그림자 없애기
