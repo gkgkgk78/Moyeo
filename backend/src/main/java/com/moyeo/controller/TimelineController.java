@@ -146,6 +146,7 @@ public class TimelineController {
         List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineNotPublicWithPaging(uid, pageable);
         log.info("다른 유저의 피드에서 타임라인 조회 기능 종료");
         return new ResponseEntity<>(timelinelist, HttpStatus.OK);
+
     }
 
 
