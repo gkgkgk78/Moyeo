@@ -5,6 +5,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 import '../models/Timeline.dart';
+import '../module/gradient_circular_indicator.dart';
 
 class TimelineListPage extends StatelessWidget {
   final PagingController<int, Timeline> pagingController;
@@ -23,6 +24,13 @@ class TimelineListPage extends StatelessWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<Timeline>(
+                firstPageProgressIndicatorBuilder: (_) => Transform.scale(
+                  scale: 0.2,
+                  child: const SizedBox(
+                      height: 400,
+                      child: GradientCircularProgressIndicator()
+                  ),
+                ),
                 noItemsFoundIndicatorBuilder: (context) => SizedBox(
                   height: 300,
                   child: Center(
