@@ -275,7 +275,6 @@ public class TimeLineServiceImpl implements TimeLineService {
 
             if (pageable.getPageNumber() != 0 && timeline.getContent().size() == 0) {
                 //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING);
-                log.info("page 0아니고, timeline size = 0 ..."); // TODO
                 return null;
             } else if (pageable.getPageNumber() == 0 && timeline.getContent().size() == 0) {
                 return null;
@@ -417,6 +416,5 @@ public class TimeLineServiceImpl implements TimeLineService {
         repo.deleteAll();
         return timeLine;
     }
-
 
 }
