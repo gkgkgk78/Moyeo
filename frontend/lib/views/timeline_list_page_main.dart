@@ -1,3 +1,4 @@
+import 'package:danim/module/gradient_circular_indicator.dart';
 import 'package:danim/view_models/app_view_model.dart';
 import 'package:danim/views/timeline_list_item_main.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,13 @@ class TimelineListPageMain extends StatelessWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<Timeline>(
+                firstPageProgressIndicatorBuilder: (_) => Transform.scale(
+                  scale: 0.2,
+                  child: const SizedBox(
+                    height: 400,
+                    child: GradientCircularProgressIndicator()
+                  ),
+                ),
                 noItemsFoundIndicatorBuilder: (context) => SizedBox(
                   height: 300,
                   child: Center(
