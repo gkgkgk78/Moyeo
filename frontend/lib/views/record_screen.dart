@@ -29,6 +29,11 @@ class RecordView extends StatelessWidget {
                     Navigator.pop(context);
                     appViewModel.goModifyProfilePage();
                   },
+                  moveToYeobot: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    appViewModel.goYeobotPage();
+                },
                 ),
                 body: Stack(
                   children: [
