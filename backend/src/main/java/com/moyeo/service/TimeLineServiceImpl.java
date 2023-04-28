@@ -33,7 +33,7 @@ public class TimeLineServiceImpl implements TimeLineService {
     private final NationRepository nationRepository;
 
     private final UtilService utilService;
-    private final TimeLineRedisRepository repo;
+    // private final TimeLineRedisRepository repo;
     private final PostService postService;
 
 
@@ -231,7 +231,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         }
 
         timeLineRepository.delete(now);
-        repo.deleteAll();
+        // repo.deleteAll();
     }
 
     @Override
@@ -252,7 +252,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             check = true;
         }
         timeLineRepository.save(now);
-        repo.deleteAll();
+        // repo.deleteAll();
         return check;
 
     }
@@ -261,15 +261,15 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public List<MainTimelinePhotoDtoRes> searchTimelineOrderBylatestPaging(Pageable pageable) throws BaseException {
         log.info("test timelineservice 접근 !");
-        log.info("현재 검색 페이지 : {}", pageable.getPageNumber());
-        log.info("레지스 페이지 존재 여부 : {}", repo.findById(pageable.getPageNumber()).isPresent());
-        // redis에 존재할 시 바로 리턴
-        try {
-            RedisPage entity = repo.findById(pageable.getPageNumber()).orElseThrow();
-            log.info("redis 값 접근");
-            return entity.getList();
-        } catch (NoSuchElementException e) {
-            log.info("레디스 데이터 존재하지 않을 때 timeLineRepository 실행");
+        // log.info("현재 검색 페이지 : {}", pageable.getPageNumber());
+        // log.info("레지스 페이지 존재 여부 : {}", repo.findById(pageable.getPageNumber()).isPresent());
+        // // redis에 존재할 시 바로 리턴
+        // try {
+        //     RedisPage entity = repo.findById(pageable.getPageNumber()).orElseThrow();
+        //     log.info("redis 값 접근");
+        //     return entity.getList();
+        // } catch (NoSuchElementException e) {
+        //     log.info("레디스 데이터 존재하지 않을 때 timeLineRepository 실행");
             Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndIsTimelinePublic(true, true, pageable);
 
 
@@ -300,13 +300,13 @@ public class TimeLineServiceImpl implements TimeLineService {
                 MainTimelinePhotoDtoRes temp = MainTimelinePhotoDtoRes.builder(time, startpost, lastpost, photo, user).build();
                 list.add(temp);
             }
-            RedisPage redisPage = new RedisPage();
-            redisPage.setNum(pageable.getPageNumber());
-            redisPage.setList(list);
-            repo.save(redisPage);
+            // RedisPage redisPage = new RedisPage();
+            // redisPage.setNum(pageable.getPageNumber());
+            // redisPage.setList(list);
+            // repo.save(redisPage);
 
             return list;
-        }
+        // }
     }
 
     //나의 타임라인 검색시 페이징 처리해서 검색을 해온다 => 나의 타임라인 조회를 할시에 비어 있는 타임라인으로 넘겨줄거임
@@ -413,7 +413,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         } catch (Exception e) {
             return null;
         }
-        repo.deleteAll();
+        // repo.deleteAll();
         return timeLine;
     }
 

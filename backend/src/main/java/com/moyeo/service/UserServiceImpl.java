@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public final JwtTokenProvider jwtTokenProvider;
     public final PasswordEncoder passwordEncoder;
     private final AwsS3 awsS3;
-    private final TimeLineRedisRepository repo;
+    // private final TimeLineRedisRepository repo;
 
     @Override
     public List<UserInfoRes> searchUserByNickname(String search) {
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
             user.setProfileImageUrl(ProfileImageUrl);
             user.setNickname(nickname);
         }
-        repo.deleteAll();
+        // repo.deleteAll();
         return entityToResponseDTO(user);
     }
 
