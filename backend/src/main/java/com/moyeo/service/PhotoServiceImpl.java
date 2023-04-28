@@ -56,7 +56,7 @@ public class PhotoServiceImpl implements PhotoService {
 
     private Photo savePhoto(MultipartFile imageFile, Post savedPost) throws Exception {
         // imageFile S3에 올리고 imageURL 가져오기
-        String photoUrl = awsS3.upload(imageFile, "Danim/Post");
+        String photoUrl = awsS3.upload(imageFile, "Moyeo/Post");
 
         // photo 객체 생성
         log.info("Starting savePhoto transaction");

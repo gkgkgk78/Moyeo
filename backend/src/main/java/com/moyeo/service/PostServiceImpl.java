@@ -151,11 +151,11 @@ public class PostServiceImpl implements PostService {
 // //                throw new BaseException(ErrorMessage.NOT_PERMIT_VOICE_SAVE);
 // //            }
 //
-//             voiceUrl = awsS3.uploadFile(filter, "Danim/Voice");
+//             voiceUrl = awsS3.uploadFile(filter, "Moyeo/Voice");
 //             Files.delete(filter.toPath());//파일을 삭제하는 코드임
 //
 //         }else{
-            voiceUrl = awsS3.upload(voiceFile, "Danim/Voice");
+            voiceUrl = awsS3.upload(voiceFile, "Moyeo/Voice");
             Files.delete(target);//파일을 삭제하는 코드임
         // }
         log.info("voiceUrl info :{}",voiceUrl);
@@ -171,7 +171,7 @@ public class PostServiceImpl implements PostService {
         Nation nation = nationRepository.findFirstByName(address1);
         if (nation == null) {
             nation = new Nation();
-            String flagUrl = awsS3.upload(flagFile, "Danim/Nation");
+            String flagUrl = awsS3.upload(flagFile, "Moyeo/Nation");
             nation.setNationUrl(flagUrl);
             nation.setName(address1);
             nationRepository.save(nation);
@@ -191,8 +191,12 @@ public class PostServiceImpl implements PostService {
         savedPost.setText(text);
         savedPost.setTimelineId(timeline);
         savedPost.setNationId(nation);
+        savedPost.setUserId(timeline.getUserId()); // 추가
         Post resavedPost = postRepository.save(savedPost);
         log.info("savePost Transaction complete");
+
+        timeline.setLastPost(resavedPost.getPostId()); // 추가
+
         return resavedPost;
     }
 
@@ -260,7 +264,8 @@ public class PostServiceImpl implements PostService {
 
             // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
             if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getIsTimelinePublic() == true ) {
-                Long totalFavorite = favoriteRepository.countByPostId(post);
+                // Long totalFavorite = favoriteRepository.countByPostId(post);
+                Long totalFavorite = post.getFavoriteCount();
                 getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
             }
         }
@@ -277,7 +282,8 @@ public class PostServiceImpl implements PostService {
 
             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
             if (post.getTimelineId().getIsComplete() == true  && post.getTimelineId().getUserId().getUserId() == userUid) {
-                Long totalFavorite = favoriteRepository.countByPostId(post);
+                // Long totalFavorite = favoriteRepository.countByPostId(post);
+                Long totalFavorite = post.getFavoriteCount();
                 getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
             }
         }

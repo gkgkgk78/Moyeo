@@ -43,6 +43,7 @@ public class TimeLine extends BaseTime {
     @ToString.Exclude
     private User userId;
 
+    @ColumnDefault("0")
     private Long lastPost;
 }
 

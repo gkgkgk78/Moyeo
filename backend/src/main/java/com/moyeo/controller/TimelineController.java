@@ -3,6 +3,7 @@ package com.moyeo.controller;
 import com.moyeo.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.dto.TimelinePostOuter;
 import com.moyeo.entity.User;
+import com.moyeo.repository.UserRepository;
 import com.moyeo.service.TimeLineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -81,7 +81,6 @@ public class TimeLineServiceImpl implements TimeLineService {
 
         TimelinePostInner temptimeline = new TimelinePostInner();
 
-
         Map<String, String> temp = new HashMap<String, String>();//그전에 국가 이름이 존재 하지 않는지 파악 하기 위해
         List<String> tempnow = new ArrayList<>();//여행한 국가의 모든 국가 리스트를 순서대로 겹치지 않게 파악하기 위해 해주는 작업
         List<String> photolist = new ArrayList<>();
@@ -97,7 +96,8 @@ public class TimeLineServiceImpl implements TimeLineService {
             favorite_count = 0L;
             String NationName = p.getNationId().getName();
             isMine = false;
-            favorite_count = favoriteRepository.countByPostId(p);
+            // favorite_count = favoriteRepository.countByPostId(p);
+            favorite_count = p.getFavoriteCount();
             favorite_temp = favoriteRepository.findFirstByPostIdAndUserId(p, user);
 
             if (favorite_temp == null)
@@ -208,7 +208,6 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public void finishTimeline(Long uid, String title, User user) throws BaseException {
-
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         //타임라인 완료 변경 작업 진행
         if (!now.getUserId().getUserId().equals(user.getUserId()))
@@ -223,7 +222,6 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public void deleteTimeline(Long uid, User user) throws Exception {
-
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
         if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
@@ -277,6 +275,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
             if (pageable.getPageNumber() != 0 && timeline.getContent().size() == 0) {
                 //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING);
+                log.info("page 0아니고, timeline size = 0 ..."); // TODO
                 return null;
             } else if (pageable.getPageNumber() == 0 && timeline.getContent().size() == 0) {
                 return null;

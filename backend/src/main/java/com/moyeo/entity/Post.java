@@ -21,7 +21,8 @@ import java.util.List;
 @DynamicInsert
 public class Post extends BaseTime{
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	// @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "post_id", nullable = false)
 	private Long postId;
 
@@ -60,7 +61,6 @@ public class Post extends BaseTime{
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private TimeLine timelineId;
 
-	// TODO
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User userId;
