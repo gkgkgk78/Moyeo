@@ -1,10 +1,19 @@
 package com.moyeo.controller;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyeo.conponent.AwsS3;
+import com.moyeo.conponent.BadWordFilter;
+import com.moyeo.conponent.ClovaSpeechClient;
+import com.moyeo.conponent.MultiFileToFile;
 import com.moyeo.dto.AddPostReq;
 import com.moyeo.dto.MainTimelinePhotoDtoRes;
+import com.moyeo.dto.WordInfo;
 import com.moyeo.entity.Photo;
 import com.moyeo.entity.Post;
+import com.moyeo.exception.BaseException;
+import com.moyeo.exception.ErrorMessage;
 import com.moyeo.service.PhotoService;
 import com.moyeo.service.PostService;
 import com.moyeo.service.TimeLineService;
@@ -16,14 +25,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +54,6 @@ public class TestController {
 
     private final TimeLineService timeLineService;
     private final UserService userService;
-
     private final PostService postService;
     private final PhotoService photoService;
 
@@ -98,6 +118,5 @@ public class TestController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
-
 
 }

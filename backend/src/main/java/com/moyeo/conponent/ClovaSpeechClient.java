@@ -26,8 +26,6 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class ClovaSpeechClient {
-    // private static final String SECRET = "5363cc2f4577446abede2f0c96814b44";
-    // private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/4852/8e3d76eb02eca805c974a9640baf24a8f604b7981f5f71a4a4cbba091938c32e";
     private static final String SECRET = "058088bb4e64483d8bb892ac32507b7c";
     private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5061/5a47dca7418b8d67af71cdb7d5f767f7cea24457cc3fad3865ddd3b0f402166d";
 

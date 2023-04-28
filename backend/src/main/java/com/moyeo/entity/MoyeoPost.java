@@ -35,8 +35,7 @@ import lombok.ToString;
 @DynamicInsert
 public class MoyeoPost extends BaseTime{
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "moyeo_post_id", nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long moyeoPostId;
 
 	@Column(length = 50)

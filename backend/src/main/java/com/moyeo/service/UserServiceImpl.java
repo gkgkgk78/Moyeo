@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인
         if (userRepository.getByClientId(clientId) != null) {
             user = userRepository.getByClientId(clientId);
-            if (!passwordEncoder.matches("다님", user.getPassword())) {
+            if (!passwordEncoder.matches("모여", user.getPassword())) {
                 throw new RuntimeException();
             }
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
                 .role("USER")
                 .refreshToken(tokenRes.getRefreshToken())
                 .profileImageUrl(profileImageUrl)
-                .password(passwordEncoder.encode("다님"))
+                .password(passwordEncoder.encode("모여"))
                 .build();
         userRepository.save(user);
         return tokenRes;
@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService {
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인
         if (userRepository.getByClientId(clientId) != null) {
             user = userRepository.getByClientId(clientId);
-            if (!passwordEncoder.matches("다님", user.getPassword())) {
+            if (!passwordEncoder.matches("모여", user.getPassword())) {
                 throw new RuntimeException();
             }
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
@@ -176,7 +176,7 @@ public class UserServiceImpl implements UserService {
                 .role("USER")
                 .refreshToken(tokenRes.getRefreshToken())
                 .profileImageUrl(profileImageUrl)
-                .password(passwordEncoder.encode("다님"))
+                .password(passwordEncoder.encode("모여"))
                 .build();
         userRepository.save(user);
         return true;

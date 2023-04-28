@@ -53,7 +53,9 @@ public class AwsS3 {
         return uploadUrl;
     }
     public void delete(String url){
-        url = url.substring(AWS_URL.length());
+        // url = url.substring(AWS_URL.length());
+        int slashIndex = url.indexOf("/", 8);
+        url = url.substring(slashIndex + 1);
         boolean isObjectExist = amazonS3Client.doesObjectExist(bucket, url);
         if(isObjectExist)amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, url));
     }
