@@ -4,6 +4,7 @@ import 'package:danim/module/bottom_navigation.dart';
 import 'package:danim/module/camera_floating_action_button.dart';
 import 'package:danim/module/custom_app_bar.dart';
 import 'package:danim/view_models/app_view_model.dart';
+import 'package:danim/view_models/camera_view_model.dart';
 import 'package:danim/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,6 +33,9 @@ void main() async {
             '홈',
           ),
         ),
+        ChangeNotifierProvider(
+          create: (_) => CameraViewModel(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -47,6 +51,17 @@ class MyApp extends StatelessWidget {
       title: 'Danim',
       theme: ThemeData(
         fontFamily: "GangwonAll",
+        primaryTextTheme: const TextTheme(
+            titleLarge: TextStyle(
+              color: Colors.black
+            ),
+          titleMedium: TextStyle(
+              color: Colors.black
+          ),
+          titleSmall: TextStyle(
+              color: Colors.black
+          ),
+        ),
         primarySwatch: CustomColors.white,
         // primaryColor:Colors.grey[50] ,
       ),

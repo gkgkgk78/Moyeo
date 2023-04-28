@@ -30,23 +30,23 @@ class AudioPlayerView extends StatelessWidget {
               Expanded(
                 child: viewModel.duration != const Duration(microseconds: 0)
                     ? Slider(
-                        // 현재 위치
-                        value:
-                            viewModel.audioPosition.inMicroseconds.toDouble(),
-                        // 최대 길이 = 음성 파일 길이
-                        max: viewModel.duration.inMicroseconds.toDouble(),
-                        onChanged: (value) {
-                          // 위치 지속적으로 갱신
-                          final position =
-                              Duration(microseconds: value.toInt());
-                          viewModel.seekTo(position);
-                        },
-                      )
+                  // 현재 위치
+                  value:
+                  viewModel.audioPosition.inMicroseconds.toDouble(),
+                  // 최대 길이 = 음성 파일 길이
+                  max: viewModel.duration.inMicroseconds.toDouble(),
+                  onChanged: (value) {
+                    // 위치 지속적으로 갱신
+                    final position =
+                    Duration(microseconds: value.toInt());
+                    viewModel.seekTo(position);
+                  },
+                )
                     : Slider(
-                        value: 0,
-                        max: 0,
-                        onChanged: (double value) {},
-                      ),
+                  value: 0,
+                  max: 0,
+                  onChanged: (double value) {},
+                ),
               ),
               Text(
                 '${viewModel.getAudioPosTimeToString()} /',

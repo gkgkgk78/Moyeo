@@ -1,5 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+
+var logger = Logger();
 
 class AudioPlayerViewModel extends ChangeNotifier {
   // 파일 경로
@@ -8,6 +11,8 @@ class AudioPlayerViewModel extends ChangeNotifier {
   Duration _duration = const Duration(microseconds: 0);
 
   AudioPlayer? _audioPlayer = AudioPlayer();
+  AudioPlayer? get audioPlayer => _audioPlayer;
+
   Duration _audioPosition = Duration.zero;
 
   String? get getAudioFilePath => _audioFilePath;
@@ -29,6 +34,14 @@ class AudioPlayerViewModel extends ChangeNotifier {
 
   Future<void> initDuration() async {
     await _audioPlayer?.setSourceUrl(_audioFilePath!);
+    _duration = (await _audioPlayer?.getDuration())!;
+    notifyListeners();
+  }
+
+  void changeFile(String filePath) async {
+    _audioPosition = Duration.zero;
+    _audioFilePath=filePath;
+    await _audioPlayer?.setSourceUrl(filePath);
     notifyListeners();
   }
 
@@ -126,7 +139,7 @@ class AudioPlayerViewModel extends ChangeNotifier {
   void dispose() {
     _audioFilePath = null;
     stopRecordedFile();
-    _audioPlayer = null;
-    super.dispose();
+    _duration = Duration.zero;
+    _audioPosition = Duration.zero;
   }
 }
