@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:danim/services/timeline_repository.dart';
+import 'package:danim/view_models/chatbot_list_view_model.dart';
 import 'package:danim/view_models/my_feed_view_model.dart';
 import 'package:danim/view_models/search_bar_view_model.dart';
 import 'package:danim/view_models/timeline_detail_view_model.dart';
+import 'package:danim/views/chatbot_list_page.dart';
 import 'package:danim/views/home_feed_page.dart';
 import 'package:danim/views/my_feed_view.dart';
 import 'package:danim/views/timeline_detail_page.dart';
@@ -50,6 +52,20 @@ class AppViewModel with ChangeNotifier {
   updateUserInfo(UserInfo userInfo) {
     _userInfo = userInfo;
     notifyListeners();
+  }
+
+  goYeobotPage() {
+    changePage(1);
+    changeTitle("채팅 리스트");
+    Timer(
+      const Duration(milliseconds: 100),
+          () {
+        Navigator.pushNamed(
+          myFeedNavigatorKey.currentContext!,
+          '/chatbot/list/',
+        );
+      },
+    );
   }
 
   goModifyProfilePage() {
@@ -117,6 +133,11 @@ class AppViewModel with ChangeNotifier {
       );
     } else if (settings.name == '/modify/profile') {
       page = const ModifyProfile();
+    } else if (settings.name == '/chatbot/list/') {
+      page = ChangeNotifierProvider(
+          create: (_) => ChatbotListViewModel(context),
+          child: ChatbotListPage(),
+      );
     } else {
       page = MultiProvider(
         providers: [

@@ -140,6 +140,9 @@ class MyHomePage extends StatelessWidget {
             moveToModifyProfile: () {
               viewModel.goModifyProfilePage();
             },
+            moveToYeobot: () {
+              viewModel.goYeobotPage();
+            }
           ),
           body: PageView(
             controller: viewModel.pageController,

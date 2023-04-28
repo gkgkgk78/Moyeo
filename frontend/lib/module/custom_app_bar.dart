@@ -7,8 +7,9 @@ import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function moveToModifyProfile;
+  final Function moveToYeobot;
 
-  const CustomAppBar({super.key, required this.moveToModifyProfile});
+  const CustomAppBar({super.key, required this.moveToModifyProfile, required this.moveToYeobot});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: PopupMenuButton(
             tooltip: '',
             offset: const Offset(0, 55),
-            icon: new Icon(Icons.menu),
+            icon: const Icon(Icons.menu),
             // 이전 UI
             // ExtendedImage.network(
             //   appViewModel.userInfo.profileImageUrl,
@@ -53,9 +54,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             onSelected: (value) {
               switch (value) {
                 case 0:
-                  moveToModifyProfile();
+                  moveToYeobot();
                   break;
                 case 1:
+                  moveToModifyProfile();
+                  break;
+                case 2:
                   const storage = FlutterSecureStorage();
                   storage.deleteAll();
                   Navigator.pushAndRemoveUntil(
@@ -70,14 +74,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             },
             itemBuilder: (context) => <PopupMenuEntry>[
               const PopupMenuItem(
-                value: 0,
+                  value: 0,
+                  child: SizedBox(
+                    width: 80,
+                    child: Text('여봇'),
+                  )
+              ),
+              const PopupMenuItem(
+                value: 1,
                 child: SizedBox(
                   width: 80,
                   child: Text('프로필변경'),
                 ),
               ),
               const PopupMenuItem(
-                value: 1,
+                value: 2,
                 child: SizedBox(
                   width: 80,
                   child: Text(
@@ -85,7 +96,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
-              )
+              ),
+
             ],
           ),
         ),
