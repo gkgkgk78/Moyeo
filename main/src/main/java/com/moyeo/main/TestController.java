@@ -14,6 +14,6 @@ public class TestController {
     @GetMapping("{name}")
     public ResponseEntity<?> hello(@PathVariable String name){
         log.info("insert string : {}",name);
-        return ResponseEntity.ok("안녕 도커 나는 CICD 되는지 확인중입니다. "+name+"야~");
+        return ResponseEntity.ok("안녕 도커 나는 CICD 되는지 확인중입니다. 두번째 자동화 태스트야! "+name+"야~");
     }
 }
