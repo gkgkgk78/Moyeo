@@ -1,3 +1,11 @@
+sever:
+  port: 443
+
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-type: PKC12
+    key-store-password: moyeo1234
+
 spring:
   port: 8080
   datasource:
