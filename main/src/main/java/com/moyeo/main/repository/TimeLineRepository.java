@@ -49,4 +49,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query(value = "select timeline_id from time_line order by timeline_id desc limit 1", nativeQuery = true)
     Long findLastTimelineId();
 
+    @Query("SELECT CASE WHEN isComplete = true THEN 1 ELSE 0 END FROM TimeLine WHERE userId = :userId ORDER BY createTime DESC")
+    int findLatestTimelineStatus(long userId);
+
 }

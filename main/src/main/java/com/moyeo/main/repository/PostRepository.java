@@ -3,6 +3,7 @@ package com.moyeo.main.repository;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.TimeLine;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,6 +27,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Post findTopByTimelineIdOrderByCreateTimeDesc(TimeLine timeline) ;
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
+
+    @Query("SELECT postId FROM Post WHERE userId = :userId ORDER BY createTime")
+    Long findLatestPost(long userId);
+
+    @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId")
+    String[] findAddressById(long userId);
 
 
 }
