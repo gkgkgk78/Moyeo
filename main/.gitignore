@@ -1,3 +1,6 @@
+application-s3.yml
+application-clova.yml
+
 HELP.md
 .gradle
 build/
