@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "115201145543",
+    "project_id": "moyeo-project",
+    "storage_bucket": "moyeo-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115201145543:android:664a3fc2ffdb5a55609ce2",
+        "android_client_info": {
+          "package_name": "com.danim.danim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7r8MRYyILuHyk2sp3rK0J9mU9zyfGu8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
