@@ -1,4 +1,4 @@
-package com.moyeo.conponent;
+package com.moyeo.main.conponent;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,15 +20,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
 @Component
 public class ClovaSpeechClient {
-    @Value()
-    private static final String SECRET = "058088bb4e64483d8bb892ac32507b7c";
-    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5061/5a47dca7418b8d67af71cdb7d5f767f7cea24457cc3fad3865ddd3b0f402166d";
+    @Value("${clova-secret-key}")
+    private static final String SECRET = null;
+    @Value("${clova-invoke-url}")
+    private static final String INVOKE_URL = null;
 
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();
