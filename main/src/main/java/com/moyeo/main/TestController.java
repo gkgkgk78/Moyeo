@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class TestController {
 
-    @GetMapping("/{name}")
+    @GetMapping("/api/{name}")
     public ResponseEntity<?> hello(@PathVariable String name){
         log.info("insert string : {}",name);
         return ResponseEntity.ok("안녕 도커 나는 SSL 확인중입니다. SSL test! "+name+"야~");
