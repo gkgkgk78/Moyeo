@@ -22,6 +22,7 @@ class TimelineListPageMain extends StatelessWidget {
             child: PagedListView<int, Timeline>(
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<Timeline>(
                 firstPageProgressIndicatorBuilder: (_) => Transform.scale(
@@ -32,7 +33,7 @@ class TimelineListPageMain extends StatelessWidget {
                   ),
                 ),
                 noItemsFoundIndicatorBuilder: (context) => SizedBox(
-                  height: 300,
+                  height: MediaQuery.of(context).size.height*(0.6),
                   child: Center(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

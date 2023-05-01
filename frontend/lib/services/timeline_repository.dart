@@ -12,6 +12,7 @@ class TimelineRepository {
 
   factory TimelineRepository() => _instance;
 
+
   // 메인피드 타임라인 리스트 가져오기
   Future<List<Timeline>> getMainTimelineByPageNum(context, int pageNum) async {
     try {
