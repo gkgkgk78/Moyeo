@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>61261560237-pp5nfg37cbpn43avot2fbfv7d0tcbd47.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.61261560237-pp5nfg37cbpn43avot2fbfv7d0tcbd47</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBkaLlXL-AREnjbXQ53o8OV39UTM_--0ko</string>
+	<key>GCM_SENDER_ID</key>
+	<string>61261560237</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.danim.danim</string>
+	<key>PROJECT_ID</key>
+	<string>moyeo-22a63</string>
+	<key>STORAGE_BUCKET</key>
+	<string>moyeo-22a63.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:61261560237:ios:5f5fe3131065666e384924</string>
+</dict>
+</plist>

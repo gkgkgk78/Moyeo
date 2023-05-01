@@ -24,12 +24,7 @@ class HomeFeedPage extends StatelessWidget {
           builder: (context, snapshot) {
             return Consumer<HomeFeedViewModel>(
               builder: (_, viewModel, __) {
-                return  Scaffold(
-                  body:SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child:Container(
-                    height: MediaQuery.of(context).size.height*(0.9),
-                    child: Stack(
+                return Stack(
                   children: [
                     GestureDetector(
                       behavior: HitTestBehavior.translucent,
@@ -37,7 +32,7 @@ class HomeFeedPage extends StatelessWidget {
                         FocusScope.of(context).unfocus();
                       },
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 70.0),
+                        padding: const EdgeInsets.only(top: 65.0),
                         child: TimelineListPageMain(
                           pagingController: viewModel.pagingController,
                         ),
@@ -60,40 +55,7 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // 시간 남으면 수정
-                    // Positioned(
-                    //     top:500,
-                    //     child: GestureDetector(
-                    //     behavior: HitTestBehavior.translucent,
-                    //     onTap: () {
-                    //       FocusScope.of(context).unfocus();
-                    //     },
-                    //   child:Padding(
-                    //     padding:const EdgeInsets.only(top: 500),
-                    //         child: HomeFeedItemPage(
-                    //           pagingController: viewModel.pagingController,
-                    //         ),
-                    //   )
-                    // )
-                    // )
-
-                    // GestureDetector(
-                    //   behavior: HitTestBehavior.translucent,
-                    //   onTap: () {
-                    //     FocusScope.of(context).unfocus();
-                    //   },
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(top: 500),
-                    //     child: HomeFeedItemPage(
-                    //       pagingController: viewModel.pagingController,
-                    //     ),
-                    //   ),
-                    // ),
-                   ]
-                )
-                  )
-                )
-
+                  ],
                 );
               },
             );

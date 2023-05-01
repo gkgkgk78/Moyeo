@@ -1,7 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 import '../services/chatbot_repository.dart';
+
+var logger = Logger();
 
 class ChatbotListViewModel extends ChangeNotifier {
   BuildContext _context;
@@ -28,10 +32,13 @@ class ChatbotListViewModel extends ChangeNotifier {
 
   ChatbotListViewModel(this._context) {
     // getChatList(_context);
+    // testAPI();
   }
 
   Future<void> getChatList(BuildContext context) async {
     _chatList = await ChatbotRepository().ChatListFromServer(context);
   }
+
+
 
 }

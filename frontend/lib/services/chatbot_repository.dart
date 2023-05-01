@@ -1,6 +1,7 @@
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mongo_dart/mongo_dart.dart';
 
 import '../utils/auth_dio.dart';
 
@@ -15,7 +16,7 @@ class ChatbotRepository {
   Future<dynamic> ChatListFromServer(BuildContext context) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post("api/auth/chatlog");
+      Response response = await dio.post("api/auth/chatlist");
       return response;
     } on DioError catch (error) {
       throw Exception('Fail to upload to Server: ${error.message}');
@@ -24,10 +25,13 @@ class ChatbotRepository {
 
   // 채팅 로그를 가져온다.
   Future<dynamic> ChatDetailFromServer(BuildContext context, int chatId) async {
+    String? mongoUrl = dotenv.env['mongoUrl'];
     try {
-      final dio = await authDio(context);
-      Response response = await dio.post("api/auth/chatlog/$chatId");
-      return response;
+      Db db = Db('$mongoUrl');
+      await db.open();
+      DbCollection chatDetail = db.collection("$chatId");
+      final chatLog = await chatDetail.find().toList();
+      return chatLog;
     } on DioError catch (error) {
       throw Exception('Fail to upload to Server: ${error.message}');
     }
