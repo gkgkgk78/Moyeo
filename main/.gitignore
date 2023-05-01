@@ -1,7 +1,8 @@
 application-s3.yml
 application-clova.yml
 application.yml
-src/main/resources/application.yml
+main/src/main/resources/application.yml
+
 
 HELP.md
 .gradle
