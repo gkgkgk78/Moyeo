@@ -26,11 +26,19 @@ class PostDetail extends StatelessWidget {
                 width: 0,
                 padding: EdgeInsets.only(left: 10),
               ),
+              beforeLineStyle:  const LineStyle(
+                color: Colors.grey,
+                thickness: 1,
+              ),
+              afterLineStyle:  const LineStyle(
+                color: Colors.grey,
+                thickness: 1,
+              ),
               alignment: TimelineAlign.center,
             ),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width - 60,
+            width: MediaQuery.of(context).size.width*(0.65),
             height: 500,
             child: Column(
               children: [
@@ -41,7 +49,7 @@ class PostDetail extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return Dialog(
-                            insetPadding: const EdgeInsets.all(5),
+                            insetPadding: const EdgeInsets.all(20),
                             child: ImagesPageView(
                               listImageUrl: viewModel.post.photoList,
                               boxFit: BoxFit.contain,
@@ -56,7 +64,7 @@ class PostDetail extends StatelessWidget {
                 ),
                 Consumer<AppViewModel>(builder: (_, appViewModel, __) {
                   return SizedBox(
-                    height: 40,
+                    height: 50,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [

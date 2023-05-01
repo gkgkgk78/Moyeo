@@ -10,7 +10,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return Consumer<AppViewModel>(
       builder: (context, viewModel, child) {
         return SizedBox(
-          height: 65,
+          height: 70,
           child: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             notchMargin: 8.0,
