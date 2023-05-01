@@ -1,12 +1,12 @@
-import 'package:danim/models/SearchedPost.dart';
-import 'package:danim/models/Timeline.dart';
-import 'package:danim/utils/auth_dio.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
 
+import '../models/SearchedPost.dart';
 import '../models/TimelineInfo.dart';
 import '../models/UserInfo.dart';
+import '../utils/auth_dio.dart';
 
 var logger = Logger();
 

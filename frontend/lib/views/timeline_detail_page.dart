@@ -1,11 +1,13 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/timeline_detail_view_model.dart';
-import 'package:danim/views/post_list_item.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+
+import '../view_models/app_view_model.dart';
+import '../view_models/timeline_detail_view_model.dart';
 
 var logger = Logger();
 

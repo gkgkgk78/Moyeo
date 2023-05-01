@@ -1,11 +1,12 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/views/timeline_list_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:moyeo/views/timeline_list_item.dart';
 import 'package:provider/provider.dart';
 
 import '../models/Timeline.dart';
 import '../module/gradient_circular_indicator.dart';
+import '../view_models/app_view_model.dart';
 
 class TimelineListPage extends StatelessWidget {
   final PagingController<int, Timeline> pagingController;

@@ -1,11 +1,13 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/my_feed_view_model.dart';
-import 'package:danim/view_models/search_bar_view_model.dart';
-import 'package:danim/views/search_bar_view.dart';
-import 'package:danim/views/timeline_list_page.dart';
-import 'package:danim/views/user_information_view.dart';
+
 import 'package:flutter/material.dart';
+import 'package:moyeo/views/search_bar_view.dart';
+import 'package:moyeo/views/timeline_list_page.dart';
+import 'package:moyeo/views/user_information_view.dart';
 import 'package:provider/provider.dart';
+
+import '../view_models/app_view_model.dart';
+import '../view_models/my_feed_view_model.dart';
+import '../view_models/search_bar_view_model.dart';
 
 class MyFeedView extends StatelessWidget {
   const MyFeedView({super.key});

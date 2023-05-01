@@ -5,8 +5,7 @@ import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
-import 'package:danim/models/LocationInformation.dart';
-import 'package:danim/module/my_alert_dialog.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,8 +21,10 @@ import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../models/LocationInformation.dart';
 import '../models/UserInfo.dart';
 import '../module/audio_player_view_model.dart';
+import '../module/my_alert_dialog.dart';
 import '../services/upload_repository.dart';
 
 var logger = Logger();

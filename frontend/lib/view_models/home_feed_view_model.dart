@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../models/Timeline.dart';
 import '../services/timeline_repository.dart';
 
+
 class HomeFeedViewModel extends ChangeNotifier {
   int searchedUserUid;
   final int myUserUid;

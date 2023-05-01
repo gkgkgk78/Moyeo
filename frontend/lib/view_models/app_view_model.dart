@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:danim/services/timeline_repository.dart';
-import 'package:danim/view_models/chatbot_list_view_model.dart';
-import 'package:danim/view_models/my_feed_view_model.dart';
-import 'package:danim/view_models/search_bar_view_model.dart';
-import 'package:danim/view_models/timeline_detail_view_model.dart';
-import 'package:danim/views/chatbot_list_page.dart';
-import 'package:danim/views/home_feed_page.dart';
-import 'package:danim/views/my_feed_view.dart';
-import 'package:danim/views/timeline_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/view_models/search_bar_view_model.dart';
+import 'package:moyeo/view_models/timeline_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserInfo.dart';
+import '../services/timeline_repository.dart';
 import '../utils/stack.dart';
+import '../views/chatbot_list_page.dart';
+import '../views/home_feed_page.dart';
 import '../views/modify_profile.dart';
+import '../views/my_feed_view.dart';
+import '../views/timeline_detail_page.dart';
+import 'chatbot_list_view_model.dart';
+import 'my_feed_view_model.dart';
 
 class AppViewModel with ChangeNotifier {
   int currentIndex;

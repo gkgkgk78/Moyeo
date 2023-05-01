@@ -1,20 +1,20 @@
 import 'dart:io';
 
-import 'package:danim/module/bottom_navigation.dart';
-import 'package:danim/module/camera_floating_action_button.dart';
-import 'package:danim/module/custom_app_bar.dart';
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/camera_view_model.dart';
-import 'package:danim/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/utils/white.dart';
+import 'package:moyeo/view_models/app_view_model.dart';
+import 'package:moyeo/view_models/camera_view_model.dart';
+import 'package:moyeo/views/login_page.dart';
 import 'package:provider/provider.dart';
 
-import 'package:danim/utils/white.dart';
 
 import 'models/UserInfo.dart';
+import 'module/bottom_navigation.dart';
+import 'module/camera_floating_action_button.dart';
+import 'module/custom_app_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

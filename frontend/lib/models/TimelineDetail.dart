@@ -1,4 +1,6 @@
-import 'package:danim/models/Post.dart';
+
+
+import 'Post.dart';
 
 class TimelineDetail {
   final String flag;

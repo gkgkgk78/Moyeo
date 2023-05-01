@@ -1,7 +1,9 @@
-import 'package:danim/models/SearchedPost.dart';
-import 'package:danim/services/search_repository.dart';
+
 
 import 'package:flutter/material.dart';
+
+import '../models/SearchedPost.dart';
+import '../services/search_repository.dart';
 
 
 

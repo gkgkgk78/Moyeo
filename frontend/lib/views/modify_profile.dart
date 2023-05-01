@@ -1,8 +1,10 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/modify_profile_view_model.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../view_models/app_view_model.dart';
+import '../view_models/modify_profile_view_model.dart';
 
 class ModifyProfile extends StatelessWidget {
   const ModifyProfile({super.key});

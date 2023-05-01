@@ -1,11 +1,12 @@
-import 'package:danim/models/Timeline.dart';
-import 'package:danim/models/UserInfo.dart';
-import 'package:danim/utils/auth_dio.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../models/Timeline.dart';
 import '../models/Token.dart';
+import '../models/UserInfo.dart';
+import '../utils/auth_dio.dart';
 
 class UserRepository {
   // 싱글턴 패턴

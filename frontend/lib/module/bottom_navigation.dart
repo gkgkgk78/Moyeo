@@ -1,6 +1,8 @@
-import 'package:danim/view_models/app_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../view_models/app_view_model.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
@@ -16,8 +18,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: Theme(
               data: ThemeData(
                   splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent
-              ),
+                  highlightColor: Colors.transparent),
               child: BottomNavigationBar(
                   iconSize: 25,
                   showSelectedLabels: false,
@@ -44,13 +45,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
                           blendMode: BlendMode.srcIn,
                           child: Container(
                               margin: const EdgeInsets.only(right: 40.0),
-                              child: const Icon(Icons.home, size: 36,)),
+                              child: const Icon(
+                                Icons.home,
+                                size: 36,
+                              )),
                         ),
                         icon: Container(
                             margin: const EdgeInsets.only(right: 40.0),
                             child: const Icon(Icons.home, color: Colors.grey)),
-                        label: "홈"
-                    ),
+                        label: "홈"),
                     BottomNavigationBarItem(
                       activeIcon: ShaderMask(
                         shaderCallback: (Rect bounds) {
@@ -68,16 +71,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
                         blendMode: BlendMode.srcIn,
                         child: Container(
                             margin: const EdgeInsets.only(left: 40.0),
-                            child: const Icon(Icons.account_circle, size: 35,)),
+                            child: const Icon(
+                              Icons.account_circle,
+                              size: 35,
+                            )),
                       ),
                       icon: Container(
                           margin: const EdgeInsets.only(left: 40.0),
-                          child: const Icon(Icons.account_circle_outlined, color: Colors.grey)),
+                          child: const Icon(Icons.account_circle_outlined,
+                              color: Colors.grey)),
                       label: "내 모여",
                     ),
                   ],
-                  selectedItemColor: Colors.purpleAccent.shade100
-              ),
+                  selectedItemColor: Colors.purpleAccent.shade100),
             ),
           ),
         );

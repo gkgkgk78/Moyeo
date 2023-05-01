@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
-import 'package:danim/view_models/chatbot_detail_view_model.dart';
+import '../view_models/chatbot_detail_view_model.dart';
 
 var logger = Logger();
 

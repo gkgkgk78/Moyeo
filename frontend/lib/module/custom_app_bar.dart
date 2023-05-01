@@ -1,9 +1,11 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/views/login_page.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+
+import '../view_models/app_view_model.dart';
+import '../views/login_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function moveToModifyProfile;

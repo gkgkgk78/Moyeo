@@ -1,11 +1,12 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/search_result_view_model.dart';
-import 'package:danim/views/search_bar_view.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:moyeo/views/search_bar_view.dart';
 import 'package:provider/provider.dart';
 
+import '../view_models/app_view_model.dart';
 import '../view_models/search_bar_view_model.dart';
+import '../view_models/search_result_view_model.dart';
 
 class SearchResultView extends StatelessWidget {
   const SearchResultView({super.key});
