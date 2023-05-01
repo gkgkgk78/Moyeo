@@ -1,12 +1,14 @@
 import 'dart:io';
 
-import 'package:danim/models/UserInfo.dart';
-import 'package:danim/services/user_repository.dart';
-import 'package:danim/view_models/app_view_model.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../models/UserInfo.dart';
+import '../services/user_repository.dart';
+import 'app_view_model.dart';
 
 class ModifyProfileViewModel extends ChangeNotifier {
   final textEditController = TextEditingController();

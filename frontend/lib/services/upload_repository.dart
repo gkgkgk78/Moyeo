@@ -1,6 +1,8 @@
-import 'package:danim/utils/auth_dio.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../utils/auth_dio.dart';
 
 class UploadRepository {
   UploadRepository._internal();

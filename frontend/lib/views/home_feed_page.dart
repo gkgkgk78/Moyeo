@@ -1,14 +1,13 @@
-import 'package:danim/view_models/home_feed_view_model.dart';
-import 'package:danim/view_models/search_bar_view_model.dart';
-import 'package:danim/views/home_feed_item_page.dart';
-import 'package:danim/views/search_bar_view.dart';
-import 'package:danim/views/timeline_list_page_main.dart';
-import 'package:extended_image/extended_image.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:moyeo/views/search_bar_view.dart';
+import 'package:moyeo/views/timeline_list_page_main.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../view_models/app_view_model.dart';
+import '../view_models/home_feed_view_model.dart';
+import '../view_models/search_bar_view_model.dart';
 
 class HomeFeedPage extends StatelessWidget {
   const HomeFeedPage({super.key});

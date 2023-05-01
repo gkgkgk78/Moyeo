@@ -1,7 +1,8 @@
-import 'package:danim/services/timeline_repository.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/TimelineDetail.dart';
+import '../services/timeline_repository.dart';
 
 class TimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;

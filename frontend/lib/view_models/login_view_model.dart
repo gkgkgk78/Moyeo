@@ -1,10 +1,13 @@
-import 'package:danim/main.dart';
-import 'package:danim/models/Token.dart';
-import 'package:danim/models/UserInfo.dart';
-import 'package:danim/services/user_repository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:logger/logger.dart';
+
+import '../main.dart';
+import '../models/Token.dart';
+import '../models/UserInfo.dart';
+import '../services/user_repository.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final storage = const FlutterSecureStorage();

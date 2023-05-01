@@ -1,13 +1,15 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/my_feed_view_model.dart';
-import 'package:danim/view_models/search_bar_view_model.dart';
-import 'package:danim/view_models/search_result_view_model.dart';
-import 'package:danim/views/my_feed_view.dart';
-import 'package:danim/views/search_result_page.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:moyeo/views/search_result_page.dart';
 import 'package:provider/provider.dart';
+
+import '../view_models/app_view_model.dart';
+import '../view_models/my_feed_view_model.dart';
+import '../view_models/search_bar_view_model.dart';
+import '../view_models/search_result_view_model.dart';
+import 'my_feed_view.dart';
 
 class SearchBar extends StatelessWidget {
   const SearchBar({super.key});

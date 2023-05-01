@@ -1,4 +1,4 @@
-import 'package:danim/models/TimelineDetail.dart';
+import 'package:moyeo/models/TimelineDetail.dart';
 
 class TimelineInfo {
   final List<TimelineDetail> timelineDetails;

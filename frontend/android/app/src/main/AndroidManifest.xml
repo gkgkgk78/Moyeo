@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.danim.danim">
+    package="com.moyeo.moyeo">
    <application
-        android:label="danim"
+        android:label="모여"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true"

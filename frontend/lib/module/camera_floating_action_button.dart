@@ -1,7 +1,8 @@
-import 'package:danim/view_models/app_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../view_models/app_view_model.dart';
 import '../views/camera_screen.dart';
 
 class CameraFloatingActionButton extends StatelessWidget {

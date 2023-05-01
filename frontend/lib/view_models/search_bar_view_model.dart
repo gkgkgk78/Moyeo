@@ -1,8 +1,9 @@
-import 'package:danim/services/search_repository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import '../models/UserInfo.dart';
+import '../services/search_repository.dart';
 
 class SearchBarViewModel extends ChangeNotifier {
   final bool isMyFeed;

@@ -1,13 +1,14 @@
 import 'package:animated_icon_button/animated_icon_button.dart';
-import 'package:danim/module/audio_player_view.dart';
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/view_models/post_view_model.dart';
-import 'package:danim/module/images_page_view.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import '../module/audio_player_view.dart';
 import '../module/audio_player_view_model.dart';
+import '../module/images_page_view.dart';
+import '../view_models/app_view_model.dart';
+import '../view_models/post_view_model.dart';
 
 class PostDetail extends StatelessWidget {
   const PostDetail({super.key});

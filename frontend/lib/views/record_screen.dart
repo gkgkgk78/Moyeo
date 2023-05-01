@@ -1,13 +1,14 @@
-import 'package:danim/module/my_alert_dialog.dart';
-import 'package:danim/module/custom_app_bar.dart';
-import 'package:danim/view_models/app_view_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../module/audio_player_view.dart';
 import '../module/audio_player_view_model.dart';
+import '../module/custom_app_bar.dart';
 import '../module/images_page_view.dart';
+import '../module/my_alert_dialog.dart';
+import '../view_models/app_view_model.dart';
 import '../view_models/camera_view_model.dart';
 
 class RecordView extends StatelessWidget {

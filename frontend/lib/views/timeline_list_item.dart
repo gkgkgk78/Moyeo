@@ -1,8 +1,9 @@
-import 'package:danim/models/Timeline.dart';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/Timeline.dart';
 import '../view_models/app_view_model.dart';
 
 class TimelineListItem extends StatelessWidget {

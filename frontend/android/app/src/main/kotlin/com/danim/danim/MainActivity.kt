@@ -1,4 +1,4 @@
-package com.danim.danim
+package com.moyeo.moyeo
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

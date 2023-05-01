@@ -1,7 +1,8 @@
-import 'package:danim/services/post_repository.dart';
+
 import 'package:flutter/cupertino.dart';
 
 import '../models/Post.dart';
+import '../services/post_repository.dart';
 
 class PostViewModel extends ChangeNotifier {
   final Post post;

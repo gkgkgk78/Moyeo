@@ -1,9 +1,10 @@
-import 'package:danim/models/Timeline.dart';
-import 'package:danim/utils/auth_dio.dart';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import '../models/Timeline.dart';
 import '../models/TimelineInfo.dart';
+import '../utils/auth_dio.dart';
 
 class TimelineRepository {
   TimelineRepository._internal();
