@@ -15,11 +15,17 @@ class TimelineListItemMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const cardHeight = 300.0;
+    final MyHeight = MediaQuery.of(context).size.height;
+    final MyWidth = MediaQuery.of(context).size.width;
+    // final cardHeight = 300;
     return Consumer<AppViewModel>(builder: (_, appViewModel, __) {
       return Container(
-        margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
-        height: cardHeight,
+        width: MyWidth*(0.6),
+        height: MyHeight*(0.5),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red),
+        ),
+        margin: EdgeInsets.only(left: MyWidth*(0.1), right: MyWidth*(0.1), bottom: MyHeight*(0.25)),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -30,13 +36,22 @@ class TimelineListItemMain extends StatelessWidget {
             );
           },
           child: TransparentImageCard(
-            width: 300,
-            imageProvider: AssetImage(
+            width: MyWidth*(0.6),
+            height: MyHeight*(0.5),
+            borderRadius: 20,
+            // 추후에 assetimage로 바꾸기
+            imageProvider: NetworkImage(
               timeline.imageUrl.isNotEmpty
                 ? timeline.imageUrl
                 :'assets/images/default_image.png'
             ),
-            title: Text(timeline.title),
+            title: Text(
+                timeline.title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize:20,
+                    fontWeight:FontWeight.bold
+                )),
             ),
           ),
         );
