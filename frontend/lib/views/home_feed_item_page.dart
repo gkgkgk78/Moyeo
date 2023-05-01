@@ -1,10 +1,11 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/views/home_feed_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 import '../models/Timeline.dart';
+import '../view_models/app_view_model.dart';
+import 'home_feed_item.dart';
 
 class HomeFeedItemPage extends StatelessWidget{
   final PagingController<int, Timeline> pagingController;

@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/timeline_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../firebase_options.dart';
 import '../models/UserInfo.dart';
+import '../services/firebase_repository.dart';
 import '../services/timeline_repository.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_list_page.dart';
@@ -26,7 +31,9 @@ class AppViewModel with ChangeNotifier {
   String _title = '';
   final MyStack<String> _formerTitle = MyStack<String>();
 
-  AppViewModel(this._userInfo, this._title, {this.currentIndex = 0});
+  AppViewModel(this._userInfo, this._title, {this.currentIndex = 0}) {
+    // initializeFirebase();
+  }
 
   String get title => _title;
 

@@ -1,10 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:logger/logger.dart';
+import 'package:moyeo/services/firebase_repository.dart';
 
 import '../models/Timeline.dart';
 import '../services/timeline_repository.dart';
 
-
+var logger = Logger();
 
   List<Timeline> test = [
     Timeline(timelineId: 1,
@@ -47,6 +50,7 @@ class HomeFeedViewModel extends ChangeNotifier {
     this.searchedUserUid = -1,
     required this.myUserUid,
   }) {
+    initializeFirebase(context);
     if (searchedUserUid == -1) {
       pagingController.addPageRequestListener((pageKey) {
         getMainTimelineList(context, pageKey);
@@ -76,7 +80,6 @@ class HomeFeedViewModel extends ChangeNotifier {
         final nextPageKey = pageKey + 1;
         pagingController.appendPage(newItems, nextPageKey);
       }
-      notifyListeners();
     } catch (e) {
       throw Exception('get timeline list fail: $e');
     }
@@ -93,7 +96,6 @@ class HomeFeedViewModel extends ChangeNotifier {
       final nextPageKey = pageKey + 1;
       pagingController.appendPage(newItems, nextPageKey);
     }
-    notifyListeners();
   }
 
   Future<void> getMyTimelineList(BuildContext context, int pageKey) async {
@@ -107,11 +109,28 @@ class HomeFeedViewModel extends ChangeNotifier {
       final nextPageKey = pageKey + 1;
       pagingController.appendPage(newItems, nextPageKey);
     }
-    notifyListeners();
   }
 
   refresh(context) async {
     pagingController.refresh();
+  }
+
+  Future<void> initializeFirebase(BuildContext context) async {
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+      await FirebaseRepository().RefreshToken(context, newToken);
+    });
+    // 알림 권한 요청
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage rm) {});
   }
 
   @override
