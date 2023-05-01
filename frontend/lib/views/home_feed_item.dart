@@ -1,5 +1,5 @@
-import 'package:danim/models/Timeline.dart';
-import 'package:danim/view_models/app_view_model.dart';
+import 'package:moyeo/models/Timeline.dart';
+import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:extended_image/extended_image.dart';
 
 import 'package:flutter/material.dart';

@@ -4,6 +4,22 @@ import 'package:flutter/material.dart';
 import '../models/TimelineDetail.dart';
 import '../services/timeline_repository.dart';
 
+import '../models/Post.dart';
+import '../models/TimelineInfo.dart';
+
+List<TimelineDetail> test2 = [
+  TimelineDetail(flag: "flag", nation: "Seoul", postList: [
+    Post(postId: 1, voiceUrl: "", voiceLength: 0, address: "서울", text: "테스트", photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20",], isFavorite: false, favoriteCount: 0)
+  ], startDate: "2023-04-01", finishDate: "2023-05-01"),
+  TimelineDetail(flag: "flag", nation: "Seoul", postList: [], startDate: "2023-03-01", finishDate: "2023-04-01")
+
+];
+
+List<TimelineInfo> test1 = [
+  TimelineInfo(timelineDetails: test2, isPublic: true, isComplete: true, isMine: true),
+];
+
+
 class TimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;
   bool _isMine = false;
@@ -35,8 +51,10 @@ class TimelineDetailViewModel extends ChangeNotifier {
   }
 
   loadTimelineDetails(context) async {
-    final timelineInfo = await TimelineRepository()
-        .getTimelineDetailsByTimelineId(context, timelineId);
+    // 주석 해제  현재 테스트 상태
+    // final timelineInfo = await TimelineRepository()
+    //     .getTimelineDetailsByTimelineId(context, timelineId);
+    final timelineInfo = test1[0];
     _timelineDetails = timelineInfo.timelineDetails;
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;

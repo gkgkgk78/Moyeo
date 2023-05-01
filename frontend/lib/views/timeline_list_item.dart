@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../models/Timeline.dart';
 import '../view_models/app_view_model.dart';
 
+import 'package:moyeo/views/timeline_detail_page.dart';
+
 class TimelineListItem extends StatelessWidget {
   final Timeline timeline;
 
@@ -22,9 +24,14 @@ class TimelineListItem extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).unfocus();
             appViewModel.changeTitle(timeline.title);
-            Navigator.pushNamed(
+            // 주석해제 필요 현재 테스트 상태
+            // Navigator.pushNamed(
+            //   context,
+            //   '/timeline/detail/${timeline.timelineId}',
+            // );
+            Navigator.push(
               context,
-              '/timeline/detail/${timeline.timelineId}',
+              MaterialPageRoute(builder: (BuildContext context) => TimelineDetailPage(key:Key("1")) )
             );
           },
           child: Card(

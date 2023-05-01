@@ -1,5 +1,5 @@
-import 'package:danim/view_models/app_view_model.dart';
-import 'package:danim/views/home_feed_item.dart';
+import 'package:moyeo/view_models/app_view_model.dart';
+import 'package:moyeo/views/home_feed_item.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';

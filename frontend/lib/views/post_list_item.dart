@@ -35,7 +35,7 @@ class PostListItem extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         leading: SizedBox(
-          width: 60,
+          width: 40,
           height: 60,
           child: TimelineTile(
             isLast: (timelineIndex == viewModel.timelineDetails.length - 1) &&
@@ -46,8 +46,16 @@ class PostListItem extends StatelessWidget {
                     .isExpand),
             indicatorStyle: const IndicatorStyle(
                 width: 20,
-                color: Colors.lightBlue,
+                color: Colors.grey,
                 padding: EdgeInsets.only(left: 10)),
+            beforeLineStyle:  const LineStyle(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+            afterLineStyle:  const LineStyle(
+              color: Colors.grey,
+              thickness: 1,
+            ),
             endChild: Container(
               padding: const EdgeInsets.all(8),
             ),
