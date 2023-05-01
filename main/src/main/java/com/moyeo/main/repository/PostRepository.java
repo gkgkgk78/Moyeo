@@ -31,7 +31,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT postId FROM Post WHERE userId = :userId ORDER BY createTime")
     Long findLatestPost(long userId);
 
-    @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId")
+    @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId AND userId = :userId")
     String[] findAddressById(long userId);
 
 
