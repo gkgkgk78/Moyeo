@@ -9,6 +9,7 @@ import papago
 
 app = Flask(__name__)
 
+
 from pymongo import MongoClient
 import datetime
 
