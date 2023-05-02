@@ -5,17 +5,17 @@ import asyncio
 from flask import Flask
 
 import chatgpt
+import config
 import papago
 
 app = Flask(__name__)
-
 
 from pymongo import MongoClient
 import datetime
 
 # db 연동
 # conn = MongoClient('127.0.0.1', 27017)
-conn = MongoClient("mongodb://Moyeo:moyeochat1234@k8a107.p.ssafy.io:27017/chat?authSource=admin")
+conn = MongoClient(config.mongourl)
 
 # db 생성
 db = conn.chat
@@ -63,9 +63,9 @@ def index1():
 
     return []
 
+
 @app.route("/hi22", methods=["POST"])
 def indext1():
-
     asyncio(aasynctest())
     print("chatgpt작업시작")
     chatgpt.chattogpt("Teach me how to decide what I want to do")
@@ -84,8 +84,6 @@ async def aasynctest():
                  "date": datetime.datetime.utcnow()}  # 도큐먼트 생성 시간(현재 시간)입니다.
 
     collection.insert_one(document1)
-
-
 
 
 @app.route("/hi23", methods=["POST"])
