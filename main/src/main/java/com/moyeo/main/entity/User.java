@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Column(length = 100)
     private String profileImageUrl;
 
-    @Column(length = 100)
+    @Column
     private String refreshToken;
 
     //@ApiModelProperty(hidden = true)
