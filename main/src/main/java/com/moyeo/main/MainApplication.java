@@ -10,6 +10,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class MainApplication {
 	// 서버 실행 전 아시아/서울 시간으로 서버 시간 동기화
+
 	@PostConstruct
 	public void started() {
 		Locale.setDefault(Locale.KOREA);
