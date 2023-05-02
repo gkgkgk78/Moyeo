@@ -13,10 +13,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/module/gradient_text.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:record/record.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -48,6 +48,11 @@ class CameraViewModel extends ChangeNotifier {
   List<CameraDescription> get cameras => _cameras;
 
   String get imagePath => _imagePath;
+
+
+  // double _zoomLevel = 1.0;
+  // double get zoomLevel => _zoomLevel;
+
 
   final record = Record();
   String fileName = DateFormat('yyyyMMdd.Hmm.ss').format(DateTime.now());
@@ -135,8 +140,15 @@ class CameraViewModel extends ChangeNotifier {
       await _controller.initialize();
       notifyListeners();
     }
-
   }
+
+  // 줌 기능
+  // Future<void> changeZoomLevel(double scale) async {
+  //   logger.d(scale);
+  //   _zoomLevel = scale;
+  //   _controller.setZoomLevel(_zoomLevel);
+  //   notifyListeners();
+  // }
 
   // 촬영 페이지 관련 기능
   //////////////////////////////////////////////////////////////////////////////////////
@@ -394,15 +406,27 @@ class CameraViewModel extends ChangeNotifier {
         style: TextStyle(fontSize: 25),
       ),
       actions: [
-        TextButton(
-            child: const Text("등록"),
-            onPressed: () {
+        GestureDetector(
+            child: const GradientText(
+              "등록할게요",
+              gradient: [Colors.blueAccent,Colors.purple],
+              style: TextStyle(
+                fontSize: 12
+              ),
+            ),
+            onTap: () {
               Navigator.of(context).pop();
               postFiles(context, myInfo, move);
             }),
-        TextButton(
-            child: const Text("아니요"),
-            onPressed: () {
+        GestureDetector(
+            child: const GradientText(
+              "잠깐만요",
+              gradient: [Colors.orangeAccent,Colors.purpleAccent],
+              style: TextStyle(
+                  fontSize: 12
+              ),
+            ),
+            onTap: () {
               Navigator.of(context).pop();
             })
       ],
