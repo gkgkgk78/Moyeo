@@ -27,6 +27,7 @@ def index():
     # 한국어 to 영어 번역
     papago.koTOeng("안녕 난 말숙이야")
 
+
     # 영어 to 한국어 번역
     papago.engTOko("hi i am yoonhee")
 
