@@ -1,9 +1,5 @@
-# from autogpt import main
-
 import asyncio
-
 from flask import Flask
-
 import chatgpt
 import config
 import papago
