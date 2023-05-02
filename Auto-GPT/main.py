@@ -1,13 +1,16 @@
+# from autogpt import main
+
 import asyncio
 from flask import Flask
+import autogpt.cli
+import click
 import chatgpt
 import config
 import papago
-
-app = Flask(__name__)
-
 from pymongo import MongoClient
 import datetime
+
+app = Flask(__name__)
 
 # db 연동
 # conn = MongoClient('127.0.0.1', 27017)
@@ -17,16 +20,16 @@ conn = MongoClient(config.mongourl)
 db = conn.chat
 
 
+# FLASK에서 기본적으로 구현 하고자 하는 기능들이 존재하는 함수
 @app.route("/", methods=["POST"])
 def index():
     # autogpt.cli.main()
-    # ctx = click.Context(autogpt.cli.main, info_name='hello')
-    # ee = ctx.invoke(autogpt.cli.main, name='you are genuis')
-    # ee = ee
+    ctx = click.Context(autogpt.cli.main, info_name='hello')
+    ee = ctx.invoke(autogpt.cli.main, name='you are genuis')
+    ee = ee
 
     # 한국어 to 영어 번역
     papago.koTOeng("안녕 난 말숙이야")
-
 
     # 영어 to 한국어 번역
     papago.engTOko("hi i am yoonhee")
@@ -89,7 +92,6 @@ def indexaa():
     a = collection.find()
     for l in a:
         print(l)
-
 
     return []
 

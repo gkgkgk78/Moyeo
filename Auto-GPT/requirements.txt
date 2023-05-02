@@ -22,7 +22,6 @@ tweepy
 click
 pymongo
 datetime
-asyncio
 
 ##Dev
 coverage
