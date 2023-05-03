@@ -12,8 +12,11 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Slf4j
 @Configuration
@@ -34,17 +37,45 @@ public class BatchConfig {
                 .build();
     }
     @Bean
-    private Step chunkStep() {
+    public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
                 .<Post, FirebaseCM>chunk(10)
-                .reader()
-                .processor()
-                .writer()
+                .reader(itemReader())
+                .processor(itemProcessor())
+                .writer(itemWriter())
                 .build();
+    }
+    @Bean
+    public ItemWriter<FirebaseCM> itemWriter() {
+        return new ItemWriter<FirebaseCM>() {
+            @Override
+            public void write(List<? extends FirebaseCM> items) throws Exception {
+
+            }
+        };
+    }
+    @Bean
+    public ItemProcessor<Post,FirebaseCM> itemProcessor() {
+        return new ItemProcessor<Post, FirebaseCM>() {
+            @Override
+            public FirebaseCM process(Post item) throws Exception {
+                return null;
+            }
+        };
     }
 
     @Bean
-    private Step taskStep() {
+    public ItemReader<Post> itemReader() {
+        return new ItemReader<Post>() {
+            @Override
+            public Post read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+                return null;
+            }
+        };
+    }
+
+    @Bean
+    public Step taskStep() {
         return stepBuilderFactory.get(STEP_NAME)
                 .tasklet(new RestRecoTasklet())
                 .build();
