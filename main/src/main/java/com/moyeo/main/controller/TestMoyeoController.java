@@ -43,24 +43,6 @@ public class TestMoyeoController {
 
     private final YeobotClient yeobotClient;
 
-    @Operation(description = "타임라인 생성하는 컨트롤러")
-    @PostMapping("")
-    public ResponseEntity<?> makeTimeLine() throws Exception {
-        //유저 한명을 받아 와서 해당 유저로 타임라인을 생성하고Y자 한다
-        log.info("여행 시작 기능 시작");
-        for (int i = 1; i < 100000; i++) {
-            timeLineService.makenewTimelineTemp();
-            for (int j = 0; j < 9; j++) {
-                Post savedPost = postService.makePost();
-                log.info("");
-                List<Photo> photoList = photoService.createPhotoListTest(savedPost);
-                postService.insertPostTest(savedPost, photoList, AddPostReq.builder().timelineId((long) i).address1("test").build());
-            }
-            timeLineService.changeTimelineFinish();
-        }
-        log.info("여행 시작 기능 종료");
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> signUpKakao() throws Exception {
