@@ -1,5 +1,7 @@
 package com.moyeo.main.service;
 
+import static java.time.LocalDateTime.*;
+
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.GetPostRes;
 import com.moyeo.main.dto.WordInfo;
@@ -126,6 +128,8 @@ public class PostServiceImpl implements PostService {
             new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
 
+        log.info("clova result: {}", result);
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         JsonNode rootNode = objectMapper.readTree(result);
@@ -202,6 +206,9 @@ public class PostServiceImpl implements PostService {
         savedPost.setTimelineId(timeline);
         savedPost.setNationId(nation);
         savedPost.setUserId(timeline.getUserId()); // 추가
+        savedPost.setFavoriteCount(0L);
+        savedPost.setCreateTime(now());
+        savedPost.setModifyTime(now());
         Post resavedPost = postRepository.save(savedPost);
         log.info("savePost Transaction complete");
 
