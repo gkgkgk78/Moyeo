@@ -18,6 +18,10 @@ class ChatbotViewModel extends ChangeNotifier {
 
   String get inputText => _inputText;
 
+  bool _isAnswered = false;
+
+  bool get isAnswered => _isAnswered;
+
   // 메세지들의 리스트
   List _messages = [
     ["안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?", "canton"],
@@ -47,7 +51,6 @@ class ChatbotViewModel extends ChangeNotifier {
 
   ScrollController get scrollController => _scrollController;
 
-
   ChatbotViewModel(this._context, this._chatId) {
     // 키보드가 안 보이면 언포커스
     keyboardVisibilityController.onChange.listen(
@@ -75,14 +78,16 @@ class ChatbotViewModel extends ChangeNotifier {
 
   double boxHeight(BoxConstraints constraints) {
     if (_chatbotFocus.hasFocus) {
-      return constraints.maxHeight-48;
+      return constraints.maxHeight - 48;
     } else {
-      return constraints.maxHeight-88;
+      return constraints.maxHeight - 88;
     }
   }
+
   // 채팅 내용을 가져옴
   Future<void> getChatDetail() async {
-    _messages = await ChatbotRepository().ChatDetailFromServer(_context, _chatId);
+    _messages =
+        await ChatbotRepository().ChatDetailFromServer(_context, _chatId);
   }
 
   // 텍스트 autogpt한테 submit
@@ -90,14 +95,13 @@ class ChatbotViewModel extends ChangeNotifier {
     _messages.add([text, "user's"]);
     textEditingController.clear();
     notifyListeners();
-    FormData formData = FormData.fromMap({
-      'userInput': _inputText
-    });
+    FormData formData = FormData.fromMap({'userInput': _inputText});
     _inputText = "";
 
-    _messages.add(["검색 중입니다. \n 잠시만 기다려주세요!","canton"]);
+    _messages.add(["검색 중입니다. \n 잠시만 기다려주세요!", "canton"]);
 
-    Response response = await ChatbotRepository().ChatToServer(context, formData);
+    Response response =
+        await ChatbotRepository().ChatToServer(context, formData);
 
     _messages.removeLast();
     response.data["text"];
@@ -134,7 +138,8 @@ class ChatbotViewModel extends ChangeNotifier {
     if (_messages[index][1] == "canton") {
       return Image.asset('assets/images/canton.png');
     } else {
-      return Image.network("유저이미지url");
+      return Image.network(
+          "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg");
     }
   }
 
@@ -159,7 +164,7 @@ class ChatbotViewModel extends ChangeNotifier {
   // 아래로 스크롤
   void goBottom() {
     SchedulerBinding.instance?.addPostFrameCallback(
-          (_) {
+      (_) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: const Duration(seconds: 1),
@@ -167,5 +172,35 @@ class ChatbotViewModel extends ChangeNotifier {
         );
       },
     );
+  }
+
+  Future<void> selectActivity() async {
+    _isAnswered = true;
+    _messages.add(['놀러갈 곳 추천 "해"', 'user']);
+    notifyListeners();
+    Timer(const Duration(seconds: 2), () {
+      _messages.add([
+        '알겠습니다!'
+            '\n최신 포스트 위치를 기준으로\n가볼 만한 곳을 추천해드릴게요.'
+            '\n답변이 완료되면 알림으로 알려드리겠습니다~',
+        'canton'
+      ]);
+      notifyListeners();
+    });
+  }
+
+  Future<void> selectRestaurant() async {
+    _isAnswered = true;
+    _messages.add(['식당 추천 "해"', 'user']);
+    notifyListeners();
+    Timer(const Duration(seconds: 2), () {
+      _messages.add([
+        '알겠습니다!'
+            '\n최신 포스트 위치를 기준으로\n맛있는 식당을 추천해드릴게요.'
+            '\n답변이 완료되면 알림으로 알려드리겠습니다~',
+        'canton'
+      ]);
+      notifyListeners();
+    });
   }
 }
