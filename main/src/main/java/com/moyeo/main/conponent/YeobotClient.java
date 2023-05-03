@@ -19,11 +19,12 @@ public class YeobotClient {
         this.flaskUrl = flaskUrl;
     }
 
-    public ResponseEntity<String> sendYeobotData(String endpoint, String data) throws IOException {
-        MediaType mediaType = MediaType.parse("application/json");
+    public ResponseEntity<String> sendYeobotData(String caseType, String data) throws IOException {
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(mediaType, data);
         Request request = new Request.Builder()
-                .url(flaskUrl + "/api/auth/yeobot/" + endpoint)
+                .header("title", caseType)
+                .url(flaskUrl)
                 .post(requestBody)
                 .build();
         Response response = okHttpClient.newCall(request).execute();
