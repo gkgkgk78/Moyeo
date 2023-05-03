@@ -1,5 +1,6 @@
 import asyncio
-from flask import Flask
+
+from flask import Flask, request
 import autogpt.cli
 import click
 import chatgpt
@@ -7,6 +8,12 @@ import config
 import papago
 from pymongo import MongoClient
 import datetime
+import sys
+import io
+import json
+
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
 
 app = Flask(__name__)
 
@@ -22,23 +29,44 @@ db = conn.chat
 @app.route("/", methods=["POST"])
 def index():
     # autogpt.cli.main()
+    data_header = dict(request.headers)
+    request_data = request.get_data()
+    # ah1=request.get_json()
+    temp_data = request_data.decode("utf-8")
 
+    print("꺼낸 데이터:", temp_data)
     ctx = click.Context(autogpt.cli.main, info_name='hello')
     # 밑의 name에서 보내주고자 하는 내용이 담길 것임
-    ee = ctx.invoke(autogpt.cli.main, name='you are genuis')
+    ee = ctx.invoke(autogpt.cli.main, name=temp_data)
     ee = ee
-    print(ee)
+    #print(ee)
+
+    want_data = data_header["Title"]
+
+    to_chatgpt = ee
+
+
+    if want_data == "restaurant":
+        to_chatgpt +="\n"+ config.restaurant
+    elif want_data == "activity":
+        to_chatgpt +="\n"+ config.activity
+    else:
+        to_chatgpt +="\n"+ config.place
+
 
     # 한국어 to 영어 번역
-    papago.koTOeng("안녕 난 말숙이야")
-
+    # text_to_english = papago.koTOeng("안녕 난 말숙이야")
+    # print(text_to_english)
     # 영어 to 한국어 번역
-    papago.engTOko("hi i am yoonhee")
-
+    # papago.engTOko("hi i am yoonhee")
+    
+    print("시작")
     # gpt명령 내리기
-    chatgpt.chattogpt("Teach me how to decide what I want to do")
-
-    return []
+    last=chatgpt.chattogpt(to_chatgpt)
+    print(to_chatgpt)
+    print(last)
+    print("끝")
+    return json.dumps({"result": last}), 200, {'Content-Type': 'application/json'}
 
 
 @app.route("/hi", methods=["POST"])

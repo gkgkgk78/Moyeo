@@ -1,14 +1,14 @@
 package com.moyeo.main.controller;
 
 
+import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
+import com.moyeo.main.dto.TravelRecommendRequest;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
-import com.moyeo.main.service.PhotoService;
-import com.moyeo.main.service.PostService;
-import com.moyeo.main.service.TimeLineService;
-import com.moyeo.main.service.UserService;
+import com.moyeo.main.entity.User;
+import com.moyeo.main.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,14 +39,18 @@ public class TestMoyeoController {
     private final PostService postService;
     private final PhotoService photoService;
 
+    private final YeobotService yeobotService;
+
+    private final YeobotClient yeobotClient;
+
     @Operation(description = "타임라인 생성하는 컨트롤러")
     @PostMapping("")
     public ResponseEntity<?> makeTimeLine() throws Exception {
         //유저 한명을 받아 와서 해당 유저로 타임라인을 생성하고Y자 한다
         log.info("여행 시작 기능 시작");
-        for(int i = 1;i<100000;i++){
+        for (int i = 1; i < 100000; i++) {
             timeLineService.makenewTimelineTemp();
-            for (int j = 0; j<9;j++){
+            for (int j = 0; j < 9; j++) {
                 Post savedPost = postService.makePost();
                 log.info("");
                 List<Photo> photoList = photoService.createPhotoListTest(savedPost);
@@ -96,5 +104,90 @@ public class TestMoyeoController {
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
+
+
+    @PostMapping("/ing/dining")
+    public ResponseEntity<String> restaurantRecommendations() throws Exception {
+        //로그인 정보에서 uid 받아오기
+//        Long userId = null;
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        if (auth != null && auth.getPrincipal() != null) {
+//            User user = (User) auth.getPrincipal();
+//            userId = user.getUserId();
+//        }
+        // 최신 주소 반환
+        //List<String[]> latestAddress = yeobotService.findLatestAddress(userId);
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("서울특별시");
+        lad[1] = new String("강남구");
+        lad[2] = new String("역삼동");
+        lad[3] = new String("테헤란로");
+        latestAddress.add(lad);
+
+        // 프롬프트 반환
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        String goal = "Search for a good restaurant near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) + " " + addressList.get(3) + ".";
+        //return ResponseEntity.ok(goal);
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData("dining", goal);
+        return response;
+
+    }
+
+
+    //여행중이 아닌 유저 여행지 추천
+    @PostMapping("/yet/place")
+    public ResponseEntity<String> recommendPlace() throws IOException {
+        // request에서 필요한 정보를 추출해서 변수에 저장
+        String destination = "유럽";
+        String season = "여름";
+        String purpose = "1주일 동안";
+
+        //
+        String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose + ".";
+
+        // 프롬프트 반환
+        //return ResponseEntity.ok(goal);
+
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
+
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData("place", goal);
+
+        return response;
+    }
+
+
+    //여행중이 아닌 유저 액티비티 추천
+    @PostMapping("/yet/activity")
+    public ResponseEntity<String> recommendActivities() throws IOException {
+        // request에서 필요한 정보를 추출해서 변수에 저장
+        String destination = "경상북도 경주";
+        String season = "가을";
+
+        // 추천 결과 문자열 생성
+        String goal = "Recommend me some fun things to do near " + destination + " during " + season + ".";
+
+        // 프롬프트 반환
+        //return ResponseEntity.ok(goal);
+
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
+
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData("activity", goal);
+
+        return response;
+
+    }
+
 
 }

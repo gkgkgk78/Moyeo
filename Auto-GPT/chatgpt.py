@@ -17,5 +17,6 @@ def chattogpt(text):
     )
 
     chat_response = completion.choices[0].message.content
-    print(f'ChatGPT: {chat_response}')
-    messages.append({"role": "assistant", "content": chat_response})
+    #print(f'ChatGPT: {chat_response}')
+    return chat_response
+    #messages.append({"role": "assistant", "content": chat_response})
