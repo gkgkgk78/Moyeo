@@ -8,9 +8,23 @@ import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
 
 List<TimelineDetail> test2 = [
-  TimelineDetail(flag: "flag", nation: "Seoul", postList: [
-    Post(postId: 1, voiceUrl: "", voiceLength: 0, address: "서울", text: "테스트", photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20",], isFavorite: false, favoriteCount: 0)
-  ], startDate: "2023-04-01", finishDate: "2023-05-01"),
+  TimelineDetail(
+      flag: "flag",
+      nation: "Seoul",
+      postList: [
+    Post(
+        postId: 1,
+        voiceUrl: "",
+        voiceLength: 0,
+        address: "서울",
+        text: "테스트",
+        photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20",],
+        members:[],
+        isFavorite: false,
+        favoriteCount: 0)
+    ],
+      startDate: "2023-04-01",
+      finishDate: "2023-05-01"),
   TimelineDetail(flag: "flag", nation: "Seoul", postList: [], startDate: "2023-03-01", finishDate: "2023-04-01")
 
 ];

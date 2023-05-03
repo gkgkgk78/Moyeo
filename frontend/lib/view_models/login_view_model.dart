@@ -34,6 +34,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   Future<void> loginButtonPressed(context, Function update) async {
+    logger.d(await KakaoSdk.origin);
     bool isInstalled = await isKakaoTalkInstalled();
     OAuthToken token = isInstalled
         ? await UserApi.instance.loginWithKakaoTalk()
