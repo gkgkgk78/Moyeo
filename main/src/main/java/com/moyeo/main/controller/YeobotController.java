@@ -32,7 +32,7 @@ public class YeobotController {
 //        this.yeobotService = yeobotService;
 //        this.yeobotClient = yeobotClient;
 //    }
-    
+
     //테스트 하려면 flask서버도 켜놔야함
 
     //유저가 여행중인지 여부 반환
