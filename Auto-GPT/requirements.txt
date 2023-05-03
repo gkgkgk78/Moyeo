@@ -22,6 +22,8 @@ tweepy
 click
 pymongo
 datetime
+urllib
+json
 
 ##Dev
 coverage

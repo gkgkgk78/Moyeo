@@ -1,7 +1,7 @@
 import os
 import sys
 import urllib.request
-
+import json
 import config
 
 # 현재 상태는 영어를 한국어로 번역하는 부분을 의미를 함
@@ -24,7 +24,12 @@ def koTOeng(text):
 
     if (rescode == 200):
         response_body = response.read()
-        print(response_body.decode('utf-8'))
+        tt=response_body.decode("utf-8")
+        temp_data_dict = json.loads(tt)
+        a1=temp_data_dict["message"]
+        a2=a1["result"]
+        a3=a2["translatedText"]
+        return a3
     else:
         print("Error Code:" + rescode)
 
