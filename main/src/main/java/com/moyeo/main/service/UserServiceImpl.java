@@ -178,6 +178,9 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode("모여"))
                 .build();
         userRepository.save(user);
+
+        //여기에 messagebox
+
         return true;
     }
 
