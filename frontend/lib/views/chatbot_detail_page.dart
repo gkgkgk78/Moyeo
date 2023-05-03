@@ -5,6 +5,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/chatbot_detail_view_model.dart';
+import 'chatbot_question.dart';
 
 var logger = Logger();
 
@@ -13,7 +14,6 @@ class ChatbotPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Consumer<ChatbotViewModel>(builder: (_, viewModel, __) {
         return LayoutBuilder(builder: (_, BoxConstraints constraints) {
@@ -43,61 +43,7 @@ class ChatbotPage extends StatelessWidget {
                             isSender: viewModel.sender(index),
                             color: viewModel.bubbleColor(index),
                           ),
-                          viewModel.messages[index][0] ==
-                                  "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?" && viewModel.isAnswered == false
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 24,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          color: Colors.amberAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          onTap: () {viewModel.selectActivity();},
-                                          splashColor: Colors.grey,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            height: 24,
-                                            child: const Text('놀러갈 곳 추천"해줘"'),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      height: 24,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          color: Colors.amberAccent,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          onTap: () {viewModel.selectRestaurant();},
-                                          splashColor: Colors.grey,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            height: 24,
-                                            child: const Text('식당 추천"해줘"'),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : SizedBox.shrink()
+                          Question(index: index,),
                         ],
                       );
                     },
@@ -109,6 +55,7 @@ class ChatbotPage extends StatelessWidget {
                       children: [
                         Expanded(
                             child: TextFormField(
+                              enabled: viewModel.ableTextField,
                           controller: viewModel.textEditingController,
                           onChanged: (text) {
                             viewModel.changeInputText(text);

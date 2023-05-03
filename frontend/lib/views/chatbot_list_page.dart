@@ -52,17 +52,28 @@ class ChatbotListPage extends StatelessWidget {
                         itemBuilder: (BuildContext context, index) {
                           return GestureDetector(
                             onTap: () {
-                              if (viewModel.chatlist[index].containsKey("chatId")) {
+                              if (viewModel.chatlist[index]
+                                  .containsKey("chatId")) {
                                 appViewModel.changeTitle("여봇과의 추억");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        ChangeNotifierProvider<ChatbotViewModel>(
-                                          create: (_) => ChatbotViewModel(context,
-                                              viewModel.chatlist[index]["chatId"]),
-                                          child: ChatbotPage(),
+                                    builder: (context) => MultiProvider(
+                                      providers: [
+                                        ChangeNotifierProvider<
+                                            ChatbotViewModel>(
+                                          create: (_) => ChatbotViewModel(
+                                            context,
+                                            chatId: viewModel.chatlist[index]
+                                                ["chatId"],
+                                            isTravel: appViewModel
+                                                .userInfo.timeLineId,
+                                            isFinished: true,
+                                          ),
                                         ),
+                                      ],
+                                      child: const ChatbotPage(),
+                                    ),
                                   ),
                                 );
                               } else {
@@ -74,7 +85,6 @@ class ChatbotListPage extends StatelessWidget {
                                   ),
                                 );
                               }
-                              
                             },
                             child: ListTile(
                               leading: ClipRRect(
@@ -96,11 +106,21 @@ class ChatbotListPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider<ChatbotViewModel>(
-                                    create: (_) => ChatbotViewModel(context,
-                                        viewModel.chatlist[index]["chatId"]),
-                                    child: ChatbotPage(),
+                                  builder: (context) => MultiProvider(
+                                    providers: [
+                                      ChangeNotifierProvider<
+                                          ChatbotViewModel>(
+                                        create: (_) => ChatbotViewModel(
+                                          context,
+                                          chatId: viewModel.chatlist[index]
+                                          ["chatId"],
+                                          isTravel: appViewModel
+                                              .userInfo.timeLineId,
+                                          isFinished: true,
+                                        ),
+                                      ),
+                                    ],
+                                    child: const ChatbotPage(),
                                   ),
                                 ),
                               );
@@ -126,12 +146,7 @@ class ChatbotListPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ChangeNotifierProvider<ChatbotViewModel>(
-                                    create: (_) => ChatbotViewModel(context,
-                                        viewModel.chatlist[index]["chatId"]),
-                                    child: ChatbotPage(),
-                                  ),
+                                  builder: (context) => PushAlarmPage(),
                                 ),
                               );
                             },

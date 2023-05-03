@@ -48,8 +48,8 @@ class ChatbotListViewModel extends ChangeNotifier {
     // testAPI();
   }
 
-  Future<void> getChatList(BuildContext context) async {
-    _chatList = await ChatbotRepository().ChatListFromServer(context);
+  Future<void> getMessageList(BuildContext context) async {
+    _chatList = await ChatbotRepository().MessageListFromServer(context);
   }
 
 
