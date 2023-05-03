@@ -84,13 +84,13 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
         log.info("voiceFile : {}",voiceFile);
-        // //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
-        // String fileName = voiceFile.getOriginalFilename();
-        // String ext = fileName.substring(fileName.lastIndexOf(".") + 1); // TODO
-        // if (!ext.equals("wav")) {
-        //     System.out.println("웨이브 파일 아님");
-        //     throw new BaseException(ErrorMessage.NOT_PERMIT_VOICE_SAVE);
-        // }
+        //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
+        String fileName = voiceFile.getOriginalFilename();
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+        if (!ext.equals("wav")) {
+            System.out.println("웨이브 파일 아님");
+            throw new BaseException(ErrorMessage.NOT_PERMIT_VOICE_SAVE);
+        }
 
         //backend 폴더 하위에 temp라는 폴더를 생성, 즉 해당 되는 폴더가 없으면 임의로 생성을 한다는 것을 의미를 함
         Files.createDirectories(Paths.get("temp"));
@@ -205,10 +205,8 @@ public class PostServiceImpl implements PostService {
         savedPost.setText(text);
         savedPost.setTimelineId(timeline);
         savedPost.setNationId(nation);
-        savedPost.setUserId(timeline.getUserId()); // 추가
         savedPost.setFavoriteCount(0L);
-        savedPost.setCreateTime(now());
-        savedPost.setModifyTime(now());
+        savedPost.setUserId(timeline.getUserId()); // 추가
         Post resavedPost = postRepository.save(savedPost);
         log.info("savePost Transaction complete");
 

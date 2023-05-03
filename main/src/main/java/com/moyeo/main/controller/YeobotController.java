@@ -51,6 +51,7 @@ public class YeobotController {
         return ResponseEntity.ok(status);
     }
 
+
     //여행중인 유저 맛집 추천
     @PostMapping("/ing/dining")
     public ResponseEntity<String> restaurantRecommendations() throws Exception {
@@ -75,11 +76,11 @@ public class YeobotController {
 
         String goal = "Search for a good restaurant near " + addressList.get(0) +" "+ addressList.get(1) +" "+ addressList.get(2) +" "+ addressList.get(3) +".";
         //return ResponseEntity.ok(goal);
-
+        String caseType = "restaurant";
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("ing/dining", goal);
+        yeobotClient.sendYeobotData(caseType, goal);
 
         return response;
 
@@ -113,12 +114,14 @@ public class YeobotController {
 
         //return ResponseEntity.ok(goal);
 
+        String caseType = "activity";
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("ing/activity", goal);
+        yeobotClient.sendYeobotData(caseType, goal);
 
         return response;
+
 
     }
 
@@ -133,13 +136,11 @@ public class YeobotController {
         //
         String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
 
-        // 프롬프트 반환
-        //return ResponseEntity.ok(goal);
-
+        String caseType = "place";
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("yet/place", goal);
+        yeobotClient.sendYeobotData(caseType, goal);
 
         return response;
     }
@@ -154,14 +155,13 @@ public class YeobotController {
 
         // 추천 결과 문자열 생성
         String goal = "Recommend me some fun things to do near " + destination + " during " + season +".";
-
-        // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
+        String caseType = "activity";
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("yet/activity", goal);
+        yeobotClient.sendYeobotData(caseType, goal);
 
         return response;
 
