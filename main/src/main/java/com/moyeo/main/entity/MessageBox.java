@@ -2,8 +2,10 @@ package com.moyeo.main.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,7 +20,7 @@ public class MessageBox {
     @Column
     private Long messageId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
@@ -31,6 +33,7 @@ public class MessageBox {
     @ColumnDefault("0")
     private Boolean isChecked = false;
 
+    private LocalDateTime createTime;
 
 
 }

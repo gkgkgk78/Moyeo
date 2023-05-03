@@ -179,8 +179,6 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
 
-        //여기에 messagebox
-
         return true;
     }
 
