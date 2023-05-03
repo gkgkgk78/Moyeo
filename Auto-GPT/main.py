@@ -1,5 +1,3 @@
-# from autogpt import main
-
 import asyncio
 from flask import Flask
 import autogpt.cli
@@ -24,9 +22,12 @@ db = conn.chat
 @app.route("/", methods=["POST"])
 def index():
     # autogpt.cli.main()
+
     ctx = click.Context(autogpt.cli.main, info_name='hello')
+    # 밑의 name에서 보내주고자 하는 내용이 담길 것임
     ee = ctx.invoke(autogpt.cli.main, name='you are genuis')
     ee = ee
+    print(ee)
 
     # 한국어 to 영어 번역
     papago.koTOeng("안녕 난 말숙이야")
