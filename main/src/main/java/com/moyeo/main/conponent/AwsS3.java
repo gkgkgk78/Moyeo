@@ -58,5 +58,6 @@ public class AwsS3 {
         url = url.substring(slashIndex + 1);
         boolean isObjectExist = amazonS3Client.doesObjectExist(bucket, url);
         if(isObjectExist)amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, url));
+
     }
 }
