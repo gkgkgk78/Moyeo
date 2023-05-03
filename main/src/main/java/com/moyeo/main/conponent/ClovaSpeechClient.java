@@ -28,9 +28,6 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class ClovaSpeechClient {
-    // private static String SECRET;
-    // private static String INVOKE_URL;
-    //
     // @Value("${clova-secret-key}")
     // public void setSECRET(String value) {
     //     SECRET = value;
