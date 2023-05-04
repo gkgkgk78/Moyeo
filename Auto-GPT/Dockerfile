@@ -1,3 +1,4 @@
+# 파이썬 버전
 FROM python:3.8.5
 
 WORKDIR /AutoGPT
