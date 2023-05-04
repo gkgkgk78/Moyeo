@@ -37,6 +37,9 @@ public class User implements UserDetails {
     @Column
     private String refreshToken;
 
+    @Column(length = 200)
+    private String deviceToken;
+
     //@ApiModelProperty(hidden = true)
     private String role;
 
