@@ -4,8 +4,10 @@ import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.TimeLine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +30,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
 
-    @Query("SELECT postId FROM Post WHERE userId = :userId ORDER BY createTime")
-    Long findLatestPost(long userId);
+    @Query(value = "SELECT post_id FROM post WHERE user_id = :userId ORDER BY create_time LIMIT 1", nativeQuery = true)
+    Long findLatestPost(@Param("userId") Long userId);
 
-    @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId AND userId = :userId")
-    String[] findAddressById(long userId);
+    @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId AND userId.userId = :userId")
+    List<String[]> findAddressById(Long postId, Long userId);
+
+    @Query("SELECT p.createTime FROM Post p WHERE p.postId = :postId")
+    LocalDateTime findCreateTimeByPostId(Long postId);
 
 
 }
