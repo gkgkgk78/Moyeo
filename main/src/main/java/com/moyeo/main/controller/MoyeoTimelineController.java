@@ -18,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class MoyeoTimelineController {
+
 	@PostMapping
 	public ResponseEntity<?> registMoyeoTimeline(@RequestBody List<registMoyeoTimelineReq> members) throws Exception {
 
