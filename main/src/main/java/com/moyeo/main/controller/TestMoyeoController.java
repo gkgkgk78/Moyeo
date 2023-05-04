@@ -43,6 +43,8 @@ public class TestMoyeoController {
 
     private final YeobotClient yeobotClient;
 
+    private final FcmService fcmService;
+
 
     @PostMapping("/login")
     public ResponseEntity<?> signUpKakao() throws Exception {
@@ -168,6 +170,16 @@ public class TestMoyeoController {
         yeobotClient.sendYeobotData("activity", goal);
 
         return response;
+
+    }
+
+    @GetMapping("/firebase/message")//테스트 해보기
+    public ResponseEntity<?> getTimelineLatestWithPaging() throws Exception {
+
+
+        fcmService.send();
+
+        return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
