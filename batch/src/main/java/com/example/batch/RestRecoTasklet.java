@@ -13,8 +13,8 @@ public class RestRecoTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         // 비니지스 로직 시작
-        log.info("bussiness login start");
-        log.info("bussiness login end");
+//        log.info("bussiness login start");
+//        log.info("bussiness login end");
         // 비지니스 로직 끝
         return RepeatStatus.CONTINUABLE;
     }

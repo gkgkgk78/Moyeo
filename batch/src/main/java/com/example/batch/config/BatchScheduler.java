@@ -12,28 +12,33 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class BatchScheduler {
-    private JobLauncher jobLauncher;
-    private BatchConfig batchConfig;
-    @Scheduled(cron = "0 0 11 * * ?")
+    private final JobLauncher jobLauncher;
+    private final BatchConfig batchConfig;
+    @Scheduled(cron = "* * * * * *")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        long nano = System.currentTimeMillis();
+        log.info("Schedule start");
         JobParameters params = new JobParametersBuilder()
-                .addDate("date", new Date())
-                .addString("query", "query for 11AM")
+                .addString("startDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
+                .addString("endDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
                 .toJobParameters();
         jobLauncher.run(batchConfig.job(), params);
     }
 
     @Scheduled(cron = "0 0 17 * * ?")
     public void runJobAtFive() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
+        long nano = System.currentTimeMillis();
         JobParameters params = new JobParametersBuilder()
-                .addDate("date", new Date())
-                .addString("query", "query for 5PM")
+                .addString("startDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"13:00:00")
+                .addString("endDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"17:00:00")
                 .toJobParameters();
         jobLauncher.run(batchConfig.job(), params);
     }
