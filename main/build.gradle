@@ -52,5 +52,9 @@ dependencies {
 	// okhttp
 	implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
+	//firebase
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
+
 
 }
