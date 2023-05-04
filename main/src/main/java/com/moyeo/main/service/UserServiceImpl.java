@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     // 카카오 로그인 연동
     public TokenRes signUpKakao(UserLoginReq userLoginReq) throws JsonProcessingException {
 
-//         카카오톡 rest api (id, profile image, nickname)
+//      카카오톡 rest api (id, profile image, nickname)
         HttpHeaders headers = HttpUtil.generateHttpHeadersForJWT(userLoginReq.getAccessToken());
         RestTemplate restTemplate = HttpUtil.generateRestTemplate();
 
@@ -68,11 +68,9 @@ public class UserServiceImpl implements UserService {
         String clientId = json.get("id").asText();
         String profileImageUrl = json.get("kakao_account").get("profile").get("profile_image_url").asText();
         String nickname = json.get("kakao_account").get("profile").get("nickname").asText();
+        log.info("nickname: {}", nickname);
 
         User user;
-//        String clientId = "2725446611";
-//        String nickname = "송지율";
-//        String profileImageUrl = "http://k.kakaocdn.net/dn/dIUOxh/btrOfbMpO9p/JikTtvK5PtI5Wi6RMyPkDK/img_640x640.jpg";
 
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인
         if (userRepository.getByClientId(clientId) != null) {
@@ -81,12 +79,17 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException();
             }
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
-            userRepository.findByClientId(clientId).setRefreshToken(tokenRes.getRefreshToken());
+            User updateUser = userRepository.findByClientId(clientId);
+            updateUser.setRefreshToken(tokenRes.getRefreshToken());
+            updateUser.setDeviceToken(userLoginReq.getDeviceToken());
+            userRepository.save(updateUser);
+
             return tokenRes;
         }
 
         // 미등록 사용자
         TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
+        log.info("리프레시 토큰 {}, 길이: {}", tokenRes.getRefreshToken(), tokenRes.getRefreshToken().length());
         user = User.builder()
                 .nickname(nickname) // 'nickname' 값을 nickname에 저장
                 .clientId(clientId) // 'id' 값을 clientId에 저장
@@ -94,6 +97,7 @@ public class UserServiceImpl implements UserService {
                 .refreshToken(tokenRes.getRefreshToken())
                 .profileImageUrl(profileImageUrl)
                 .password(passwordEncoder.encode("모여"))
+                .deviceToken(userLoginReq.getDeviceToken())
                 .build();
         userRepository.save(user);
         return tokenRes;
