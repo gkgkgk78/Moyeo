@@ -107,11 +107,20 @@ dependencies:
   carousel_slider: ^4.2.1
   image_card: ^0.0.4
 
+  # Fab
+  flutter_expandable_fab: ^1.7.1
+
   # chat_bubbles
   chat_bubbles:
 
+<<<<<<< HEAD
+  # switch
+  flutter_switch: ^0.3.2
+
+=======
   # mondgodb
   mongo_dart:
+>>>>>>> frontend
 
 dev_dependencies:
   flutter_test:

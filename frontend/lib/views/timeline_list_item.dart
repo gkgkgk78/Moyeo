@@ -49,7 +49,8 @@ class TimelineListItem extends StatelessWidget {
                       Container(
                           height: cardHeight * 0.2,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            // color: Theme.of(context).primaryColor,
+                            color: Colors.black54,
                             borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(20),
                             ),
@@ -62,7 +63,7 @@ class TimelineListItem extends StatelessWidget {
                               const SizedBox(width: 30),
                               const Text(
                                 "Danim",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: Colors.red),
                               ),
                               const SizedBox(width: 10),
                               const Icon(
@@ -75,7 +76,7 @@ class TimelineListItem extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 textAlign: TextAlign.right,
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.red),
                               )),
                               const SizedBox(width: 30)
                             ],
@@ -84,13 +85,15 @@ class TimelineListItem extends StatelessWidget {
                         child: Container(
                           // 티켓 디자인 추가
                           decoration: const BoxDecoration(
-                            gradient: LinearGradient(colors:
-                              [
+                            gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
                                 Color(0xff4B75C9),
                                 Color(0xc9D16DDA),
                                 Color(0xffFFBB66),
                                 Color(0xffFF8E00)
-                              ]
+                              ],
                             )
                           ),
                           padding: const EdgeInsets.only(
@@ -131,14 +134,23 @@ class TimelineListItem extends StatelessWidget {
                                             child: Text(
                                               "T   I  T  L  E",
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           Expanded(
-                                            child: Text(
-                                              timeline.title,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                            child:Container(
+                                              width: 80,
+                                              padding: EdgeInsets.only(left: 10.0),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child:Text(
+                                                timeline.title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              )
                                             ),
                                           ),
                                         ],
@@ -152,11 +164,20 @@ class TimelineListItem extends StatelessWidget {
                                             child: Text(
                                               "TRAVELER",
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           Expanded(
-                                            child: Text(timeline.nickname),
+                                            child:Container(
+                                              width: 80,
+                                              padding: EdgeInsets.only(left: 10.0),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Text(timeline.nickname),
+                                            )
                                           ),
                                         ],
                                       ),
@@ -168,12 +189,21 @@ class TimelineListItem extends StatelessWidget {
                                             width: 90,
                                             child: Text("DURATION",
                                                 style: TextStyle(
+                                                  color: Colors.white,
                                                     fontWeight:
                                                         FontWeight.bold)),
                                           ),
                                           Expanded(
-                                            child: Text(
-                                                '${timeline.createTime} ~ ${timeline.finishTime}'),
+                                            child:Container(
+                                              width: 80,
+                                              padding: EdgeInsets.only(left: 10.0),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+                                              child: Text(
+                                                  '${timeline.createTime} ~ ${timeline.finishTime}'),
+                                            )
                                           )
                                         ],
                                       ),

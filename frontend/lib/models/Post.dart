@@ -5,6 +5,8 @@ class Post {
   final String address;
   final String text;
   final List<String> photoList;
+  // 동행 추가
+  final List<Map<String,int>> members;
   bool isFavorite;
   int favoriteCount;
   bool isExpand;
@@ -16,6 +18,8 @@ class Post {
     required this.address,
     required this.text,
     required this.photoList,
+    // 동행 추가
+    required this.members,
     required this.isFavorite,
     required this.favoriteCount,
     this.isExpand = false,
@@ -33,6 +37,7 @@ class Post {
           (json['address4'] ?? ''),
       text: json['text'],
       photoList: List.from(json['photoList']),
+      members: List<Map<String,int>>.from(json['members']),
       isFavorite: json['isFavorite'],
       favoriteCount: json['favoriteCount'],
     );

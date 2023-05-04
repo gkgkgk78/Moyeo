@@ -8,15 +8,43 @@ import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
 
 List<TimelineDetail> test2 = [
-  TimelineDetail(flag: "flag", nation: "Seoul", postList: [
-    Post(postId: 1, voiceUrl: "", voiceLength: 0, address: "서울", text: "테스트", photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20",], isFavorite: false, favoriteCount: 0)
-  ], startDate: "2023-04-01", finishDate: "2023-05-01"),
-  TimelineDetail(flag: "flag", nation: "Seoul", postList: [], startDate: "2023-03-01", finishDate: "2023-04-01")
+  TimelineDetail(
+      flag: "flag",
+      nation: "Seoul",
+      postList: [
+    Post(
+        postId: 1,
+        voiceUrl: "",
+        voiceLength: 0,
+        address: "seoul",
+        text: "테스트",
+        photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20",],
+        members:[],
+        isFavorite: false,
+        favoriteCount: 0)
+    ],
+      startDate: "2023-04-01",
+      finishDate: "2023-05-01"),
+  TimelineDetail(flag: "Seoul", nation: "Korea", postList: [], startDate: "2023-03-01", finishDate: "2023-04-01"),
+  TimelineDetail(flag: "F", nation: "USA", postList: [
+    Post(
+        postId: 2,
+        voiceUrl: "",
+        voiceLength: 0,
+        address: "미국",
+        text: "미국포스트 테스트",
+        photoList: ["https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20","https://t1.daumcdn.net/cfile/tistory/99128B3E5AD978AF20"],
+        members: [],
+        isFavorite: false,
+        favoriteCount: 0
+    )],
+      startDate: "2023-04-02",
+      finishDate: "2023-04-06")
 
 ];
 
 List<TimelineInfo> test1 = [
-  TimelineInfo(timelineDetails: test2, isPublic: true, isComplete: true, isMine: true),
+  TimelineInfo(timelineDetails: test2, isPublic: true, isComplete: false, isMine: true),
 ];
 
 

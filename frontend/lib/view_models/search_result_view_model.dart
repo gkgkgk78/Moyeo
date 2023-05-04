@@ -6,7 +6,6 @@ import '../models/SearchedPost.dart';
 import '../services/search_repository.dart';
 
 
-
 class SearchResultViewModel extends ChangeNotifier {
   final BuildContext _context;
 
