@@ -24,8 +24,6 @@ public class MessageBox {
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @Column(length = 30)
-    private String category;
     @Column(length = 2000)
     private String content;
 
