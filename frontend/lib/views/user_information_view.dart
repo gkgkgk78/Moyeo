@@ -18,8 +18,18 @@ class UserInformationView extends StatelessWidget {
         height: 80,
         margin: const EdgeInsets.symmetric(horizontal: 30),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  userInfo.timelineNum.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const Text('게시물'),
+              ],
+            ),
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
@@ -46,16 +56,6 @@ class UserInformationView extends StatelessWidget {
                 cache: true,
                 shape: BoxShape.circle,
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  userInfo.timelineNum.toString(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const Text('게시물'),
-              ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

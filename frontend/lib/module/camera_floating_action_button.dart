@@ -287,7 +287,11 @@ class CameraFloatingActionButton extends StatelessWidget {
                       icon:const Icon(Icons.photo_camera)
                   ),
                   ActionButton(
-                      icon: const Icon(Icons.leave_bags_at_home_outlined))
+                      icon: const Icon(Icons.leave_bags_at_home_outlined)
+                  ),
+                  ActionButton(
+                      icon: const Icon(Icons.logout, color: Colors.redAccent)
+                  ),
                 ]
             )
             )

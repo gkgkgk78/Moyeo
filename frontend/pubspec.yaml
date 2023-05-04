@@ -109,6 +109,9 @@ dependencies:
   # chat_bubbles
   chat_bubbles:
 
+  # switch
+  flutter_switch: ^0.3.2
+
 
 dev_dependencies:
   flutter_test:
