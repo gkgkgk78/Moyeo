@@ -62,25 +62,25 @@ public class User implements UserDetails {
     public String getUsername() {
         return this.nickname;
     }
-//    // 계정이 만료됐는지 리턴. true는 만료되지 않았다는 의미
+    //    // 계정이 만료됐는지 리턴. true는 만료되지 않았다는 의미
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-//    // 계정이 잠겨있는지 리턴. true는 잠기지 않았다는 의미
+    //    // 계정이 잠겨있는지 리턴. true는 잠기지 않았다는 의미
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-//    // 비밀번호가 만료됐는지 리턴. true는 만료되지 않았다는 의미
+    //    // 비밀번호가 만료됐는지 리턴. true는 만료되지 않았다는 의미
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-//    // 계정이 활성화돼 있는지 리턴. true는 활성화 상태를 의미
+    //    // 계정이 활성화돼 있는지 리턴. true는 활성화 상태를 의미
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public boolean isEnabled() {
