@@ -2,6 +2,7 @@ package com.example.batch.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -22,15 +23,19 @@ import java.util.Date;
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfig batchConfig;
-    @Scheduled(cron = "* * * * * *")
+//    @Scheduled(cron = "50 * * * * *")
+    @Scheduled(cron = "10 * * * * *")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         long nano = System.currentTimeMillis();
         log.info("Schedule start");
         JobParameters params = new JobParametersBuilder()
-                .addString("startDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
-                .addString("endDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
+                .addString("start", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
+                .addString("end", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
                 .toJobParameters();
-        jobLauncher.run(batchConfig.job(), params);
+        log.info("jobparameter :{}",params);
+        log.info("Job:{}",batchConfig.job());
+        jobLauncher.run(batchConfig.job(),
+                params);
     }
 
     @Scheduled(cron = "0 0 17 * * ?")

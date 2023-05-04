@@ -1,21 +1,25 @@
 package com.example.batch.config;
 
-import com.example.batch.RestRecoTasklet;
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
 import com.example.batch.RestaurantRecommendDto.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.*;
+import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Slf4j
@@ -25,59 +29,71 @@ import java.util.List;
 public class BatchConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
+    private final EntityManagerFactory entityManagerFactory;
     private String JOB_NAME = "restaurantRecommendJob";
     private String STEP_NAME = "restaurantRecommendStep";
     private String CHUNK_NAME = "restaurantRecommendChunk";
     @Bean
     public Job job(){
+        log.info("JOB 실행됨");
         return jobBuilderFactory.get(JOB_NAME)
                 .incrementer(new RunIdIncrementer())
-                .start(this.taskStep())
-                .next(this.chunkStep())
+                .start(this.chunkStep())
+//                .start()
+//                .next(this.chunkStep())
+//                .start(this.chunkStep())
                 .build();
     }
     @Bean
+    @JobScope
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
-                .<Post, FirebaseCM>chunk(10)
-                .reader(itemReader())
-                .processor(itemProcessor())
-                .writer(itemWriter())
+                .<Post, FirebaseCM>chunk(3)
+                .reader(this.itemReader())
+                .processor(this.itemProcessor())
+                .writer(this.itemWriter())
                 .build();
     }
     @Bean
-    public ItemWriter<FirebaseCM> itemWriter() {
-        return new ItemWriter<FirebaseCM>() {
-            @Override
-            public void write(List<? extends FirebaseCM> items) throws Exception {
-
-            }
-        };
+    @StepScope
+    public JpaItemWriter<FirebaseCM> itemWriter() {
+        JpaItemWriter<FirebaseCM> writer = new JpaItemWriter<>();
+        writer.setEntityManagerFactory(entityManagerFactory);
+        return writer;
     }
     @Bean
+    @StepScope
     public ItemProcessor<Post,FirebaseCM> itemProcessor() {
-        return new ItemProcessor<Post, FirebaseCM>() {
-            @Override
-            public FirebaseCM process(Post item) throws Exception {
-                return null;
-            }
+        return item -> {
+            log.info("item : {}",item);
+            return FirebaseCM.builder()
+                    .message("안녕").build();
         };
     }
 
     @Bean
-    public ItemReader<Post> itemReader() {
-        return new ItemReader<Post>() {
-            @Override
-            public Post read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-                return null;
-            }
-        };
+    @StepScope
+    public JpaPagingItemReader<Post> itemReader() {
+        return new JpaPagingItemReaderBuilder<Post>()
+                .queryString("SELECT p FROM Post p")
+                .pageSize(3)
+                .entityManagerFactory(entityManagerFactory)
+                .name("PostReader")
+                .build();
     }
 
     @Bean
     public Step taskStep() {
         return stepBuilderFactory.get(STEP_NAME)
-                .tasklet(new RestRecoTasklet())
+                .tasklet(new Tasklet() {
+                    @Override
+                    public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+                        log.info("tasklet");
+                        log.info("contribution : {}",contribution);
+                        log.info("chunkContext : {}",chunkContext);
+                        return RepeatStatus.FINISHED;
+                    }
+                })
                 .build();
     }
 
