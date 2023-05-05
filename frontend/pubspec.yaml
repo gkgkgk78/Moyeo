@@ -113,14 +113,12 @@ dependencies:
   # chat_bubbles
   chat_bubbles:
 
-<<<<<<< HEAD
+
   # switch
   flutter_switch: ^0.3.2
 
-=======
   # mondgodb
   mongo_dart:
->>>>>>> frontend
 
 dev_dependencies:
   flutter_test:
