@@ -29,8 +29,8 @@ public class ChatServiceImpl implements ChatService {
 
     public List<Chat> select(String name) throws BaseException {
 
-        List<Chat> ch = mongoTemplate.findAll(Chat.class, name);
-        return ch;
+        List<Chat> findData = mongoTemplate.findAll(Chat.class, name);
+        return findData;
     }
 
 }

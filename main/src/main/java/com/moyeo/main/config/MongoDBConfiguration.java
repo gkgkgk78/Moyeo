@@ -23,15 +23,7 @@ public class MongoDBConfiguration {
 
     @Value("${spring.data.mongodb.database}")
     private String database;
-//    @Bean
-//    public MongoClient mongoClient() {
-//        return MongoClients.create(connection);
-//    }
-//
-//    @Bean
-//    public MongoTemplate mongoTemplate() {
-//        return new MongoTemplate(mongoClient(), database);
-//    }
+
 
     @Bean
     public MongoDatabaseFactory mongoDatabaseFactory() {
