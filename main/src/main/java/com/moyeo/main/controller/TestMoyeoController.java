@@ -5,6 +5,7 @@ import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.TravelRecommendRequest;
+import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
@@ -44,6 +45,8 @@ public class TestMoyeoController {
     private final YeobotClient yeobotClient;
 
     private final FcmService fcmService;
+
+    private final ChatService chatService;
 
 
     @PostMapping("/login")
@@ -181,6 +184,22 @@ public class TestMoyeoController {
 
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @PostMapping("/chat")
+    public ResponseEntity<?> insertChat(@RequestBody Chat chat) throws Exception {
+
+
+        chatService.insert("mongotest", chat);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/chat/{name}")
+    public ResponseEntity<?> selectChat(@PathVariable String name) throws Exception {
+
+        List<Chat> ch = chatService.select(name);
+        return new ResponseEntity<>(ch, HttpStatus.OK);
     }
 
 
