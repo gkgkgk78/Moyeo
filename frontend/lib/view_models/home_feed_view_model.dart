@@ -50,7 +50,7 @@ class HomeFeedViewModel extends ChangeNotifier {
     this.searchedUserUid = -1,
     required this.myUserUid,
   }) {
-    initializeFirebase(context);
+
     if (searchedUserUid == -1) {
       pagingController.addPageRequestListener((pageKey) {
         getMainTimelineList(context, pageKey);
@@ -115,23 +115,7 @@ class HomeFeedViewModel extends ChangeNotifier {
     pagingController.refresh();
   }
 
-  Future<void> initializeFirebase(BuildContext context) async {
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-      await FirebaseRepository().RefreshToken(context, newToken);
-    });
-    // 알림 권한 요청
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: true,
-      badge: true,
-      carPlay: true,
-      criticalAlert: true,
-      provisional: true,
-      sound: true,
-    );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage rm) {});
-  }
 
   @override
   void dispose() {

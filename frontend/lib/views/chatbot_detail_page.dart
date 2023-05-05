@@ -39,7 +39,7 @@ class ChatbotPage extends StatelessWidget {
                               height: 30,
                               child: viewModel.profileImage(index)),
                           BubbleSpecialOne(
-                            text: viewModel.messages[index][0],
+                            text: viewModel.messages[index].message,
                             isSender: viewModel.sender(index),
                             color: viewModel.bubbleColor(index),
                           ),
@@ -61,7 +61,7 @@ class ChatbotPage extends StatelessWidget {
                             viewModel.changeInputText(text);
                           },
                           onFieldSubmitted: (_) {
-                            viewModel.testsubmit(viewModel.inputText);
+                            viewModel.notTravelSubmit();
                           },
                           focusNode: viewModel.chatbotFocus,
                           decoration: const InputDecoration(
@@ -71,7 +71,7 @@ class ChatbotPage extends StatelessWidget {
                         )),
                         GestureDetector(
                           onTap: () {
-                            viewModel.testsubmit(viewModel.inputText);
+                            viewModel.notTravelSubmit();
                           },
                           child: Container(
                             decoration: const BoxDecoration(

@@ -46,7 +46,7 @@ class UserRepository {
   }
 
   // 내 정보 가져오기
-  Future<UserInfo> getUserInfo(context) async {
+  Future<UserInfo>  getUserInfo(context) async {
     final dio = await authDio(context);
     Response response = await dio.get(
       'api/auth/user/info',

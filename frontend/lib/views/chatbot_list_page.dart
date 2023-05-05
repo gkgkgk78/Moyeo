@@ -16,9 +16,9 @@ class ChatbotListPage extends StatelessWidget {
         builder: (_, viewModel, __) {
           return DefaultTabController(
             initialIndex: 0,
-            length: 3,
+            length: 2,
             child: Scaffold(
-                appBar: TabBar(
+                appBar: const TabBar(
                   labelColor: Colors.white,
                   unselectedLabelColor: Colors.grey,
                   indicator: ShapeDecoration(
@@ -35,9 +35,6 @@ class ChatbotListPage extends StatelessWidget {
                   indicatorWeight: 1,
                   tabs: [
                     Center(
-                      child: Text("모두"),
-                    ),
-                    Center(
                       child: Text("여봇"),
                     ),
                     Center(
@@ -47,56 +44,6 @@ class ChatbotListPage extends StatelessWidget {
                 ),
                 body: TabBarView(
                   children: [
-                    ListView.builder(
-                        itemCount: viewModel.chatlist.length,
-                        itemBuilder: (BuildContext context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              if (viewModel.chatlist[index]
-                                  .containsKey("chatId")) {
-                                appViewModel.changeTitle("여봇과의 추억");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MultiProvider(
-                                      providers: [
-                                        ChangeNotifierProvider<
-                                            ChatbotViewModel>(
-                                          create: (_) => ChatbotViewModel(
-                                            context,
-                                            chatId: viewModel.chatlist[index]
-                                                ["chatId"],
-                                            isTravel: appViewModel
-                                                .userInfo.timeLineId,
-                                            isFinished: true,
-                                          ),
-                                        ),
-                                      ],
-                                      child: const ChatbotPage(),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                appViewModel.changeTitle("왔던 알림");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PushAlarmPage(),
-                                  ),
-                                );
-                              }
-                            },
-                            child: ListTile(
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: Image.network(
-                                    "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
-                              ),
-                              title: Text(viewModel.chatlist[index]["title"]),
-                              subtitle: Text(viewModel.chatlist[index]["sub"]),
-                            ),
-                          );
-                        }),
                     ListView.builder(
                         itemCount: viewModel.yeobotList.length,
                         itemBuilder: (BuildContext context, index) {
@@ -112,8 +59,7 @@ class ChatbotListPage extends StatelessWidget {
                                           ChatbotViewModel>(
                                         create: (_) => ChatbotViewModel(
                                           context,
-                                          chatId: viewModel.chatlist[index]
-                                          ["chatId"],
+                                          chatId: viewModel.yeobotList[index][["message"]],
                                           isTravel: appViewModel
                                               .userInfo.timeLineId,
                                           isFinished: true,
@@ -131,9 +77,7 @@ class ChatbotListPage extends StatelessWidget {
                                 child: Image.network(
                                     "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
                               ),
-                              title: Text(viewModel.yeobotList[index]["title"]),
-                              subtitle:
-                                  Text(viewModel.yeobotList[index]["sub"]),
+                              title: Text(viewModel.yeobotList[index]["message"]),
                             ),
                           );
                         }),
@@ -160,9 +104,11 @@ class ChatbotListPage extends StatelessWidget {
                               subtitle: Text(viewModel.pushList[index]["sub"]),
                             ),
                           );
-                        }),
+                        },
+                    ),
                   ],
-                )),
+                ),
+            ),
           );
         },
       );
