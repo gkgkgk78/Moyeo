@@ -189,17 +189,17 @@ public class TestMoyeoController {
     @PostMapping("/chat")
     public ResponseEntity<?> insertChat(@RequestBody Chat chat) throws Exception {
 
+        //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
 
         chatService.insert("mongotest", chat);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/chat/{name}")
     public ResponseEntity<?> selectChat(@PathVariable String name) throws Exception {
 
-        List<Chat> ch = chatService.select(name);
-        return new ResponseEntity<>(ch, HttpStatus.OK);
+        List<Chat> result = chatService.select(name);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
