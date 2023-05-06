@@ -1,5 +1,7 @@
 package com.moyeo.main.service;
 
+import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.MoyeoPostRepository;
 import com.moyeo.main.repository.PostRepository;
 import com.moyeo.main.repository.TimeLineRepository;
@@ -33,7 +35,10 @@ public class YeobotServiceImpl implements YeobotService{
             return latestPostAddress;
         } else if (latestPostAddress == null) {
             return latestMoyeoPostAddress;
-        } else {
+        } else if(latestPostAddress == null && latestMoyeoPostAddress == null){
+            throw new BaseException(ErrorMessage.NOT_EXIST_LATEST_ADDRESS);
+        }
+        else {
             LocalDateTime latestPostTime = postRepository.findCreateTimeByPostId(latestPostId);
             LocalDateTime latestMoyeoPostTime = moyeoPostRepository.findCreateTimeByMoyeoPostId(latestMoyeoPostId);
             if (latestPostTime.isAfter(latestMoyeoPostTime)) {

@@ -27,15 +27,7 @@ import java.util.List;
 public class YeobotController {
 
     private final YeobotService yeobotService;
- //   private final UserRepository userRepository;
     private final YeobotClient yeobotClient;
-
-//    public YeobotController(YeobotService yeobotService, YeobotClient yeobotClient) {
-//        this.yeobotService = yeobotService;
-//        this.yeobotClient = yeobotClient;
-//    }
-
-    //테스트 하려면 flask서버도 켜놔야함
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -72,11 +64,12 @@ public class YeobotController {
         List<String[]> latestAddress = null;
         try {
             latestAddress = yeobotService.findLatestAddress(userId);
+        } catch (BaseException e) {
+            throw e;
         } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.NOT_EXIST_LATEST_ADDRESS);
+            throw new RuntimeException(e);
         }
 
-        // 프롬프트 반환
         List<String> addressList = new ArrayList<>();
 
         for (String[] addresses : latestAddress) {
@@ -84,27 +77,17 @@ public class YeobotController {
                 addressList.add(String.valueOf(address));
             }
         }
-
+    
+        //프롬프트 반환
         String goal = "Search for a good restaurant near " + addressList.get(0) +" "+ addressList.get(1) +" "+ addressList.get(2) +" "+ addressList.get(3) +".";
-        //return ResponseEntity.ok(goal);
         String caseType = "restaurant";
 
-        log.info("맛집추천 spring 내부 로직 완료");
-
-        //response code 200이 아닌경우 예외처리
-        try {
-            // Flask 서버에 데이터 전송
-            yeobotClient.sendYeobotData(caseType, goal);
-
-        } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.TOO_LONG_COMMAND);
-            return ResponseEntity
-                    .status(exception.getHttpStatus())
-                    .body(exception.getErrorMessage());
-        }
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData(caseType, goal);
 
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
+        log.info("맛집추천 spring 내부 로직 완료");
 
         return response;
 
@@ -125,10 +108,11 @@ public class YeobotController {
         List<String[]> latestAddress = null;
         try {
             latestAddress = yeobotService.findLatestAddress(userId);
+        } catch (BaseException e) {
+            throw e;
         } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.NOT_EXIST_LATEST_ADDRESS);
+            throw new RuntimeException(e);
         }
-
 
         List<String> addressList = new ArrayList<>();
 
@@ -149,20 +133,9 @@ public class YeobotController {
 
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
 
-        //response code 200이 아닌경우 예외처리
-        try {
-            // Flask 서버에 데이터 전송
-            yeobotClient.sendYeobotData(caseType, goal);
-
-        } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.TOO_LONG_COMMAND);
-            return ResponseEntity
-                    .status(exception.getHttpStatus())
-                    .body(exception.getErrorMessage());
-        }
-
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData(caseType, goal);
         ResponseEntity<String> response = ResponseEntity.ok(goal);
-
 
         return response;
 
@@ -172,32 +145,19 @@ public class YeobotController {
     @PostMapping("/yet/place")
     public ResponseEntity<String> recommendPlace(@RequestBody TravelRecommendRequest request) {
         log.info("여행지추천 spring 내부 로직 시작");
+
         // request에서 필요한 정보를 추출해서 변수에 저장
         String destination = request.getDestination();
         String season = request.getSeason();
         String purpose = request.getPurpose();
 
-        //
         String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
-
         String caseType = "place";
 
-        log.info("여행지추천 spring 내부 로직 완료");
-
-        //response code 200이 아닌경우 예외처리
-        try {
-            // Flask 서버에 데이터 전송
-            yeobotClient.sendYeobotData(caseType, goal);
-
-        } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.TOO_LONG_COMMAND);
-            return ResponseEntity
-                    .status(exception.getHttpStatus())
-                    .body(exception.getErrorMessage());
-        }
-
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData(caseType, goal);
         ResponseEntity<String> response = ResponseEntity.ok(goal);
-
+        log.info("여행지추천 spring 내부 로직 완료");
 
         return response;
     }
@@ -214,26 +174,13 @@ public class YeobotController {
 
         // 추천 결과 문자열 생성
         String goal = "Recommend me some fun things to do near " + destination + " during " + season +".";
-        //return ResponseEntity.ok(goal);
-
         String caseType = "activity";
 
-        log.info("여행중이 아닌 유저에게 액티비티 추천 spring 내부 로직 완료");
-
-        //response code 200이 아닌경우 예외처리
-        try {
-            // Flask 서버에 데이터 전송
-            yeobotClient.sendYeobotData(caseType, goal);
-
-        } catch (Exception e) {
-            BaseException exception = new BaseException(ErrorMessage.TOO_LONG_COMMAND);
-            return ResponseEntity
-                    .status(exception.getHttpStatus())
-                    .body(exception.getErrorMessage());
-        }
+        // Flask 서버에 데이터 전송
+        yeobotClient.sendYeobotData(caseType, goal);
 
         ResponseEntity<String> response = ResponseEntity.ok(goal);
-
+        log.info("여행중이 아닌 유저에게 액티비티 추천 spring 내부 로직 완료");
 
         return response;
 
