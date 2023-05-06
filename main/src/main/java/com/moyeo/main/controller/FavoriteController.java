@@ -28,7 +28,8 @@ public class FavoriteController {
     // 해당 유저가 포스트에 좋아요를 누른 경우 -> favorite 저장 (true 반환)
     // 해당 유저가 포스트에 좋아요를 취소한 경우 -> favorite 삭제 (false 반환)
     @PostMapping(value = "")
-    public ResponseEntity<?> changeFavoriteStatus(@RequestBody @Valid ChangeFavoriteStatusReq changeFavoriteStatusReq) throws Exception {
+    public ResponseEntity<?> changeFavoriteStatus(@RequestBody @Valid ChangeFavoriteStatusReq changeFavoriteStatusReq
+        , @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
         // accessToken에서 userUid 값 가져오기
         Long userUid = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -40,8 +41,9 @@ public class FavoriteController {
         // 응답
         ChangeFavoriteStatusRes res = new ChangeFavoriteStatusRes();
         res.setPostId(changeFavoriteStatusReq.getPostId());
-        res.setFavorite(favoriteService.isFavorite(changeFavoriteStatusReq.getPostId(), userUid));
-        res.setTotalFavorite(favoriteService.countFavorite(changeFavoriteStatusReq.getPostId()));
+        res.setMoyeo(isMoyeo);
+        res.setFavorite(favoriteService.isFavorite(changeFavoriteStatusReq.getPostId(), userUid, isMoyeo));
+        res.setTotalFavorite(favoriteService.countFavorite(changeFavoriteStatusReq.getPostId(), isMoyeo));
 
         return ResponseEntity.ok(res);
     }
