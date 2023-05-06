@@ -37,9 +37,10 @@ public class ChatController {
         User user = null;
         if (auth != null && auth.getPrincipal() != null)
             user = (User) auth.getPrincipal();
-
-
+    
+        log.info("chat insert작업 시작");
         chatService.insert(user.getUserId().toString(), chat);
+        log.info("chat insert작업 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
