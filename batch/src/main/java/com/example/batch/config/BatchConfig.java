@@ -1,5 +1,6 @@
 package com.example.batch.config;
 
+import com.example.batch.RestTemplateResponseErrorHandler;
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
 import com.example.batch.RestaurantRecommendDto.Post;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
@@ -77,7 +79,9 @@ public class BatchConfig {
             log.info("item : {}",item);
             String goal = "Search for a good restaurant near " + "대한민국" + " " + "제주시" + " " + "애윌읍" +".";
 
-            RestTemplate restTemplate = new RestTemplate();
+            RestTemplate restTemplate = new RestTemplateBuilder()
+                    .errorHandler(new RestTemplateResponseErrorHandler())
+                    .build();
 
             // create headers
             HttpHeaders headers = new HttpHeaders();
@@ -91,7 +95,7 @@ public class BatchConfig {
             HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
 
             ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, entity, String.class);
-            log.info("result:{}",response);
+            log.info("result:{}",response.getBody());
 
             // Flask 서버에 데이터 전송
 //            yeobotClient.sendYeobotData("restaurant", goal);
