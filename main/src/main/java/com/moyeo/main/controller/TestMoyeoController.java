@@ -4,6 +4,7 @@ package com.moyeo.main.controller;
 import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
+import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.dto.TravelRecommendRequest;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
@@ -47,6 +48,8 @@ public class TestMoyeoController {
     private final FcmService fcmService;
 
     private final ChatService chatService;
+
+    private final AsyncTestService asyncTestService;
 
 
     @PostMapping("/login")
@@ -200,6 +203,15 @@ public class TestMoyeoController {
 
         List<Chat> result = chatService.select(name);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/notification")
+    public ResponseEntity<?> toNotification(@RequestBody PostInsertReq post) throws Exception {
+
+
+        asyncTestService.test(post);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
