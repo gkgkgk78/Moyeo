@@ -40,6 +40,7 @@ public class ChatController {
             user = (User) auth.getPrincipal();
     
         log.info("chat insert작업 시작");
+        log.info("user아이디 추출"+user.getUserId().toString());
         chatService.insert(user.getUserId().toString(), chat);
         log.info("chat insert작업 완료");
         return new ResponseEntity<>(HttpStatus.OK);
