@@ -49,7 +49,7 @@ public class TestMoyeoController {
 
     private final YeobotClient yeobotClient;
 
-    private final FcmService fcmService;
+//    private final FcmService fcmService;
 
     private final ChatService chatService;
 
@@ -182,16 +182,13 @@ public class TestMoyeoController {
         return response;
 
     }
-
-    @GetMapping("/firebase/message")//테스트 해보기
-    public ResponseEntity<?> getTimelineLatestWithPaging() throws Exception {
-
-
-        fcmService.send();
-
-        return new ResponseEntity<>(HttpStatus.OK);
-
-    }
+//
+//    @GetMapping("/firebase/message")//테스트 해보기
+//    public ResponseEntity<?> getTimelineLatestWithPaging() throws Exception {
+//        fcmService.send();
+//        return new ResponseEntity<>(HttpStatus.OK);
+//
+//    }
 
     @PostMapping("/chat")
     public ResponseEntity<?> insertChat(@RequestBody Chat chat) throws Exception {
