@@ -84,10 +84,37 @@ public class BatchConfig {
         parameter.put("start",start);
         parameter.put("end",end);
         return new JpaPagingItemReaderBuilder<Post>()
-                .queryString("SELECT p FROM Post p WHERE p.createTime BETWEEN :start and :end")
-//                .queryString("SELECT P.userId,P.address1,P.address2,P.address3,P.address4 ,U.deviceToken from Post P inner join User U on U.userId")
-//                .queryString("SELECT p.userId, p.address1, p.address2, p.address3, p.address4, u.deviceToken FROM Post p INNER JOIN p.user u ON u.userId = p.userId")
-                .parameterValues(parameter)
+//                .queryString("SELECT t.postId, t.userId, t.address1, t.address2, t.address3, t.address4, t.deviceToken, t.createTime" +
+//                        "FROM (" +
+//                        "  SELECT p.postId, u.userId, p.address1, p.address2, p.address3, p.address4, u.deviceToken, p.createTime," +
+//                        "    (SELECT COUNT(*) FROM Post p2 WHERE p2.user = p.user AND p2.createTime >= p.createTime) AS rn" +
+//                        "  FROM Post p" +
+//                        "  JOIN p.user u" +
+//                        "  WHERE p.createTime BETWEEN :start AND :end AND p.postId = (" +
+//                        "    SELECT MAX(p2.postId)" +
+//                        "    FROM Post p2" +
+//                        "    WHERE p2.user = p.user AND p2.createTime BETWEEN :start AND :end" +
+//                        "  )" +
+//                        "  " +
+//                        "  UNION ALL" +
+//                        "  " +
+//                        "  SELECT mp.moyeoPostId, mm.userId, mp.address1, mp.address2, mp.address3, mp.address4, u.deviceToken, mp.createTime," +
+//                        "    (SELECT COUNT(*) FROM MoyeoPost mp2 WHERE mp2.moyeoTimeline = mp.moyeoTimeline AND mp2.createTime >= mp.createTime) AS rn" +
+//                        "  FROM MoyeoPost mp " +
+//                        "  JOIN mp.moyeoTimeline mtl" +
+//                        "  JOIN mtl.moyeoMembers mm" +
+//                        "  JOIN mm.user u" +
+//                        "  WHERE mp.createTime BETWEEN :start AND :end AND mp.moyeoPostId = (" +
+//                        "    SELECT MAX(mp2.moyeoPostId)" +
+//                        "    FROM MoyeoPost mp2" +
+//                        "    WHERE mp2.moyeoTimeline = mp.moyeoTimeline AND mp2.createTime BETWEEN :start AND :end" +
+//                        "  )" +
+//                        ") t" +
+//                        "WHERE t.rn = 1" +
+//                        "ORDER BY t.createTime DESC")
+//                .queryString("SELECT P from Post P inner join P.user U")
+                .queryString("SELECT MP FROM Moyeo_post MP inner join MP.moyeoTimeline MTL")
+//                .parameterValues(parameter)
                 .pageSize(3)
                 .entityManagerFactory(entityManagerFactory)
                 .name("PostReader")

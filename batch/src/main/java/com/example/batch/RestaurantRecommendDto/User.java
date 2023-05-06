@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,6 +18,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class User {
     @Id
-    String userId;
+    Long userId;
     String deviceToken;
+//    @OneToMany(mappedBy = "user")
+//    @Builder.Default
+//    private List<MoyeoMembers> moyeoMembersList = new ArrayList<>();
 }
