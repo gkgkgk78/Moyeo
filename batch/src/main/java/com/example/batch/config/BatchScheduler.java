@@ -24,7 +24,7 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfig batchConfig;
 //    @Scheduled(cron = "50 * * * * *")
-    @Scheduled(cron = "10 * * * * *")
+    @Scheduled(cron = "* 30 * * * *")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         long nano = System.currentTimeMillis();
         log.info("Schedule start");

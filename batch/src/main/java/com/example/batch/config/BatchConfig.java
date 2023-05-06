@@ -2,6 +2,7 @@ package com.example.batch.config;
 
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
 import com.example.batch.RestaurantRecommendDto.Post;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -19,6 +20,8 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
@@ -37,6 +40,8 @@ public class BatchConfig {
     private String JOB_NAME = "restaurantRecommendJob";
     private String STEP_NAME = "restaurantRecommendStep";
     private String CHUNK_NAME = "restaurantRecommendChunk";
+    @Value("${flask}")
+    private String autogpt;
     @Bean
     public Job job(){
         log.info("JOB 실행됨");
@@ -70,6 +75,26 @@ public class BatchConfig {
     public ItemProcessor<Post,FirebaseCM> itemProcessor() {
         return item -> {
             log.info("item : {}",item);
+            String goal = "Search for a good restaurant near " + "대한민국" + " " + "제주시" + " " + "애윌읍" +".";
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            // create headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("Title","restaurant");
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String,Object> map = new HashMap<>();
+            map.put("data",goal);
+            // create param
+
+            HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, entity, String.class);
+            log.info("result:{}",response);
+
+            // Flask 서버에 데이터 전송
+//            yeobotClient.sendYeobotData("restaurant", goal);
             return FirebaseCM.builder()
                     .message("안녕").build();
         };
@@ -112,8 +137,8 @@ public class BatchConfig {
 //                        ") t" +
 //                        "WHERE t.rn = 1" +
 //                        "ORDER BY t.createTime DESC")
-//                .queryString("SELECT P from Post P inner join P.user U")
-                .queryString("SELECT MP FROM Moyeo_post MP inner join MP.moyeoTimeline MTL")
+                .queryString("SELECT P from Post P inner join P.user U")
+//                .queryString("SELECT MP FROM Moyeo_post MP inner join MP.moyeoTimeline MTL")
 //                .parameterValues(parameter)
                 .pageSize(3)
                 .entityManagerFactory(entityManagerFactory)
