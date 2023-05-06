@@ -3,6 +3,8 @@ package com.moyeo.main.service;
 import com.moyeo.main.dto.MyMessageBoxDTO;
 import com.moyeo.main.entity.MessageBox;
 import com.moyeo.main.entity.User;
+import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.MessageBoxRepository;
 import com.moyeo.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -45,43 +47,22 @@ public class MessageBoxServiceImpl implements MessageBoxService{
     @Transactional
     public void markAsCheckedByMessageId(Long messageId) {
 
-        if (messageId == null) {
-            throw new IllegalArgumentException("messageId cannot be null");
-        }
-
-        Optional<MessageBox> messageBoxOptional = messageBoxRepository.findById(messageId);
-        if (messageBoxOptional.isEmpty()) {
-            throw new RuntimeException("No message found for the given messageId");
-        }
-
         messageBoxRepository.markAsCheckedById(messageId);
     }
 
     @Override
     @Transactional
     public void markAsCheckedAll(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("userId cannot be null");
-        }
 
         User user = userRepository.getByUserId(userId);
         List<MessageBox> messageBoxList = messageBoxRepository.findByUserIdOrderByIsCheckedAscCreateTimeDesc(user);
-//        if (messageBoxList == null || messageBoxList.isEmpty()) {
-//            throw new RuntimeException("No messages found for the user");
-//        }
-//        messageBoxRepository.markAsCheckedByUser(userId);
 
         if (messageBoxList == null || messageBoxList.isEmpty()) {
-            throw new RuntimeException("No messages found for the user");
+            throw new BaseException(ErrorMessage.NO_MESSAGE_FOR_USER);
         }
 
         messageBoxRepository.markAsCheckedByUser(userId);
 
-//        for (MessageBox messageBox : messageBoxList) {
-//            messageBox.setIsChecked(true);
-//        }
-//
-//        messageBoxRepository.saveAll(messageBoxList);
     }
 
     @Override
