@@ -28,7 +28,7 @@ import java.util.List;
 public class ChatController {
 
 
-    private ChatService chatService;
+    private final ChatService chatService;
 
     @PostMapping("")
     public ResponseEntity<?> insertChat(@RequestBody ChatReq chat) throws Exception {
