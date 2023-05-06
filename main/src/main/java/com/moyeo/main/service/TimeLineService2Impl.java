@@ -56,23 +56,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 
 public class TimeLineService2Impl implements TimeLineService2 {
-
     private final TimeLineRepository timeLineRepository;
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final MoyeoPostRepository moyeoPostRepository;
-    private final PhotoRepository photoRepository;
     private final TimeLineAndMoyeoRepository timeLineAndMoyeoRepository;
-    private final MoyeoMembersRepository moyeoMembersRepository;
-
     private final FavoriteRepository favoriteRepository;
     private final MoyeoFavoriteRepository moyeoFavoriteRepository;
     private final MoyeoPublicRepository moyeoPublicRepository;
-    private final NationRepository nationRepository;
-
     private final UtilService utilService;
-    // private final TimeLineRedisRepository repo;
-    private final PostService postService;
 
 
     @Override

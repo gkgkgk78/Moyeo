@@ -33,6 +33,7 @@ import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.ChangeFavoriteStatusReq;
 import com.moyeo.main.dto.ChangeFavoriteStatusRes;
+import com.moyeo.main.dto.GetPostRes;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.MoyeoMembersReq;
 import com.moyeo.main.dto.TimelinePostOuter;
@@ -104,7 +105,7 @@ public class TestAccompanyController {
     }
 
     @GetMapping("/timeline/{uid}/{userId}")
-    @Operation(summary = "타임라인 상세 조회", description = "타임라인 한개 조회")
+    @Operation(summary = "타임라인 상세 조회", description = "타임라인 상세 조회")
     public ResponseEntity<?> seleteOneTimeLine(@PathVariable Long uid, @PathVariable Long userId) throws Exception {
         log.info("타임라인 한개 조회 시작");
         User user = userRepository.getByUserId(userId);
@@ -152,7 +153,7 @@ public class TestAccompanyController {
 
     // 포스트 수정 (공개 여부 수정)
     @PutMapping("/moyeopost/{moyeoPostId}/{userId}")
-    @Operation(summary = "포스트 공개 여부 수정", description = "동행 합류")
+    @Operation(summary = "포스트 공개 여부 수정", description = "")
     public ResponseEntity<?> updateMoyeoPost(@PathVariable Long moyeoPostId, @PathVariable Long userId) throws Exception {
         if (moyeoPostId == null) {
             log.info("moyeoPostId 값 없음");
@@ -166,7 +167,7 @@ public class TestAccompanyController {
 
     // 포스트 삭제
     @DeleteMapping("/moyeopost/{moyeoPostId}/{userId}")
-    @Operation(summary = "모여 포스트 삭제", description = "동행 합류")
+    @Operation(summary = "모여 포스트 삭제", description = "")
     public ResponseEntity<?> deleteMoyeoPost(@PathVariable Long moyeoPostId, @PathVariable Long userId) throws Exception {
         if (moyeoPostId == null) {
             log.info("moyeoPostId 값 없음");
@@ -180,7 +181,7 @@ public class TestAccompanyController {
 
 
     @PostMapping(value = "/moyeofavorite/{userId}")
-    @Operation(summary = "모여 포스트 좋아요 기능", description = "동행 합류")
+    @Operation(summary = "모여 포스트 좋아요 기능", description = "")
     public ResponseEntity<?> changeFavoriteStatus(@RequestBody @Valid ChangeFavoriteStatusReq changeFavoriteStatusReq
         , @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo, @PathVariable Long userId) throws Exception {
         // accessToken에서 userUid 값 가져오기
@@ -194,6 +195,37 @@ public class TestAccompanyController {
         res.setTotalFavorite(favoriteService.countFavorite(changeFavoriteStatusReq.getPostId(), isMoyeo));
 
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping(value = "/moyeofavorite")
+    @Operation(summary = "내가 좋아요 누른 포스트 보기", description = "")
+    public ResponseEntity<?> getFavoritePostList(@RequestParam Long userUid) throws Exception {
+        // List<Post> favoritePostList = favoriteService.findFavoritePost(userUid);
+        return ResponseEntity.ok(favoriteService.findFavoritePost(userUid));
+    }
+
+    //메인페이지에서 포스트 조회
+    @GetMapping("/moyeopost/main/{location}")
+    @Operation(summary = "포스트 - 메인 페이지에서 포스트 address로 검색", description = "최신순")
+    public ResponseEntity<?> getPost(@PathVariable String location) throws Exception {
+        if (location == null) {
+            log.info("location 값 없음");
+            throw new BaseException(ErrorMessage.VALIDATION_FAIL_EXCEPTION);
+        }
+        List<GetPostRes> getPostResList = postService.findByLocation(location);
+        return ResponseEntity.ok(getPostResList);
+    }
+
+    //내 페이지에서 포스트 조회
+    @GetMapping("/moyeopost/mine/{myLocation}/{userUid}")
+    @Operation(summary = "포스트 - 내 페이지에서 포스트 address로 검색", description = "최신순")
+    public ResponseEntity<?> getMyPost(@PathVariable String myLocation, @PathVariable Long userUid) throws Exception {
+        if (myLocation == null) {
+            log.info("location 값 없음");
+            throw new BaseException(ErrorMessage.VALIDATION_FAIL_EXCEPTION);
+        }
+        List<GetPostRes> getPostResList = postService.findMyPost(myLocation, userUid);
+        return ResponseEntity.ok(getPostResList);
     }
 
 }
