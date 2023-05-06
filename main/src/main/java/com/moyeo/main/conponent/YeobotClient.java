@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
@@ -40,5 +39,10 @@ public class YeobotClient {
 
         return ResponseEntity.ok(responseBody);
     }
+
+
+
+
+
 
 }

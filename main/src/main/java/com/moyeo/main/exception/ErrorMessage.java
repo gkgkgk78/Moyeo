@@ -37,6 +37,8 @@ public enum ErrorMessage {
 
     FIREBASE_INIT_ERROR("firebase 초기화시 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR),
 
+    ASYNC_RUN_ERROR("notification 서버 전송중 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR),
+
     FIREBASE_SEND_ERROR("firebase 알림 메시지 전송중 에러", HttpStatus.INTERNAL_SERVER_ERROR),
     NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
 
