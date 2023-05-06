@@ -1,5 +1,6 @@
 package com.moyeo.main.service;
 
+import com.moyeo.main.dto.ChatReq;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.exception.BaseException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,11 @@ public class ChatServiceImpl implements ChatService {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void insert(String name, Chat chat) throws BaseException {
+    public void insert(String name, ChatReq chat1) throws BaseException {
+
+        Chat chat=new Chat();
+        chat.setMessage(chat1.getMessage());
+        chat.setSender(chat1.getSender());
         chat.setCreateTime(LocalDateTime.now());
         log.info("chat inser 시작");
         log.info(name.toString());
