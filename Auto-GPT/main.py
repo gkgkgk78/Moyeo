@@ -32,12 +32,12 @@ def index():
     # ah1=request.get_json()
     temp_data = request_data.decode("utf-8")
     temp_data+=" The result is less than or equal to 4000 tokens."
-    #print(temp_data)
+
     # print("꺼낸 데이터:", temp_data)
     ctx = click.Context(autogpt.cli.main, info_name='hello')
     # 밑의 name에서 보내주고자 하는 내용이 담길 것임
     ee = ctx.invoke(autogpt.cli.main, name=temp_data)
-
+    
     want_data = data_header["Title"]
 
     to_chatgpt = ee
@@ -54,7 +54,7 @@ def index():
     # print(text_to_english)
     # 영어 to 한국어 번역
     # papago.engTOko("hi i am yoonhee")
-    #print(to_chatgpt)
+    print(to_chatgpt)
     # gpt명령 내리기
     last = chatgpt.chattogpt(to_chatgpt)
 
