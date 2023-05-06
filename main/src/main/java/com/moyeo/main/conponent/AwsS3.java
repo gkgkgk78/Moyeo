@@ -37,8 +37,8 @@ public class AwsS3 {
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
         String keyname =uploadPath+"/"+uploadFileName;
-        // amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead)); // TODO
-        amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata)); // TODO
+        // amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata));
         uploadUrl = amazonS3Client.getUrl(bucket,keyname).toString();
         return uploadUrl;
     }

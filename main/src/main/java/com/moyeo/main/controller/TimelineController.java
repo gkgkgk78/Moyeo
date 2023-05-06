@@ -1,11 +1,16 @@
 package com.moyeo.main.controller;
 
+import com.moyeo.main.conponent.ClovaSpeechClient;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.service.TimeLineService;
+import com.moyeo.main.service.TimeLineService2;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,8 +29,8 @@ import java.util.List;
 @RestController
 @Log4j2
 public class TimelineController {
-
     private final TimeLineService timeLineService;
+    private final TimeLineService2 timeLineService2;
 
     //타임라인 한개 조회 => 이제 이걸 해야함 , 넘겨줄때 여행한 국가 리스트 순서대로 해서 만들어 넘겨주면 될듯
     @GetMapping("/{uid}")
@@ -35,7 +40,8 @@ public class TimelineController {
         User user = null;
         if (auth != null && auth.getPrincipal() != null)
             user = (User) auth.getPrincipal();
-        TimelinePostOuter timeline = timeLineService.searchOneTimeline(uid, user);
+        // TimelinePostOuter timeline = timeLineService.searchOneTimeline(uid, user);
+        TimelinePostOuter timeline = timeLineService2.searchOneTimeline(uid, user);
         if (timeline==null)
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         log.info("timeLine info :{}",timeline.getTimeline());
