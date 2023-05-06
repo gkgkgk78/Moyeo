@@ -25,9 +25,4 @@ public class Photo {
     @Column(length = 120, unique = true, nullable = false)
     private String photoUrl;
 
-
-    // @Builder.Default
-    // @ColumnDefault("0")
-    // private Boolean isLive = false;
-
 }

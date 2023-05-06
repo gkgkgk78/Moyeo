@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
             User updateUser = userRepository.findByClientId(clientId);
             updateUser.setRefreshToken(tokenRes.getRefreshToken());
-            updateUser.setDeviceToken(userLoginReq.getDeviceToken());
+            if(userLoginReq.getDeviceToken() != null) updateUser.setDeviceToken(userLoginReq.getDeviceToken());
             userRepository.save(updateUser);
 
             return tokenRes;
