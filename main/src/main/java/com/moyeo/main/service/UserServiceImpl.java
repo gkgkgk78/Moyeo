@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         String profileImageUrl = json.get("kakao_account").get("profile").get("profile_image_url").asText();
         String nickname = json.get("kakao_account").get("profile").get("nickname").asText();
         log.info("nickname: {}", nickname);
-
+//        log.info("기기토큰",userLoginReq.getAccessToken());
         User user;
 
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인

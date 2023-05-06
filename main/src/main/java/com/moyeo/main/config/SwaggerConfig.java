@@ -19,7 +19,7 @@ public class SwaggerConfig {
     public OpenAPI openAPI(@Value("${spring-doc.version}") String version) {
 
         Info info = new Info()
-                .title("Danim API 문서") // 타이틀
+                .title("Moyeo API 문서") // 타이틀
                 .version(version) // 문서 버전
                 .description("잘못된 부분이나 오류 발생 시 바로 말씀해주세요.");
 
