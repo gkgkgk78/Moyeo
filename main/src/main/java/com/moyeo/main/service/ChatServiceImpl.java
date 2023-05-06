@@ -3,6 +3,7 @@ package com.moyeo.main.service;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.exception.BaseException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
@@ -23,7 +25,14 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void insert(String name, Chat chat) throws BaseException {
         chat.setCreateTime(LocalDateTime.now());
-        mongoTemplate.insert(chat, name);
+        try {
+            mongoTemplate.insert(chat, name);
+        }
+        catch (Exception e)
+        {
+            log.info(e.getMessage());
+
+        }
     }
 
 
