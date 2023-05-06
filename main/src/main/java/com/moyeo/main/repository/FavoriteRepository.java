@@ -5,6 +5,7 @@ import com.moyeo.main.id.FavoriteID;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +21,10 @@ public interface FavoriteRepository extends JpaRepository<Favorite, FavoriteID> 
 
     // 해당 유저가 좋아요 누른 포스트 검색
     Optional<List<Favorite>> findAllByUserId(User user);
+    @Query(nativeQuery = true, value = "select post_id from favorite where user_id = :userId")
+    Optional<List<Long>> findAllPostIdByUserId(Long userId);
 
     //포스트 삭제되면 포스트에 연결된 좋아요도 삭제
     void deleteAllByPostId(Post post);
+
 }
