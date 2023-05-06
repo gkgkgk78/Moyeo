@@ -21,4 +21,5 @@ public interface MoyeoPublicRepository extends JpaRepository<MoyeoPublic, MoyeoP
 	MoyeoPublic findByUserIdAndMoyeoPostId(User user, MoyeoPost moyeoPostId);
 
 	List<MoyeoPublic> findByMoyeoPostId(MoyeoPost moyeoPostId);
+	List<MoyeoPublic> findByMoyeoPostId(Long moyeoPostId);
 }

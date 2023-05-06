@@ -7,14 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moyeo.main.dto.GetFavoritePostListRes;
 import com.moyeo.main.dto.PostMembers;
 import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.MoyeoTimeLine;
+import com.moyeo.main.entity.Post;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
@@ -36,7 +37,13 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
 
     List<MoyeoPost> findAllByMoyeoTimelineIdAndCreateTimeGreaterThanEqualAndCreateTimeLessThanEqual(MoyeoTimeLine moyeoTimelineId, LocalDateTime joinTime, LocalDateTime finishTime);
 
+    Optional<List<MoyeoPost>> findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(String location1, String location2, String location3, String location4);
+
+
     @Query(nativeQuery = true, value = "SELECT a.* FROM moyeo_post a WHERE a.moyeo_timeline_id IN :moyeoTimelineIdList")
     List<MoyeoPost> findAllByMoyeoTimelineIdIn(List<Long> moyeoTimelineIdList);
+
+    @Query(nativeQuery = true, value = "select * from moyeo_post where moyeo_post_id in :postIdList")
+    List<MoyeoPost> findAllMoyeoPostIn(List<Long> postIdList);
 
 }

@@ -24,7 +24,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Override
     TimeLine getById(Long aLong);
 
-
+    Optional<TimeLine> findFirstByUserIdOrderByTimelineIdDesc(User user);
     Optional<List<TimeLine>> findAllByUserIdOrderByCreateTimeDesc(User u);
 
     Optional<List<TimeLine>> findAllByUserIdAndIsTimelinePublic(User u, Boolean flag);

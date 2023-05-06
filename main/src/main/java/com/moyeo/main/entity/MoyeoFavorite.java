@@ -27,7 +27,6 @@ import lombok.Setter;
 public class MoyeoFavorite {
     @Id
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "moyeo_post_id")
     private MoyeoPost moyeoPostId;
 
