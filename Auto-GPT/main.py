@@ -55,6 +55,7 @@ def index():
     # 영어 to 한국어 번역
     # papago.engTOko("hi i am yoonhee")
     print(to_chatgpt)
+    
     # gpt명령 내리기
     last = chatgpt.chattogpt(to_chatgpt)
 
