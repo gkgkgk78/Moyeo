@@ -45,7 +45,7 @@ public class MessageBoxController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/readall")
+    @PutMapping("/readall/{userId}")
     public ResponseEntity<?> markAsCheckedAllByUserId(@PathVariable Long userId) {
         log.info("메시지 전체 조회처리 로직 시작");
         //로그인 정보에서 uid 받아오기
