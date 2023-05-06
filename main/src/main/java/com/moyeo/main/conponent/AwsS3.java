@@ -8,10 +8,14 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.UUID;
 
@@ -33,7 +37,8 @@ public class AwsS3 {
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
         String keyname =uploadPath+"/"+uploadFileName;
-        amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        // amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+        amazonS3Client.putObject(new PutObjectRequest(bucket,keyname,file.getInputStream(),objectMetadata));
         uploadUrl = amazonS3Client.getUrl(bucket,keyname).toString();
         return uploadUrl;
     }
@@ -58,5 +63,6 @@ public class AwsS3 {
         url = url.substring(slashIndex + 1);
         boolean isObjectExist = amazonS3Client.doesObjectExist(bucket, url);
         if(isObjectExist)amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, url));
+
     }
 }

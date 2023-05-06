@@ -1,62 +1,61 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '2.7.12-SNAPSHOT'
-	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.9'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
+
 
 group = 'com.moyeo'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'junit:junit:4.13.1'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.projectlombok:lombok:1.18.22'
-	testImplementation 'junit:junit:4.13.1'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	testImplementation 'org.springframework.security:spring-security-test'
-	testCompileOnly 'org.projectlombok:lombok:1.18.22'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
-	// asertJ
-	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    //testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testCompileOnly 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    // asertJ
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
-	// jwt
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	// swagger
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.12'
 
-	// asw setting
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
-	// stt api
-	implementation 'com.google.code.gson:gson:2.8.7'
-	implementation 'org.apache.httpcomponents:httpclient:4.5.12'
-	implementation 'org.apache.httpcomponents:httpmime:4.3.1'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
+    // asw setting
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
+    // stt api
+    implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation 'org.apache.httpcomponents:httpmime:4.3.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 
-	// okhttp
-//	implementation group: 'com.squareup.okhttp', name: 'okhttp', version: '2.7.5'
-	implementation("com.squareup.okhttp3:okhttp:4.10.0")
-}
+    // okhttp
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
-tasks.named('test') {
-	useJUnitPlatform()
+    //firebase
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
+    //mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+
 }

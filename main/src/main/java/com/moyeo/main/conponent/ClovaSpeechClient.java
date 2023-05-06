@@ -28,10 +28,16 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class ClovaSpeechClient {
-    @Value("${clova-secret-key}")
-    private static final String SECRET = null;
-    @Value("${clova-invoke-url}")
-    private static final String INVOKE_URL = null;
+    // @Value("${clova-secret-key}")
+    // public void setSECRET(String value) {
+    //     SECRET = value;
+    // }
+    // @Value("${clova-invoke-url}")
+    // public void setINVOKE_URL(String value) {
+    //     INVOKE_URL = value;
+    // }
+    private static final String SECRET = "058088bb4e64483d8bb892ac32507b7c";
+    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5061/5a47dca7418b8d67af71cdb7d5f767f7cea24457cc3fad3865ddd3b0f402166d";
 
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();
