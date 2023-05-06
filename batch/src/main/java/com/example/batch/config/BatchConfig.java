@@ -21,7 +21,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Configuration
@@ -77,10 +80,14 @@ public class BatchConfig {
     public JpaPagingItemReader<Post> itemReader(@Value("#{jobParameters['start']}") String start,@Value("#{jobParameters['end']}") String end) {
         log.info("start : {}",start);
         log.info("end : {}",end);
+        Map<String,Object> parameter = new HashMap<>();
+        parameter.put("start",start);
+        parameter.put("end",end);
         return new JpaPagingItemReaderBuilder<Post>()
-                .queryString("SELECT p FROM Post p")
+                .queryString("SELECT p FROM Post p WHERE p.createTime BETWEEN :start and :end")
 //                .queryString("SELECT P.userId,P.address1,P.address2,P.address3,P.address4 ,U.deviceToken from Post P inner join User U on U.userId")
 //                .queryString("SELECT p.userId, p.address1, p.address2, p.address3, p.address4, u.deviceToken FROM Post p INNER JOIN p.user u ON u.userId = p.userId")
+                .parameterValues(parameter)
                 .pageSize(3)
                 .entityManagerFactory(entityManagerFactory)
                 .name("PostReader")
