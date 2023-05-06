@@ -2,11 +2,7 @@ package com.moyeo.main.controller;
 
 
 import com.moyeo.main.conponent.YeobotClient;
-import com.moyeo.main.dto.AddPostReq;
-import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
-import com.moyeo.main.dto.PostInsertReq;
-import com.moyeo.main.dto.TimelinePostOuter;
-import com.moyeo.main.dto.TravelRecommendRequest;
+import com.moyeo.main.dto.*;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
@@ -191,7 +187,7 @@ public class TestMoyeoController {
 //    }
 
     @PostMapping("/chat")
-    public ResponseEntity<?> insertChat(@RequestBody Chat chat) throws Exception {
+    public ResponseEntity<?> insertChat(@RequestBody ChatReq chat) throws Exception {
 
         //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
 
