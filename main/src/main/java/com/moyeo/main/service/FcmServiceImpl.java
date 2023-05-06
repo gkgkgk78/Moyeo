@@ -7,6 +7,7 @@ import com.google.firebase.messaging.*;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,7 @@ import java.util.Date;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FcmServiceImpl implements FcmService {
 
@@ -31,6 +33,7 @@ public class FcmServiceImpl implements FcmService {
         try {
             remoteToken = new FileInputStream("src/main/resources/firebase.json");
         } catch (FileNotFoundException e) {
+            log.info("현재 firebase파일이 존재 하지 않음");
             throw new BaseException(ErrorMessage.NOT_EXIST_ROUTE);
         }
 
