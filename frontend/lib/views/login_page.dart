@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:moyeo/views/home_feed_page.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
@@ -88,8 +89,13 @@ class LoginPage extends StatelessWidget {
                             },
                           );
                           // 원래 로그인 로직
-                          viewModel.loginButtonPressed(
-                              context, appViewModel.updateUserInfo);
+                          // viewModel.loginButtonPressed(
+                          //     context, appViewModel.updateUserInfo);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_)=> const MyHomePage(),)
+                          );
+
                         },
                         child: Image.asset(
                           'assets/images/kakao_login.png',

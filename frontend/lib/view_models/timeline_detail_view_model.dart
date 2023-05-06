@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:moyeo/models/UserInfo.dart';
 
 import '../models/TimelineDetail.dart';
 import '../services/timeline_repository.dart';
+import '../services/moyeo_repository.dart';
 
 import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
@@ -152,5 +154,10 @@ class TimelineDetailViewModel extends ChangeNotifier {
   deleteTimeline(context) async {
     await TimelineRepository().deleteTimeline(context, timelineId);
     Navigator.pop(context);
+  }
+
+  addMoyeoUser(context, List<UserInfo> userList) async {
+    await MoyeoRepository().addMoyeoUser(context, userList);
+    notifyListeners();
   }
 }

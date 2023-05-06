@@ -17,4 +17,5 @@ class PostViewModel extends ChangeNotifier {
     post.favoriteCount = res['totalFavorite'];
     notifyListeners();
   }
+
 }
