@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +18,13 @@ import java.util.Optional;
 //mapper와 동일한 기능을 제공한다고 생각을 하자
 @Repository
 public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
+
+    Optional<TimeLine> findByUserIdAndIsComplete(User user, Boolean isComplete);
+
     @Override
     TimeLine getById(Long aLong);
 
-
+    Optional<TimeLine> findFirstByUserIdOrderByTimelineIdDesc(User user);
     Optional<List<TimeLine>> findAllByUserIdOrderByCreateTimeDesc(User u);
 
     Optional<List<TimeLine>> findAllByUserIdAndIsTimelinePublic(User u, Boolean flag);
@@ -49,7 +53,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query(value = "select timeline_id from time_line order by timeline_id desc limit 1", nativeQuery = true)
     Long findLastTimelineId();
 
-    @Query("SELECT CASE WHEN isComplete = true THEN 1 ELSE 0 END FROM TimeLine WHERE userId = :userId ORDER BY createTime DESC")
-    int findLatestTimelineStatus(long userId);
+    @Query(value = "SELECT CASE WHEN is_complete = true THEN 1 ELSE 0 END FROM time_line WHERE user_id = :userId ORDER BY create_time DESC LIMIT 1", nativeQuery = true)
+    int findLatestTimelineStatus(Long userId);
 
 }
