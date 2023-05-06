@@ -4,12 +4,15 @@ package com.moyeo.main.controller;
 import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
+import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.dto.TravelRecommendRequest;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
+import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Tag(name = "Test", description = "테스트 API Document")
 @RestController
 @RequiredArgsConstructor
 @Slf4j

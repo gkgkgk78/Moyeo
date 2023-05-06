@@ -39,5 +39,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p.createTime FROM Post p WHERE p.postId = :postId")
     LocalDateTime findCreateTimeByPostId(Long postId);
 
+    @Query(nativeQuery = true, value = "select * from post where post_id in :postIdList")
+    List<Post> findAllPostIn(List<Long> postIdList);
+
+    // @Query(nativeQuery = true, value = "select post_id, create_time, modify_time, address1, address2, address3, address4, favorite_count, text, voice_length, voice_url, nation_id, false as is_moyeo\n"
+    //     + "from post\n"
+    //     + "where post_id in :postIdList\n"
+    //     + "union\n"
+    //     + "select a.moyeo_post_id, a.create_time, a.modify_time, a.address1, a.address2, a.address3, a.address4, a.favorite_count, a.text, a.voice_length, a.voice_url, a.nation_id, true as is_moyeo\n"
+    //     + "from moyeo_post a\n"
+    //     + "where a.moyeo_post_id in :moyeoPostIdList\n"
+    //     + "ORDER BY create_time DESC")
+    // Optional<List<PostUnionMoyeoPostInterface>> findPostsAndMoyeoPosts(List<Long> postIdList,  List<Long> moyeoPostIdList);
 
 }
