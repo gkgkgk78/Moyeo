@@ -25,6 +25,8 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void insert(String name, Chat chat) throws BaseException {
         chat.setCreateTime(LocalDateTime.now());
+        log.info("chat inser 시작");
+        log.info(name.toString());
         try {
             mongoTemplate.insert(chat, name);
         }
