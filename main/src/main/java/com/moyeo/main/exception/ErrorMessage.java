@@ -47,7 +47,7 @@ public enum ErrorMessage {
     ASYNC_RUN_ERROR("notification 서버 전송중 에러 발생", HttpStatus.INTERNAL_SERVER_ERROR),
 
     FIREBASE_SEND_ERROR("firebase 알림 메시지 전송중 에러", HttpStatus.INTERNAL_SERVER_ERROR),
-    NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+
     NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST);
 
