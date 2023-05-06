@@ -41,7 +41,8 @@ public enum ErrorMessage {
     NOT_EXIST_PHOTO("존재하지 않는 사진 입니다", HttpStatus.BAD_REQUEST),
 
     TOO_LONG_COMMAND("input 명령어가 너무 깁니다.", HttpStatus.BAD_REQUEST),
-    NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND);
+    NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST);
 
     private final String errMsg;
     private final HttpStatus httpStatus;
