@@ -16,6 +16,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -49,7 +50,7 @@ public class BatchConfig {
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
                 .<Post, FirebaseCM>chunk(3)
-                .reader(this.itemReader())
+                .reader(this.itemReader(null,null))
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
                 .build();
@@ -73,9 +74,13 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<Post> itemReader() {
+    public JpaPagingItemReader<Post> itemReader(@Value("#{jobParameters['start']}") String start,@Value("#{jobParameters['end']}") String end) {
+        log.info("start : {}",start);
+        log.info("end : {}",end);
         return new JpaPagingItemReaderBuilder<Post>()
                 .queryString("SELECT p FROM Post p")
+//                .queryString("SELECT P.userId,P.address1,P.address2,P.address3,P.address4 ,U.deviceToken from Post P inner join User U on U.userId")
+//                .queryString("SELECT p.userId, p.address1, p.address2, p.address3, p.address4, u.deviceToken FROM Post p INNER JOIN p.user u ON u.userId = p.userId")
                 .pageSize(3)
                 .entityManagerFactory(entityManagerFactory)
                 .name("PostReader")
