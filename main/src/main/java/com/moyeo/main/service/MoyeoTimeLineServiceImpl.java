@@ -105,6 +105,7 @@ public class MoyeoTimeLineServiceImpl implements MoyeoTimeLineService {
         moyeoTimeLine.setTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
         moyeoTimeLineRepository.save(moyeoTimeLine);
 
+        log.info("동행 타임라인 생성 끝...");
         return RegistMoyeoRes.builder().timelineId(timeLine.getTimelineId()).moyeoTimelineId(moyeoTimelineId).userId(user.getUserId()).build();
     }
 
