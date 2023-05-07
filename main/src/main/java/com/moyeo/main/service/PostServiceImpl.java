@@ -5,6 +5,7 @@ import static java.time.LocalDateTime.*;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.BasePostDto;
 import com.moyeo.main.dto.GetPostRes;
+import com.moyeo.main.dto.MoyeoPostStatusDto;
 import com.moyeo.main.dto.PostMembers;
 import com.moyeo.main.dto.WordInfo;
 import com.moyeo.main.entity.MoyeoPost;
@@ -477,7 +478,11 @@ public class PostServiceImpl implements PostService {
         List<GetPostRes> moyeoPostList = new ArrayList<>();
         if(moyeoPosts != null && moyeoPosts.size() != 0) {
             moyeoPostList = moyeoPosts.stream()
-                // .filter(post -> post.getTimelineId().getIsComplete() && post.getTimelineId().getIsTimelinePublic()) // TODO 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+                .filter(post -> {
+                    // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
+                    MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
+                    return post.getMoyeoTimelineId().getIsComplete() && status.getIsAllPublic() && !status.getIsAnyDeleted();
+                })
                 .map(post -> GetPostRes.builder(post).build())
                 .collect(Collectors.toList());
         }
