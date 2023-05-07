@@ -481,7 +481,9 @@ public class PostServiceImpl implements PostService {
                 .filter(post -> {
                     // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
                     MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
-                    return post.getMoyeoTimelineId().getIsComplete() && status.getIsAllPublic() && !status.getIsAnyDeleted();
+                    Boolean isAllPublic = status.getIsAllPublic() == 1L;
+                    Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+                    return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
                 })
                 .map(post -> GetPostRes.builder(post).build())
                 .collect(Collectors.toList());
