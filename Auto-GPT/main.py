@@ -37,29 +37,31 @@ def index():
     ctx = click.Context(autogpt.cli.main, info_name='hello')
     # 밑의 name에서 보내주고자 하는 내용이 담길 것임
     ee = ctx.invoke(autogpt.cli.main, name=temp_data)
-    
+    print(ee)
     want_data = data_header["Title"]
 
-    to_chatgpt = ee
+    return json.dumps({"result": ee}), 200, {'Content-Type': 'application/json'}
 
-    if want_data == "restaurant":
-        to_chatgpt += "\n" + config.restaurant
-    elif want_data == "activity":
-        to_chatgpt += "\n" + config.activity
-    else:
-        to_chatgpt += "\n" + config.place
-
-    # 한국어 to 영어 번역
-    # text_to_english = papago.koTOeng("안녕 난 말숙이야")
-    # print(text_to_english)
-    # 영어 to 한국어 번역
-    # papago.engTOko("hi i am yoonhee")
-    print(to_chatgpt)
-
-    # gpt명령 내리기
-    last = chatgpt.chattogpt(to_chatgpt)
-
-    return json.dumps({"result": last}), 200, {'Content-Type': 'application/json'}
+    # to_chatgpt = ee
+    #
+    # if want_data == "restaurant":
+    #     to_chatgpt += "\n" + config.restaurant
+    # elif want_data == "activity":
+    #     to_chatgpt += "\n" + config.activity
+    # else:
+    #     to_chatgpt += "\n" + config.place
+    #
+    # # 한국어 to 영어 번역
+    # # text_to_english = papago.koTOeng("안녕 난 말숙이야")
+    # # print(text_to_english)
+    # # 영어 to 한국어 번역
+    # # papago.engTOko("hi i am yoonhee")
+    # #print(to_chatgpt)
+    # # gpt명령 내리기
+    # last = chatgpt.chattogpt(to_chatgpt)
+    #
+    #
+    # return json.dumps({"result": last}), 200, {'Content-Type': 'application/json'}
 
 
 @app.route("/hi", methods=["POST"])
