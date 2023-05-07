@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Tag(name = "Test", description = "테스트 API Document")
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j

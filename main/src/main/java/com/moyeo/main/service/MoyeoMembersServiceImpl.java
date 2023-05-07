@@ -53,11 +53,10 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     }
 
     @Override
-    // @Transactional
-    public RegistMoyeoRes updateMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
+    @Transactional
+    public Boolean updateMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
-        log.info("동행 끝내기 기능");
         // moyeo_members에서 finish_time 기록
         MoyeoMembers moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndMoyeoTimelineIdAndFinishTimeOrderByMoyeoMembersIdDesc(user, moyeoTimelineId, null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         moyeoMembers.setFinishTime(LocalDateTime.now());
@@ -77,7 +76,8 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
             moyeoTimeLineRepository.save(moyeoTimeLine);
         }
 
-        return null;
+        log.info("동행 나가기 끝...");
+        return true;
     }
 
     public RegistMoyeoRes joinMember(TimeLine timeLine, MoyeoTimeLine moyeoTimeLine, User user) {
@@ -100,6 +100,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         moyeoTimeLine.setTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
         moyeoTimeLineRepository.save(moyeoTimeLine);
 
+        log.info("동행 참여 끝...");
         return RegistMoyeoRes.builder()
             .timelineId(timeLine.getTimelineId())
             .moyeoTimelineId(moyeoTimelineId)
