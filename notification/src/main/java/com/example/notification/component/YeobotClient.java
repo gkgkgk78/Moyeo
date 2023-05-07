@@ -30,26 +30,26 @@ public class YeobotClient {
                 .post(requestBody)
                 .build();
 
-        return "테스트중";
-//        Response response = null;
-//        String result="";
-//        try {
-//            response = okHttpClient.newCall(request).execute();
-//        } catch (Exception e) {
-//            log.info("flask 서버 에러");
-//            throw new Exception(e.getMessage());
-//        }
-//        String responseBody = null;
-//        try {
-//            responseBody = response.body().string();
-//            Gson gson = new Gson();
-//            Map<String, String> getdata = gson.fromJson(responseBody, Map.class);
-//            result = getdata.get("result");
-//        } catch (Exception e) {
-//            log.info("메시지가 너무 길었다");
-//            throw new Exception(e.getMessage());
-//        }
-//        return result;
+//        return "테스트중";
+        Response response = null;
+        String result="";
+        try {
+            response = okHttpClient.newCall(request).execute();
+        } catch (Exception e) {
+            log.info("flask 서버 에러");
+            throw new Exception(e.getMessage());
+        }
+        String responseBody = null;
+        try {
+            responseBody = response.body().string();
+            Gson gson = new Gson();
+            Map<String, String> getdata = gson.fromJson(responseBody, Map.class);
+            result = getdata.get("result");
+        } catch (Exception e) {
+            log.info("메시지가 너무 길었다");
+            throw new Exception(e.getMessage());
+        }
+        return result;
     }
 
 }
