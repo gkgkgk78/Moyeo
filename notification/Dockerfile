@@ -4,6 +4,7 @@ FROM openjdk:11-jdk
 # 3000번 포트 노출
 ENV PORT 3000
 EXPOSE $PORT
+PWD
 
 # 빌드후 생성된 jar 파일을 컨테이너 내부에 복사
 COPY notification-0.0.1-SNAPSHOT.jar app.jar
