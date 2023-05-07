@@ -5,11 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class MoyeoPostStatusDto {
-	private Boolean isAnyDeleted;
-	private Boolean isAllPublic;
+public interface MoyeoPostStatusDto {
+	Boolean getIsAnyDeleted();
+	Boolean getIsAllPublic();
 }
