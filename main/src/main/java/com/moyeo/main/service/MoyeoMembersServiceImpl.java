@@ -34,18 +34,10 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final MoyeoTimeLineRepository moyeoTimeLineRepository;
 
     @Override
+    @Transactional
     public RegistMoyeoRes registMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
-        // 여행 중이어야 한다.
-        TimeLine timeLine = timeLineRepository.findByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
-        // 다른 동행에 참여 중이면 안된다.
-        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdOrderByMoyeoMembersIdDesc(user);
-        if (optionalMembers.isPresent()) {
-            MoyeoMembers moyeoMembers = optionalMembers.get();
-            if (moyeoMembers.getFinishTime() == null) {
-                // 이미 동행중
-                throw new BaseException(ErrorMessage.ALREADY_MOYEO);
-            }
-        }
+        // 1. 참여 자격 체크하기: 여행 중이어야 하고, 다른 동행에 참여 중이면 안된다. (여행 중인 타임라인 리턴)
+        TimeLine timeLine = checkJoinable(user);
 
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
@@ -78,6 +70,22 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
 
         log.info("동행 나가기 끝...");
         return true;
+    }
+
+    public TimeLine checkJoinable(User user) {
+        // 여행 중이어야 한다.
+        TimeLine timeLine = timeLineRepository.findByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
+        // 다른 동행에 참여 중이면 안된다.
+        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdOrderByMoyeoMembersIdDesc(user);
+        if (optionalMembers.isPresent()) {
+            MoyeoMembers moyeoMembers = optionalMembers.get();
+            if (moyeoMembers.getFinishTime() == null) {
+                // 이미 동행중
+                throw new BaseException(ErrorMessage.ALREADY_MOYEO);
+            }
+        }
+
+        return timeLine;
     }
 
     public RegistMoyeoRes joinMember(TimeLine timeLine, MoyeoTimeLine moyeoTimeLine, User user) {
