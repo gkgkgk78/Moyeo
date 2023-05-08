@@ -53,12 +53,12 @@ public class AsyncService {
         formBuilder.add("deviceToken", post.getDeviceToken());
 
         Request request = new Request.Builder()
-                .url("http://localhost:9000/autogpt")
+                .url("http://localhost:3000/autogpt")
                 .addHeader("Content-Type", "application/json;")
                 .addHeader("Cache-Control", "no-cache")
                 .post(formBuilder.build())
                 .build();
-        System.out.println("현재 notification 실행이 됨");
+        //System.out.println("현재 notification 실행이 됨");
 
         try {
             okHttpClient.newCall(request).execute();
