@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class PostInsertAutogptImpl implements PostInsertAutogpt {
 
     private final YeobotClient yeobotClient;
-    //private final FcmService fcmService;
+    private final FcmService fcmService;
 
     @Override
     public void insert(PostInsertReq post) {
@@ -27,7 +27,7 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
             log.info("autogpt에게 응답 받음 "+a1.toString());
             System.out.println(a1.toString());
             //받은 응답을 바탕으로 푸시 알림을 해줘야 함
-           // fcmService.send(post.getDeviceToken(),a1);
+            fcmService.send(post.getDeviceToken(),a1);
 
         } catch (Exception e) {
             log.info(e.getMessage());
