@@ -3,6 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/post_view_model.dart';
+import 'package:moyeo/views/moyeo_add_user.dart';
 import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -14,6 +15,7 @@ import '../view_models/search_bar_view_model.dart';
 import '../view_models/search_result_view_model.dart';
 import '../view_models/user_search_bar_view_model.dart';
 import '../views/user_search_bar_view.dart';
+import '../views/moyeo_add_user.dart';
 
 import 'package:moyeo/utils/black.dart';
 
@@ -295,89 +297,11 @@ class TimelineDetailPage extends StatelessWidget {
                                               ),
                                             InkWell(
                                               onTap: (){
-                                                showDialog(
-                                                    barrierDismissible: false,
-                                                    context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title: Container(
-                                                          margin: const EdgeInsets.only(top: 0),
-                                                          padding: const EdgeInsets.only(top:0),
-                                                          child: Row(
-                                                            children: [
-                                                              const Text("동행 추가 하기"),
-                                                              Expanded(child:Container()),
-                                                              IconButton(
-                                                                  onPressed: () {
-                                                                    Navigator.pop(context);
-                                                                  },
-                                                                  icon: const Icon(Icons.close, color: Colors.red)
-                                                              )
-                                                            ],
-                                                          )
-                                                      ),
-                                                      content:Column(
-                                                        children:[
-                                                          Container(
-                                                              padding:const EdgeInsets.all(10.0),
-                                                              child: const Text("함께 여행할 동행을 찾아 보세요."),
-                                                          ),
-                                                          Container(
-                                                            color: Colors.white,
-                                                            height: 45,
-                                                            child:ChangeNotifierProvider<SearchBarViewModel>(
-                                                              create: (_) => SearchBarViewModel(isMyFeed: false),
-                                                              child: const UserSearchBar(),
-                                                            )
-                                                          ),
-                                                          ChangeNotifierProvider<SelectedUsersProvider>(
-                                                              create: (_)=> SelectedUsersProvider(),
-                                                              child: Consumer<SelectedUsersProvider>(
-                                                                builder: (context, provider, child) {
-                                                                  final selectedUsers = provider.selectedUsers;
-                                                                  return Column(
-                                                                      children:[
-                                                                        ListView.builder(
-                                                                          itemCount: selectedUsers.length,
-                                                                          itemBuilder: (context, index) {
-                                                                          final user = selectedUsers[index];
-                                                                            return ListTile(
-                                                                                leading: CircleAvatar(
-                                                                                  backgroundImage: NetworkImage(
-                                                                                      user.profileImageUrl
-                                                                                  ),
-                                                                                ),
-                                                                                title: Text(
-                                                                                    user.nickname
-                                                                                ),
-                                                                                trailing: IconButton(
-                                                                                  icon: Icon(
-                                                                                      Icons.remove_circle),
-                                                                                  onPressed: () {
-                                                                                    provider.removeUser(user);
-                                                                                  },
-                                                                                )
-                                                                            );
-                                                                        },
-                                                                      ),
-                                                                      selectedUsers.length != 0
-                                                                      ? InkWell(
-                                                                          onTap:(){
-                                                                            viewModel.addMoyeoUser(context, selectedUsers);
-                                                                          } ,
-                                                                        child: Container(
-                                                                          child: Text("모여 시작"),
-                                                                        ),
-                                                                        )
-                                                                     : Container()     
-                                                                    ]
-                                                                  );
-                                                                }
-                                                              )
-                                                            ),
-
-                                                          ]
-                                                      )
-                                                    )
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => MoyeoTimeline()
+                                                  )
                                                 );
                                               },
                                               child: Container(

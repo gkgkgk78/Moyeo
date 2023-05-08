@@ -1,8 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
+import '../services/moyeo_repository.dart';
 import '../models/UserInfo.dart';
 
-class SelectedUsersProvider with ChangeNotifier{
+class SelectedUsersProvider extends ChangeNotifier{
   List<UserInfo> _selectedUsers = [];
 
   List<UserInfo> get selectedUsers => _selectedUsers;
@@ -15,5 +16,15 @@ class SelectedUsersProvider with ChangeNotifier{
   void removeUser(UserInfo user){
     _selectedUsers.remove(user);
     notifyListeners();
+  }
+
+  addMoyeoUser(context, List<UserInfo> userList) async {
+    await MoyeoRepository().addMoyeoUser(context, userList);
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

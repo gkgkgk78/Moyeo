@@ -18,7 +18,7 @@ class UserSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tapUser = Provider.of<SelectedUsersProvider>(context, listen: false);
+    final tapUser = Provider.of<SelectedUsersProvider>(context, listen: true);
 
     return Consumer<AppViewModel>(
       builder: (context, appViewModel, _) {
@@ -32,8 +32,6 @@ class UserSearchBar extends StatelessWidget {
                       height: viewModel.getSearchBarHeight(),
                       child: Column(
                         children: [
-                          !viewModel.isMyFeed
-                              ?
                               // 키워드가 없을 때엔 검색 결과창이 뜨지 않는다.
                               viewModel.myFocus.hasFocus &&
                                       viewModel.searchKeyWord != "" && isKeyboardVisible
@@ -80,7 +78,9 @@ class UserSearchBar extends StatelessWidget {
                                                 } else {
                                                   return GestureDetector(
                                                     onTap: () {
-
+                                                      tapUser.addUser(
+                                                          viewModel.searchedResults[index-1]
+                                                      );
                                                     },
                                                     child: Column(
                                                       children: [
@@ -92,13 +92,7 @@ class UserSearchBar extends StatelessWidget {
                                                           leading: SizedBox(
                                                             width: 45,
                                                             height: 45,
-                                                            child: InkWell(
-                                                              onTap: (){
-                                                                tapUser.addUser(
-                                                                    viewModel.searchedResults[index-1]
-                                                                );
-                                                              },
-                                                              child:ClipRRect(
+                                                            child: ClipRRect(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
@@ -113,7 +107,6 @@ class UserSearchBar extends StatelessWidget {
                                                                 cache: true,
                                                               ),
                                                             ),
-                                                            )
                                                           ),
                                                           title: Text(viewModel
                                                               .searchedResults[
@@ -131,63 +124,6 @@ class UserSearchBar extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox.shrink()
-                              : viewModel.myFocus.hasFocus &&
-                                      viewModel.searchKeyWord != "" && isKeyboardVisible
-                                  ? Expanded(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(top: 30),
-                                        decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border(
-                                              top: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 2),
-                                              left: BorderSide(
-                                                  color: Colors.black54, width: 2),
-                                              right: BorderSide(
-                                                  color: Colors.black54, width: 2),
-                                              bottom: BorderSide(
-                                                  color: Colors.black54, width: 2),
-                                            )),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(top: 14),
-                                          child: SizedBox(
-                                            height: 50,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                appViewModel.changeTitle(viewModel.searchKeyWord!);
-                                                FocusScope.of(context).unfocus();
-                                                Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    pageBuilder: (context, _, __) =>
-                                                        ChangeNotifierProvider<
-                                                            SearchResultViewModel>(
-                                                      create: (_) =>
-                                                          SearchResultViewModel(
-                                                        context,
-                                                        viewModel.searchKeyWord!,
-                                                        isMyFeed:
-                                                            viewModel.isMyFeed,
-                                                      ),
-                                                      child: SearchResultView(),
-                                                    ),
-                                                    transitionDuration:
-                                                        Duration.zero,
-                                                  ),
-                                                );
-                                              },
-                                              child: ListTile(
-                                                leading: const Icon(Icons.search),
-                                                title: Text(
-                                                    "${viewModel.searchKeyWord}(으)로 검색..."),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox.shrink(),
                         ],
                       ),
                     ),
@@ -202,27 +138,6 @@ class UserSearchBar extends StatelessWidget {
                         textInputAction: TextInputAction.done,
                         onChanged: (String? keyword) async {
                           viewModel.searchUser(context, keyword);
-                        },
-                        onSubmitted: (String keyWord) {
-                          appViewModel.changeTitle(keyWord);
-                          viewModel.unFocus();
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, _, __) {
-                                return ChangeNotifierProvider<
-                                    SearchResultViewModel>(
-                                  create: (_) => SearchResultViewModel(
-                                    context,
-                                    keyWord,
-                                    isMyFeed: viewModel.isMyFeed,
-                                  ),
-                                  child: SearchResultView(),
-                                );
-                              },
-                              transitionDuration: Duration.zero,
-                            ),
-                          );
                         },
                         // 포커스 일 때 스타일 바꾸기
                         decoration: const InputDecoration(

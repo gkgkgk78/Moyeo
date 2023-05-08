@@ -156,8 +156,4 @@ class TimelineDetailViewModel extends ChangeNotifier {
     Navigator.pop(context);
   }
 
-  addMoyeoUser(context, List<UserInfo> userList) async {
-    await MoyeoRepository().addMoyeoUser(context, userList);
-    notifyListeners();
-  }
 }
