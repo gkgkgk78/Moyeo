@@ -18,16 +18,17 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
     @Override
     public void insert(PostInsertReq post) {
 
-
+        //해당 요청이 들어오면, 액티비티, 여행지, 맛집 세개를 추천을 해줘야 함
         //autogpt에게 응답을 보낸후
+
         String goal = "Search for a good restaurant near " + post.getAddress1() + " " + post.getAddress2() + " " + post.getAddress3() + " " + post.getAddress4() + ".";
 
         try {
             String a1 = yeobotClient.sendYeobotData("restaurant", goal);
-            log.info("autogpt에게 응답 받음 "+a1.toString());
+            log.info("autogpt에게 응답 받음 " + a1.toString());
             System.out.println(a1.toString());
             //받은 응답을 바탕으로 푸시 알림을 해줘야 함
-            fcmService.send(post.getDeviceToken(),a1);
+            fcmService.send(post.getDeviceToken(), a1);
 
         } catch (Exception e) {
             log.info(e.getMessage());

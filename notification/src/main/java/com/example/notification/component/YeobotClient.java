@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
@@ -21,6 +19,7 @@ public class YeobotClient {
         this.flaskUrl = flaskUrl;
     }
 
+
     public String sendYeobotData(String caseType, String data) throws Exception {
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(mediaType, data);
@@ -32,7 +31,7 @@ public class YeobotClient {
 
 //        return "테스트중";
         Response response = null;
-        String result="";
+        String result = "";
         try {
             response = okHttpClient.newCall(request).execute();
         } catch (Exception e) {
@@ -49,7 +48,10 @@ public class YeobotClient {
             log.info("메시지가 너무 길었다");
             throw new Exception(e.getMessage());
         }
+
         return result;
     }
+
+
 
 }
