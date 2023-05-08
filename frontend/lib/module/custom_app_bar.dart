@@ -20,13 +20,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       leading: const Padding(
         padding: EdgeInsets.only(left: 10),
-        child: 
+        // child:
+        // IconButton(
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //     icon:Icon(Icons.arrow_back_ios)
+        // )
         // 이전 UI
         // CircleAvatar(
         //   foregroundImage: AssetImage('assets/images/transparent_logo.png'),
         //   backgroundColor: Colors.transparent,
         // ),
-        Icon(Icons.arrow_back_ios)
       ),
       actions: [
         Theme(

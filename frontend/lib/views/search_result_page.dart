@@ -27,7 +27,7 @@ class SearchResultView extends StatelessWidget {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(top: 70),
+                        padding: const EdgeInsets.only(top: 70, right:5, left:5),
                         child: viewModel.searchedPosts.isEmpty
                             ? Center(
                                 child: Text(
