@@ -13,9 +13,7 @@ import '../services/chatbot_repository.dart';
 var logger = Logger();
 
 class ChatbotViewModel extends ChangeNotifier {
-  String chatId;
   int isTravel;
-  bool isFinished;
   BuildContext _context;
 
   String _inputText = "";
@@ -66,10 +64,7 @@ class ChatbotViewModel extends ChangeNotifier {
   String _newSeason = "";
   String _newPurpose = "";
 
-  ChatbotViewModel(this._context,
-      {required this.chatId,
-      required this.isTravel,
-      required this.isFinished}) {
+  ChatbotViewModel(this._context, {required this.isTravel}) {
     // 키보드가 안 보이면 언포커스
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -80,35 +75,39 @@ class ChatbotViewModel extends ChangeNotifier {
         }
       },
     );
+    startChat();
+  }
 
-    // 새로 생성된 채팅이면
-    if (isFinished == false) {
-      // 채팅 새로 하나 생성
-      CreateNewChat();
+  Future<void> startChat() async {
+    _messages = await ChatbotRepository().ChatDetailFromServer(_context);
+    notifyListeners();
+    if (_messages.last.message == "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?" ||
+        _messages.last.message == "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?") {
+    } else {
       if (isTravel == -1) {
-        _messages.add(
+        submitMessage(
           ChatMessage(
             message: "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?",
-            sender: "canton",
+            sender: "gpt",
           ),
         );
       } else {
-        _messages.add(
+        submitMessage(
           ChatMessage(
             message: "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?",
-            sender: "canton",
+            sender: "gpt",
           ),
         );
       }
-      // 이미 끝난 채팅이면
-    } else {
-      // 채팅 상세내용 가져오기
-      getChatDetail();
     }
+    notifyListeners();
   }
 
-  Future<dynamic> CreateNewChat() async {
-    chatId = await ChatbotRepository().CreateNewChat(_context);
+  Future<void> submitMessage(ChatMessage message) async {
+    _messages.add(message);
+    notifyListeners();
+    goBottom();
+    await ChatbotRepository().ChatToServer(_context, message);
   }
 
   void notTravelSubmit() {
@@ -123,23 +122,28 @@ class ChatbotViewModel extends ChangeNotifier {
   Future<void> notTravelHaveDestSubmit(String text) async {
     if (_newDestination == '') {
       _newDestination = text;
-      _messages.add(ChatMessage(
-        message: text,
-        sender: 'user',
-      ),);
+      submitMessage(
+        ChatMessage(
+          message: text,
+          sender: 'user',
+        ),
+      );
       _textEditingController.clear();
       unFocus();
       notifyListeners();
-      await Future.delayed(const Duration(seconds: 2), () {
-        _messages.add(
-          ChatMessage(
+      await Future.delayed(
+        const Duration(seconds: 2),
+        () {
+          submitMessage(
+            ChatMessage(
               message: '${text}! 참 좋은 나라죠.\n어느 계절에 떠나시고 싶으신가요?',
-              sender: 'canton',
-          )
-        );
-        notifyListeners();
-      });
-      goBottom();
+              sender: 'gpt',
+            ),
+          );
+          notifyListeners();
+        },
+      );
+
       return;
     }
 
@@ -149,49 +153,51 @@ class ChatbotViewModel extends ChangeNotifier {
           text.contains('봄') ||
           text.contains('가을')) {
         _newSeason = text;
-        _messages.add(ChatMessage(
+        submitMessage(ChatMessage(
           message: text,
           sender: 'user',
         ));
         _textEditingController.clear();
         unFocus();
         notifyListeners();
-        await Future.delayed(const Duration(seconds: 2), () {
-          if (text.contains('봄')) {
-            _messages.add(
+        await Future.delayed(
+          const Duration(seconds: 2),
+          () {
+            if (text.contains('봄')) {
+              submitMessage(
                 ChatMessage(
-                  message: '따스한 봄햇살을 맞으며 여행하는 것은\n누구에게나 기쁜 일이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
+                  message: '따스한 봄햇살을 맞으며 여행하는 것은\n누구에게나 기쁜 일이죠.',
+                  sender: 'gpt',
                 ),
-            );
-            notifyListeners();
-          } else if (text.contains('여름')) {
-            _messages.add(
+              );
+              notifyListeners();
+            } else if (text.contains('여름')) {
+              submitMessage(
                 ChatMessage(
-                  message: '여름의 무더위를 날려버리기 위해\n여행은 좋은 선택 중 하나이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
+                  message: '여름의 무더위를 날려버리기 위해\n여행은 좋은 선택 중 하나이죠.',
+                  sender: 'gpt',
                 ),
-                );
-            notifyListeners();
-          } else if (text.contains('가을')) {
-            _messages.add(
+              );
+              notifyListeners();
+            } else if (text.contains('가을')) {
+              submitMessage(
                 ChatMessage(
-                  message: '쓸쓸한 가을을 여행으로 채워보세요.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
+                  message: '쓸쓸한 가을을 여행으로 채워보세요.',
+                  sender: 'gpt',
                 ),
-            );
-            notifyListeners();
-          } else if (text.contains('겨울')) {
-            _messages.add(
+              );
+              notifyListeners();
+            } else if (text.contains('겨울')) {
+              submitMessage(
                 ChatMessage(
-                  message: '겨울은 매우 춥지만\n동시에 여행할 거리가 매우 많은 계절이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
+                  message: '겨울은 매우 춥지만\n동시에 여행할 거리가 매우 많은 계절이죠.',
+                  sender: 'gpt',
                 ),
-                );
-            notifyListeners();
-          }
-          goBottom();
-        });
+              );
+              notifyListeners();
+            }
+          },
+        );
         ChatbotRequest newRequest = ChatbotRequest(
           destination: _newDestination,
           season: _newSeason,
@@ -199,21 +205,21 @@ class ChatbotViewModel extends ChangeNotifier {
         );
         _chatbotRequest = newRequest;
         if (_context.mounted) {
-          ChatbotRepository().RecommendActivityNotTraveling(_context, newRequest);
+          ChatbotRepository()
+              .RecommendActivityNotTraveling(_context, newRequest);
         }
-        await Future.delayed(const Duration(seconds: 1), () {
-          _messages.add(
+        await Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            submitMessage(
               ChatMessage(
                 message: '여봇이 대답을 생성하고 있어요!\n 생성이 완료되면 알림으로\n 알려드릴게요~!',
-                sender: 'canton',
+                sender: 'gpt',
               ),
             );
-          notifyListeners();
-          goBottom();
-        });
-        if (_context.mounted) {
-          ChatbotRepository().ChatToServer(_context, chatId, _messages);
-        }
+            notifyListeners();
+          },
+        );
         return;
       } else {
         return;
@@ -224,23 +230,25 @@ class ChatbotViewModel extends ChangeNotifier {
   Future<void> notTravelNoDestSubmit(String text) async {
     if (_newDestination == '') {
       _newDestination = text;
-      _messages.add(ChatMessage(
-        message: text,
-        sender: 'user',
-      ),);
+      submitMessage(
+        ChatMessage(
+          message: text,
+          sender: 'user',
+        ),
+      );
       _textEditingController.clear();
       unFocus();
       notifyListeners();
       await Future.delayed(const Duration(seconds: 2), () {
-        _messages.add(
-            ChatMessage(
-              message: '${text}! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?',
-              sender: 'canton',
-            ),
-           );
+        submitMessage(
+          ChatMessage(
+            message: '${text}! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?',
+            sender: 'gpt',
+          ),
+        );
         notifyListeners();
       });
-      goBottom();
+      ;
       return;
     }
     if (_newSeason == '') {
@@ -249,49 +257,50 @@ class ChatbotViewModel extends ChangeNotifier {
           text.contains('봄') ||
           text.contains('가을')) {
         _newSeason = text;
-        _messages.add(
-            ChatMessage(
-                message: text,
-                sender: 'user',
-            ),);
+        submitMessage(
+          ChatMessage(
+            message: text,
+            sender: 'user',
+          ),
+        );
         _textEditingController.clear();
         unFocus();
         notifyListeners();
         await Future.delayed(const Duration(seconds: 2), () {
           if (text.contains('봄')) {
-            _messages.add(
-                ChatMessage(
-                  message: '따스한 봄햇살을 맞으며 여행하는 것은\n누구에게나 기쁜 일이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
-                ),
-                );
+            submitMessage(
+              ChatMessage(
+                message: '따스한 봄햇살을 맞으며 여행하는 것은\n누구에게나 기쁜 일이죠.\n무엇을 즐기러 가실건가요?',
+                sender: 'gpt',
+              ),
+            );
             notifyListeners();
           } else if (text.contains('여름')) {
-            _messages.add(
-                ChatMessage(
-                  message: '여름의 무더위를 날려버리기 위해\n여행은 좋은 선택 중 하나이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
-                ),
-                );
+            submitMessage(
+              ChatMessage(
+                message: '여름의 무더위를 날려버리기 위해\n여행은 좋은 선택 중 하나이죠.\n무엇을 즐기러 가실건가요?',
+                sender: 'gpt',
+              ),
+            );
             notifyListeners();
           } else if (text.contains('가을')) {
-            _messages.add(
-                ChatMessage(
-                  message: '쓸쓸한 가을을 여행으로 채워보세요.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
-                ),
+            submitMessage(
+              ChatMessage(
+                message: '쓸쓸한 가을을 여행으로 채워보세요.\n무엇을 즐기러 가실건가요?',
+                sender: 'gpt',
+              ),
             );
             notifyListeners();
           } else if (text.contains('겨울')) {
-            _messages.add(
-                ChatMessage(
-                  message: '겨울은 매우 춥지만\n동시에 여행할 거리가 매우 많은 계절이죠.\n무엇을 즐기러 가실건가요?',
-                  sender: 'canton',
-                ),
-                );
+            submitMessage(
+              ChatMessage(
+                message: '겨울은 매우 춥지만\n동시에 여행할 거리가 매우 많은 계절이죠.\n무엇을 즐기러 가실건가요?',
+                sender: 'gpt',
+              ),
+            );
             notifyListeners();
           }
-          goBottom();
+          ;
         });
         return;
       } else {
@@ -300,23 +309,27 @@ class ChatbotViewModel extends ChangeNotifier {
     }
     if (_newPurpose == '') {
       _newPurpose = text;
-      _messages.add(ChatMessage(
-        message: text,
-        sender: 'user',
-      ),);
+      submitMessage(
+        ChatMessage(
+          message: text,
+          sender: 'user',
+        ),
+      );
       _textEditingController.clear();
       unFocus();
       notifyListeners();
-      await Future.delayed(Duration(seconds: 2), () {
-        _messages.add(
+      await Future.delayed(
+        Duration(seconds: 2),
+        () {
+          submitMessage(
             ChatMessage(
               message: '${_newSeason}에\n${_newDestination}을 가시는 군요',
-              sender: 'canton',
+              sender: 'gpt',
             ),
-            );
-        notifyListeners();
-        goBottom();
-      });
+          );
+          notifyListeners();
+        },
+      );
       ChatbotRequest newRequest = ChatbotRequest(
         destination: _newDestination,
         season: _newSeason,
@@ -326,20 +339,19 @@ class ChatbotViewModel extends ChangeNotifier {
       if (_context.mounted) {
         ChatbotRepository().RecommendPlace(_context, newRequest);
       }
-      await Future.delayed(const Duration(seconds: 1), () {
-        _messages.add(
+      await Future.delayed(
+        const Duration(seconds: 1),
+        () {
+          submitMessage(
             ChatMessage(
               message: '여봇이 대답을 생성하고 있어요!\n 생성이 완료되면 알림으로\n 알려드릴게요~!',
-              sender: 'canton',
+              sender: 'gpt',
             ),
-            );
-        notifyListeners();
-        goBottom();
-      }
+          );
+          notifyListeners();
+          ;
+        },
       );
-      if (_context.mounted) {
-        ChatbotRepository().ChatToServer(_context, chatId, _messages);
-      }
     }
     notifyListeners();
   }
@@ -353,14 +365,11 @@ class ChatbotViewModel extends ChangeNotifier {
   }
 
   // 채팅을 하나 만듦
-  Future<void> createNewChat() async {
-
-  }
+  Future<void> createNewChat() async {}
 
   // 채팅 내용을 가져옴
   Future<void> getChatDetail() async {
-    _messages =
-        await ChatbotRepository().ChatDetailFromServer(_context, chatId);
+    _messages = await ChatbotRepository().ChatDetailFromServer(_context);
     notifyListeners();
   }
 
@@ -369,7 +378,7 @@ class ChatbotViewModel extends ChangeNotifier {
   // 언포커스
   void unFocus() {
     _chatbotFocus.unfocus();
-    goBottom();
+    ;
     notifyListeners();
   }
 
@@ -381,7 +390,7 @@ class ChatbotViewModel extends ChangeNotifier {
 
   // 좌로 모여 우로 모여
   CrossAxisAlignment getAlignment(int index) {
-    if (_messages[index].sender == "canton") {
+    if (_messages[index].sender == "gpt") {
       return CrossAxisAlignment.start;
     } else {
       return CrossAxisAlignment.end;
@@ -390,7 +399,7 @@ class ChatbotViewModel extends ChangeNotifier {
 
   // 프로필 이미지
   Image profileImage(index) {
-    if (_messages[index].sender == "canton") {
+    if (_messages[index].sender == "gpt") {
       return Image.asset('assets/images/canton.png');
     } else {
       return Image.network(
@@ -400,7 +409,7 @@ class ChatbotViewModel extends ChangeNotifier {
 
   // 유저인지 아닌지
   bool sender(index) {
-    if (_messages[index].sender == "canton") {
+    if (_messages[index].sender == "gpt") {
       return false;
     } else {
       return true;
@@ -409,7 +418,7 @@ class ChatbotViewModel extends ChangeNotifier {
 
   // 말풍선 색상
   Color bubbleColor(index) {
-    if (_messages[index].sender == "canton") {
+    if (_messages[index].sender == "gpt") {
       return const Color(0xfffdeedc);
     } else {
       return const Color(0xffddf3fd);
@@ -432,74 +441,77 @@ class ChatbotViewModel extends ChangeNotifier {
   // 액티비티 추천
   Future<void> selectActivity(context) async {
     _isAnswered = true;
-    _messages.add(ChatMessage(message: '놀러갈 곳 추천 "해"', sender: 'user'));
+    submitMessage(ChatMessage(message: '놀러갈 곳 추천 "해"', sender: 'user'));
     notifyListeners();
     ChatbotRepository().RecommendActivity(context);
-    await Future.delayed(const Duration(seconds: 2), () {
-      _messages.add(
-          ChatMessage(
-              message: '알겠습니다!'
-                  '\n최신 포스트 위치를 기준으로\n가볼 만한 곳을 추천해드릴게요.'
-                  '\n답변이 완료되면 알림으로 알려드리겠습니다~', sender: 'canton')
-          );
-      notifyListeners();
-    });
-    if (_context.mounted) {
-      await ChatbotRepository().ChatToServer(_context, chatId, _messages);
-    }
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        submitMessage(ChatMessage(
+            message: '알겠습니다!'
+                '\n최신 포스트 위치를 기준으로\n가볼 만한 곳을 추천해드릴게요.'
+                '\n답변이 완료되면 알림으로 알려드리겠습니다~',
+            sender: 'gpt'));
+        notifyListeners();
+      },
+    );
   }
 
   // 식당 추천
   Future<void> selectRestaurant(context) async {
     _isAnswered = true;
-    _messages.add(ChatMessage(message: '식당 추천 "해"', sender: 'users'));
+    submitMessage(ChatMessage(message: '식당 추천 "해"', sender: 'users'));
     notifyListeners();
     ChatbotRepository().RecommendRestaurant(context);
-    await Future.delayed(const Duration(seconds: 2), () {
-      _messages.add(
-          ChatMessage(message: '알겠습니다!'
-              '\n최신 포스트 위치를 기준으로\n맛있는 식당을 추천해드릴게요.'
-              '\n답변이 완료되면 알림으로 알려드리겠습니다~', sender: 'canton')
-          );
-      notifyListeners();
-    });
-    if (_context.mounted) {
-      ChatbotRepository().ChatToServer(_context, chatId, _messages);
-    }
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        submitMessage(ChatMessage(
+            message: '알겠습니다!'
+                '\n최신 포스트 위치를 기준으로\n맛있는 식당을 추천해드릴게요.'
+                '\n답변이 완료되면 알림으로 알려드리겠습니다~',
+            sender: 'gpt'));
+        notifyListeners();
+      },
+    );
   }
 
   void userHaveDestination() async {
-    _messages.add(ChatMessage(message: '오냐', sender: 'users'));
+    submitMessage(ChatMessage(message: '오냐', sender: 'users'));
     _isAnswered = true;
     _ableTextField = true;
     _haveDestination = true;
-    goBottom();
+
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 2), () {
-      _messages.add(
-          ChatMessage(message: '그러시군요!'
-              '\n어떤 나라에 가실 예정이신가요?'
-              '\n하나의 나라이름을 입력해주세요^^', sender: 'canton')
-      );
-      notifyListeners();
-    }
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        submitMessage(ChatMessage(
+            message: '그러시군요!'
+                '\n어떤 나라에 가실 예정이신가요?'
+                '\n하나의 나라이름을 입력해주세요^^',
+            sender: 'gpt'));
+        notifyListeners();
+      },
     );
   }
 
   void userHaveNoDestination() async {
-    _messages.add(ChatMessage(message: '아니', sender: 'users'));
+    submitMessage(ChatMessage(message: '아니', sender: 'users'));
     _isAnswered = true;
     _ableTextField = true;
-    goBottom();
+
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 2), () {
-      _messages.add(
-          ChatMessage(message: '그러시군요!'
-              '\n어떤 지역에 가시고 싶으신가요?'
-              '\n하나의 지역명을 입력해주세요^^', sender: 'canton')
-      );
-      notifyListeners();
-    }
+    await Future.delayed(
+      const Duration(seconds: 2),
+      () {
+        submitMessage(ChatMessage(
+            message: '그러시군요!'
+                '\n어떤 지역에 가시고 싶으신가요?'
+                '\n하나의 지역명을 입력해주세요^^',
+            sender: 'gpt'));
+        notifyListeners();
+      },
     );
   }
 }

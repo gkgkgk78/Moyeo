@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'package:mongo_dart/mongo_dart.dart';
 import 'package:moyeo/models/ChatMessage.dart';
 import 'package:moyeo/models/ChatbotRequest.dart';
 
@@ -17,47 +15,22 @@ class ChatbotRepository {
 
   factory ChatbotRepository() => _instance;
 
-  final String? _mongoUrl = dotenv.env['mongoUrl'];
-
-
-  // 전체 채팅 리스트를 가져온다.
-  Future<dynamic> ChatListFromServer(BuildContext context) async {
-    try {
-      final dio = await authDio(context);
-      Response response = await dio.get("api/auth/yeobot/");
-      return response;
-    } catch (error) {
-      throw Exception('Fail to upload to Server: ${error}');
-    }
-  }
-
 
   // 채팅 로그를 가져온다.
-  Future<dynamic> ChatDetailFromServer(BuildContext context, String chatId) async {
+  Future<List<ChatMessage>> ChatDetailFromServer(BuildContext context) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.get("api/auth/yeobot/$chatId");
+      Response response = await dio.get("api/auth/chat");
       return List.from(response.data.map((json) => ChatMessage.fromJson(json)));
     } catch (error) {
       throw Exception('Fail to upload to Server: ${error}');
     }
   }
 
-  Future<dynamic> CreateNewChat(BuildContext context) async {
+  Future<dynamic> ChatToServer(BuildContext context, ChatMessage message) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post("api/auth/yeobot/");
-      return response;
-    } catch (error) {
-      throw Exception('Fail to upload to Server: ${error}');
-    }
-  }
-
-  Future<dynamic> ChatToServer(BuildContext context, chatId, List<ChatMessage> messages) async {
-    try {
-      final dio = await authDio(context);
-      final jsonList = messages.map((message) => message.toJson()).toList();
-      Response response = await dio.post("api/auth/yeobot/$chatId", data: jsonList);
+      Response response = await dio.post("api/auth/chat", data: message.toJson());
       return response;
     } catch (error) {
       throw Exception('Fail to upload to Server: ${error}');

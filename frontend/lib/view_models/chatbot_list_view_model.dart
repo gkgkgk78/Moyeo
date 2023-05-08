@@ -21,11 +21,6 @@ class ChatbotListViewModel extends ChangeNotifier {
   List get pushList => _pushList;
 
   ChatbotListViewModel(this._context) {
-    getChatList();
   }
 
-  Future<void> getChatList() async {
-    _yeobotList = await ChatbotRepository().ChatListFromServer(_context);
-    notifyListeners();
-  }
 }

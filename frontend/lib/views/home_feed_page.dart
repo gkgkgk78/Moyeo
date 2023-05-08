@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:moyeo/views/search_bar_view.dart';
 import 'package:moyeo/views/timeline_list_page_main.dart';
@@ -6,8 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../view_models/app_view_model.dart';
+import '../view_models/chatbot_detail_view_model.dart';
 import '../view_models/home_feed_view_model.dart';
 import '../view_models/search_bar_view_model.dart';
+import 'chatbot_detail_page.dart';
 
 class HomeFeedPage extends StatelessWidget {
   const HomeFeedPage({super.key});
@@ -36,6 +37,33 @@ class HomeFeedPage extends StatelessWidget {
                         child: TimelineListPageMain(
                           pagingController: viewModel.pagingController,
                         ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 300,
+                      left: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          appViewModel.changeTitle("여봇과의 추억");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MultiProvider(
+                                providers: [
+                                  ChangeNotifierProvider<ChatbotViewModel>(
+                                    create: (_) => ChatbotViewModel(
+                                      context,
+                                      isTravel: appViewModel.userInfo.timeLineId,
+                                    ),
+                                  ),
+                                ],
+                                child: const ChatbotPage(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(child: Text("test"),),
                       ),
                     ),
                     Positioned(
