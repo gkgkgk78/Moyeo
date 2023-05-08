@@ -41,7 +41,7 @@ public class PostController {
     private final MoyeoPostService moyeoPostService;
     private final MoyeoPhotoService moyeoPhotoService;
 
-    
+
     //포스트 등록 (Address 1 - 국가 -> Address 4 - 동네)
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "포스트 등록")
@@ -54,7 +54,7 @@ public class PostController {
         System.out.println("flagFile:" + flagFile);
         log.info("timeline id : {}", addPostReq.getTimelineId());
         log.info("국가 이름 : {}", addPostReq.getAddress1());
-        if(isMoyeo == false) {
+        if (isMoyeo == false) {
             Post savedPost = postService.createPost(addPostReq);
 
             List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
