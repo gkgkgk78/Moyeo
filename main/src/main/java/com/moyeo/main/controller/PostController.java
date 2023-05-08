@@ -13,6 +13,9 @@ import com.moyeo.main.service.MoyeoPhotoService;
 import com.moyeo.main.service.MoyeoPostService;
 import com.moyeo.main.service.PhotoService;
 import com.moyeo.main.service.PostService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -31,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/api/auth/post")
 @RestController
 @Slf4j
+@Tag(name = "Post")
 public class PostController {
     private final PostService postService;
     private final PhotoService photoService;
@@ -40,6 +44,7 @@ public class PostController {
     
     //포스트 등록 (Address 1 - 국가 -> Address 4 - 동네)
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "포스트 등록")
     public ResponseEntity<?> addPost(@RequestPart MultipartFile flagFile,
                                      @RequestPart List<MultipartFile> imageFiles,
                                      @RequestPart MultipartFile voiceFile,
@@ -73,6 +78,7 @@ public class PostController {
 
     //포스트 삭제
     @DeleteMapping("/{postId}")
+    @Operation(summary = "포스트 삭제")
     public ResponseEntity<?> deletePost(@PathVariable Long postId) throws Exception {
         if (postId == null) {
             log.info("postId 값 없음");
@@ -84,6 +90,7 @@ public class PostController {
 
     //메인페이지에서 포스트 조회
     @GetMapping("/main/{location}")
+    @Operation(summary = "포스트 검색 조회 (메인 페이지에서 지역으로 검색)")
     public ResponseEntity<?> getPost(@PathVariable String location) throws Exception {
         if (location == null) {
             log.info("location 값 없음");
@@ -95,6 +102,7 @@ public class PostController {
 
     //내 페이지에서 포스트 조회
     @GetMapping("/mine/{myLocation}")
+    @Operation(summary = "포스트 검색 조회 (내 페이지에서 지역으로 검색)")
     public ResponseEntity<?> getMyPost(@PathVariable String myLocation) throws Exception {
         // accessToken에서 user 가져오기
         Long userUid = null;

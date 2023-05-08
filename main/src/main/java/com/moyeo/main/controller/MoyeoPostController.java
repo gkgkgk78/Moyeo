@@ -36,6 +36,8 @@ import com.moyeo.main.service.MoyeoPostService;
 import com.moyeo.main.service.PhotoService;
 import com.moyeo.main.service.PostService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,12 +45,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth/moyeo/post")
 @RestController
 @Slf4j
+@Tag(name = "MoyeoMembers", description = "모여 포스트 수정 및 삭제 기능")
 public class MoyeoPostController {
     private final MoyeoPostService moyeoPostService;
 
     // 포스트 수정 (공개 여부 수정)
     @PutMapping("/{moyeoPostId}")
+    @Operation(summary = "모여 포스트 공개 여부 수정")
     public ResponseEntity<?> updateMoyeoPost(@PathVariable Long moyeoPostId) throws Exception {
+        log.info("모여 포스트 공개 여부 수정 시작...");
         if (moyeoPostId == null) {
             log.info("moyeoPostId 값 없음");
             throw new BaseException(ErrorMessage.VALIDATION_FAIL_EXCEPTION);
@@ -60,12 +65,15 @@ public class MoyeoPostController {
             user = (User) auth.getPrincipal();
 
         moyeoPostService.updateMoyeoPost(user, moyeoPostId);
+        log.info("모여 포스트 공개 여부 수정 끝...");
         return ResponseEntity.ok().build();
     }
 
     // 포스트 삭제
     @DeleteMapping("/{moyeoPostId}")
+    @Operation(summary = "모여 포스트 삭제", description = "is_deleted = true")
     public ResponseEntity<?> deleteMoyeoPost(@PathVariable Long moyeoPostId) throws Exception {
+        log.info("모여 포스트 삭제 시작...");
         if (moyeoPostId == null) {
             log.info("moyeoPostId 값 없음");
             throw new BaseException(ErrorMessage.VALIDATION_FAIL_EXCEPTION);
@@ -77,6 +85,7 @@ public class MoyeoPostController {
             user = (User) auth.getPrincipal();
 
         moyeoPostService.deleteMoyeoPost(user, moyeoPostId);
+        log.info("모여 포스트 삭제 끝...");
         return ResponseEntity.ok().build();
     }
 

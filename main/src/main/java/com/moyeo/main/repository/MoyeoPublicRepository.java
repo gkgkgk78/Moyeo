@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.moyeo.main.dto.MoyeoPostStatusDto;
 import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.MoyeoPublic;
 import com.moyeo.main.entity.User;
@@ -22,4 +23,9 @@ public interface MoyeoPublicRepository extends JpaRepository<MoyeoPublic, MoyeoP
 
 	List<MoyeoPublic> findByMoyeoPostId(MoyeoPost moyeoPostId);
 	List<MoyeoPublic> findByMoyeoPostId(Long moyeoPostId);
+
+	@Query(nativeQuery = true, value = "SELECT SUM(is_deleted) > 0 AS isAnyDeleted, MIN(is_public) = 1 AS isAllPublic\n"
+		+ "FROM moyeo_public\n"
+		+ "WHERE moyeo_post_id = :moyeoPostId")
+	MoyeoPostStatusDto getMoyeoPostStatus(Long moyeoPostId);
 }
