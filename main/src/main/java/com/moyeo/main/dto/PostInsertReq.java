@@ -13,7 +13,10 @@ import lombok.*;
 public class PostInsertReq {
 
     private String deviceToken;
-    private String location;//위치 정보 
+    private String address1;//위치 정보
+    private String address2;
+    private String address3;
+    private String address4;
     private String userId;//고유한 사용자 아이디
 
 
