@@ -36,8 +36,6 @@ public class ClovaSpeechClient {
     // public void setINVOKE_URL(String value) {
     //     INVOKE_URL = value;
     // }
-
-    //TODO
     private static final String SECRET = "058088bb4e64483d8bb892ac32507b7c";
     private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5061/5a47dca7418b8d67af71cdb7d5f767f7cea24457cc3fad3865ddd3b0f402166d";
 

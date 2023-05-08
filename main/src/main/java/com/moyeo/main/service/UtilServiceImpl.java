@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class UtilServiceImpl implements UtilService {
     @Override
     public String invertLocalDate(LocalDateTime time) {
+        if(time == null) return "";
         LocalDate s2 = time.toLocalDate();
         String s3 = s2.toString();
         s3 = s3.replace("-", ".");

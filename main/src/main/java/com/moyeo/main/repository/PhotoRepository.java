@@ -1,5 +1,8 @@
 package com.moyeo.main.repository;
 
+import java.util.List;
+
+import com.moyeo.main.dto.PhotoDto;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 

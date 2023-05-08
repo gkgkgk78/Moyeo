@@ -69,6 +69,8 @@ public class Post extends BaseTime{
 	@ColumnDefault("0")
 	private Long favoriteCount;
 
+	// private = null;
+
 	public void updateFavoriteCount(Integer amount) {
 		this.favoriteCount += amount;
 		if (this.favoriteCount < 0) {
