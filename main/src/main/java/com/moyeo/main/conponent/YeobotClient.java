@@ -23,7 +23,7 @@ public class YeobotClient {
         this.flaskUrl = flaskUrl;
     }
 
-    public ResponseEntity<String> sendYeobotData(String caseType, String data) {
+    public String sendYeobotData(String caseType, String data) {
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(mediaType, data);
         Request request = new Request.Builder()
@@ -39,15 +39,16 @@ public class YeobotClient {
             throw new BaseException(ErrorMessage.FLASK_SERVER_ERROR);
         }
         String responseBody = null;
+        String result=null;
         try {
             responseBody = response.body().string();
             Gson gson = new Gson();
             Map<String, String> getdata = gson.fromJson(responseBody, Map.class);
-            String result = getdata.get("result");
+            result = getdata.get("result");
         } catch (Exception e) {
             throw new BaseException(ErrorMessage.TOO_LONG_COMMAND);
         }
-        return ResponseEntity.ok(responseBody);
+        return result;
     }
 
 
