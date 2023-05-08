@@ -14,10 +14,14 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @ServletComponentScan
 @EnableJpaAuditing
 @SpringBootApplication
+
+
 public class MainApplication {
 	// 서버 실행 전 아시아/서울 시간으로 서버 시간 동기화
 	@PostConstruct

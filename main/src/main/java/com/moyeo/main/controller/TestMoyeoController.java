@@ -2,10 +2,8 @@ package com.moyeo.main.controller;
 
 
 import com.moyeo.main.conponent.YeobotClient;
-import com.moyeo.main.dto.AddPostReq;
-import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
-import com.moyeo.main.dto.TimelinePostOuter;
-import com.moyeo.main.dto.TravelRecommendRequest;
+import com.moyeo.main.dto.*;
+import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
@@ -46,6 +44,12 @@ public class TestMoyeoController {
     private final YeobotService yeobotService;
 
     private final YeobotClient yeobotClient;
+
+//    private final FcmService fcmService;
+
+    private final ChatService chatService;
+
+    private final AsyncTestService asyncTestService;
 
 
     @PostMapping("/login")
@@ -173,6 +177,40 @@ public class TestMoyeoController {
 
         return response;
 
+    }
+//
+//    @GetMapping("/firebase/message")//테스트 해보기
+//    public ResponseEntity<?> getTimelineLatestWithPaging() throws Exception {
+//        fcmService.send();
+//        return new ResponseEntity<>(HttpStatus.OK);
+//
+//    }
+
+    @PostMapping("/chat")
+    public ResponseEntity<?> insertChat(@RequestBody ChatReq chat) throws Exception {
+
+        //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
+        Long l1=1l;
+
+        log.info("chat insert작업 시작");
+        chatService.insert(l1.toString(), chat);
+        log.info("chat insert작업 완료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/chat/{name}")
+    public ResponseEntity<?> selectChat(@PathVariable String name) throws Exception {
+
+        List<Chat> result = chatService.select(name);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/notification")
+    public ResponseEntity<?> toNotification(@RequestBody PostInsertReq post) throws Exception {
+
+
+        asyncTestService.test(post);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
