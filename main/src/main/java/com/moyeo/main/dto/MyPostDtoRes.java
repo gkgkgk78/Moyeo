@@ -41,7 +41,6 @@ public class MyPostDtoRes {
                 .favoriteCount(favoriteCount)
                 .isFavorite(favorite)
                 ;
-
     }
 
     public static MyPostDtoResBuilder builder(Post entity, Boolean isFavorite) {
