@@ -37,8 +37,8 @@ public class FcmServiceImpl implements FcmService {
         FileInputStream remoteToken = null;
 
         try {
-            remoteToken = new FileInputStream("src/main/resources/firebase.json");
-    //        remoteToken = new FileInputStream(route);
+    //        remoteToken = new FileInputStream("src/main/resources/firebase.json");
+            remoteToken = new FileInputStream(route);
         } catch (FileNotFoundException e) {
             log.info(e.getMessage());
             throw new BaseException(ErrorMessage.NOT_EXIST_ROUTE);
