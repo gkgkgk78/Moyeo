@@ -2,11 +2,15 @@ package com.moyeo.main.controller;
 
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.GetPostRes;
+import com.moyeo.main.entity.MoyeoPhoto;
+import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.service.MoyeoPhotoService;
+import com.moyeo.main.service.MoyeoPostService;
 import com.moyeo.main.service.PhotoService;
 import com.moyeo.main.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +34,8 @@ import java.util.Map;
 public class PostController {
     private final PostService postService;
     private final PhotoService photoService;
+    private final MoyeoPostService moyeoPostService;
+    private final MoyeoPhotoService moyeoPhotoService;
 
     
     //포스트 등록 (Address 1 - 국가 -> Address 4 - 동네)
@@ -37,18 +43,32 @@ public class PostController {
     public ResponseEntity<?> addPost(@RequestPart MultipartFile flagFile,
                                      @RequestPart List<MultipartFile> imageFiles,
                                      @RequestPart MultipartFile voiceFile,
-                                     @Valid @ModelAttribute AddPostReq addPostReq) throws Exception {
+                                     @Valid @ModelAttribute AddPostReq addPostReq,
+                                     @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
         // 입력 테스트중
         System.out.println("flagFile:" + flagFile);
+        log.info("timeline id : {}", addPostReq.getTimelineId());
+        log.info("국가 이름 : {}", addPostReq.getAddress1());
+        if(isMoyeo == false) {
+            Post savedPost = postService.createPost(addPostReq);
 
-        Post savedPost = postService.createPost(addPostReq);
-        List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
-        postService.insertPost(savedPost, photoList, flagFile, voiceFile, addPostReq);
+            List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
+            postService.insertPost(savedPost, photoList, flagFile, voiceFile, addPostReq);
 
-        // addPost 요청에 대한 응답으로 timelineId 반환
-        Map<String, Object> res = new HashMap<>();
-        res.put("timelineId", addPostReq.getTimelineId());
-        return ResponseEntity.ok(res);
+            // addPost 요청에 대한 응답으로 timelineId 반환
+            Map<String, Object> res = new HashMap<>();
+            res.put("timelineId", addPostReq.getTimelineId());
+            return ResponseEntity.ok(res);
+        } else {
+            MoyeoPost savedPost = moyeoPostService.createPost(addPostReq);
+            List<MoyeoPhoto> photoList = moyeoPhotoService.createPhotoList(imageFiles, savedPost);
+            moyeoPostService.insertPost(savedPost, photoList, flagFile, voiceFile, addPostReq);
+
+            // addPost 요청에 대한 응답으로 timelineId 반환
+            Map<String, Object> res = new HashMap<>();
+            res.put("timelineId", addPostReq.getTimelineId());
+            return ResponseEntity.ok(res);
+        }
     }
 
     //포스트 삭제

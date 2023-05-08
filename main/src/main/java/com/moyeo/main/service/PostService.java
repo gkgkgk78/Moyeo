@@ -1,7 +1,9 @@
 package com.moyeo.main.service;
 
 import com.moyeo.main.dto.AddPostReq;
+import com.moyeo.main.dto.BasePostDto;
 import com.moyeo.main.dto.GetPostRes;
+import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 
@@ -23,4 +25,6 @@ public interface PostService {
 
     Post insertPostTest(Post savedPost, List<Photo> photoList,AddPostReq addPostReq) throws Exception;
     List<GetPostRes> findMyPost(String location, Long userUid) throws Exception;
+
+    List<BasePostDto> addPostsWithMoyeoPosts(List<Post> posts, List<MoyeoPost> moyeoPosts) throws Exception;
 }

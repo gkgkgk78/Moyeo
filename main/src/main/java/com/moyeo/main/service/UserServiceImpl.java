@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         String profileImageUrl = json.get("kakao_account").get("profile").get("profile_image_url").asText();
         String nickname = json.get("kakao_account").get("profile").get("nickname").asText();
         log.info("nickname: {}", nickname);
+        log.info("기기토큰",userLoginReq.getAccessToken());
 
         User user;
 
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
             User updateUser = userRepository.findByClientId(clientId);
             updateUser.setRefreshToken(tokenRes.getRefreshToken());
-            updateUser.setDeviceToken(userLoginReq.getDeviceToken());
+            if(userLoginReq.getDeviceToken() != null) updateUser.setDeviceToken(userLoginReq.getDeviceToken());
             userRepository.save(updateUser);
 
             return tokenRes;
@@ -182,6 +183,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode("모여"))
                 .build();
         userRepository.save(user);
+
         return true;
     }
 
