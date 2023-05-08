@@ -29,7 +29,7 @@ public class FcmServiceImpl implements FcmService {
         FileInputStream remoteToken = null;
 
         try {
-            remoteToken = new FileInputStream("firebase.json");
+            remoteToken = new FileInputStream("src/main/resources/firebase.json");
         } catch (FileNotFoundException e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
