@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Tag(name = "Test", description = "테스트 API Document")
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -206,12 +206,17 @@ public class TestMoyeoController {
 
     @PostMapping("/notification")
     public ResponseEntity<?> toNotification(@RequestBody PostInsertReq post) throws Exception {
-
-
+        log.info("notification 테스트 시작");
         asyncTestService.test(post);
-
+        log.info("notification 테스트 종료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PostMapping("/notification1")
+    public ResponseEntity<?> toNotification1(@RequestBody PostInsertReq post) throws Exception {
+        log.info("notification 테스트 시작");
+        asyncTestService.test(post);
+        log.info("notification 테스트 종료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

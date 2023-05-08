@@ -183,6 +183,7 @@ public class UserServiceImpl implements UserService {
                 .password(passwordEncoder.encode("모여"))
                 .build();
         userRepository.save(user);
+
         return true;
     }
 

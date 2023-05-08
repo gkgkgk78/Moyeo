@@ -48,6 +48,8 @@ public class TimeLineServiceImpl implements TimeLineService {
     // private final TimeLineRedisRepository repo;
     private final PostService postService;
 
+    private final MoyeoMembersRepository moyeoMembersRepository;
+
 
     @Override
     //모든 최신 타임라인 얻어옴 , 페이징 x
@@ -221,6 +223,14 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public void finishTimeline(Long uid, String title, User user) throws BaseException {
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+
+        // 동행 중이라면 동행을 끝내고 타임라인을 종료할 수 있다.
+        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findByUserIdAndFinishTime(user.getUserId(), null);
+        if (optionalMembers.isPresent()) {
+            // 이미 동행중
+            throw new BaseException(ErrorMessage.ALREADY_MOYEO);
+        }
+
         //타임라인 완료 변경 작업 진행
         if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
