@@ -46,16 +46,19 @@ public class AsyncService {
 
         FormBody.Builder formBuilder = new FormBody.Builder();
         formBuilder.add("userId", post.getUserId());//여기에 key, value 매핑하여 넣어줘야할 데이터 넣어주면됨 (위치, 사용자 이름, 토큰)
-        formBuilder.add("location", post.getLocation());
+        formBuilder.add("address1", post.getAddress1());
+        formBuilder.add("address2", post.getAddress2());
+        formBuilder.add("address3", post.getAddress3());
+        formBuilder.add("address4", post.getAddress4());
         formBuilder.add("deviceToken", post.getDeviceToken());
 
         Request request = new Request.Builder()
-                .url("http://localhost:9000/autogpt")
+                .url("http://localhost:3000/autogpt")
                 .addHeader("Content-Type", "application/json;")
                 .addHeader("Cache-Control", "no-cache")
                 .post(formBuilder.build())
                 .build();
-
+        //System.out.println("현재 notification 실행이 됨");
 
         try {
             okHttpClient.newCall(request).execute();

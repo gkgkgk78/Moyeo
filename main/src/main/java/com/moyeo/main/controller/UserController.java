@@ -5,6 +5,8 @@ import com.moyeo.main.dto.UserLoginReq;
 import com.moyeo.main.dto.UserInfoRes;
 import com.moyeo.main.dto.UserReq;
 import com.moyeo.main.entity.User;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +31,7 @@ import java.util.List;
 @RequestMapping("/api")
 @RestController
 @Slf4j
+@Tag(name = "User")
 public class UserController {
     private final UserService userService;
     public final JwtTokenProvider jwtTokenProvider;
