@@ -31,7 +31,7 @@ def index():
     request_data = request.get_data()
     # ah1=request.get_json()
     temp_data = request_data.decode("utf-8")
-    temp_data+=" The result is less than or equal to 4000 tokens."
+    temp_data
 
     # print("꺼낸 데이터:", temp_data)
     ctx = click.Context(autogpt.cli.main, info_name='hello')

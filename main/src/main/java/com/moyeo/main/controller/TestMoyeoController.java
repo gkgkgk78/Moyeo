@@ -128,8 +128,8 @@ public class TestMoyeoController {
         //return ResponseEntity.ok(goal);
         ResponseEntity<String> response = ResponseEntity.ok(goal);
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("dining", goal);
-        return response;
+        String result=yeobotClient.sendYeobotData("dining", goal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
@@ -151,9 +151,9 @@ public class TestMoyeoController {
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("place", goal);
+        String result=yeobotClient.sendYeobotData("place", goal);
 
-        return response;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
@@ -173,10 +173,9 @@ public class TestMoyeoController {
         ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("activity", goal);
+        String result=yeobotClient.sendYeobotData("activity", goal);
 
-        return response;
-
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 //
 //    @GetMapping("/firebase/message")//테스트 해보기
@@ -219,4 +218,5 @@ public class TestMoyeoController {
         log.info("notification 테스트 종료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
