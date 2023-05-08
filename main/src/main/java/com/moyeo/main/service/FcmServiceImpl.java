@@ -8,6 +8,7 @@ import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +25,11 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class FcmServiceImpl implements FcmService {
 
+    @Value("${firebase.route}")
+    private String route;
+
+
+
     @PostConstruct
     public void initialize() throws BaseException {
         // initialize Admin SDK using OAuth 2.0 refresh token
@@ -31,7 +37,8 @@ public class FcmServiceImpl implements FcmService {
         FileInputStream remoteToken = null;
 
         try {
-            remoteToken = new FileInputStream("src/main/resources/firebase.json");
+//            remoteToken = new FileInputStream("src/main/resources/firebase.json");
+            remoteToken = new FileInputStream(route);
         } catch (FileNotFoundException e) {
             log.info(e.getMessage());
             throw new BaseException(ErrorMessage.NOT_EXIST_ROUTE);
