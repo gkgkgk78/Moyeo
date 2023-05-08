@@ -71,4 +71,27 @@ public class MainTimelinePhotoDtoRes {
                 .finishPlace(lastpost.getAddress2());
     }
 
+    public static MainTimelinePhotoDtoResBuilder builder(TimeLine timeline, User user, String thumbnailUrl, String startPlace, String lastPlace) {
+
+        String start = "";
+        String finish = "";
+        if (timeline.getCreateTime() != null) {
+            start = make(timeline.getCreateTime());
+        }
+
+        if (timeline.getFinishTime() != null) {
+            finish = make(timeline.getFinishTime());
+        }
+
+        return MainTimelinePhotoDtoResBuilder().
+            timelineId(timeline.getTimelineId())
+            .imageUrl(thumbnailUrl)
+            .title(timeline.getTitle())
+            .nickname(user.getNickname())
+            .createTime(start)
+            .finishTime(finish)
+            .startPlace(startPlace)
+            .finishPlace(lastPlace);
+    }
+
 }
