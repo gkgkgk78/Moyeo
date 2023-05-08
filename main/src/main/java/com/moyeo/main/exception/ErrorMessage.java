@@ -49,7 +49,10 @@ public enum ErrorMessage {
     FIREBASE_SEND_ERROR("firebase 알림 메시지 전송중 에러", HttpStatus.INTERNAL_SERVER_ERROR),
 
     NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
-    FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST);
+    FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST),
+
+    NO_MESSAGE_FOR_USER("해당 유저가 수신한 메시지가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+
 
     private final String errMsg;
     private final HttpStatus httpStatus;
