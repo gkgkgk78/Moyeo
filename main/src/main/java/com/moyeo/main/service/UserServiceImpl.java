@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
         String profileImageUrl = json.get("kakao_account").get("profile").get("profile_image_url").asText();
         String nickname = json.get("kakao_account").get("profile").get("nickname").asText();
         log.info("nickname: {}", nickname);
+        log.info("기기토큰",userLoginReq.getAccessToken());
 
         User user;
 
