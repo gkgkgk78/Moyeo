@@ -16,7 +16,7 @@ class Question extends StatelessWidget {
         if (chatbotViewModel.isAnswered == false) {
           if (chatbotViewModel.isTravel != -1) {
             // 첫번째 질문
-            if (chatbotViewModel.messages[index][0] == "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?") {
+            if ( index == chatbotViewModel.messages.length-1 ) {
               return Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly,
@@ -74,7 +74,7 @@ class Question extends StatelessWidget {
             }
             // 여행 중이 아닐 때
           } else {
-            if (chatbotViewModel.messages[index].message == "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?") {
+            if ( index == chatbotViewModel.messages.length -1) {
               return Row(
                 mainAxisAlignment:
                 MainAxisAlignment.spaceEvenly,

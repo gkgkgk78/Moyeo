@@ -1,7 +1,7 @@
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+
 import 'package:provider/provider.dart';
 
 import '../view_models/chatbot_detail_view_model.dart';

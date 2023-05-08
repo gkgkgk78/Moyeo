@@ -108,18 +108,16 @@ dependencies:
   image_card: ^0.0.4
 
   # Fab
-  flutter_expandable_fab: ^1.7.1
+  circular_menu: ^2.0.1
 
   # chat_bubbles
   chat_bubbles:
 
-<<<<<<< HEAD
+
   # switch
   flutter_switch: ^0.3.2
 
-=======
-  # mondgodb
-  mongo_dart: ^0.9.1
+
 
 dev_dependencies:
   flutter_test:

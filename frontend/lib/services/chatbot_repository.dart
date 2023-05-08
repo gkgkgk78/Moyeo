@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
@@ -27,11 +29,11 @@ class ChatbotRepository {
     }
   }
 
-  Future<dynamic> ChatToServer(BuildContext context, ChatMessage message) async {
+  Future<void> ChatToServer(BuildContext context, ChatMessage message) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post("api/auth/chat", data: message.toJson());
-      return response;
+      await dio.post("api/auth/chat", data: message.toJson());
+      return;
     } catch (error) {
       throw Exception('Fail to upload to Server: ${error}');
     }

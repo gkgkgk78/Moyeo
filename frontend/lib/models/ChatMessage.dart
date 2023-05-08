@@ -5,7 +5,7 @@ class ChatMessage {
   ChatMessage({required this.message, required this.sender});
 
   Map<String, dynamic> toJson() => {
-    'message': message,
+    'message': [message],
     'sender': sender,
   };
 

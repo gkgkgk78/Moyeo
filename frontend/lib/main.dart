@@ -101,12 +101,6 @@ class MyHomePage extends StatelessWidget {
             if (viewModel.myFeedNavigatorKey.currentState!.canPop()) {
               Navigator.of(viewModel.myFeedNavigatorKey.currentContext!).pop();
               return false;
-              // Navigator.pushNamedAndRemoveUntil(
-              //   viewModel.myFeedNavigatorKey.currentContext!,
-              //   '/',
-              //   (routes) => false,
-              // );
-              // return false;
             }
           }
           if (!Navigator.canPop(context)) {
@@ -174,7 +168,10 @@ class MyHomePage extends StatelessWidget {
           resizeToAvoidBottomInset: true,
           floatingActionButton: Visibility(
             visible: !keyboardIsOpen,
-            child: const CameraFloatingActionButton(),
+            child: Container(
+                color: Colors.transparent,
+              child: const CameraFloatingActionButton() ,
+            ),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
