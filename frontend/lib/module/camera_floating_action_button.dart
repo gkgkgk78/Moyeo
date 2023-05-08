@@ -16,13 +16,13 @@ class CameraFloatingActionButton extends StatelessWidget {
         child: Consumer<AppViewModel>(
           builder: (_, appViewModel, __) {
             return FloatingActionButton(
-                child: appViewModel.userInfo.timeLineId == -1
-                    ? Image.asset(
-                  'assets/images/transparent_logo.png',
-                  width: 50,
-                  height: 50,
-                )
-                    : Container(
+              child: appViewModel.userInfo.timeLineId == -1
+                  ? Image.asset(
+                'assets/images/transparent_logo.png',
+                width: 50,
+                height: 50,
+              )
+                  : Container(
                 height: 70,
                 width: 70,
                 decoration: const BoxDecoration(
@@ -42,22 +42,22 @@ class CameraFloatingActionButton extends StatelessWidget {
                   size: 40,
                 ),
               ),
-                onPressed: () {
-                  if (appViewModel.userInfo.timeLineId == -1) {
-                    // 여행 중이 아닐 때 여행 시작
-                    appViewModel.startTravel(context);
-                  } else {
-                    // 여행 중일 때 사진 촬영 화면으로 이동
+              onPressed: () {
+                if (appViewModel.userInfo.timeLineId == -1) {
+                  // 여행 중이 아닐 때 여행 시작
+                  appViewModel.startTravel(context);
+                } else {
+                  // 여행 중일 때 사진 촬영 화면으로 이동
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CameraView(),
-                      ),
-                    );
-                  }
-                },
-              );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CameraView(),
+                    ),
+                  );
+                }
+              },
+            );
           },
         ),
       ),

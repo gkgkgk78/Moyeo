@@ -108,7 +108,7 @@ dependencies:
   image_card: ^0.0.4
 
   # Fab
-  circular_menu: ^2.0.1
+  spincircle_bottom_bar: ^2.0.0
 
   # chat_bubbles
   chat_bubbles:
