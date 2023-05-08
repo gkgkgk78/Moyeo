@@ -51,9 +51,9 @@ public class PostController {
                                      @Valid @ModelAttribute AddPostReq addPostReq,
                                      @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
         // 입력 테스트중
-        System.out.println("flagFile:" + flagFile);
-        log.info("timeline id : {}", addPostReq.getTimelineId());
-        log.info("국가 이름 : {}", addPostReq.getAddress1());
+        // System.out.println("flagFile:" + flagFile);
+        // log.info("timeline id : {}", addPostReq.getTimelineId());
+        // log.info("국가 이름 : {}", addPostReq.getAddress1());
         if(isMoyeo == false) {
             Post savedPost = postService.createPost(addPostReq);
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -54,6 +55,7 @@ import com.moyeo.main.service.PhotoService;
 import com.moyeo.main.service.PostService;
 import com.moyeo.main.service.TimeLineService;
 import com.moyeo.main.service.TimeLineService2;
+import com.moyeo.main.service.TimeLineService2Impl;
 import com.moyeo.main.service.UserService;
 import com.moyeo.main.service.YeobotService;
 
@@ -65,19 +67,46 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/moyeoTest")
+@RequestMapping("/test/moyeo")
 public class TestAccompanyController {
     private final TimeLineService timeLineService;
     private final UserService userService;
     private final PostService postService;
     private final PhotoService photoService;
     private final TimeLineService2 timeLineService2;
+    private final TimeLineService2Impl timeLineService2Impl;
     private final UserRepository userRepository;
     private final MoyeoPostService moyeoPostService;
     private final MoyeoPhotoService moyeoPhotoService;
     private final MoyeoTimeLineService moyeoTimeLineService;
     private final MoyeoMembersService moyeoMembersService;
     private final FavoriteService favoriteService;
+
+    @GetMapping("/moyeotimeline/main2")
+    @Operation(summary = "그냥!! 타임라인 목록 조회 (메인 페이지에서) ver.2", description = "No-Offset")
+    public ResponseEntity<?> testGetTimlineListNoPathVariable() throws Exception { // 동행 시작
+        return ResponseEntity.ok(timeLineService2Impl.testGetTimlineList(null));
+    }
+    @GetMapping("/moyeotimeline/main2/{lastTimelineId}")
+    @Operation(summary = "그냥!! 타임라인 목록 조회 (메인 페이지에서) ver.2", description = "No-Offset")
+    public ResponseEntity<?> testGetTimlineList(@PathVariable(required = false) Optional<Long> lastTimelineId) throws Exception { // 동행 시작
+        log.info("lastTimelineId: {}", lastTimelineId);
+        return ResponseEntity.ok(timeLineService2Impl.testGetTimlineList(lastTimelineId.orElse(null)));
+    }
+    @GetMapping("/moyeotimeline/main1/{page}")//테스트 해보기
+    @Operation(summary = "그냥!! 타임라인 목록 조회 (메인 페이지에서) ver.1", description = "Offset")
+    public ResponseEntity<?> getTimelineLatestWithPaging(@PathVariable Integer page) throws Exception {
+        Pageable pageable = PageRequest.of(page, 15, Sort.by("createTime").descending());
+        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineOrderBylatestPaging(pageable);
+        if (timelinelist != null) {
+            return new ResponseEntity<>(timelinelist, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
+
+    }
+
     @PostMapping("/moyeotimeline/{userId}")
     @Operation(summary = "동행 여행 시작", description = "동행 여행 시작 -> 동행 타임라인 생성")
     // @Operation(summary = "동행 여행 시작", description = "동행 여행 시작 -> 동행 타임라인 생성", tags = {"View"})

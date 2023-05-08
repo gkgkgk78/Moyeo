@@ -36,6 +36,10 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     //공개되지 않은 것들 중에, 완료가 된것만 찾아내야함
     Page<TimeLine> findAllByIsCompleteAndIsTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
+    // 2. No-Offset 방식
+    Optional<List<TimeLine>> findTop15ByIsCompleteAndIsTimelinePublicAndTimelineIdLessThanOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic, Long timeLineId);
+    Optional<List<TimeLine>> findTop16ByIsCompleteAndIsTimelinePublicAndTimelineIdLessThanOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic, Long timeLineId);
+    Optional<List<TimeLine>> findTop16ByIsCompleteAndIsTimelinePublicOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic);
 
     Page<TimeLine> findAllByUserIdOrderByCreateTimeDesc(User u, Pageable pageable);
 

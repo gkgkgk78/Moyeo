@@ -17,5 +17,5 @@ public interface TimeLineAndMoyeoRepository extends JpaRepository<TimeLineAndMoy
 	@Query(nativeQuery = true, value = "SELECT DISTINCT moyeo_timeline_id\n"
 		+ "FROM time_line_and_moyeo\n"
 		+ "WHERE timeline_id = :timelineId")
-	List<Long> findAllMoyeoTimelineIdByTimlineId(Long timelineId);
+	Optional<List<Long>> findAllMoyeoTimelineIdByTimlineId(Long timelineId);
 }
