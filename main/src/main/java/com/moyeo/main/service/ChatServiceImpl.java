@@ -26,17 +26,19 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void insert(String name, ChatReq chat1) throws BaseException {
 
-        Chat chat=new Chat();
-        chat.setMessage(chat1.getMessage());
-        chat.setSender(chat1.getSender());
-        chat.setCreateTime(LocalDateTime.now());
-        log.info("chat inser 시작");
-        log.info(name.toString());
+
+        log.info("chat insert 시작");
+        //log.info(name.toString());
         try {
-            mongoTemplate.insert(chat, name);
-        }
-        catch (Exception e)
-        {
+            for (String s1 : chat1.getMessage()) {
+                Chat chat = new Chat();
+                chat.setMessage(s1);
+                chat.setSender(chat1.getSender());
+                chat.setCreateTime(LocalDateTime.now());
+                mongoTemplate.insert(chat, name);
+            }
+
+        } catch (Exception e) {
             log.info(e.getMessage());
 
         }
