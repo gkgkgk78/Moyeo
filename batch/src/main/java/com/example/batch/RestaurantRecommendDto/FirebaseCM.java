@@ -10,14 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity(name = "FirebaseCM")
 @Data
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class FirebaseCM {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    String deviceToken;
     String message;
 }

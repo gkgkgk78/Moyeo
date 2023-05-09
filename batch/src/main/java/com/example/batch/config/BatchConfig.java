@@ -2,7 +2,7 @@ package com.example.batch.config;
 
 import com.example.batch.RestTemplateResponseErrorHandler;
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
-import com.example.batch.RestaurantRecommendDto.Post;
+import com.example.batch.RestaurantRecommendDto.PushTable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,8 +59,8 @@ public class BatchConfig {
     @JobScope
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
-                .<Post, FirebaseCM>chunk(3)
-                .reader(this.itemReader(null,null))
+                .<PushTable, FirebaseCM>chunk(3)
+                .reader(this.itemReader(/* JOBPARAMETER 없어도 됨 null,null*/))
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
                 .build();
@@ -69,12 +69,13 @@ public class BatchConfig {
     @StepScope
     public JpaItemWriter<FirebaseCM> itemWriter() {
         JpaItemWriter<FirebaseCM> writer = new JpaItemWriter<>();
-        writer.setEntityManagerFactory(entityManagerFactory);
+//        writer.setEntityManagerFactory(entityManagerFactory);
+        
         return writer;
     }
     @Bean
     @StepScope
-    public ItemProcessor<Post,FirebaseCM> itemProcessor() {
+    public ItemProcessor<PushTable,FirebaseCM> itemProcessor() {
         return item -> {
             log.info("item : {}",item);
             String goal = "Search for a good restaurant near " + "대한민국" + " " + "제주시" + " " + "애윌읍" +".";
@@ -106,13 +107,13 @@ public class BatchConfig {
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<Post> itemReader(@Value("#{jobParameters['start']}") String start,@Value("#{jobParameters['end']}") String end) {
-        log.info("start : {}",start);
-        log.info("end : {}",end);
-        Map<String,Object> parameter = new HashMap<>();
-        parameter.put("start",start);
-        parameter.put("end",end);
-        return new JpaPagingItemReaderBuilder<Post>()
+    public JpaPagingItemReader<PushTable> itemReader(/* @Value("#{jobParameters['start']}") String start,@Value("#{jobParameters['end']}") String end*/) {
+//        log.info("start : {}",start);
+//        log.info("end : {}",end);
+//        Map<String,Object> parameter = new HashMap<>();
+//        parameter.put("start",start);
+//        parameter.put("end",end);
+        return new JpaPagingItemReaderBuilder<PushTable>()
 //                .queryString("SELECT t.postId, t.userId, t.address1, t.address2, t.address3, t.address4, t.deviceToken, t.createTime" +
 //                        "FROM (" +
 //                        "  SELECT p.postId, u.userId, p.address1, p.address2, p.address3, p.address4, u.deviceToken, p.createTime," +
@@ -141,7 +142,7 @@ public class BatchConfig {
 //                        ") t" +
 //                        "WHERE t.rn = 1" +
 //                        "ORDER BY t.createTime DESC")
-                .queryString("SELECT P from Post P inner join P.user U")
+                .queryString("SELECT P from PushTable P")
 //                .queryString("SELECT MP FROM Moyeo_post MP inner join MP.moyeoTimeline MTL")
 //                .parameterValues(parameter)
                 .pageSize(3)

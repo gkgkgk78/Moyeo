@@ -29,8 +29,8 @@ public class BatchScheduler {
         long nano = System.currentTimeMillis();
         log.info("Schedule start");
         JobParameters params = new JobParametersBuilder()
-                .addString("start", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
-                .addString("end", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
+//                .addString("start", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
+//                .addString("end", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
                 .toJobParameters();
         log.info("jobparameter :{}",params);
         log.info("Job:{}",batchConfig.job());
