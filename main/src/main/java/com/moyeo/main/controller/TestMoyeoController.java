@@ -208,12 +208,5 @@ public class TestMoyeoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/notification1")
-    public ResponseEntity<?> toNotification1(@RequestBody PostInsertReq post) throws Exception {
-        log.info("notification 테스트 시작");
-        asyncTestService.test(post);
-        log.info("notification 테스트 종료");
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
 }

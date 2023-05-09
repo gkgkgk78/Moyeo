@@ -45,7 +45,7 @@ public class AsyncService {
     public void toNotification(PostInsertReq post) {
 
         FormBody.Builder formBuilder = new FormBody.Builder();
-        formBuilder.add("userId", post.getUserId());//여기에 key, value 매핑하여 넣어줘야할 데이터 넣어주면됨 (위치, 사용자 이름, 토큰)
+        formBuilder.add("userId", post.getUserId().toString());//여기에 key, value 매핑하여 넣어줘야할 데이터 넣어주면됨 (위치, 사용자 이름, 토큰)
         formBuilder.add("address1", post.getAddress1());
         formBuilder.add("address2", post.getAddress2());
         formBuilder.add("address3", post.getAddress3());
