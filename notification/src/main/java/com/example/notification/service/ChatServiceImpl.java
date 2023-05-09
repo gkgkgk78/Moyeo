@@ -19,7 +19,7 @@ public class ChatServiceImpl implements ChatService {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public void insert(String name, ChatReq chat1) throws Exception {
+    public void insertRecv(String name, ChatReq chat1) throws Exception {
 
         log.info("chat insert 시작");
         //log.info(name.toString());
@@ -33,6 +33,16 @@ public class ChatServiceImpl implements ChatService {
                 mongoTemplate.insert(chat, name);
             }
 
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void insertAutogpt(String name, Chat chat) throws Exception {
+        try {
+            mongoTemplate.insert(chat, name);
         } catch (Exception e) {
             log.info(e.getMessage());
         }

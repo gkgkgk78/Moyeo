@@ -1,11 +1,10 @@
 package com.example.notification.service;
 
-import dto.PostInsertReq;
+import com.example.notification.dto.PostInsertReq;
 
 public interface PostInsertAutogpt {
 
     void insert(PostInsertReq post);
-
 
 
 }

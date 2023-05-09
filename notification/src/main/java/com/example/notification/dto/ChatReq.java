@@ -19,9 +19,7 @@ import java.util.List;
 public class ChatReq {
 
     private List<String> message;
+
     private String sender;
-
-
-
 
 }

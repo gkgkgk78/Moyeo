@@ -1,4 +1,4 @@
-package dto;
+package com.example.notification.dto;
 
 import lombok.*;
 
@@ -17,7 +17,7 @@ public class PostInsertReq {
     private String address2;
     private String address3;
     private String address4;
-    private String userId;//고유한 사용자 아이디
+    private Long userId;//고유한 사용자 아이디
 
 
 }
