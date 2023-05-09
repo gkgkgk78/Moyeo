@@ -8,6 +8,7 @@ import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.UserRepository;
+import com.moyeo.main.service.ChatService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class YeobotController {
 
     private final YeobotService yeobotService;
     private final YeobotClient yeobotClient;
-    private final MongoTemplate mongoTemplate;
+    private final ChatService chatService;
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -60,9 +61,10 @@ public class YeobotController {
         log.info("맛집추천 spring 내부 로직 시작");
         //로그인 정보에서 uid 받아오기
         Long userId = null;
+        User user = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null && auth.getPrincipal() != null) {
-            User user = (User) auth.getPrincipal();
+            user = (User) auth.getPrincipal();
             userId = user.getUserId();
         }
         // 최신 주소 반환
@@ -91,17 +93,9 @@ public class YeobotController {
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-        try {
-            Chat chat = new Chat();
-            chat.setMessage(result);
-            chat.setSender("YeoBot");
-            chat.setCreateTime(LocalDateTime.now());
-            mongoTemplate.insert(chat, userId.toString()); // user.getUserId()는 유저의 고유 pk
-            System.out.println("몽고db저장완료");
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
-        }
+
+        chatService.insertResponse(user, result);
+
         log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -114,9 +108,10 @@ public class YeobotController {
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 시작");
         //로그인 정보에서 uid 받아오기
         Long userId = null;
+        User user = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null && auth.getPrincipal() != null) {
-            User user = (User) auth.getPrincipal();
+            user = (User) auth.getPrincipal();
             userId = user.getUserId();
         }
         // 최신 주소 반환
@@ -152,17 +147,9 @@ public class YeobotController {
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-        try {
-            Chat chat = new Chat();
-            chat.setMessage(result);
-            chat.setSender("YeoBot");
-            chat.setCreateTime(LocalDateTime.now());
-            mongoTemplate.insert(chat, userId.toString()); // user.getUserId()는 유저의 고유 pk
-            System.out.println("몽고db저장완료");
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
-        }
+
+        chatService.insertResponse(user, result);
+
         log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -191,17 +178,9 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-        try {
-            Chat chat = new Chat();
-            chat.setMessage(result);
-            chat.setSender("YeoBot");
-            chat.setCreateTime(LocalDateTime.now());
-            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
-            System.out.println("몽고db저장완료");
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
-        }
+
+        chatService.insertResponse(user, result);
+
         log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -230,17 +209,9 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-        try {
-            Chat chat = new Chat();
-            chat.setMessage(result);
-            chat.setSender("YeoBot");
-            chat.setCreateTime(LocalDateTime.now());
-            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
-            System.out.println("몽고db저장완료");
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
-        }
+
+        chatService.insertResponse(user, result);
+
         log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
