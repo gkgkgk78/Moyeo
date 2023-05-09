@@ -192,7 +192,10 @@ public class TimeLineServiceImpl implements TimeLineService {
     public Long makenewTimeline(User now) throws BaseException {
 
         // 이미 여행 중인지 체크
-        timeLineRepository.findFirstByUserIdAndIsComplete(now, false).orElseThrow(() -> new BaseException(ErrorMessage.ALREADY_TRAVELING));
+        log.info("유저ID: {}", now.getUserId());
+        if(timeLineRepository.findFirstByUserId(now).isPresent()){
+            timeLineRepository.findFirstByUserIdAndIsComplete(now, false).orElseThrow(() -> new BaseException(ErrorMessage.ALREADY_TRAVELING));
+        }
 
         //여기서 넘어온 uid는 User의 uid아이디 입니다.
         TimeLine timeline = new TimeLine();
