@@ -51,10 +51,16 @@ public class MoyeoTimeLine extends BaseTime {
     private Long membersCount;
 
     public void updateMembersCount(Integer amount) {
+        if(this.membersCount == null) {
+            this.membersCount = 0L;
+        }
+
         this.membersCount += amount;
+
         if (this.membersCount < 0) {
             this.membersCount = 0L;
         }
+
     }
 
 }
