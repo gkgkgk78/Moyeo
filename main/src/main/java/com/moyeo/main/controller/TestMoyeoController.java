@@ -50,7 +50,7 @@ public class TestMoyeoController {
 
     private final YeobotClient yeobotClient;
 
-//    private final FcmService fcmService;
+    private final FcmService fcmService;
 
     private final ChatService chatService;
 
@@ -171,6 +171,8 @@ public class TestMoyeoController {
         chatService.insertResponse(user, result);
 
         log.info("response insert 작업 완료");
+
+       // fcmService.send();
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

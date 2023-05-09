@@ -48,6 +48,7 @@ public class ChatServiceImpl implements ChatService {
     public void insertResponse(User user, String result) throws BaseException {
 
         try {
+            log.info("MongoDB에 저장 로직 시작");
             Chat chat = new Chat();
             chat.setMessage(result);
             chat.setSender("YeoBot");
