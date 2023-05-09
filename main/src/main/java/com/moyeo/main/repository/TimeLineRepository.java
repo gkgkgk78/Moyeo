@@ -19,7 +19,8 @@ import java.util.Optional;
 @Repository
 public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
-    Optional<TimeLine> findByUserIdAndIsComplete(User user, Boolean isComplete);
+    // Optional<TimeLine> findByUserIdAndIsComplete(User user, Boolean isComplete); // (X)
+    Optional<TimeLine> findFirstByUserIdAndIsComplete(User user, Boolean isComplete);
 
     @Override
     TimeLine getById(Long aLong);
