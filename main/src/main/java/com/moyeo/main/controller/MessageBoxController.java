@@ -32,7 +32,6 @@ public class MessageBoxController {
 //            userId = user.getUserId();
 //        }
         List<MyMessageBoxDTO> myMessageBoxDTOS = messageBoxService.getMessagesByUser(userId);
-
         log.info("메시지함 조회 로직 완료");
         return new ResponseEntity<>(myMessageBoxDTOS, HttpStatus.OK);
     }

@@ -14,4 +14,7 @@ public interface MessageBoxService {
 
     public void RemoveMessage(Long messageId);
 
+    public void insertMessage();
+
+
 }
