@@ -20,7 +20,7 @@ public class PostInsertReq {
     private String address2;
     private String address3;
     private String address4;
-    private String userId;//고유한 사용자 아이디
+    private Long userId;//고유한 사용자 아이디
 
 
     public static PostInsertReqBuilder builder(AddPostReq post, User user) {
@@ -30,7 +30,7 @@ public class PostInsertReq {
                 .address2(post.getAddress2())
                 .address3(post.getAddress3())
                 .address4(post.getAddress4())
-                .userId(user.getUserId().toString())
+                .userId(user.getUserId())
                 .deviceToken(user.getDeviceToken())
                 ;
     }

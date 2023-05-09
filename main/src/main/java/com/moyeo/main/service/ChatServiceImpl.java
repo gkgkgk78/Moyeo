@@ -7,9 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +27,7 @@ public class ChatServiceImpl implements ChatService {
         log.info("chat insert 시작");
         //log.info(name.toString());
         try {
+            //사용자의 응답을 mongo db에 넣는 중
             for (String s1 : chat1.getMessage()) {
                 Chat chat = new Chat();
                 chat.setMessage(s1);
@@ -37,6 +35,14 @@ public class ChatServiceImpl implements ChatService {
                 chat.setCreateTime(LocalDateTime.now());
                 mongoTemplate.insert(chat, name);
             }
+
+            //사용자의 질문 목록을 auto gpt에 날리기
+            
+            
+            
+            //받은 응답을 기반으로 푸시 알람 날리기
+
+
 
         } catch (Exception e) {
             log.info(e.getMessage());
