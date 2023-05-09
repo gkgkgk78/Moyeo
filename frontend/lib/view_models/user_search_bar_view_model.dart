@@ -18,10 +18,10 @@ class SelectedUsersProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  addMoyeoUser(context, List<UserInfo> userList) async {
-    await MoyeoRepository().addMoyeoUser(context, userList);
-    notifyListeners();
-  }
+  // addMoyeoUser(context, List<UserInfo> userList) async {
+  //   await MoyeoRepository().addMoyeoUser(context, userList);
+  //   notifyListeners();
+  // }
 
   @override
   void dispose() {

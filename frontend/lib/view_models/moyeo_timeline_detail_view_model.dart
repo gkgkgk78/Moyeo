@@ -10,7 +10,7 @@ import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
 import '../views/moyeo_timeline.dart';
 
-class TimelineDetailViewModel extends ChangeNotifier {
+class MoyeoTimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;
   bool _isMine = false;
   bool _isPublic = false;
@@ -35,7 +35,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  TimelineDetailViewModel(BuildContext context, this.timelineId) {
+  MoyeoTimelineDetailViewModel(BuildContext context, this.timelineId) {
     loadTimelineDetails(context);
     notifyListeners();
   }
@@ -113,12 +113,10 @@ class TimelineDetailViewModel extends ChangeNotifier {
     await TimelineRepository().deleteTimeline(context, timelineId);
     Navigator.pop(context);
   }
-
-  startMoyeo(context) async {
-    final MoyeoTimelineId = await MoyeoRepository().startMoyeo(context);
-    Navigator.pushNamed(
-        context,
-        'api/auth/timeline/${MoyeoTimelineId.timelineId}'
-    );
+  // PUT요청
+  outMoyeoTimeline(context) async {
+    await MoyeoRepository().outMoyeo(context, moyeoTimelineId);
+    Navigator.pop(context);
   }
+
 }

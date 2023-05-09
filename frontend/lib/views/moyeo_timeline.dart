@@ -2,20 +2,13 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:moyeo/view_models/post_view_model.dart';
-import 'package:moyeo/views/moyeo_add_user.dart';
 import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 import '../view_models/app_view_model.dart';
-import '../view_models/timeline_detail_view_model.dart';
-import '../view_models/search_bar_view_model.dart';
-import '../view_models/search_result_view_model.dart';
-import '../view_models/user_search_bar_view_model.dart';
-import '../views/user_search_bar_view.dart';
-import '../views/moyeo_add_user.dart';
+import '../view_models/moyeo_timeline_detail_view_model.dart';
 
 import 'package:moyeo/utils/black.dart';
 
@@ -33,24 +26,18 @@ class MoyeoTimeline extends StatelessWidget {
           primarySwatch: CustomColors.black,
         ),
         child:Scaffold(
-          body: Consumer<TimelineDetailViewModel>(
+          body: Consumer<MoyeoTimelineDetailViewModel>(
             builder: (context, viewModel, _) => SingleChildScrollView(
               child: Column(
                 children: [
                   viewModel.isMine
                       ? Row(
-                    children: [
+                      children: [
                       Expanded(child: Container()),
                       Padding(
                         padding: const EdgeInsets.only(right: 5),
                         child: Text(viewModel.isPublic ? '공개' : ' 비공개'),
                       ),
-                      // viewModel.showPublicIcon(),
-                      // Switch(
-                      //     value: viewModel.isPublic,
-                      //     onChanged: (_) {
-                      //       viewModel.changeIsPublic(context);
-                      //     }),
                       FlutterSwitch(
                           width: 50,
                           height: 30,
@@ -295,48 +282,41 @@ class MoyeoTimeline extends StatelessWidget {
                                       )
                                   ),
                                 ),
+                                // 모여나가기 수정 필요
                                 InkWell(
                                   onTap: (){
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MoyeoTimeline()
-                                        )
-                                    );
+                                    viewModel.outMoyeoTimeline(context);
                                   },
-                                  child: Container(
-                                      padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
-                                      decoration: BoxDecoration(
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey.withOpacity(0.5),
-                                              blurRadius: 1.0,
-                                              spreadRadius: 1.0,
-                                              offset: const Offset(2,2),
-                                            )
-                                          ],
-                                          borderRadius: BorderRadius.circular(10),
-                                          gradient: LinearGradient(
-                                              colors: <Color>[
-                                                Colors.redAccent,
-                                                Colors.orangeAccent,
-                                              ]
-                                          )
-                                      ),
-                                      child: Row(
-                                          children:[
-                                            Icon(
-                                              Icons.group_add,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              "  모여",
-                                              style: TextStyle(color: Colors.white),
-                                            ),
-                                          ]
+                                  child:Container(
+                                    margin: const EdgeInsets.only(right: 10),
+                                    padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                    decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5),
+                                        blurRadius: 1.0,
+                                        spreadRadius: 1.0,
+                                        offset: const Offset(2,2),
                                       )
-                                  ),
-                                )
+                                    ],
+                                    borderRadius: BorderRadius.circular(10),
+                                    gradient: LinearGradient(
+                                      colors: <Color>[
+                                        Colors.redAccent,
+                                        Colors.orangeAccent,
+                                        ]
+                                      )
+                                    ),
+                                    child: Row(
+                                      children:[
+                                        Icon(Icons.done, color: Colors.white,),
+                                        Text(" 모여 나가기",
+                                        style: TextStyle(color: Colors.white),
+                                        ),
+                                      ]
+                                    )
+                                  )
+                                ),
                               ]
                           )
                       )
