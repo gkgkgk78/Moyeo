@@ -229,7 +229,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
         // 동행 중이라면 동행을 끝내고 타임라인을 종료할 수 있다.
-        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findByUserIdAndFinishTime(user.getUserId(), null);
+        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user.getUserId(), null);
         if (optionalMembers.isPresent()) {
             // 이미 동행중
             throw new BaseException(ErrorMessage.ALREADY_MOYEO);
