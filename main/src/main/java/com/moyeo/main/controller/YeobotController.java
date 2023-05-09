@@ -9,6 +9,7 @@ import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.ChatService;
+import com.moyeo.main.service.FcmService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class YeobotController {
     private final YeobotService yeobotService;
     private final YeobotClient yeobotClient;
     private final ChatService chatService;
+    private final FcmService fcmService;
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -98,6 +100,8 @@ public class YeobotController {
 
         log.info("response insert 작업 완료");
 
+        fcmService.send(user);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
@@ -152,6 +156,8 @@ public class YeobotController {
 
         log.info("response insert 작업 완료");
 
+        fcmService.send(user);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
@@ -183,6 +189,8 @@ public class YeobotController {
 
         log.info("response insert 작업 완료");
 
+        fcmService.send(user);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -213,6 +221,8 @@ public class YeobotController {
         chatService.insertResponse(user, result);
 
         log.info("response insert 작업 완료");
+
+        fcmService.send(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 
