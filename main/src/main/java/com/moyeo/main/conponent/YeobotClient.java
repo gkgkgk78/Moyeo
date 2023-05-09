@@ -40,6 +40,7 @@ public class YeobotClient {
         }
         String responseBody = null;
         String result=null;
+
         try {
             responseBody = response.body().string();
             Gson gson = new Gson();
