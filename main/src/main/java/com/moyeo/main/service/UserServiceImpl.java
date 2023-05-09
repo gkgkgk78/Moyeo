@@ -73,6 +73,8 @@ public class UserServiceImpl implements UserService {
 
         User user;
 
+        log.info("카카오 로그인 중... device token : {}", userLoginReq.getDeviceToken());
+
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인
         if (userRepository.getByClientId(clientId) != null) {
             user = userRepository.getByClientId(clientId);
@@ -82,7 +84,9 @@ public class UserServiceImpl implements UserService {
             TokenRes tokenRes = jwtTokenProvider.createtoken(clientId, "USER");
             User updateUser = userRepository.findByClientId(clientId);
             updateUser.setRefreshToken(tokenRes.getRefreshToken());
-            if (userLoginReq.getDeviceToken() != null) updateUser.setDeviceToken(userLoginReq.getDeviceToken());
+            if (userLoginReq.getDeviceToken() != null || userLoginReq.getDeviceToken().length() != 0) {
+                updateUser.setDeviceToken(userLoginReq.getDeviceToken());
+            }
             userRepository.save(updateUser);
 
             return tokenRes;
