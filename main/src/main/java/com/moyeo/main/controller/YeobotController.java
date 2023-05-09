@@ -3,6 +3,7 @@ package com.moyeo.main.controller;
 
 import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.TravelRecommendRequest;
+import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
@@ -10,12 +11,15 @@ import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +32,7 @@ public class YeobotController {
 
     private final YeobotService yeobotService;
     private final YeobotClient yeobotClient;
+    private final MongoTemplate mongoTemplate;
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -83,13 +88,23 @@ public class YeobotController {
         String caseType = "restaurant";
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData(caseType, goal);
+        String result = yeobotClient.sendYeobotData(caseType, goal);
 
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        log.info("response insert 작업 시작");
+        try {
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, userId.toString()); // user.getUserId()는 유저의 고유 pk
+            System.out.println("몽고db저장완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
+        }
+        log.info("response insert 작업 완료");
 
-        log.info("맛집추천 spring 내부 로직 완료");
-
-        return response;
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
@@ -134,10 +149,23 @@ public class YeobotController {
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData(caseType, goal);
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        String result = yeobotClient.sendYeobotData(caseType, goal);
 
-        return response;
+        log.info("response insert 작업 시작");
+        try {
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, userId.toString()); // user.getUserId()는 유저의 고유 pk
+            System.out.println("몽고db저장완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
+        }
+        log.info("response insert 작업 완료");
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
@@ -155,11 +183,28 @@ public class YeobotController {
         String caseType = "place";
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData(caseType, goal);
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
-        log.info("여행지추천 spring 내부 로직 완료");
+        String result = yeobotClient.sendYeobotData(caseType, goal);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.getPrincipal() != null)
+            user = (User) auth.getPrincipal();
+        System.out.println(user + " is user");
 
-        return response;
+        log.info("response insert 작업 시작");
+        try {
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
+            System.out.println("몽고db저장완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
+        }
+        log.info("response insert 작업 완료");
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
@@ -177,12 +222,28 @@ public class YeobotController {
         String caseType = "activity";
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData(caseType, goal);
+        String result = yeobotClient.sendYeobotData(caseType, goal);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.getPrincipal() != null)
+            user = (User) auth.getPrincipal();
+        System.out.println(user + " is user");
 
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
-        log.info("여행중이 아닌 유저에게 액티비티 추천 spring 내부 로직 완료");
+        log.info("response insert 작업 시작");
+        try {
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
+            System.out.println("몽고db저장완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
+        }
+        log.info("response insert 작업 완료");
 
-        return response;
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 

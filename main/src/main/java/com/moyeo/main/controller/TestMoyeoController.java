@@ -9,6 +9,9 @@ import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
+import com.moyeo.main.entity.User;
+import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +19,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +53,7 @@ public class TestMoyeoController {
 //    private final FcmService fcmService;
 
     private final ChatService chatService;
+    private final MongoTemplate mongoTemplate;
 
     private final AsyncTestService asyncTestService;
 
@@ -146,10 +154,32 @@ public class TestMoyeoController {
         // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        //ResponseEntity<String> response = ResponseEntity.ok(goal);
+
+        System.out.println("is it started?");
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData("place", goal);
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.getPrincipal() != null)
+            user = (User) auth.getPrincipal();
+        System.out.println(user + " is user");
+
+        log.info("response insert 작업 시작");
+        try {
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
+            System.out.println("몽고db저장완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
+        }
+        log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -175,7 +205,7 @@ public class TestMoyeoController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-//
+
 //    @GetMapping("/firebase/message")//테스트 해보기
 //    public ResponseEntity<?> getTimelineLatestWithPaging() throws Exception {
 //        fcmService.send();
@@ -187,10 +217,23 @@ public class TestMoyeoController {
     public ResponseEntity<?> insertChat(@RequestBody ChatReq chat) throws Exception {
 
         //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
-        Long l1 = 1l;
+//        Long l1 = 1l;
+
+        //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (auth != null && auth.getPrincipal() != null){
+            user = (User) auth.getPrincipal();
+            log.info(user+"유저 찾았다");
+        }
+
+        System.out.println(user + " 유저 찾았다");
+
 
         log.info("chat insert작업 시작");
-        chatService.insert(l1.toString(), chat);
+        //chatService.insert(l1.toString(), chat);
+
+        chatService.insert(user.getUserId().toString(), chat);
         log.info("chat insert작업 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
