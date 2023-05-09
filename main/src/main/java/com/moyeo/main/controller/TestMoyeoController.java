@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -126,10 +128,10 @@ public class TestMoyeoController {
 
         String goal = "Search for a good restaurant near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) + " " + addressList.get(3) + ".";
         //return ResponseEntity.ok(goal);
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        //ResponseEntity<String> response = ResponseEntity.ok(goal);
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("dining", goal);
-        return response;
+        String response = yeobotClient.sendYeobotData("dining", goal);
+        return ResponseEntity.ok(response);
 
     }
 
@@ -148,18 +150,18 @@ public class TestMoyeoController {
         // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+//        ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("place", goal);
+        String response = yeobotClient.sendYeobotData("place", goal);
 
-        return response;
+        return ResponseEntity.ok(response);
     }
 
 
     //여행중이 아닌 유저 액티비티 추천
     @PostMapping("/yet/activity")
-    public ResponseEntity<String> recommendActivities() throws IOException {
+    public ResponseEntity<String> recommendActivities(@Value("http://localhost:4000") String flaskUrl) throws IOException {
         // request에서 필요한 정보를 추출해서 변수에 저장
         String destination = "경상북도 경주";
         String season = "가을";
@@ -170,12 +172,12 @@ public class TestMoyeoController {
         // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
-
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("activity", goal);
+        String response = yeobotClient.sendYeobotData("activity", goal);
 
-        return response;
+
+        return ResponseEntity.ok(response);
+        //return response;
 
     }
 //
@@ -206,12 +208,17 @@ public class TestMoyeoController {
 
     @PostMapping("/notification")
     public ResponseEntity<?> toNotification(@RequestBody PostInsertReq post) throws Exception {
-
-
+        log.info("notification 테스트 시작");
         asyncTestService.test(post);
-
+        log.info("notification 테스트 종료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @PostMapping("/notification1")
+    public ResponseEntity<?> toNotification1(@RequestBody PostInsertReq post) throws Exception {
+        log.info("notification 테스트 시작");
+        asyncTestService.test(post);
+        log.info("notification 테스트 종료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

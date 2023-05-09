@@ -1,70 +1,43 @@
 package com.moyeo.main.service;
 
-import static java.time.LocalDateTime.*;
-
-import com.moyeo.main.dto.AddPostReq;
-import com.moyeo.main.dto.BasePostDto;
-import com.moyeo.main.dto.GetPostRes;
-import com.moyeo.main.dto.MoyeoPostStatusDto;
-import com.moyeo.main.dto.PostMembers;
-import com.moyeo.main.dto.VoiceTextResult;
-import com.moyeo.main.dto.WordInfo;
-import com.moyeo.main.entity.MoyeoPost;
-import com.moyeo.main.entity.MoyeoPublic;
-import com.moyeo.main.entity.MoyeoTimeLine;
-import com.moyeo.main.entity.User;
-import com.moyeo.main.exception.BaseException;
-import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.conponent.AwsS3;
-import com.moyeo.main.conponent.ClovaSpeechClient;
-import com.moyeo.main.conponent.Http;
-import com.moyeo.main.conponent.MultiFileToFile;
-import com.moyeo.main.entity.Nation;
-import com.moyeo.main.entity.Photo;
-import com.moyeo.main.entity.Post;
-import com.moyeo.main.entity.TimeLine;
-import com.moyeo.main.repository.FavoriteRepository;
-import com.moyeo.main.repository.MoyeoPostRepository;
-import com.moyeo.main.repository.MoyeoPublicRepository;
-import com.moyeo.main.repository.MoyeoTimeLineRepository;
-import com.moyeo.main.repository.NationRepository;
-import com.moyeo.main.repository.PhotoRepository;
-import com.moyeo.main.repository.PostRepository;
-import com.moyeo.main.repository.TimeLineRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyeo.main.repository.UserRepository;
-
+import com.moyeo.main.conponent.AwsS3;
+import com.moyeo.main.conponent.ClovaSpeechClient;
+import com.moyeo.main.conponent.MultiFileToFile;
+import com.moyeo.main.dto.*;
+import com.moyeo.main.entity.*;
+import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Time;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
-    // @Value("${spring.flask.url}")
-    private String flaskServer;
+
+
     private final AwsS3 awsS3;
     private final PostRepository postRepository;
     private final MoyeoPostRepository moyeoPostRepository;
@@ -76,8 +49,8 @@ public class PostServiceImpl implements PostService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     // private final BadWordFilter badWordFilter;
     private final MultiFileToFile multiFileToFile;
-    private final Http http;
 
+    private final AsyncTestService asyncTestService;
 
     // 포스트 생성 및 저장
     @Override
@@ -108,6 +81,7 @@ public class PostServiceImpl implements PostService {
         // String voiceUrl = uploadAndGetVoiceFileUrl(voiceFile);
         // Nation nation = uploadAndGetNation(flagFile, addPostReq);
 
+
         //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
         checkVoiceFileValidity(voiceFile);
 
@@ -120,6 +94,12 @@ public class PostServiceImpl implements PostService {
 
         // timeline 객체 가져오기
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+
+        //푸시 알림을 위해 작업 하는 단계
+        User temp_user = userRepository.getByUserId(timeline.getUserId().getUserId());
+        PostInsertReq req = PostInsertReq.builder(addPostReq, temp_user).build();
+        asyncTestService.test(req);//해당 단계에서 비동기로 푸시 알람을 보낼 예정
+
 
         // imageURL, voiceURL db에 저장하기
         log.info("Starting savePost transaction");
@@ -145,7 +125,7 @@ public class PostServiceImpl implements PostService {
     }
 
     public void checkVoiceFileValidity(MultipartFile voiceFile) {
-        log.info("voiceFile : {}",voiceFile);
+        log.info("voiceFile : {}", voiceFile);
         //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
         String fileName = voiceFile.getOriginalFilename();
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -201,7 +181,7 @@ public class PostServiceImpl implements PostService {
         ClovaSpeechClient.NestRequestEntity requestEntity = new ClovaSpeechClient.NestRequestEntity();
         //        String result = clovaSpeechClient.url(voiceUrl, requestEntity);
 
-        String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile),requestEntity);
+        String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
         if (result.contains("\"result\":\"FAILED\"")) {
             new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
@@ -214,12 +194,12 @@ public class PostServiceImpl implements PostService {
         String text = rootNode.get("text").asText();
 
         // voiceFile -> text 변환 : 응답 결과 확인
-        log.info("Clova info :{}",result);
-        String voiceUrl="";
+        log.info("Clova info :{}", result);
+        String voiceUrl = "";
 
         voiceUrl = awsS3.upload(voiceFile, "Moyeo/Voice");
         Files.delete(target);//파일을 삭제하는 코드임
-        log.info("voiceUrl info :{}",voiceUrl);
+        log.info("voiceUrl info :{}", voiceUrl);
         // voiceFile -> text 변환 : 응답받은 json 파일에서 text 추출
         // voiceFile S3에 올리고 voiceURL 가져오기
 
@@ -227,9 +207,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post insertPostTest(Post savedPost, List<Photo> photoList,AddPostReq addPostReq) throws Exception {
-
-
+    public Post insertPostTest(Post savedPost, List<Photo> photoList, AddPostReq addPostReq) throws Exception {
 
 
         // timeline 객체 가져오기
@@ -263,8 +241,7 @@ public class PostServiceImpl implements PostService {
         log.info("savePost Transaction complete");
         return resavedPost;
     }
-    
-    
+
 
     // 포스트 삭제 및 해당 포스트의 삭제 사진
     @Override
@@ -295,28 +272,28 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        if(posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+        if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
 
         List<GetPostRes> postList = new ArrayList<>();
-        if(posts != null && posts.size() != 0) {
+        if (posts != null && posts.size() != 0) {
             postList = posts.stream()
-                .filter(post -> post.getTimelineId().getIsComplete() && post.getTimelineId().getIsTimelinePublic()) // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-                .map(post -> GetPostRes.builder(post, post.getFavoriteCount()).build())
-                .collect(Collectors.toList());
+                    .filter(post -> post.getTimelineId().getIsComplete() && post.getTimelineId().getIsTimelinePublic()) // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+                    .map(post -> GetPostRes.builder(post, post.getFavoriteCount()).build())
+                    .collect(Collectors.toList());
         }
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
-        if(moyeoPosts != null && moyeoPosts.size() != 0) {
+        if (moyeoPosts != null && moyeoPosts.size() != 0) {
             moyeoPostList = moyeoPosts.stream()
-                .filter(post -> {
-                    // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
-                    MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
-                    Boolean isAllPublic = status.getIsAllPublic() == 1L;
-                    Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
-                    return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
-                })
-                .map(post -> GetPostRes.builder(post).build())
-                .collect(Collectors.toList());
+                    .filter(post -> {
+                        // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
+                        MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
+                        Boolean isAllPublic = status.getIsAllPublic() == 1L;
+                        Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+                        return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
+                    })
+                    .map(post -> GetPostRes.builder(post).build())
+                    .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
@@ -332,12 +309,12 @@ public class PostServiceImpl implements PostService {
 
         List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        if(posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+        if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
 
         List<GetPostRes> postList = new ArrayList<>();
         for (Post post : posts) {
             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
-            if (post.getTimelineId().getIsComplete() == true  && post.getTimelineId().getUserId().getUserId() == userUid) {
+            if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getUserId().getUserId() == userUid) {
                 // Long totalFavorite = favoriteRepository.countByPostId(post);
                 Long totalFavorite = post.getFavoriteCount();
                 postList.add(GetPostRes.builder(post, totalFavorite).build());
@@ -345,17 +322,17 @@ public class PostServiceImpl implements PostService {
         }
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
-        if(moyeoPosts != null && moyeoPosts.size() != 0) {
+        if (moyeoPosts != null && moyeoPosts.size() != 0) {
             moyeoPostList = moyeoPosts.stream()
-                .filter(post -> {
-                    // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
-                    MoyeoPublic moyeoPublic = moyeoPublicRepository.findByUserIdAndMoyeoPostId(user, post);
-                    TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
-                    if(timeLine == null) return false;
-                    return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
-                })
-                .map(post -> GetPostRes.builder(post).build())
-                .collect(Collectors.toList());
+                    .filter(post -> {
+                        // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+                        MoyeoPublic moyeoPublic = moyeoPublicRepository.findByUserIdAndMoyeoPostId(user, post);
+                        TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
+                        if (timeLine == null) return false;
+                        return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
+                    })
+                    .map(post -> GetPostRes.builder(post).build())
+                    .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
@@ -368,21 +345,21 @@ public class PostServiceImpl implements PostService {
     public List<BasePostDto> addPostsWithMoyeoPosts(List<Post> posts, List<MoyeoPost> moyeoPosts) throws Exception {
         // List<Post> posts = postRepository.findAllPostIn(postIdList);
         List<BasePostDto> postList = new ArrayList<>();
-        if(posts != null && posts.size() != 0) {
+        if (posts != null && posts.size() != 0) {
             postList = posts.stream()
-                .map(post -> BasePostDto.builder(post, null).build())
-                .collect(Collectors.toList());
+                    .map(post -> BasePostDto.builder(post, null).build())
+                    .collect(Collectors.toList());
         }
 
         // List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllMoyeoPostIn(moyeoPostIdList);
         List<BasePostDto> moyeoPostList = new ArrayList<>();
-        if(moyeoPosts != null && moyeoPosts.size() != 0) {
+        if (moyeoPosts != null && moyeoPosts.size() != 0) {
             moyeoPostList = moyeoPosts.stream()
-                .map(post -> BasePostDto.builder(post
-                        , null
-                        , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
-                    .build())
-                .collect(Collectors.toList());
+                    .map(post -> BasePostDto.builder(post
+                                    , null
+                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                            .build())
+                    .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
