@@ -24,15 +24,14 @@ class TimelineListItem extends StatelessWidget {
           onTap: () {
             FocusScope.of(context).unfocus();
             appViewModel.changeTitle(timeline.title);
-            // 주석해제 필요 현재 테스트 상태
-            // Navigator.pushNamed(
-            //   context,
-            //   '/timeline/detail/${timeline.timelineId}',
-            // );
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(builder: (BuildContext context) => TimelineDetailPage(key:Key("1")) )
+              '/timeline/detail/${timeline.timelineId}',
             );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (BuildContext context) => TimelineDetailPage(key:Key("1")) )
+            // );
           },
           child: Card(
             shape: RoundedRectangleBorder(

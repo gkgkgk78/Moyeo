@@ -116,8 +116,8 @@ class MyHomePage extends StatelessWidget {
               builder: (ctx) => WillPopScope(
                 onWillPop: () async => false,
                 child: AlertDialog(
-                  title: const Text('다님 종료'),
-                  content: const Text('다님을  종료 하시겠습니까?'),
+                  title: const Text('한 번만 더 묻겠습니다.'),
+                  content: const Text('정말로 가실 건가요...?'),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -125,7 +125,7 @@ class MyHomePage extends StatelessWidget {
                         exit(0);
                       },
                       child: const Text(
-                        '종료',
+                        '응!',
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -133,7 +133,8 @@ class MyHomePage extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(ctx);
                       },
-                      child: const Text('취소'),
+                      child: const Text('아니;',
+                      style: TextStyle(color: Colors.blueAccent),),
                     ),
                   ],
                 ),
@@ -172,8 +173,14 @@ class MyHomePage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           floatingActionButton: Visibility(
-            visible: !keyboardIsOpen,
-            child: const CameraFloatingActionButton(),
+            visible: !keyboardIsOpen && !viewModel.modalVisible ,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40)
+
+              ),
+              child: const CameraFloatingActionButton() ,
+            ),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,

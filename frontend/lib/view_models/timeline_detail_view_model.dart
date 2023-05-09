@@ -79,10 +79,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
   }
 
   loadTimelineDetails(context) async {
-    // 주석 해제  현재 테스트 상태
-    // final timelineInfo = await TimelineRepository()
-    //     .getTimelineDetailsByTimelineId(context, timelineId);
-    final timelineInfo = test1[0];
+    final timelineInfo = await TimelineRepository()
+        .getTimelineDetailsByTimelineId(context, timelineId);
     _timelineDetails = timelineInfo.timelineDetails;
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;

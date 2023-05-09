@@ -1,34 +1,77 @@
 {
   "project_info": {
-    "project_number": "61261560237",
-    "project_id": "moyeo-22a63",
-    "storage_bucket": "moyeo-22a63.appspot.com"
+    "project_number": "115201145543",
+    "project_id": "moyeo-project",
+    "storage_bucket": "moyeo-project.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:61261560237:android:3af717b1524c3333384924",
+        "mobilesdk_app_id": "1:115201145543:android:664a3fc2ffdb5a55609ce2",
         "android_client_info": {
-          "package_name": "com.moyeo.moyeo"
+          "package_name": "com.danim.danim"
         }
       },
       "oauth_client": [
         {
-          "client_id": "61261560237-hsh70f1mq62j9nlgk4h2q89us5624b68.apps.googleusercontent.com",
+          "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-38nKUukvRH0DuiAXolv3vYb4xShcDEE"
+          "current_key": "AIzaSyA7r8MRYyILuHyk2sp3rK0J9mU9zyfGu8Y"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "61261560237-hsh70f1mq62j9nlgk4h2q89us5624b68.apps.googleusercontent.com",
+              "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "115201145543-sudkp0tdht98artr66q89lqfgfpdvpja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danim.danim"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115201145543:android:f231571ff038281b609ce2",
+        "android_client_info": {
+          "package_name": "com.moyeo.moyeo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7r8MRYyILuHyk2sp3rK0J9mU9zyfGu8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115201145543-q7n4qcs70a7ri1rjpou0a3ptrbnavie0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "115201145543-sudkp0tdht98artr66q89lqfgfpdvpja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danim.danim"
+              }
             }
           ]
         }

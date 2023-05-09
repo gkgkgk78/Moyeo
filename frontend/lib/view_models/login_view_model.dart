@@ -33,8 +33,7 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> loginButtonPressed(context, Function update) async {
-    logger.d(await KakaoSdk.origin);
+  Future<void> loginButtonPressed(context, Function update, String fcmToken) async {
     bool isInstalled = await isKakaoTalkInstalled();
     OAuthToken token = isInstalled
         ? await UserApi.instance.loginWithKakaoTalk()
@@ -42,7 +41,7 @@ class LoginViewModel extends ChangeNotifier {
     final accessToken = token.accessToken;
     final refreshToken = token.refreshToken;
     Token ourToken = await UserRepository().kakaoLogin(
-        Token(accessToken: accessToken, refreshToken: refreshToken));
+        Token(accessToken: accessToken, refreshToken: refreshToken, fcmToken: fcmToken));
 
     storage.write(key: 'accessToken', value: ourToken.accessToken);
     storage.write(key: 'refreshToken', value: ourToken.refreshToken);
