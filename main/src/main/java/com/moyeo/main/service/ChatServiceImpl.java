@@ -37,11 +37,9 @@ public class ChatServiceImpl implements ChatService {
             }
 
             //사용자의 질문 목록을 auto gpt에 날리기
-            
-            
-            
-            //받은 응답을 기반으로 푸시 알람 날리기
 
+
+            //받은 응답을 기반으로 푸시 알람 날리기
 
 
         } catch (Exception e) {
