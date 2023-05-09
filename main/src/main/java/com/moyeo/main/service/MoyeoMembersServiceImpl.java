@@ -74,7 +74,9 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
 
     public TimeLine checkJoinable(User user) {
         // 여행 중이어야 한다.
-        TimeLine timeLine = timeLineRepository.findByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
+        log.info("여행 중인지 체크 중...");
+        TimeLine timeLine = timeLineRepository.findFirstByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
+        log.info("다른 동행 중인지 체크 중...");
         // 다른 동행에 참여 중이면 안된다.
         Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdOrderByMoyeoMembersIdDesc(user);
         if (optionalMembers.isPresent()) {
