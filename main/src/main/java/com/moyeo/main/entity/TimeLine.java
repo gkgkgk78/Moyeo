@@ -45,5 +45,9 @@ public class TimeLine extends BaseTime {
 
     @ColumnDefault("0")
     private Long lastPost;
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
 }
 

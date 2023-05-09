@@ -45,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/auth/moyeo/post")
 @RestController
 @Slf4j
-@Tag(name = "MoyeoMembers", description = "모여 포스트 수정 및 삭제 기능")
+@Tag(name = "MoyeoPost", description = "모여 포스트 수정 및 삭제 기능")
 public class MoyeoPostController {
     private final MoyeoPostService moyeoPostService;
 

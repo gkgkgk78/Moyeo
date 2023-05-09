@@ -9,13 +9,11 @@ import com.moyeo.main.repository.MessageBoxRepository;
 import com.moyeo.main.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +22,8 @@ public class MessageBoxServiceImpl implements MessageBoxService{
 
     private final MessageBoxRepository messageBoxRepository;
     private final UserRepository userRepository;
+
+
 
     @Override
     public List<MyMessageBoxDTO> getMessagesByUser(Long userId) {
@@ -69,6 +69,21 @@ public class MessageBoxServiceImpl implements MessageBoxService{
     @Transactional
     public void RemoveMessage(Long messageId) {
         messageBoxRepository.deleteByMessageId(messageId);
+    }
+
+
+    @Override
+    public void insertMessage() {
+    /*
+    private User userId;
+    private String content;
+    private Boolean isChecked = false;
+    private LocalDateTime createTime;
+    * */
+
+
+
+
     }
 
 
