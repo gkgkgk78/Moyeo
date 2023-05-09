@@ -44,6 +44,8 @@ public class BatchConfig {
     private String CHUNK_NAME = "restaurantRecommendChunk";
     @Value("${flask}")
     private String autogpt;
+    @Value("${notification}")
+    private String noti;
     @Bean
     public Job job(){
         log.info("JOB 실행됨");
@@ -70,7 +72,7 @@ public class BatchConfig {
     public JpaItemWriter<FirebaseCM> itemWriter() {
         JpaItemWriter<FirebaseCM> writer = new JpaItemWriter<>();
 //        writer.setEntityManagerFactory(entityManagerFactory);
-        
+
         return writer;
     }
     @Bean
@@ -93,16 +95,22 @@ public class BatchConfig {
             map.put("data",goal);
             // create param
 
-            HttpEntity<String> entity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
+            HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, entity, String.class);
-            log.info("result:{}",response.getBody());
-
-            // Flask 서버에 데이터 전송
-//            yeobotClient.sendYeobotData("restaurant", goal);
+//            ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
+//            log.info("result:{}",response.getBody());
+            headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            mapper = new ObjectMapper();
+            map = new HashMap<>();
+            map.put("deviceToken",item.getDeviceToken());
+            map.put("message","안뇽!");
+            HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
+            ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
+            log.info("result :{}",res.getBody());
             return FirebaseCM.builder()
                     .deviceToken(item.getDeviceToken())
-                    .message(response.getBody())
+                    .message("안녕")
                     .build();
         };
     }
