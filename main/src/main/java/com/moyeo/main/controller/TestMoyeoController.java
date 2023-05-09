@@ -53,7 +53,6 @@ public class TestMoyeoController {
 //    private final FcmService fcmService;
 
     private final ChatService chatService;
-    private final MongoTemplate mongoTemplate;
 
     private final AsyncTestService asyncTestService;
 
@@ -168,17 +167,9 @@ public class TestMoyeoController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-        try {
-            Chat chat = new Chat();
-            chat.setMessage(result);
-            chat.setSender("YeoBot");
-            chat.setCreateTime(LocalDateTime.now());
-            mongoTemplate.insert(chat, user.getUserId().toString()); // user.getUserId()는 유저의 고유 pk
-            System.out.println("몽고db저장완료");
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
-        }
+
+        chatService.insertResponse(user, result);
+
         log.info("response insert 작업 완료");
 
         return new ResponseEntity<>(result, HttpStatus.OK);
