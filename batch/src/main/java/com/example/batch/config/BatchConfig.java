@@ -78,7 +78,7 @@ public class BatchConfig {
     public ItemProcessor<PushTable,FirebaseCM> itemProcessor() {
         return item -> {
             log.info("item : {}",item);
-            String goal = "Search for a good restaurant near " + "대한민국" + " " + "제주시" + " " + "애윌읍" +".";
+            String goal = "Search for a good restaurant near " + item.getAddress1() + " " + item.getAddress2() + " " + item.getAddress3()+" "+item.getAddress4() +".";
 
             RestTemplate restTemplate = new RestTemplateBuilder()
                     .errorHandler(new RestTemplateResponseErrorHandler())
@@ -101,7 +101,9 @@ public class BatchConfig {
             // Flask 서버에 데이터 전송
 //            yeobotClient.sendYeobotData("restaurant", goal);
             return FirebaseCM.builder()
-                    .message("안녕").build();
+                    .deviceToken(item.getDeviceToken())
+                    .message(response.getBody())
+                    .build();
         };
     }
 
