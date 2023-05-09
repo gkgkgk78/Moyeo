@@ -176,6 +176,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
             child: GestureDetector(
               onTap: () {
                 if (animationController.isCompleted) {
+                  appViewModel.deleteFCMToken();
                   Navigator.pop(context);
                   Navigator.push(
                     context,

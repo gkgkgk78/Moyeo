@@ -10,19 +10,15 @@ import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/timeline_detail_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../firebase_options.dart';
 import '../models/UserInfo.dart';
-import '../services/firebase_repository.dart';
 import '../services/timeline_repository.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_detail_page.dart';
-import '../views/chatbot_list_page.dart';
 import '../views/home_feed_page.dart';
 import '../views/modify_profile.dart';
 import '../views/my_feed_view.dart';
 import '../views/timeline_detail_page.dart';
 import 'chatbot_detail_view_model.dart';
-import 'chatbot_list_view_model.dart';
 import 'my_feed_view_model.dart';
 
 class AppViewModel with ChangeNotifier {
@@ -202,6 +198,10 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage rm) {
     });
+  }
+
+  void deleteFCMToken() {
+    FirebaseMessaging.instance.deleteToken();
   }
 
   bool _modalVisible = false;
