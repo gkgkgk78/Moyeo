@@ -15,7 +15,6 @@ import 'my_feed_view.dart';
 class UserSearchBar extends StatelessWidget {
   const UserSearchBar({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final tapUser = Provider.of<SelectedUsersProvider>(context, listen: true);

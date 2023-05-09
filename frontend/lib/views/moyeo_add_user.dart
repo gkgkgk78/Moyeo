@@ -6,10 +6,11 @@ import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/user_search_bar_view_model.dart';
 import 'package:moyeo/views/user_search_bar_view.dart';
+import 'package:moyeo/views/moyeo_timeline.dart';
 import 'package:provider/provider.dart';
 
-class MoyeoTimeline extends StatelessWidget{
-  const MoyeoTimeline({Key? key}) : super(key: key);
+class MoyeoAddUser extends StatelessWidget{
+  const MoyeoAddUser({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -75,6 +76,7 @@ class MoyeoTimeline extends StatelessWidget{
                           ),
                           selectedUser.length != 0
                             ? Container(
+                              padding: EdgeInsets.only(bottom: 30) ,
                               child: ElevatedButton(
                                 onPressed: (){
                                   selectedUsersProvider.addMoyeoUser(context, selectedUser);

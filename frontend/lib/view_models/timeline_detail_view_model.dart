@@ -8,6 +8,7 @@ import '../services/moyeo_repository.dart';
 
 import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
+import '../views/moyeo_timeline.dart';
 
 List<TimelineDetail> test2 = [
   TimelineDetail(
@@ -82,9 +83,9 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   loadTimelineDetails(context) async {
     // 주석 해제  현재 테스트 상태
-    // final timelineInfo = await TimelineRepository()
-    //     .getTimelineDetailsByTimelineId(context, timelineId);
-    final timelineInfo = test1[0];
+    final timelineInfo = await TimelineRepository()
+        .getTimelineDetailsByTimelineId(context, timelineId);
+    // final timelineInfo = test1[0];
     _timelineDetails = timelineInfo.timelineDetails;
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;
@@ -103,8 +104,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  changePostExpansion(
-      context, int timelineIndex, int postIndex, bool isExpand) async {
+  changePostExpansion(context, int timelineIndex, int postIndex,
+      bool isExpand) async {
     if (!isExpand) {
       await Future.delayed(Duration(milliseconds: expansionTileAnimationTile));
     } else {
@@ -126,7 +127,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   changeIsPublic(BuildContext context) async {
     _isPublic =
-        await TimelineRepository().changeTimelinePublic(context, timelineId);
+    await TimelineRepository().changeTimelinePublic(context, timelineId);
     notifyListeners();
   }
 
@@ -156,4 +157,13 @@ class TimelineDetailViewModel extends ChangeNotifier {
     Navigator.pop(context);
   }
 
+  startMoyeo(context) async {
+    await MoyeoRepository().startMoyeo(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MoyeoTimeline()
+        )
+    );
+  }
 }

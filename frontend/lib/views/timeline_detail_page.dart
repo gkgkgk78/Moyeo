@@ -297,12 +297,7 @@ class TimelineDetailPage extends StatelessWidget {
                                               ),
                                             InkWell(
                                               onTap: (){
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => MoyeoTimeline()
-                                                  )
-                                                );
+                                                viewModel.startMoyeo(context);
                                               },
                                               child: Container(
                                                 padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
