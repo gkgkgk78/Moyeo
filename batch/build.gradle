@@ -31,7 +31,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
