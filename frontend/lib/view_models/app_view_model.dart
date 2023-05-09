@@ -15,11 +15,13 @@ import '../models/UserInfo.dart';
 import '../services/firebase_repository.dart';
 import '../services/timeline_repository.dart';
 import '../utils/stack.dart';
+import '../views/chatbot_detail_page.dart';
 import '../views/chatbot_list_page.dart';
 import '../views/home_feed_page.dart';
 import '../views/modify_profile.dart';
 import '../views/my_feed_view.dart';
 import '../views/timeline_detail_page.dart';
+import 'chatbot_detail_view_model.dart';
 import 'chatbot_list_view_model.dart';
 import 'my_feed_view_model.dart';
 
@@ -74,7 +76,7 @@ class AppViewModel with ChangeNotifier {
           () {
         Navigator.pushNamed(
           myFeedNavigatorKey.currentContext!,
-          '/chatbot/list/',
+          '/chatbot',
         );
       },
     );
@@ -145,10 +147,10 @@ class AppViewModel with ChangeNotifier {
       );
     } else if (settings.name == '/modify/profile') {
       page = const ModifyProfile();
-    } else if (settings.name == '/chatbot/list/') {
+    } else if (settings.name == '/chatbot') {
       page = ChangeNotifierProvider(
-          create: (_) => ChatbotListViewModel(context),
-          child: ChatbotListPage(),
+          create: (_) => ChatbotViewModel(context, isTravel: _userInfo.timeLineId),
+          child: const ChatbotPage(),
       );
     } else {
       page = MultiProvider(
@@ -200,5 +202,17 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage rm) {
     });
+  }
+
+  bool _modalVisible = false;
+  bool get modalVisible => _modalVisible;
+
+  void chageModalVisible () {
+    if (_modalVisible == false) {
+      _modalVisible = true;
+    } else {
+      _modalVisible = false;
+    }
+    notifyListeners();
   }
 }

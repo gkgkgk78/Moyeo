@@ -173,13 +173,13 @@ class MyHomePage extends StatelessWidget {
           ),
           resizeToAvoidBottomInset: true,
           floatingActionButton: Visibility(
-            visible: !keyboardIsOpen,
+            visible: !keyboardIsOpen && !viewModel.modalVisible ,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40)
 
               ),
-              child: CameraFloatingActionButton() ,
+              child: const CameraFloatingActionButton() ,
             ),
           ),
           floatingActionButtonLocation:

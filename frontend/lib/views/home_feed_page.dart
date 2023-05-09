@@ -40,33 +40,6 @@ class HomeFeedPage extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      top: 300,
-                      left: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () {
-                          appViewModel.changeTitle("여봇과의 추억");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MultiProvider(
-                                providers: [
-                                  ChangeNotifierProvider<ChatbotViewModel>(
-                                    create: (_) => ChatbotViewModel(
-                                      context,
-                                      isTravel: appViewModel.userInfo.timeLineId,
-                                    ),
-                                  ),
-                                ],
-                                child: const ChatbotPage(),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(child: Text("test"),),
-                      ),
-                    ),
-                    Positioned(
                       top: 0,
                       left: 0,
                       right: 0,
