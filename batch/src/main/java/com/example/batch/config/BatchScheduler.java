@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -24,13 +26,14 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchConfig batchConfig;
 //    @Scheduled(cron = "50 * * * * *")
-    @Scheduled(cron = "* 30 * * * *",zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 11,17 * * *",zone = "Asia/Seoul")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         long nano = System.currentTimeMillis();
+        Date now = new Date(System.currentTimeMillis());
         log.info("Schedule start");
         JobParameters params = new JobParametersBuilder()
-//                .addString("start", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"00:00:00")
-//                .addString("end", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"11:00:00")
+                .addString("start", UUID.randomUUID()+"")
+                .addString("end", UUID.randomUUID()+"")
                 .toJobParameters();
         log.info("jobparameter :{}",params);
         log.info("Job:{}",batchConfig.job());
@@ -38,13 +41,4 @@ public class BatchScheduler {
                 params);
     }
 
-    @Scheduled(cron = "0 0 17 * * ?",zone = "Asia/Seoul")
-    public void runJobAtFive() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        long nano = System.currentTimeMillis();
-        JobParameters params = new JobParametersBuilder()
-                .addString("startDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"13:00:00")
-                .addString("endDate", new SimpleDateFormat("yyyy-MM-dd ").format(nano)+"17:00:00")
-                .toJobParameters();
-        jobLauncher.run(batchConfig.job(), params);
-    }
 }

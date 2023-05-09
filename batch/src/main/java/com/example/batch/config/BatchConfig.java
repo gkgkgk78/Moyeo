@@ -12,6 +12,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.skip.SkipException;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.database.JpaItemWriter;
@@ -23,6 +24,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
@@ -62,16 +64,19 @@ public class BatchConfig {
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
                 .<PushTable, FirebaseCM>chunk(3)
-                .reader(this.itemReader(/* JOBPARAMETER 없어도 됨 null,null*/))
+                .reader(this.itemReader())
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
+                .faultTolerant()
+                .skip(SkipException.class)
+                .skipLimit(100)
                 .build();
     }
     @Bean
     @StepScope
     public JpaItemWriter<FirebaseCM> itemWriter() {
         JpaItemWriter<FirebaseCM> writer = new JpaItemWriter<>();
-//        writer.setEntityManagerFactory(entityManagerFactory);
+        writer.setEntityManagerFactory(entityManagerFactory);
 
         return writer;
     }
@@ -83,7 +88,7 @@ public class BatchConfig {
             String goal = "Search for a good restaurant near " + item.getAddress1() + " " + item.getAddress2() + " " + item.getAddress3()+" "+item.getAddress4() +".";
 
             RestTemplate restTemplate = new RestTemplateBuilder()
-                    .errorHandler(new RestTemplateResponseErrorHandler())
+//                    .errorHandler(new RestTemplateResponseErrorHandler())
                     .build();
 
             // create headers
@@ -96,29 +101,39 @@ public class BatchConfig {
             // create param
 
             HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
+            try {
+                ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 
-//            ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 //            log.info("result:{}",response.getBody());
-            headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            mapper = new ObjectMapper();
-            map = new HashMap<>();
-            map.put("deviceToken",item.getDeviceToken());
-            map.put("message","안뇽!");
-            HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
-            ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
-            log.info("result :{}",res.getBody());
-            return FirebaseCM.builder()
-                    .deviceToken(item.getDeviceToken())
-                    .message("안녕")
-                    .build();
+
+                headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                mapper = new ObjectMapper();
+                map = new HashMap<>();
+                map.put("deviceToken",item.getDeviceToken());
+                map.put("message",response.getBody());
+                HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
+                ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
+                log.info("result :{}",res.getBody());
+                return FirebaseCM.builder()
+                        .id(item.getDeviceToken())
+                        .message("푸시전송완료")
+                        .build();
+            }catch (RestClientException e){
+                throw new SkipException("Skip 합니다.") {
+                    @Override
+                    public String getMessage() {
+                        return super.getMessage();
+                    }
+                };
+            }
         };
     }
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<PushTable> itemReader(/* @Value("#{jobParameters['start']}") String start,@Value("#{jobParameters['end']}") String end*/) {
-//        log.info("start : {}",start);
+    public JpaPagingItemReader<PushTable> itemReader() {
+        log.info("start : {}","시작합니다");
 //        log.info("end : {}",end);
 //        Map<String,Object> parameter = new HashMap<>();
 //        parameter.put("start",start);

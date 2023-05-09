@@ -26,7 +26,7 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-batch-core'
 	implementation 'org.springframework.batch:spring-batch-core'
 	implementation 'org.springframework.batch:spring-batch-infrastructure:4.3.7'
-//	implementation 'org.springframework.boot:spring-boot-starter-quartz:'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz:'
 //	runtimeOnly 'com.mysql:mysql-connector-j'
 	compileOnly 'org.projectlombok:lombok'
 	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.0.31'

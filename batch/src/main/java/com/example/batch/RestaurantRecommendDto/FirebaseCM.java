@@ -10,11 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity
 @Data
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class FirebaseCM {
-    String deviceToken;
-    String message;
+    @Id
+    private String id;
+    private String message;
 }
