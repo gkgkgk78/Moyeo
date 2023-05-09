@@ -18,6 +18,7 @@ import java.util.Optional;
 //mapper와 동일한 기능을 제공한다고 생각을 하자
 @Repository
 public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
+    Optional<TimeLine> findFirstByUserId(User user);
     Optional<TimeLine> findFirstByUserIdAndIsComplete(User user, Boolean isComplete);
 
     @Override
