@@ -59,14 +59,14 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
             moyeoTimeLine.setMembersCount(0L);
             moyeoTimeLine.setIsComplete(true);
             moyeoTimeLine.setFinishTime(LocalDateTime.now());
-            moyeoTimeLine.setTitle("여행중");
-            moyeoTimeLineRepository.save(moyeoTimeLine);
         } else {
             // moyeo_time_line에서 count - 1
             moyeoTimeLine.updateMembersCount(-1);
-            moyeoTimeLine.setTitle("여행중");
-            moyeoTimeLineRepository.save(moyeoTimeLine);
         }
+        // moyeoTimeLine.setTitle("여행중"); // (X)
+        moyeoTimeLineRepository.save(moyeoTimeLine);
+
+
 
         log.info("동행 나가기 끝...");
         return true;
@@ -105,8 +105,10 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
 
         log.info("[registMoyeoMembers] 2-2. 모여_타임라인 카운트 + 1 / timeline 제목 '동행중'");
         moyeoTimeLine.updateMembersCount(1);
-        moyeoTimeLine.setTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
+        // moyeoTimeLine.setTitle("동행중"); // (X) // 현재 여행중인 타임라인 제목 "동행중"으로 수정
         moyeoTimeLineRepository.save(moyeoTimeLine);
+
+        // timeLine.updateTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
 
         log.info("동행 참여 끝...");
         return RegistMoyeoRes.builder()
