@@ -39,7 +39,8 @@ public class YeobotClient {
             throw new BaseException(ErrorMessage.FLASK_SERVER_ERROR);
         }
         String responseBody = null;
-        String result = null;
+        String result=null;
+
         try {
             responseBody = response.body().string();
             Gson gson = new Gson();
@@ -50,6 +51,8 @@ public class YeobotClient {
         }
         return result;
     }
+
+
 
 
 

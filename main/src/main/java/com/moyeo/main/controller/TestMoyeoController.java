@@ -2,15 +2,14 @@ package com.moyeo.main.controller;
 
 
 import com.moyeo.main.conponent.YeobotClient;
-import com.moyeo.main.dto.*;
+import com.moyeo.main.dto.AddPostReq;
+import com.moyeo.main.dto.ChatReq;
+import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
+import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
-import com.moyeo.main.entity.User;
-import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -128,10 +124,10 @@ public class TestMoyeoController {
 
         String goal = "Search for a good restaurant near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) + " " + addressList.get(3) + ".";
         //return ResponseEntity.ok(goal);
-        //ResponseEntity<String> response = ResponseEntity.ok(goal);
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
         // Flask 서버에 데이터 전송
-        String response = yeobotClient.sendYeobotData("dining", goal);
-        return ResponseEntity.ok(response);
+        yeobotClient.sendYeobotData("dining", goal);
+        return response;
 
     }
 
@@ -150,18 +146,18 @@ public class TestMoyeoController {
         // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
-//        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
 
         // Flask 서버에 데이터 전송
-        String response = yeobotClient.sendYeobotData("place", goal);
+        String result = yeobotClient.sendYeobotData("place", goal);
 
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
     //여행중이 아닌 유저 액티비티 추천
     @PostMapping("/yet/activity")
-    public ResponseEntity<String> recommendActivities(@Value("http://localhost:4000") String flaskUrl) throws IOException {
+    public ResponseEntity<String> recommendActivities() throws IOException {
         // request에서 필요한 정보를 추출해서 변수에 저장
         String destination = "경상북도 경주";
         String season = "가을";
@@ -172,13 +168,12 @@ public class TestMoyeoController {
         // 프롬프트 반환
         //return ResponseEntity.ok(goal);
 
+        ResponseEntity<String> response = ResponseEntity.ok(goal);
+
         // Flask 서버에 데이터 전송
-        String response = yeobotClient.sendYeobotData("activity", goal);
+        String result = yeobotClient.sendYeobotData("activity", goal);
 
-
-        return ResponseEntity.ok(response);
-        //return response;
-
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 //
 //    @GetMapping("/firebase/message")//테스트 해보기
@@ -192,13 +187,14 @@ public class TestMoyeoController {
     public ResponseEntity<?> insertChat(@RequestBody ChatReq chat) throws Exception {
 
         //insert 작업의 첫번째 파라미터는 인증된 사용자의 고유한 닉네임 값이 들어갈 것임
-        Long l1=1l;
+        Long l1 = 1l;
 
         log.info("chat insert작업 시작");
         chatService.insert(l1.toString(), chat);
         log.info("chat insert작업 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/chat/{name}")
     public ResponseEntity<?> selectChat(@PathVariable String name) throws Exception {
 
