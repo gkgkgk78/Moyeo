@@ -46,4 +46,26 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
     @Query(nativeQuery = true, value = "select * from moyeo_post where moyeo_post_id in :postIdList")
     List<MoyeoPost> findAllMoyeoPostIn(List<Long> postIdList);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
+        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
+        + "AND p.moyeo_post_id IN (\n"
+        + "  SELECT moyeo_post_id\n"
+        + "  FROM moyeo_public\n"
+        + "  GROUP BY moyeo_post_id\n"
+        + "  HAVING SUM(is_deleted) = 0 AND MIN(is_public) = 1\n"
+        + ")\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstVisiblePost(List<Long> moyeoTimelineIdList);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
+        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
+        + "AND p.moyeo_post_id IN (\n"
+        + "  SELECT moyeo_post_id\n"
+        + "  FROM moyeo_public\n"
+        + "  GROUP BY moyeo_post_id\n"
+        + "  HAVING SUM(is_deleted) = 0 AND MIN(is_public) = 1\n"
+        + ")\n"
+        + "ORDER BY p.moyeo_post_id DESC\n"
+        + "LIMIT 1")
+    MoyeoPost findLastVisiblePost(List<Long> moyeoTimelineIdList);
 }
