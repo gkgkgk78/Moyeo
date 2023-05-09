@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mongo_dart/mongo_dart.dart';
+import 'package:logger/logger.dart';
+import 'package:moyeo/models/ChatMessage.dart';
+import 'package:moyeo/models/ChatbotRequest.dart';
 
 import '../utils/auth_dio.dart';
+
+var logger = Logger();
 
 class ChatbotRepository {
   ChatbotRepository._internal();
@@ -12,39 +17,67 @@ class ChatbotRepository {
 
   factory ChatbotRepository() => _instance;
 
-  // 전체 채팅 리스트를 가져온다.
-  Future<dynamic> ChatListFromServer(BuildContext context) async {
+
+  // 채팅 로그를 가져온다.
+  Future<List<ChatMessage>> ChatDetailFromServer(BuildContext context) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post("api/auth/chatlist");
+      Response response = await dio.get("api/auth/chat");
+      return List.from(response.data.map((json) => ChatMessage.fromJson(json)));
+    } catch (error) {
+      throw Exception('Fail to upload to Server: ${error}');
+    }
+  }
+
+  Future<void> ChatToServer(BuildContext context, ChatMessage message) async {
+    try {
+      final dio = await authDio(context);
+      await dio.post("api/auth/chat", data: message.toJson());
+      return;
+    } catch (error) {
+      throw Exception('Fail to upload to Server: ${error}');
+    }
+  }
+
+  // 요청을 서버에 업로드
+  Future<dynamic> RecommendActivity(BuildContext context) async {
+    try {
+      final dio = await authDio(context);
+      Response response = await dio.post("api/auth/yeobot/ing/activity");
       return response;
     } on DioError catch (error) {
       throw Exception('Fail to upload to Server: ${error.message}');
     }
   }
 
-  // 채팅 로그를 가져온다.
-  Future<dynamic> ChatDetailFromServer(BuildContext context, int chatId) async {
-    String? mongoUrl = dotenv.env['mongoUrl'];
+  Future<dynamic> RecommendRestaurant(BuildContext context) async {
     try {
-      Db db = Db('$mongoUrl');
-      await db.open();
-      DbCollection chatDetail = db.collection("$chatId");
-      final chatLog = await chatDetail.find().toList();
-      return chatLog;
+      final dio = await authDio(context);
+      Response response = await dio.post("api/auth/yeobot/ing/dining");
+      return response;
     } on DioError catch (error) {
       throw Exception('Fail to upload to Server: ${error.message}');
     }
   }
 
-  // 서버에 업로드
-  Future<dynamic> ChatToServer(BuildContext context, FormData formData) async {
+  Future<dynamic> RecommendPlace(BuildContext context, ChatbotRequest chatbotRequest) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post("api/auth/autogpt", data: formData);
+      Response response = await dio.post("api/auth/yeobot/yet/place", data: chatbotRequest.toPlaceJson());
+      return response;
+    } on DioError catch (error) {
+      throw Exception('Fail to upload to Server: ${error.message}');
+    }
+  }
+
+  Future<dynamic> RecommendActivityNotTraveling(BuildContext context, ChatbotRequest chatbotRequest) async {
+    try {
+      final dio = await authDio(context);
+      Response response = await dio.post("api/auth/yeobot/yet/activity", data: chatbotRequest.toActivityJson());
       return response;
     } on DioError catch (error) {
       throw Exception('Fail to upload to Server: ${error.message}');
     }
   }
 }
+

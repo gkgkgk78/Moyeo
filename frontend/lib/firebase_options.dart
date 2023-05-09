@@ -47,30 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBQTQJkYgeLQy2oc5WK51fgCROXSVIwtfg',
-    appId: '1:61261560237:web:286ffce455ce0846384924',
-    messagingSenderId: '61261560237',
-    projectId: 'moyeo-22a63',
-    authDomain: 'moyeo-22a63.firebaseapp.com',
-    storageBucket: 'moyeo-22a63.appspot.com',
-    measurementId: 'G-7QE82HP2TZ',
+    apiKey: 'AIzaSyBV1Fuk8kWBJOkWwcTAbYiE4YuUEUFnSxk',
+    appId: '1:115201145543:web:1bf8ae074eca5a68609ce2',
+    messagingSenderId: '115201145543',
+    projectId: 'moyeo-project',
+    authDomain: 'moyeo-project.firebaseapp.com',
+    storageBucket: 'moyeo-project.appspot.com',
+    measurementId: 'G-VRC3JDQ7GD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB-38nKUukvRH0DuiAXolv3vYb4xShcDEE',
-    appId: '1:61261560237:android:3af717b1524c3333384924',
-    messagingSenderId: '61261560237',
-    projectId: 'moyeo-22a63',
-    storageBucket: 'moyeo-22a63.appspot.com',
+    apiKey: 'AIzaSyA7r8MRYyILuHyk2sp3rK0J9mU9zyfGu8Y',
+    appId: '1:115201145543:android:f231571ff038281b609ce2',
+    messagingSenderId: '115201145543',
+    projectId: 'moyeo-project',
+    storageBucket: 'moyeo-project.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBkaLlXL-AREnjbXQ53o8OV39UTM_--0ko',
-    appId: '1:61261560237:ios:5f5fe3131065666e384924',
-    messagingSenderId: '61261560237',
-    projectId: 'moyeo-22a63',
-    storageBucket: 'moyeo-22a63.appspot.com',
-    iosClientId: '61261560237-pp5nfg37cbpn43avot2fbfv7d0tcbd47.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC64W34PmLLeyAd6gbHylzI0PtFQQRedAQ',
+    appId: '1:115201145543:ios:88d363b2b4946b0b609ce2',
+    messagingSenderId: '115201145543',
+    projectId: 'moyeo-project',
+    storageBucket: 'moyeo-project.appspot.com',
+    iosClientId: '115201145543-sudkp0tdht98artr66q89lqfgfpdvpja.apps.googleusercontent.com',
     iosBundleId: 'com.danim.danim',
   );
 }
