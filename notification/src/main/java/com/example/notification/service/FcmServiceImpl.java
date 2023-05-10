@@ -59,6 +59,7 @@ public class FcmServiceImpl implements FcmService {
     public void send(String token, String content) throws Exception {
 
 
+        log.info("들어온 토큰 확인"+token);
         Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
         Message message = Message.builder()
                 .setAndroidConfig(AndroidConfig.builder()
