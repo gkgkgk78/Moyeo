@@ -2,10 +2,14 @@ package com.moyeo.main.service;
 
 import com.moyeo.main.config.security.JwtTokenProvider;
 import com.moyeo.main.conponent.AwsS3;
+import com.moyeo.main.dto.GetPostRes;
+import com.moyeo.main.dto.MoyeoPostStatusDto;
 import com.moyeo.main.dto.UserLoginReq;
 import com.moyeo.main.dto.TokenRes;
 import com.moyeo.main.dto.UserInfoRes;
+import com.moyeo.main.entity.MoyeoMembers;
 import com.moyeo.main.entity.User;
+import com.moyeo.main.repository.MoyeoMembersRepository;
 import com.moyeo.main.repository.TimeLineRepository;
 import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.utils.HttpUtil;
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +45,24 @@ public class UserServiceImpl implements UserService {
     public final PasswordEncoder passwordEncoder;
     private final AwsS3 awsS3;
     // private final TimeLineRedisRepository repo;
+    private final MoyeoMembersRepository moyeoMembersRepository;
 
     @Override
-    public List<UserInfoRes> searchUserByNickname(String search) {
+    public List<UserInfoRes> searchUserByNickname(String search, Boolean isMoyeo) {
+        if(isMoyeo) {
+            List<UserInfoRes> resultList = userRepository.searchUserByNickname(search).stream()
+                .filter(user -> {
+                    // 이미 동행 중인 유저들은 검색 조회 대상에서 제외된다.
+                    return moyeoMembersRepository.findFirstByUserIdAndFinishTime(user.getUserId(), null).isEmpty();
+                })
+                .map(user -> entityToResponseDTO(user))
+                .collect(Collectors.toList());
+
+            return resultList;
+        }
+
         List<User> resultList = userRepository.searchUserByNickname(search);
+
         List<UserInfoRes> returnList = new ArrayList<>();
 
         for (User user : resultList) {
