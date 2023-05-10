@@ -68,4 +68,17 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
         + "ORDER BY p.moyeo_post_id DESC\n"
         + "LIMIT 1")
     MoyeoPost findLastVisiblePost(List<Long> moyeoTimelineIdList);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
+        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
+        + "AND p.moyeo_post_id IN :moyeoPostIdList\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstVisiblePostByUserId(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
+        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
+        + "AND p.moyeo_post_id IN :moyeoPostIdList\n"
+        + "ORDER BY p.moyeo_post_id DESC\n"
+        + "LIMIT 1")
+    MoyeoPost findLastVisiblePostByUserId(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
 }
