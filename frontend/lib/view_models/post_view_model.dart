@@ -18,4 +18,10 @@ class PostViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // post 삭제
+  deletePost(context) async {
+    await PostRepository().deletePost(context, post.postId);
+    notifyListeners()
+  }
+
 }

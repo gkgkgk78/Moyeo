@@ -22,4 +22,14 @@ class PostRepository {
       throw Exception('ChangeFavoritePost Error $e');
     }
   }
+
+  Future<void> deletePost(BuildContext context, int postId) async {
+    try{
+      final dio = await authDio(context);
+      Response response = await dio.delete('api/auth/post/$postId');
+      return response.data;
+    } catch(e) {
+      throw Exception('DeletePost Error $e');
+    }
+  }
 }
