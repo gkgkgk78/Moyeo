@@ -104,17 +104,20 @@ public class BatchConfig {
             try {
                 ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 
-//            log.info("result:{}",response.getBody());
+                log.info("AUTO-GPT result:{}",response.getBody());
+                String m = response.getBody();
+                Map<String, String> responseMap = mapper.readValue(m, Map.class);
+                log.info("AUTO-GPT message:{}",responseMap);
 
                 headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 mapper = new ObjectMapper();
                 map = new HashMap<>();
                 map.put("deviceToken",item.getDeviceToken());
-                map.put("message",response.getBody());
+                map.put("message",responseMap.get("result"));
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
                 ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
-                log.info("result :{}",res.getBody());
+                log.info("result :{}",responseMap.get("result"));
                 return FirebaseCM.builder()
                         .id(item.getDeviceToken())
                         .message("푸시전송완료")
