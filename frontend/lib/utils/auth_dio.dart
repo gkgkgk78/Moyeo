@@ -29,6 +29,8 @@ Future<Dio> authDio(BuildContext context) async {
       onRequest: (options, handler) async {
         final accessToken = await storage.read(key: 'accessToken');
         options.headers['Authorization'] = 'Bearer $accessToken';
+        print('Access Token: ${accessToken}');
+
         return handler.next(options);
       },
       onError: (error, handler) async {
