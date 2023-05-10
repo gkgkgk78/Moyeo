@@ -21,6 +21,7 @@ public enum ErrorMessage {
     NOT_EXIST_TIMELINE("존재하지 않는 타임라인입니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_MOYEO_TIMELINE("존재하지 않는 모여 타임라인입니다.", HttpStatus.BAD_REQUEST),
     NOT_TRAVELING("여행 중이 아닙니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_TRAVELING("이미 여행 중입니다.", HttpStatus.BAD_REQUEST),
     ALREADY_MOYEO("이미 동행 중입니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_MEMBERS("동행 멤버가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_MOYEO_PUBLIC("존재하지 않는 모여 퍼블릭입니다.", HttpStatus.BAD_REQUEST),
@@ -51,7 +52,8 @@ public enum ErrorMessage {
     NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST),
 
-    NO_MESSAGE_FOR_USER("해당 유저가 수신한 메시지가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+    NO_MESSAGE_FOR_USER("해당 유저가 수신한 메시지가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    MONGO_DB_ERROR("mongoDB 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST);
 
 
     private final String errMsg;

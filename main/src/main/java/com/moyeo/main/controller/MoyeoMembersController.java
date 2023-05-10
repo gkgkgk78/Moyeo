@@ -25,7 +25,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @Tag(name = "MoyeoMembers", description = "모여 멤버 참여, 나가기 기능")
 public class MoyeoMembersController {
+
+
 	private final MoyeoMembersService moyeoMembersService;
+
 	@PostMapping
 	@Operation(summary = "동행 참여")
 	public ResponseEntity<?> registMoyeoMembers(@RequestBody MoyeoMembersReq moyeoTimelineId) throws Exception {
@@ -49,4 +52,5 @@ public class MoyeoMembersController {
 
 		return ResponseEntity.ok(moyeoMembersService.updateMoyeoMembers(user, moyeoTimelineId.getMoyeoTimelineId()));
 	}
+
 }
