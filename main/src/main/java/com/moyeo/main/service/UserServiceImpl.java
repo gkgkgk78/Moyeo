@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserInfoRes> searchUserByNickname(String search, Boolean isMoyeo) {
         if(isMoyeo) {
+            log.info("동행 중인 유저들 제외하고 검색 중...");
             List<UserInfoRes> resultList = userRepository.searchUserByNickname(search).stream()
                 .filter(user -> {
                     // 이미 동행 중인 유저들은 검색 조회 대상에서 제외된다.
@@ -58,6 +59,7 @@ public class UserServiceImpl implements UserService {
                 .map(user -> entityToResponseDTO(user))
                 .collect(Collectors.toList());
 
+            log.info("동행 중인 유저들 제외하고 검색 완료...");
             return resultList;
         }
 
