@@ -15,7 +15,6 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -101,7 +99,7 @@ public class TestMoyeoController {
     }
 
 
-    @PostMapping("/ing/dining")
+    @PostMapping("/ing/restaurant")
     public ResponseEntity<String> restaurantRecommendations() throws Exception {
         //로그인 정보에서 uid 받아오기
 //        Long userId = null;
@@ -131,9 +129,10 @@ public class TestMoyeoController {
 
         String goal = "Search for a good restaurant near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) + " " + addressList.get(3) + ".";
         //return ResponseEntity.ok(goal);
-        ResponseEntity<String> response = ResponseEntity.ok(goal);
+
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("dining", goal);
+        String an=yeobotClient.sendYeobotData("restaurant", goal);
+        ResponseEntity<String> response = ResponseEntity.ok(an);
         return response;
 
     }
@@ -246,11 +245,6 @@ public class TestMoyeoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/notification1")
-    public ResponseEntity<?> toNotification1(@RequestBody PostInsertReq post) throws Exception {
-        log.info("notification 테스트 시작");
-        asyncTestService.test(post);
-        log.info("notification 테스트 종료");
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
+
 }
