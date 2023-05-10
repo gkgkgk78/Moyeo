@@ -44,10 +44,9 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
         String goal1[] = {res, act};
         String goal2[] = {"restaurant", "activity"};
 
-
         try {
 
-            for (int i=0;i<2;i++){
+            for (int i = 0; i < 2; i++) {
                 String a1 = yeobotClient.sendYeobotData(goal2[i], goal1[i]);
                 log.info("autogpt에게 응답 받음 " + a1.toString());
                 //System.out.println(a1.toString());
