@@ -6,13 +6,17 @@ import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.ChatReq;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.PostInsertReq;
+import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -53,6 +57,7 @@ public class TestMoyeoController {
     private final ChatService chatService;
 
     private final AsyncTestService asyncTestService;
+    private final UserRepository userRepository;
 
 
     @PostMapping("/login")
@@ -245,6 +250,16 @@ public class TestMoyeoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/timeline/{uid}/{userId}")
+    @Operation(summary = "타임라인 상세 조회")
+    public ResponseEntity<?> seleteOneTimeLine(@PathVariable Long uid, @PathVariable Long userId) throws Exception {
+        User user = userRepository.getByUserId(userId);
 
+        TimelinePostOuter timeline = timeLineService.searchOneTimeline(uid, user);
+        if (timeline==null)
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+
+        return new ResponseEntity<>(timeline, HttpStatus.OK);
+    }
 
 }

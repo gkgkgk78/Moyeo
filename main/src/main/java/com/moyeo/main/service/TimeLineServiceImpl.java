@@ -154,7 +154,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         timelinePostOuter.setTitle(timeLine.getTitle());
         // 추가. nowMoyeo
         Boolean nowMoyeo = false;
-        Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(timelineUser.getUserId(), null);
+        Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(timelineUser, null);
         if(moyeoMembers.isPresent()){
             nowMoyeo = true; // 현재 동행 중
         }
@@ -244,7 +244,7 @@ public class TimeLineServiceImpl implements TimeLineService {
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
         // 동행 중이라면 동행을 끝내고 타임라인을 종료할 수 있다.
-        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user.getUserId(), null);
+        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null);
         if (optionalMembers.isPresent()) {
             // 이미 동행중
             throw new BaseException(ErrorMessage.ALREADY_MOYEO);
