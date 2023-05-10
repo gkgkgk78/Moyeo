@@ -101,7 +101,7 @@ public class TestMoyeoController {
     }
 
 
-    @PostMapping("/ing/dining")
+    @PostMapping("/ing/restaurant")
     public ResponseEntity<String> restaurantRecommendations() throws Exception {
         //로그인 정보에서 uid 받아오기
 //        Long userId = null;
