@@ -326,7 +326,7 @@ public class PostServiceImpl implements PostService {
             moyeoPostList = moyeoPosts.stream()
                     .filter(post -> {
                         // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
-                        MoyeoPublic moyeoPublic = moyeoPublicRepository.findByUserIdAndMoyeoPostId(user, post);
+                        MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, post);
                         TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
                         if (timeLine == null) return false;
                         return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
