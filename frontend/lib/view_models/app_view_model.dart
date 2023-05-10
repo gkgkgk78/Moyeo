@@ -207,6 +207,9 @@ class AppViewModel with ChangeNotifier {
   }
 
   Future<void> initializeFirebase() async {
+    String? vapidKey = dotenv.env["firebaseValidKey"];
+    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: vapidKey))!;
+    logger.d(_fcmToken);
     FirebaseMessaging.instance.onTokenRefresh.listen(
       (newToken) async {
         _fcmToken = newToken;

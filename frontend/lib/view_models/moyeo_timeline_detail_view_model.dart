@@ -115,7 +115,7 @@ class MoyeoTimelineDetailViewModel extends ChangeNotifier {
   }
   // PUT요청
   outMoyeoTimeline(context) async {
-    await MoyeoRepository().outMoyeo(context, moyeoTimelineId);
+    // await MoyeoRepository().outMoyeo(context, moyeoTimelineId);
     Navigator.pop(context);
   }
 
