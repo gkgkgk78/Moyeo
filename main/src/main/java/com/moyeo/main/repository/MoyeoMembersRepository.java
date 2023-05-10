@@ -18,6 +18,6 @@ public interface MoyeoMembersRepository extends JpaRepository<MoyeoMembers, Long
 	List<MoyeoMembers> findAllByMoyeoTimelineId(Long moyeoTimelineId);
 
 	// 동행에 참여 중인지 여부. (userID와 finishTime이 null인 것을 찾았다면 동행 참여 중)
-	Optional<MoyeoMembers> findFirstByUserIdAndFinishTime(Long userId, LocalDateTime finishTime);
+	Optional<MoyeoMembers> findFirstByUserIdAndFinishTime(User user, LocalDateTime finishTime);
 
 }

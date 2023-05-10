@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
             List<UserInfoRes> resultList = userRepository.searchUserByNickname(search).stream()
                 .filter(user -> {
                     // 이미 동행 중인 유저들은 검색 조회 대상에서 제외된다.
-                    return moyeoMembersRepository.findFirstByUserIdAndFinishTime(user.getUserId(), null).isEmpty();
+                    return moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null).isEmpty();
                 })
                 .map(user -> entityToResponseDTO(user))
                 .collect(Collectors.toList());
