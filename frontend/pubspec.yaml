@@ -115,7 +115,8 @@ dependencies:
   # switch
   flutter_switch: ^0.3.2
 
-
+  #avatar group
+  flutter_face_pile: ^0.0.3
 
 dev_dependencies:
   flutter_test:

@@ -2,6 +2,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/view_models/post_view_model.dart';
+import 'package:moyeo/views/moyeo_add_user.dart';
 import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -9,6 +11,12 @@ import 'package:flutter_switch/flutter_switch.dart';
 
 import '../view_models/app_view_model.dart';
 import '../view_models/timeline_detail_view_model.dart';
+import '../view_models/search_bar_view_model.dart';
+import '../view_models/search_result_view_model.dart';
+import '../view_models/user_search_bar_view_model.dart';
+import '../views/user_search_bar_view.dart';
+import '../views/moyeo_add_user.dart';
+
 import 'package:moyeo/utils/black.dart';
 
 var logger = Logger();
@@ -138,7 +146,8 @@ class TimelineDetailPage extends StatelessWidget {
                                     trailing: Padding(
                                       padding: const EdgeInsets.only(right: 10.0),
                                       child: Text(
-                                        '${viewModel.timelineDetails[timelineIndex].startDate} ~ ${viewModel.timelineDetails[timelineIndex].finishDate}',
+                                        '${viewModel.timelineDetails[timelineIndex].startDate} '
+                                            '~ ${viewModel.timelineDetails[timelineIndex].finishDate}',
                                         style:
                                             const TextStyle(color: Colors.grey, fontSize: 13),
                                       ),
@@ -205,60 +214,6 @@ class TimelineDetailPage extends StatelessWidget {
                                             margin: EdgeInsets.only(right: 35, top:5),
                                             child:Row(
                                             children:[
-                                              // 이전 버튼
-                                              // ElevatedButton(
-                                              // onPressed: () {
-                                              //   showDialog(
-                                              //     barrierDismissible: false,
-                                              //     context: context,
-                                              //     builder: (context) => AlertDialog(
-                                              //       title: const Text('여행 제목을 입력해 주세요'),
-                                              //       content: TextField(
-                                              //         onChanged: (String value) {
-                                              //           viewModel.changeTitle(value);
-                                              //         },
-                                              //         decoration: const InputDecoration(
-                                              //             labelText: '제목',
-                                              //             hintText: '필수 입니다.'),
-                                              //       ),
-                                              //       actions: [
-                                              //         TextButton(
-                                              //           onPressed: () {
-                                              //             if (viewModel.title != null) {
-                                              //               appViewModel.userInfo.timeLineId =
-                                              //                   -1;
-                                              //               appViewModel
-                                              //                   .changeTitleToFormer();
-                                              //               appViewModel.changeTitle(
-                                              //                 viewModel.title!,
-                                              //               );
-                                              //               Navigator.pop(context);
-                                              //               viewModel.endTimeline(
-                                              //                 appViewModel.myFeedNavigatorKey
-                                              //                     .currentContext,
-                                              //               );
-                                              //             }
-                                              //           },
-                                              //           child: const Text(
-                                              //             '여행 종료',
-                                              //           ),
-                                              //         ),
-                                            //           TextButton(
-                                            //             onPressed: () {
-                                            //               viewModel.resetTitle();
-                                            //               Navigator.pop(context);
-                                            //             },
-                                            //             child: const Text('취소'),
-                                            //           ),
-                                            //         ],
-                                            //       ),
-                                            //     );
-                                            //   },
-                                            //   child: const Text(
-                                            //     '여행 종료',
-                                            //     style: TextStyle(color: Colors.white),
-                                            //   ),
-                                            // ),
                                               InkWell(
                                                 onTap: (){
                                                   showDialog(
@@ -342,7 +297,7 @@ class TimelineDetailPage extends StatelessWidget {
                                               ),
                                             InkWell(
                                               onTap: (){
-
+                                                viewModel.startMoyeo(context);
                                               },
                                               child: Container(
                                                 padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),

@@ -6,7 +6,8 @@ class Post {
   final String text;
   final List<String> photoList;
   // 동행 추가
-  final List<Map<String,int>> members;
+  final List<Map<String,dynamic>> members;
+  bool isMoyeo;
   bool isFavorite;
   int favoriteCount;
   bool isExpand;
@@ -22,6 +23,7 @@ class Post {
     required this.members,
     required this.isFavorite,
     required this.favoriteCount,
+    required this.isMoyeo,
     this.isExpand = false,
   });
 
@@ -37,7 +39,8 @@ class Post {
           (json['address4'] ?? ''),
       text: json['text'],
       photoList: List.from(json['photoList']),
-      members: List<Map<String,int>>.from(json['members']),
+      members: List<Map<String,dynamic>>.from(json['members']),
+      isMoyeo: json['isMoyeo'],
       isFavorite: json['isFavorite'],
       favoriteCount: json['favoriteCount'],
     );

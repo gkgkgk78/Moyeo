@@ -70,9 +70,9 @@ class HomeFeedViewModel extends ChangeNotifier {
 
   Future<void> getMainTimelineList(BuildContext context, int pageKey) async {
     try {
-      // final newItems =
-      //     await TimelineRepository().getMainTimelineByPageNum(context, pageKey);
-      final newItems = test;
+      final newItems =
+          await TimelineRepository().getMainTimelineByPageNum(context, pageKey);
+      // final newItems = test;
       final isLastPage = newItems.length < 15;
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
@@ -86,9 +86,9 @@ class HomeFeedViewModel extends ChangeNotifier {
   }
 
   Future<void> getUserTimelineList(BuildContext context, int pageKey) async {
-    // final newItems = await TimelineRepository()
-    //     .getOtherTimelineByPageNum(context, pageKey, searchedUserUid);
-    final newItems = test;
+    final newItems = await TimelineRepository()
+        .getOtherTimelineByPageNum(context, pageKey, searchedUserUid);
+    // final newItems = test;
     final isLastPage = newItems.length < 15;
     if (isLastPage) {
       pagingController.appendLastPage(newItems);
@@ -99,9 +99,9 @@ class HomeFeedViewModel extends ChangeNotifier {
   }
 
   Future<void> getMyTimelineList(BuildContext context, int pageKey) async {
-    // final newItems =
-    //     await TimelineRepository().getMyTimelineByPageNum(context, pageKey);
-    final newItems = test;
+    final newItems =
+        await TimelineRepository().getMyTimelineByPageNum(context, pageKey);
+    // final newItems = test;
     final isLastPage = newItems.length < 15;
     if (isLastPage) {
       pagingController.appendLastPage(newItems);

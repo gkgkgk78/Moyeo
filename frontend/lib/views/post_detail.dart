@@ -91,7 +91,13 @@ class PostDetail extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(viewModel.post.favoriteCount.toString()),
+                        Text(
+                            viewModel.post.favoriteCount.toString()
+                        ),
+                        // 삭제 버튼 구현 할 자리
+                        Container(
+                            child: Icon(Icons.delete),
+                        )
                       ],
                     ),
                   );

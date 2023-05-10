@@ -17,4 +17,11 @@ class PostViewModel extends ChangeNotifier {
     post.favoriteCount = res['totalFavorite'];
     notifyListeners();
   }
+
+  // post 삭제
+  deletePost(context) async {
+    await PostRepository().deletePost(context, post.postId);
+    notifyListeners()
+  }
+
 }
