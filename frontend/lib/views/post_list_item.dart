@@ -58,38 +58,9 @@ class PostListItem extends StatelessWidget {
               color: Colors.grey,
               thickness: 1,
             ),
-            endChild:
-              viewModel.timelineDetails[timelineIndex]
-                  .postList[postIndex]
-                  .isMoyeo == false
-              ? Container(
-                padding: const EdgeInsets.all(8),
-              )
-              // 동행자 이미지
-              : Container(
-                child: FacePile(
-                  faces: List.generate(
-                      viewModel.timelineDetails[timelineIndex]
-                          .postList[postIndex]
-                          .members
-                          .length,
-                          (index) {
-                        var people = viewModel
-                            .timelineDetails[timelineIndex]
-                            .postList[postIndex]
-                            .members[index];
-                        return FaceHolder(
-                            avatar:NetworkImage(people.profileImageUrl),
-                            name: people.nickname,
-                            id: people.userId
-                          );
-                        },
-                      ),
-                  faceSize: 50,
-                  facePercentOverlap: .4,
-                  borderColor: Colors.grey,
-                )
-              ),
+            endChild: Container(
+              padding: const EdgeInsets.all(8),
+            ),
           ),
         ),
         children: [
