@@ -14,5 +14,6 @@ public class UserInfoRes {
     private String nickname;
     private String profileImageUrl;
     private Long timeLineId;
+    private Long moyeoTimelineId;
     private Integer timelineNum;
 }
