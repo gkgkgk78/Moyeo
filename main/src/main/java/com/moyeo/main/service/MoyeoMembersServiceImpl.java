@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.moyeo.main.dto.MoyeoMembersReq;
 import com.moyeo.main.dto.RegistMoyeoRes;
 import com.moyeo.main.entity.MoyeoMembers;
 import com.moyeo.main.entity.MoyeoTimeLine;
@@ -19,6 +20,7 @@ import com.moyeo.main.repository.MoyeoMembersRepository;
 import com.moyeo.main.repository.MoyeoTimeLineRepository;
 import com.moyeo.main.repository.TimeLineAndMoyeoRepository;
 import com.moyeo.main.repository.TimeLineRepository;
+import com.moyeo.main.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,23 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final TimeLineAndMoyeoRepository timeLineAndMoyeoRepository;
     private final MoyeoTimeLineRepository moyeoTimeLineRepository;
+    private final UserRepository userRepository;
+    private final FcmService fcmService;
+
+    @Override
+    public Long inviteMoyeoMembers(MoyeoMembersReq moyeoMembersReq) throws BaseException {
+        User inviteeUser = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+        Long moyeoTimelineId = moyeoMembersReq.getMoyeoTimelineId();
+        MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
+
+        // TODO 메시지 함?
+
+        log.info("동행 초대 푸시 알림 보내기...");
+        fcmService.send(inviteeUser, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
+
+        log.info("동행 초대 끝...");
+        return moyeoTimelineId;
+    }
 
     @Override
     @Transactional
@@ -40,6 +59,9 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         TimeLine timeLine = checkJoinable(user);
 
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        if(moyeoTimeLine.getIsComplete()) {
+            throw new BaseException(ErrorMessage.ALREADY_DONE_MOYEO_TIMELINE);
+        }
 
         return joinMember(timeLine, moyeoTimeLine, user);
     }
@@ -76,15 +98,10 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         // 여행 중이어야 한다.
         log.info("여행 중인지 체크 중...");
         TimeLine timeLine = timeLineRepository.findFirstByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
-        log.info("다른 동행 중인지 체크 중...");
-        // 다른 동행에 참여 중이면 안된다.
-        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdOrderByMoyeoMembersIdDesc(user);
-        if (optionalMembers.isPresent()) {
-            MoyeoMembers moyeoMembers = optionalMembers.get();
-            if (moyeoMembers.getFinishTime() == null) {
-                // 이미 동행중
-                throw new BaseException(ErrorMessage.ALREADY_MOYEO);
-            }
+        log.info("이미 동행 중인지 체크 중...");
+        // 다른 동행에 참여 중이면 안된다. TODO 테스트
+        if(moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null).isPresent()) {
+            throw new BaseException(ErrorMessage.ALREADY_MOYEO);
         }
 
         return timeLine;
