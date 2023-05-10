@@ -13,7 +13,7 @@ import com.moyeo.main.entity.User;
 @Repository
 public interface MoyeoMembersRepository extends JpaRepository<MoyeoMembers, Long> {
 	Optional<MoyeoMembers> findFirstByUserIdAndMoyeoTimelineIdAndFinishTimeOrderByMoyeoMembersIdDesc(User user, Long moyeoTimelineId, LocalDateTime finishTime);
-	Optional<MoyeoMembers> findFirstByUserIdOrderByMoyeoMembersIdDesc(User user);
+	// Optional<MoyeoMembers> findFirstByUserIdOrderByMoyeoMembersIdDesc(User user);
 	Optional<List<MoyeoMembers>> findAllByMoyeoTimelineIdAndFinishTime(Long moyeoTimelineId, LocalDateTime finishTime);
 	List<MoyeoMembers> findAllByMoyeoTimelineId(Long moyeoTimelineId);
 

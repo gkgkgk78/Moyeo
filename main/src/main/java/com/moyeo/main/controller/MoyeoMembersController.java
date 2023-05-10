@@ -31,7 +31,14 @@ public class MoyeoMembersController {
 	@Operation(summary = "동행 초대, 푸시 알림 보내기")
 	public ResponseEntity<?> inviteMoyeoMembers(@RequestBody MoyeoMembersReq moyeoMembersReq) throws Exception {
 		log.info("동행 초대 시작...");
-		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(moyeoMembersReq));
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = null;
+		if (auth != null && auth.getPrincipal() != null) {
+			user = (User) auth.getPrincipal();
+		}
+
+		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(user, moyeoMembersReq));
 	}
 
 	@PostMapping

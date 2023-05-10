@@ -38,15 +38,16 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final FcmService fcmService;
 
     @Override
-    public Long inviteMoyeoMembers(MoyeoMembersReq moyeoMembersReq) throws BaseException {
-        User inviteeUser = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+    public Long inviteMoyeoMembers(User user, MoyeoMembersReq moyeoMembersReq) throws BaseException {
+        User invitee = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+
         Long moyeoTimelineId = moyeoMembersReq.getMoyeoTimelineId();
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
 
         // TODO 메시지 함?
 
         log.info("동행 초대 푸시 알림 보내기...");
-        fcmService.send(inviteeUser, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
+        fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
 
         log.info("동행 초대 끝...");
         return moyeoTimelineId;
@@ -55,8 +56,8 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     @Override
     @Transactional
     public RegistMoyeoRes registMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
-        // 1. 참여 자격 체크하기: 여행 중이어야 하고, 다른 동행에 참여 중이면 안된다. (여행 중인 타임라인 리턴)
-        TimeLine timeLine = checkJoinable(user);
+        // 1. 참여 자격 체크하기: 여행 중이어야 하고, 다른 동행에 참여 중이면 안된다.
+        TimeLine timeLine = checkJoinable(user); // (여행 중인 타임라인 리턴)
 
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if(moyeoTimeLine.getIsComplete()) {
@@ -122,14 +123,14 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
             .moyeoTimelineId(moyeoTimelineId)
             .build());
 
-        log.info("[registMoyeoMembers] 2-2. 모여_타임라인 카운트 + 1 / timeline 제목 '동행중'");
+        log.info("[registMoyeoMembers] 2-2. 모여_타임라인 멤버s_카운트 + 1");
         moyeoTimeLine.updateMembersCount(1);
         // moyeoTimeLine.setTitle("동행중"); // (X) // 현재 여행중인 타임라인 제목 "동행중"으로 수정
         moyeoTimeLineRepository.save(moyeoTimeLine);
 
         // timeLine.updateTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
 
-        log.info("동행 참여 끝...");
+        log.info("동행 타임라인_생성/참여 끝...");
         return RegistMoyeoRes.builder()
             .timelineId(timeLine.getTimelineId())
             .moyeoTimelineId(moyeoTimelineId)

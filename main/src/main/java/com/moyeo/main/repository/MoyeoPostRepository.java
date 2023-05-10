@@ -44,37 +44,74 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
         + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
-        + "AND p.moyeo_post_id IN (\n"
-        + "  SELECT moyeo_post_id\n"
-        + "  FROM moyeo_public\n"
-        + "  GROUP BY moyeo_post_id\n"
-        + "  HAVING SUM(is_deleted) = 0 AND MIN(is_public) = 1\n"
-        + ")\n"
-        + "LIMIT 1")
-    MoyeoPost findFirstVisiblePost(List<Long> moyeoTimelineIdList);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
-        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
-        + "AND p.moyeo_post_id IN (\n"
-        + "  SELECT moyeo_post_id\n"
-        + "  FROM moyeo_public\n"
-        + "  GROUP BY moyeo_post_id\n"
-        + "  HAVING SUM(is_deleted) = 0 AND MIN(is_public) = 1\n"
-        + ")\n"
-        + "ORDER BY p.moyeo_post_id DESC\n"
-        + "LIMIT 1")
-    MoyeoPost findLastVisiblePost(List<Long> moyeoTimelineIdList);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
-        + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
         + "AND p.moyeo_post_id IN :moyeoPostIdList\n"
         + "LIMIT 1")
-    MoyeoPost findFirstVisiblePostByUserId(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
+    MoyeoPost findFirstMoyeoPostByCondition(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
 
     @Query(nativeQuery = true, value = "SELECT * FROM moyeo_post p\n"
         + "WHERE p.moyeo_timeline_id IN :moyeoTimelineIdList\n"
         + "AND p.moyeo_post_id IN :moyeoPostIdList\n"
         + "ORDER BY p.moyeo_post_id DESC\n"
         + "LIMIT 1")
-    MoyeoPost findLastVisiblePostByUserId(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
+    MoyeoPost findLastMoyeoPostByCondition(List<Long> moyeoTimelineIdList, List<Long> moyeoPostIdList);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false AND mpb.is_public = true\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstPublicMoyeoPost(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstMoyeoPost(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "ORDER BY moyeo_post_id DESC\n"
+        + "LIMIT 1")
+    MoyeoPost findLastMoyeoPost(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false AND mpb.is_public = true\n"
+        + "GROUP BY mp.moyeo_post_id")
+    List<MoyeoPost> findAllPublicMoyeoPost(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
+        + "GROUP BY mp.moyeo_post_id")
+    List<MoyeoPost> findAllMoyeoPost(Long timelineId, Long userId);
+
 }
