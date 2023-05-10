@@ -1,7 +1,9 @@
 package com.moyeo.main.service;
 
+import com.moyeo.main.dto.BasePostDto;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.MyPostDtoRes;
+import com.moyeo.main.dto.PostMembers;
 import com.moyeo.main.dto.TimelinePostInner;
 import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.entity.*;
@@ -29,29 +31,25 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 
 public class TimeLineServiceImpl implements TimeLineService {
-
     private final TimeLineRepository timeLineRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final PhotoRepository photoRepository;
-
     private final FavoriteRepository favoriteRepository;
-    private final NationRepository nationRepository;
-
     private final UtilService utilService;
     // private final TimeLineRedisRepository repo;
     private final PostService postService;
-
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final TimeLineAndMoyeoRepository timeLineAndMoyeoRepository;
     private final MoyeoPostRepository moyeoPostRepository;
     private final MoyeoPublicRepository moyeoPublicRepository;
+    private final MoyeoFavoriteRepository moyeoFavoriteRepository;
 
 
     @Override
@@ -79,116 +77,111 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     public TimelinePostOuter searchOneTimeline(Long uid, User user) throws BaseException {
 
-        //해당 되는 타임라인을 얻어 왔고
-        TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        // 해당되는 타임라인을 얻어 왔고
+        TimeLine timeLine = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
-        //이제 그 다음으로 해당 되는 타임라인을 포스트를 얻어 올거임
-        List<Post> post = postRepository.findAllByTimelineIdOrderByCreateTimeAsc(now);
-        //이제 찾아 왔으므로 넘겨 줘야함
+        // 이제 그 다음으로 해당 되는 타임라인을 포스트를 얻어 올거임
+        // List<Post> postList = postRepository.findAllByTimelineId(timeLine);
+
+        User timelineUser = timeLine.getUserId();
+        Boolean isMine = timelineUser.getUserId().equals(user.getUserId());
+
+        // <일반 포스트 리스트 가져오기>
+        List<Post> posts = postRepository.findAllByTimelineId(timeLine);
+        // if(posts == null || posts.size() == 0) return addPostToResponse(timeLine, null, isMine);
+        List<BasePostDto> postList = new ArrayList<>();
+        if(posts != null && posts.size() != 0) {
+            log.info("일반 포스트 가져오기...");
+            postList = posts.stream()
+                .map(post -> {
+                    Boolean isFavorite = false;
+                    if(favoriteRepository.findFirstByPostIdAndUserId(post, user) != null) {
+                        isFavorite = true;
+                    }
+                    return BasePostDto.builder(post, isFavorite).build();
+                })
+                .collect(Collectors.toList());
+        }
 
 
-        //딕셔너리 형태로 해서 있으면 넣고 없으면 제외를 하도록 하자
-        //타임 라인 하나를 넘겨 주는데 어떻게 넘겨 줄지 문제가 되네
-        TimelinePostOuter timelineouter = new TimelinePostOuter();
-        timelineouter.setIsComplete(now.getIsComplete());
-        timelineouter.setIsPublic(now.getIsTimelinePublic());
+        // 모여 타임라인 id 리스트
+        List<Long> moyeoTimelineIdList = timeLineAndMoyeoRepository.findAllMoyeoTimelineIdByTimlineId(timeLine.getTimelineId()).orElse(null);
+        if(moyeoTimelineIdList == null) {
+            return addPostToResponse(timeLine, postList, isMine);
+        }
 
-        List<MyPostDtoRes> postlist = new ArrayList<>();
-
-
-        TimelinePostInner temptimeline = new TimelinePostInner();
-
-        Map<String, String> temp = new HashMap<String, String>();//그전에 국가 이름이 존재 하지 않는지 파악 하기 위해
-        List<String> tempnow = new ArrayList<>();//여행한 국가의 모든 국가 리스트를 순서대로 겹치지 않게 파악하기 위해 해주는 작업
-        List<String> photolist = new ArrayList<>();
-        Long favorite_count = 0L;
-        Favorite favorite_temp = null;
-        Boolean favorite = false;
-        Boolean isMine = false;
-        Long nowUserUid = user.getUserId();
-        int check = 0;
-        Post last = null;
-        for (Post p : post) {
-            last = p;
-            favorite_count = 0L;
-            String NationName = p.getNationId().getName();
-            isMine = false;
-            // favorite_count = favoriteRepository.countByPostId(p);
-            favorite_count = p.getFavoriteCount();
-            favorite_temp = favoriteRepository.findFirstByPostIdAndUserId(p, user);
-
-            if (favorite_temp == null)
-                favorite = false;
-            else favorite = true;
-
-            TimeLine timelinetemp = p.getTimelineId();
-
-            if (nowUserUid.equals(timelinetemp.getUserId().getUserId()))
-                isMine = true;
-
-            if (!temp.containsKey(NationName)) {//해당 부분은 여행 국가가 새로 나타난 형태를 의미를 함
-                temp = new HashMap<String, String>();
-                photolist = new ArrayList<>();
-                temptimeline.setFinishDate(utilService.invertLocalDate(p.getCreateTime()));
-                if (postlist.size() > 0) {
-                    temptimeline.setPostList(postlist);
-                    //그전에 했던 국가 , 국기, List<post>를 넣어주는 작업 진행할 부분
-                    timelineouter.getTimeline().add(temptimeline);
+        // <모여 포스트 리스트도 가져오기!>
+        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllByMoyeoTimelineIdIn(moyeoTimelineIdList);
+        if(moyeoPosts == null || moyeoPosts.size() == 0) {
+            return addPostToResponse(timeLine, postList, isMine);
+        }
+        log.info("모여 포스트 리스트 가져오기...");
+        List<BasePostDto> moyeoPostList = moyeoPosts.stream()
+            .filter(post -> {
+                MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(timelineUser, post);
+                if(moyeoPublic == null) return false;
+                if(isMine) { // 내 타임라인을 조회하는 거라면 삭제된 포스트는 제외하고 가져와야 한다.
+                    return !moyeoPublic.getIsDeleted();
+                }
+                return !moyeoPublic.getIsDeleted() && moyeoPublic.getIsPublic(); // 타인의 타임라인을 조회하는 거라면 해당 타임라인 유저가 공개한 것만 가져와야 한다.
+            })
+            .map(post -> {
+                Boolean isFavorite = false;
+                if(moyeoFavoriteRepository.findFirstByMoyeoPostIdAndUserId(post, user) != null) {
+                    isFavorite = true;
                 }
 
-                for (Photo p1 : p.getPhotoList()) {
-                    photolist.add(p1.getPhotoUrl());
-                }
+                return BasePostDto.builder(post
+                        , isFavorite
+                        , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                    .build();
+            })
+            .collect(Collectors.toList());
 
-                //이제 새로운 타임라인 생성을 하고 국가, 국기, post를 넣어주는 작업이다
-                postlist = new ArrayList<>();
-                temptimeline = new TimelinePostInner();
-                temptimeline.setStartDate(utilService.invertLocalDate(p.getCreateTime()));
-                // temptimeline.setFlag(p.getNationUrl());
+        // 합쳐서 createTime으로 정렬
+        postList.addAll(moyeoPostList);
+        Collections.sort(postList, Comparator.comparing(BasePostDto::getCreateTime));
 
-                Nation nation = p.getNationId();
-                temptimeline.setFlag(nation.getNationUrl());
 
-                temptimeline.setNation(NationName);
-                //temptimeline.setIsMine(isMine);
-                tempnow.add(NationName);
-                temp.put(NationName, "1");
+        return addPostToResponse(timeLine, postList, isMine);
+    }
 
-                postlist.add(MyPostDtoRes.builder(p, photolist, favorite_count, favorite).build());
+    public TimelinePostOuter addPostToResponse(TimeLine timeLine, List<BasePostDto> postList, Boolean isMine) {
+        // TimelinePostOuter
+        TimelinePostOuter timelinePostOuter = new TimelinePostOuter();
+        timelinePostOuter.setIsComplete(timeLine.getIsComplete());
+        timelinePostOuter.setIsPublic(timeLine.getIsTimelinePublic());
+        timelinePostOuter.setIsMine(isMine);
+        if(postList == null || postList.size() == 0) {
+            return timelinePostOuter;
+        }
+        timelinePostOuter.setTitle(timeLine.getTitle());
 
-            } else {
-                photolist = new ArrayList<>();
-                for (Photo p1 : p.getPhotoList()) {
-                    photolist.add(p1.getPhotoUrl());
-                }
+        // TimelinePostInner
+        TimelinePostInner timelinePostInner = new TimelinePostInner();
+        String tempNationName = null; // 그 전에 국가 이름이 존재하지 않는지 파악하기 위해
 
-                //나온 국가가 그전에 있던거에 이어져서 가는 형태로 파악을 하면됨
-                postlist.add(MyPostDtoRes.builder(p, photolist, favorite_count, favorite).build());
+        for(BasePostDto post: postList) {
+            String NationName = post.getAddress1();
+
+            if (tempNationName == null || !tempNationName.equals(NationName)) { // 해당 부분은 여행 국가가 새로 나타난 형태를 의미를 함
+                if(tempNationName != null) timelinePostOuter.getTimeline().add(timelinePostInner);
+
+                tempNationName = NationName;
+
+                timelinePostInner = new TimelinePostInner();
+                timelinePostInner.setFlag(post.getNationId().getNationUrl());
+                timelinePostInner.setNation(tempNationName);
+                if(post.getCreateTime() != null) timelinePostInner.setStartDate(utilService.invertLocalDate(post.getCreateTime()));
+                timelinePostInner.setPostList(new ArrayList<>());
             }
-        }
+            timelinePostInner.setFinishDate(utilService.invertLocalDate(post.getCreateTime()));
 
-        if (last != null) {
-            temptimeline.setStartDate(utilService.invertLocalDate(now.getCreateTime()));
-            temptimeline.setFinishDate(utilService.invertLocalDate(last.getCreateTime()));
+            timelinePostInner.getPostList().add(MyPostDtoRes.builder(post).build());
         }
-        else {
-            temptimeline.setStartDate(utilService.invertLocalDate(now.getCreateTime()));
-        }
+        timelinePostOuter.getTimeline().add(timelinePostInner); // 마지막 timelinePostInner도 넣어주기
 
-        //가장 마지막에 남은 것들 처리해 주는 과정
-        temptimeline.setPostList(postlist);
-        timelineouter.getTimeline().add(temptimeline);
-
-        timelineouter.setTitle(now.getTitle());
-        if (post.size() == 0) {
-            timelineouter.setTimeline(null);
-            if (now.getUserId().getUserId().equals(user.getUserId()))
-                isMine = true;
-        }
-        timelineouter.setIsMine(isMine);
-        // timelineouter.setNationList(tempnow);//중복 되지 않는 타임라인의 모든 국가 리스트 를 설정해 주는 작업이다.
-        return timelineouter;
-
+        return timelinePostOuter;
     }
 
     @Override
@@ -290,6 +283,111 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     }
 
+    @Override
+    public List<MainTimelinePhotoDtoRes> getTimelineList(Long userId, Boolean isMine, Pageable pageable) {
+        log.info("타임라인 목록 조회 서비스 시작...");
+
+        Page<TimeLine> timeline = null;
+        User user = null;
+
+        if(userId == null) {
+            // 메인 페이지에서 타임라인 목록 조회 -> 최신순
+            timeline = timeLineRepository.findAllByIsCompleteAndIsTimelinePublic(true, true, pageable);
+        } else {
+            user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+
+            if(isMine){
+                // 마이 페이지에서 내 타임라인 목록 조회
+                timeline = timeLineRepository.findAllByUserIdOrderByCreateTimeDesc(user, pageable);
+            } else {
+                // 다른 유저의 타임라인 목록 조회
+                timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublic(user, true, pageable);
+            }
+        }
+
+        //이제 얻어낸 타임라인 리스트에 해당 되는 포스트 정보를 불러오도록 한다.
+        List<MainTimelinePhotoDtoRes> list = new ArrayList<>();//넘겨줄 timeline dto생성
+
+        if (timeline.getContent().size() == 0) {
+            return list;
+            //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING);
+        }
+
+        // if (pageable.getPageNumber() != 0 && timeline.getContent().size() == 0) {
+        //     //throw new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING);
+        //     return list;
+        // } else if (pageable.getPageNumber() == 0 && timeline.getContent().size() == 0) {
+        //     return list;
+        // }
+
+        for (TimeLine time : timeline) {
+            Post startpost = postRepository.findTopByTimelineIdOrderByCreateTimeAsc(time);
+            Post lastpost = postRepository.findTopByTimelineIdOrderByCreateTimeDesc(time);
+
+            // moyeo post 가져오기
+            // (1) timeline_and_moyeo 에서 timelineId로 moyeo_timeline_id 리스트 가져오기
+            List<Long> moyeoTimelineIdList = timeLineAndMoyeoRepository.findAllMoyeoTimelineIdByTimlineId(time.getTimelineId()).orElse(null);
+            MoyeoPost startMoyeoPost = null;
+            MoyeoPost lastMoyeoPost = null;
+            if(userId == null) {
+                // 메인 페이지에서 타임라인 목록 조회 -> 최신순
+                // (2-1) moyeo_post에서 moyeoTimelineIdList로 첫번째 moyeo post, 마지막 moyeo post 가져오기
+                // (2-2) moyeo_post 조건: 모두가 공개로 설정 && 삭제되지 않은
+                startMoyeoPost = moyeoPostRepository.findFirstVisiblePost(moyeoTimelineIdList);
+               lastMoyeoPost = moyeoPostRepository.findLastVisiblePost(moyeoTimelineIdList);
+            } else {
+                List<Long> moyeoPostIdList = new ArrayList<>();
+                if(isMine){
+                    // 마이 페이지에서 내 타임라인 목록 조회
+                    moyeoPostIdList = moyeoPublicRepository.getMyMoyeoPostIdList(userId, false).orElse(null);
+                } else {
+                    // 다른 유저의 타임라인 목록 조회
+                    moyeoPostIdList = moyeoPublicRepository.getMoyeoPostIdList(userId, false, true).orElse(null);
+                }
+                startMoyeoPost = moyeoPostRepository.findFirstVisiblePostByUserId(moyeoTimelineIdList, moyeoPostIdList);
+                lastMoyeoPost = moyeoPostRepository.findLastVisiblePostByUserId(moyeoTimelineIdList, moyeoPostIdList);
+            }
+
+
+            String thumbnailUrl = "";
+            String startPlace = "";
+            String lastPlace = "";
+
+            if(startpost != null && (startMoyeoPost == null || startMoyeoPost != null && startpost.getCreateTime().isBefore(startMoyeoPost.getCreateTime()))) {
+                // 일반 포스트가 start!
+                List<Photo> photoList = startpost.getPhotoList();
+                if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
+                startPlace = startpost.getAddress2();
+            } else if(startMoyeoPost != null && (startpost == null || startpost != null && startMoyeoPost.getCreateTime().isBefore(startpost.getCreateTime()))) {
+                // 모여 포스트가 start!
+                List<MoyeoPhoto> photoList = startMoyeoPost.getMoyeoPhotoList();
+                if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
+                startPlace = startMoyeoPost.getAddress2();
+            }
+
+            if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
+                // 일반 포스트가 last!
+                lastPlace = lastpost.getAddress2();
+            } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
+                // 모여 포스트가 last!
+                lastPlace = lastMoyeoPost.getAddress2();
+            }
+
+            if(userId == null) {
+                // 메인 페이지에서 타임라인 목록 조회 -> 최신순
+                user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+            }
+
+            // responseDto 리스트에 추가
+            list.add(MainTimelinePhotoDtoRes.builder(time, user, thumbnailUrl, startPlace, lastPlace).build());
+
+        }
+
+        log.info("타임라인 목록 조회 서비스 종료...");
+
+        return list;
+    }
+
     //타임라인 중에서 완료가 된 여행과 공개가 된 여행을 페이징 처리르 하여 보여준다 => 메인 피드 화면에서 타임라인과 썸네일 같이 넘어감
     @Override
     public List<MainTimelinePhotoDtoRes> searchTimelineOrderBylatestPaging(Pageable pageable) throws BaseException {
@@ -356,7 +454,6 @@ public class TimeLineServiceImpl implements TimeLineService {
             if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
                 // 일반 포스트가 last!
                 lastPlace = lastpost.getAddress2();
-                // TODO
             } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
                 // 모여 포스트가 last!
                 lastPlace = lastMoyeoPost.getAddress2();
@@ -419,7 +516,6 @@ public class TimeLineServiceImpl implements TimeLineService {
             if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
                 // 일반 포스트가 last!
                 lastPlace = lastpost.getAddress2();
-                // TODO
             } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
                 // 모여 포스트가 last!
                 lastPlace = lastMoyeoPost.getAddress2();
@@ -511,7 +607,6 @@ public class TimeLineServiceImpl implements TimeLineService {
             if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
                 // 일반 포스트가 last!
                 lastPlace = lastpost.getAddress2();
-                // TODO
             } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
                 // 모여 포스트가 last!
                 lastPlace = lastMoyeoPost.getAddress2();
@@ -536,6 +631,86 @@ public class TimeLineServiceImpl implements TimeLineService {
         }
         // repo.deleteAll();
         return timeLine;
+    }
+
+    public List<MainTimelinePhotoDtoRes> testGetTimlineList(Long lastTimelineId) throws BaseException {
+        // 메인 페이지에서 타임라인 목록 가져오기 (최신순으로, 페이징, 15개 가져오기)
+        // 최신 순으로, isComplete, isTimelinePublic. 15개, but 마지막 페이지인지 판단하기 위해서 일단 16개 가져왔다..
+        List<TimeLine> timeLineList = new ArrayList<>();
+        if(lastTimelineId == null) { // 첫 페이지
+            timeLineList = timeLineRepository
+                .findTop16ByIsCompleteAndIsTimelinePublicOrderByTimelineIdDesc(true, true)
+                .orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING));
+        } else {
+            timeLineList = timeLineRepository
+                .findTop16ByIsCompleteAndIsTimelinePublicAndTimelineIdLessThanOrderByTimelineIdDesc(true, true, lastTimelineId)
+                .orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE_PAGING));
+        }
+
+        Boolean isLastPage = false;
+        int size = timeLineList.size();
+        log.info("size: {}", size);
+        if(size < 16) isLastPage = true;
+        log.info("isLastPage: {}", isLastPage);
+
+        int len = isLastPage ? size : size - 1;
+        log.info("len: {}", len);
+
+        List<MainTimelinePhotoDtoRes> list = new ArrayList<>(); // 넘겨줄 timeline dto생성
+
+        TimeLine timeLine;
+        for(int i = 0; i < len; i++) {
+            timeLine = timeLineList.get(i);
+
+            // 첫번째 post
+            Post firstPost = postRepository.findTopByTimelineId(timeLine);
+            // 마지막 post
+            Post lastPost = postRepository.findTopByTimelineIdOrderByPostIdDesc(timeLine);
+
+            // moyeo post 가져오기
+            // (1) timeline_and_moyeo 에서 timelineId로 moyeo_timeline_id 리스트 가져오기
+            List<Long> moyeoTimelineIdList = timeLineAndMoyeoRepository.findAllMoyeoTimelineIdByTimlineId(timeLine.getTimelineId()).orElse(null);
+            // (2-1) moyeo_post에서 moyeoTimelineIdList로 첫번째 moyeo post, 마지막 moyeo post 가져오기
+            // (2-2) moyeo_post 조건: 모두가 공개로 설정 && 삭제되지 않은
+            MoyeoPost firstMoyeoPost = moyeoPostRepository.findFirstVisiblePost(moyeoTimelineIdList);
+            MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastVisiblePost(moyeoTimelineIdList);
+
+
+            // if ((firstPost == null || lastPost == null) && (firstMoyeoPost == null || lastMoyeoPost == null))
+            //     continue;
+            // if(firstPost == null && firstMoyeoPost == null)
+            //     continue;
+            // if(lastPost == null && lastMoyeoPost == null)
+            //     continue;
+            // 할 거: post 없어도 그냥 보여주기~~
+
+            String thumbnailUrl;
+            String startPlace;
+            String lastPlace;
+
+            if(firstMoyeoPost == null || firstPost != null && firstPost.getCreateTime().isBefore(firstMoyeoPost.getCreateTime())) {
+                thumbnailUrl = firstPost.getPhotoList().get(0).getPhotoUrl();
+                startPlace = firstPost.getAddress2();
+            } else {
+                thumbnailUrl = firstMoyeoPost.getMoyeoPhotoList().get(0).getPhotoUrl();
+                startPlace = firstMoyeoPost.getAddress2();
+            }
+
+            if(lastMoyeoPost == null || lastPost != null && lastPost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime())) {
+                lastPlace = lastPost.getAddress2();
+            } else {
+                lastPlace = lastMoyeoPost.getAddress2();
+            }
+
+            User user = userRepository.findById(timeLine.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+            // responseDto 리스트에 추가
+            list.add(MainTimelinePhotoDtoRes.builder(timeLine, user, thumbnailUrl, startPlace, lastPlace).build());
+        }
+
+        log.info("len: {}", len);
+        Long nowLastTimelineId = timeLineList.get(len - 1).getTimelineId();
+        // 나중에 DTO에 lastTimelineId보내주고, isLastPage = true 도 보내주고
+        return list;
     }
 
 }

@@ -34,6 +34,8 @@ public interface TimeLineService {
     //타임라인 공개 <->비공개 변경 => 완료
     Boolean changePublic(Long uid,User user) throws Exception;
 
+    // 타임라인 목록 조회 & 페이징 처리
+    List<MainTimelinePhotoDtoRes> getTimelineList(Long userId, Boolean isMine, Pageable pageable) throws Exception;
 
     //메인 피드상에서 타임라인 페이징 처리해서 조회하는 메서드
     List<MainTimelinePhotoDtoRes> searchTimelineOrderBylatestPaging(Pageable pageable) throws Exception;
