@@ -5,18 +5,16 @@ import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
 import '../view_models/chatbot_detail_view_model.dart';
-import 'chatbot_detail_page.dart';
 
 class MessageListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Consumer<AppViewModel>(
       builder: (_, appViewModel, __) {
         return Consumer<MessageListViewModel>(
           builder: (_, viewModel, __) {
             return DefaultTabController(
-              initialIndex: 0,
+              initialIndex: viewModel.initialIndex,
               length: 2,
               child: Scaffold(
                 appBar: const TabBar(
@@ -49,28 +47,28 @@ class MessageListPage extends StatelessWidget {
                 body: TabBarView(
                   children: [
                     ListView.builder(
-                      itemCount: viewModel.yeobotList.length,
+                      itemCount: viewModel.pushList.length,
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(
                           onTap: () {
                             appViewModel.changeTitle("여봇과의 추억");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MultiProvider(
-                                  providers: [
-                                    ChangeNotifierProvider<ChatbotViewModel>(
-                                      create: (_) => ChatbotViewModel(
-                                        context,
-                                        isTravel:
-                                            appViewModel.userInfo.timeLineId,
-                                      ),
-                                    ),
-                                  ],
-                                  child: const ChatbotPage(),
-                                ),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => MultiProvider(
+                            //       providers: [
+                            //         ChangeNotifierProvider<ChatbotViewModel>(
+                            //           create: (_) => ChatbotViewModel(
+                            //             context,
+                            //             isTravel:
+                            //                 appViewModel.userInfo.timeLineId,
+                            //           ),
+                            //         ),
+                            //       ],
+                            //       child: const ChatbotPage(),
+                            //     ),
+                            //   ),
+                            // );
                           },
                           child: ListTile(
                             leading: ClipRRect(
@@ -78,7 +76,7 @@ class MessageListPage extends StatelessWidget {
                               child: Image.network(
                                   "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
                             ),
-                            title: Text(viewModel.yeobotList[index]["message"]),
+                            title: Text(viewModel.pushList[index]["message"]),
                           ),
                         );
                       },
@@ -102,8 +100,8 @@ class MessageListPage extends StatelessWidget {
                               child: Image.network(
                                   "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
                             ),
-                            title: Text(viewModel.pushList[index]["title"]),
-                            subtitle: Text(viewModel.pushList[index]["sub"]),
+                            title: Text(viewModel.inviteList[index]["title"]),
+                            subtitle: Text(viewModel.inviteList[index]["sub"]),
                           ),
                         );
                       },

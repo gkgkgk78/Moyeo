@@ -75,7 +75,7 @@ class AppViewModel with ChangeNotifier {
     changeTitle("채팅 리스트");
     Future.delayed(
       const Duration(milliseconds: 100),
-          () {
+      () {
         Navigator.pushNamed(
           myFeedNavigatorKey.currentContext!,
           '/chatbot',
@@ -103,7 +103,7 @@ class AppViewModel with ChangeNotifier {
     changeTitle('날 귀찮게 했던 것들');
     Future.delayed(
       const Duration(milliseconds: 100),
-          () {
+      () {
         Navigator.pushNamed(
           myFeedNavigatorKey.currentContext!,
           '/messages',
@@ -165,13 +165,14 @@ class AppViewModel with ChangeNotifier {
       page = const ModifyProfile();
     } else if (settings.name == '/chatbot') {
       page = ChangeNotifierProvider(
-          create: (_) => ChatbotViewModel(context, isTravel: _userInfo.timeLineId),
-          child: const ChatbotPage(),
+        create: (_) =>
+            ChatbotViewModel(context, isTravel: _userInfo.timeLineId),
+        child: const ChatbotPage(),
       );
     } else if (settings.name == '/messages') {
       page = ChangeNotifierProvider(
-          create: (_) => MessageListViewModel(context),
-          child: MessageListPage(),
+        create: (_) => MessageListViewModel(context, userInfo: _userInfo),
+        child: MessageListPage(),
       );
     } else {
       page = MultiProvider(
@@ -206,10 +207,12 @@ class AppViewModel with ChangeNotifier {
   }
 
   Future<void> initializeFirebase() async {
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-      _fcmToken = newToken;
-      logger.d(_fcmToken);
-    });
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+      (newToken) async {
+        _fcmToken = newToken;
+        logger.d(_fcmToken);
+      },
+    );
     // 알림 권한 요청
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -221,34 +224,34 @@ class AppViewModel with ChangeNotifier {
       sound: true,
     );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage rm) {
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage rm) {
+        NotificationDetails details = const NotificationDetails(
+          android: AndroidNotificationDetails('moyeo1', '모여1'),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        );
 
-      NotificationDetails details = const NotificationDetails(
-        android: AndroidNotificationDetails('moyeo1', '모여1'),
-        iOS: DarwinNotificationDetails(
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      );
+        FlutterLocalNotificationsPlugin localNotification =
+            FlutterLocalNotificationsPlugin();
 
-      FlutterLocalNotificationsPlugin localNotification =
-      FlutterLocalNotificationsPlugin();
-
-      localNotification.show(_localMessageId, rm.notification?.title, rm.notification?.body, details);
-      _localMessageId += 1;
-
-    },
+        localNotification.show(_localMessageId, rm.notification?.title,
+            rm.notification?.body, details);
+        _localMessageId += 1;
+      },
     );
   }
 
   Future<void> _initLocalNotification() async {
     FlutterLocalNotificationsPlugin localNotification =
-    FlutterLocalNotificationsPlugin();
+        FlutterLocalNotificationsPlugin();
     AndroidInitializationSettings initSettingsAndroid =
-    const AndroidInitializationSettings('@mipmap/launcher_icon');
+        const AndroidInitializationSettings('@mipmap/launcher_icon');
     DarwinInitializationSettings initSettingsIOS =
-    const DarwinInitializationSettings(
+        const DarwinInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
       requestAlertPermission: false,
@@ -260,9 +263,20 @@ class AppViewModel with ChangeNotifier {
     await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (_) {
+        _fromPush = true;
         goMessageListPage();
-      }
+      },
     );
+  }
+
+  bool _fromPush = false;
+  bool get fromPush => _fromPush;
+
+  void changeFromPush() {
+    if (_fromPush == true) {
+      _fromPush = false;
+    }
+    notifyListeners();
   }
 
   void deleteFCMToken() {
@@ -270,9 +284,10 @@ class AppViewModel with ChangeNotifier {
   }
 
   bool _modalVisible = false;
+
   bool get modalVisible => _modalVisible;
 
-  void chageModalVisible () {
+  void chageModalVisible() {
     if (_modalVisible == false) {
       _modalVisible = true;
     } else {
