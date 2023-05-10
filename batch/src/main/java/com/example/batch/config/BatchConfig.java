@@ -101,7 +101,7 @@ public class BatchConfig {
             // create param
 
             HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
-            try {
+//            try {
                 ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 
                 log.info("AUTO-GPT result:{}",response.getBody());
@@ -122,15 +122,15 @@ public class BatchConfig {
                         .id(item.getDeviceToken())
                         .message("푸시전송완료")
                         .build();
-            }catch (RestClientException e){
-                log.info("Skip-AutoGpt500");
-                throw new SkipException("Skip 합니다.") {
-                    @Override
-                    public String getMessage() {
-                        return super.getMessage();
-                    }
-                };
-            }
+//            }catch (RestClientException e){
+//                log.info("Skip-AutoGpt500");
+//                throw new SkipException("Skip 합니다.") {
+//                    @Override
+//                    public String getMessage() {
+//                        return super.getMessage();
+//                    }
+//                };
+//            }
         };
     }
 
