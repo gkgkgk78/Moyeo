@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -169,8 +170,14 @@ public class UserServiceImpl implements UserService {
     private UserInfoRes entityToResponseDTO(User user) {
         Integer timelineNum = timeLineRepository.countAllByUserId(user);
         Long timeLineId = -1L;
+        Long moyeoTimelineId = null; // 추가
         if (timeLineService.isTraveling(user.getUserId()) != null) {
             timeLineId = timeLineService.isTraveling(user.getUserId()).getTimelineId();
+
+            Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null);
+            if(moyeoMembers.isPresent()) {
+                moyeoTimelineId = moyeoMembers.get().getMoyeoTimelineId();
+            }
         }
 
         return UserInfoRes.builder()
@@ -178,6 +185,7 @@ public class UserServiceImpl implements UserService {
                 .nickname(user.getNickname())
                 .profileImageUrl((user.getProfileImageUrl()))
                 .timeLineId(timeLineId)
+                .moyeoTimelineId(moyeoTimelineId)
                 .timelineNum(timelineNum)
                 .build();
     }
