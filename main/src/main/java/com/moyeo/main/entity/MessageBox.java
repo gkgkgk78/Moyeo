@@ -35,5 +35,4 @@ public class MessageBox {
 
     private LocalDateTime createTime;
 
-
 }

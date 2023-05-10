@@ -70,8 +70,6 @@ public class AsyncTestServiceImpl implements AsyncTestService {
     public void test(PostInsertReq post) {
         asyncService.toNotification(post);
 
-
-
     }
 
 

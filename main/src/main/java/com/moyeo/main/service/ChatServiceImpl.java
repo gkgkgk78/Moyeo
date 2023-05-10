@@ -2,14 +2,13 @@ package com.moyeo.main.service;
 
 import com.moyeo.main.dto.ChatReq;
 import com.moyeo.main.entity.Chat;
+import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +29,7 @@ public class ChatServiceImpl implements ChatService {
         log.info("chat insert 시작");
         //log.info(name.toString());
         try {
+            //사용자의 응답을 mongo db에 넣는 중
             for (String s1 : chat1.getMessage()) {
                 Chat chat = new Chat();
                 chat.setMessage(s1);
@@ -41,6 +41,23 @@ public class ChatServiceImpl implements ChatService {
         } catch (Exception e) {
             log.info(e.getMessage());
 
+        }
+    }
+
+    @Override
+    public void insertResponse(User user, String result) throws BaseException {
+
+        try {
+            log.info("MongoDB에 저장 로직 시작");
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, user.getUserId().toString());
+            log.info("MongoDB에 저장 완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
         }
     }
 

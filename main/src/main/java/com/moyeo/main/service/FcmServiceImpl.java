@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
@@ -58,26 +59,24 @@ public class FcmServiceImpl implements FcmService {
 
 
     @Override
-    public void send() throws BaseException {
-
-        String token = "";
+    public void send(User user) throws BaseException {
+//      device 토큰값 갱신반영이 안될 경우 메시지전송 에러 발생함 : 현재 갱신기준(: 앱 재설치)
+        String token = user.getDeviceToken();
         Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
         Message message = Message.builder()
-
                 .setAndroidConfig(AndroidConfig.builder()
                         .setTtl(3600 * 1000)
                         .setPriority(AndroidConfig.Priority.HIGH)
 //                        .setRestrictedPackageName("com.moyeo.moyeo") // 애플리케이션 패키지 이름
                         .setDirectBootOk(true)
-
                         .setNotification(AndroidNotification.builder()
-                                .setTitle("BLRING") // 알림 제목
-                                .setBody("헌혈 요청글에 헌혈이 신청되었습니다.") // 알림 본문
+                                .setTitle("여봇이 생각을 마쳤습니다!") // 알림 제목
+                                .setBody("결과를 확인하러 갈까요?") // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())
 
                         .build())
-                .putData("requestId", "나야나") // request 식별 정보(requestId) 넣기
+                .putData("requestId", user.getUserId().toString()) // request 식별 정보(requestId) 넣기
                 .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정
                 .build();
 
