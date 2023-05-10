@@ -19,7 +19,7 @@ public interface MoyeoPublicRepository extends JpaRepository<MoyeoPublic, MoyeoP
 	@Query("UPDATE MoyeoPublic m set m.isDeleted= :deleted")
 	void deleteMoyeoPost(Boolean deleted);
 
-	MoyeoPublic findByUserIdAndMoyeoPostId(User user, MoyeoPost moyeoPostId);
+	MoyeoPublic findFirstByUserIdAndMoyeoPostId(User user, MoyeoPost moyeoPostId);
 
 	List<MoyeoPublic> findByMoyeoPostId(MoyeoPost moyeoPostId);
 	List<MoyeoPublic> findByMoyeoPostId(Long moyeoPostId);
