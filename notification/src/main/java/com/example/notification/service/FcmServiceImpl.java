@@ -94,7 +94,6 @@ public class FcmServiceImpl implements FcmService {
     public String pushNoti(String deviceToken, String content) throws Exception {
         Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
         Message message = Message.builder()
-
                 .setAndroidConfig(AndroidConfig.builder()
                         .setTtl(3600 * 1000)
                         .setPriority(AndroidConfig.Priority.HIGH)
@@ -104,20 +103,21 @@ public class FcmServiceImpl implements FcmService {
                                 .setBody(content) // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())
-
                         .build())
+
                 .putData("requestId", "나야나") // request 식별 정보(requestId) 넣기
                 .setToken(deviceToken) // 요청자의 디바이스에 대한 registration token으로 설정
                 .build();
-
+        log.info("message :{}",message.toString());
 
         // Send a message to the device corresponding to the provided registration token.
         String response;
         try {
             response = FirebaseMessaging.getInstance().send(message);
-            System.out.println(response.toString());
+            log.info("알림 성공!");
         } catch (FirebaseMessagingException e) {
-            System.out.println(e.getMessage());
+            log.info("error:{}",e.getMessage());
+            log.info("알림 실패");
             throw new Exception(e.getMessage());
         }
 
