@@ -120,6 +120,7 @@ public class BatchConfig {
                         .message("푸시전송완료")
                         .build();
             }catch (RestClientException e){
+                log.info("Skip-AutoGpt500");
                 throw new SkipException("Skip 합니다.") {
                     @Override
                     public String getMessage() {
