@@ -61,7 +61,7 @@ class UserInformationView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  userInfo.timeLineId == -1 ? '휴식중' : '다님중',
+                  userInfo.timeLineId == -1 ? '휴식중' : '여행중',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Text('상태'),
