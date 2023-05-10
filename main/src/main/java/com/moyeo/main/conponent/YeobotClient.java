@@ -3,6 +3,7 @@ package com.moyeo.main.conponent;
 import com.google.gson.Gson;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.service.FcmService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,9 @@ public class YeobotClient {
             Map<String, String> getdata = gson.fromJson(responseBody, Map.class);
             result = getdata.get("result");
         } catch (Exception e) {
-            throw new BaseException(ErrorMessage.TOO_LONG_COMMAND);
+            //throw new BaseException(ErrorMessage.TOO_LONG_COMMAND);
+            result = "여봇이 반항합니다!"; //임시 메시지 return 처리 -> 추후 보완 필요
+
         }
         return result;
     }

@@ -2,7 +2,9 @@ package com.moyeo.main.service;
 
 import com.moyeo.main.dto.ChatReq;
 import com.moyeo.main.entity.Chat;
+import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
+import com.moyeo.main.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,17 +38,26 @@ public class ChatServiceImpl implements ChatService {
                 mongoTemplate.insert(chat, name);
             }
 
-            //사용자의 질문 목록을 auto gpt에 날리기
-            
-            
-            
-            //받은 응답을 기반으로 푸시 알람 날리기
-
-
-
         } catch (Exception e) {
             log.info(e.getMessage());
 
+        }
+    }
+
+    @Override
+    public void insertResponse(User user, String result) throws BaseException {
+
+        try {
+            log.info("MongoDB에 저장 로직 시작");
+            Chat chat = new Chat();
+            chat.setMessage(result);
+            chat.setSender("YeoBot");
+            chat.setCreateTime(LocalDateTime.now());
+            mongoTemplate.insert(chat, user.getUserId().toString());
+            log.info("MongoDB에 저장 완료");
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new BaseException(ErrorMessage.MONGO_DB_ERROR);
         }
     }
 
