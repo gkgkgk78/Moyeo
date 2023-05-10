@@ -44,8 +44,10 @@ public class UserController {
 
     // 유저 조회
     @GetMapping("/auth/user")
-    public ResponseEntity<?> searchUserByNickname(@RequestParam("search") String search){
-        List<UserInfoRes> resultList = userService.searchUserByNickname(search);
+    public ResponseEntity<?> searchUserByNickname(@RequestParam("search") String search
+        , @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo){
+
+        List<UserInfoRes> resultList = userService.searchUserByNickname(search, isMoyeo);
         return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 
