@@ -89,4 +89,38 @@ public class FcmServiceImpl implements FcmService {
 
 
     }
+
+    @Override
+    public String pushNoti(String deviceToken, String content) throws Exception {
+        Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
+        Message message = Message.builder()
+
+                .setAndroidConfig(AndroidConfig.builder()
+                        .setTtl(3600 * 1000)
+                        .setPriority(AndroidConfig.Priority.HIGH)
+                        .setDirectBootOk(true)
+                        .setNotification(AndroidNotification.builder()
+                                .setTitle("Batch에서 Push Test 진행중") // 알림 제목
+                                .setBody(content) // 알림 본문
+                                .setIcon("@drawable/bling")
+                                .build())
+
+                        .build())
+                .putData("requestId", "나야나") // request 식별 정보(requestId) 넣기
+                .setToken(deviceToken) // 요청자의 디바이스에 대한 registration token으로 설정
+                .build();
+
+
+        // Send a message to the device corresponding to the provided registration token.
+        String response;
+        try {
+            response = FirebaseMessaging.getInstance().send(message);
+            System.out.println(response.toString());
+        } catch (FirebaseMessagingException e) {
+            System.out.println(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+
+        return response;
+    }
 }
