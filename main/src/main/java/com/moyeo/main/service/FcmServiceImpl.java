@@ -94,9 +94,9 @@ public class FcmServiceImpl implements FcmService {
     }
 
     @Override
-    public void send(User user, Long moyeoTimelineId, String title, String content) throws BaseException {
+    public void send(User inviter, User invitee, Long moyeoTimelineId, String title, String content) throws BaseException {
         //      device 토큰값 갱신반영이 안될 경우 메시지전송 에러 발생함 : 현재 갱신기준(: 앱 재설치)
-        String token = user.getDeviceToken();
+        String token = invitee.getDeviceToken();
         Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
         Message message = Message.builder()
             .setAndroidConfig(AndroidConfig.builder()
@@ -111,8 +111,9 @@ public class FcmServiceImpl implements FcmService {
                     .build())
 
                 .build())
-            .putData("requestId", user.getUserId().toString()) // request 식별 정보(requestId) 넣기
-            // .putData("moyeoTimelineId", moyeoTimelineId.toString()) // TODO
+            .putData("inviterId", inviter.getUserId().toString()) // TODO
+            .putData("inviteeId", invitee.getUserId().toString()) // TODO
+            .putData("moyeoTimelineId", moyeoTimelineId.toString()) // TODO
             .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정
             .build();
 
