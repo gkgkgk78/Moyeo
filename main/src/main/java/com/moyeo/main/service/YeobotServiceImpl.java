@@ -41,6 +41,9 @@ public class YeobotServiceImpl implements YeobotService{
         else {
             LocalDateTime latestPostTime = postRepository.findCreateTimeByPostId(latestPostId);
             LocalDateTime latestMoyeoPostTime = moyeoPostRepository.findCreateTimeByMoyeoPostId(latestMoyeoPostId);
+            if (latestPostTime == null || latestMoyeoPostTime == null) {
+                throw new BaseException(ErrorMessage.NOT_EXIST_LATEST_TIME);
+            }
             if (latestPostTime.isAfter(latestMoyeoPostTime)) {
                 return latestPostAddress;
             } else {
