@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 import 'package:moyeo/firebase_options.dart';
@@ -25,6 +26,7 @@ void main() async {
   await dotenv.load(fileName: ".env"); // 추가
   KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+
 
 
   runApp(
@@ -190,3 +192,4 @@ class MyHomePage extends StatelessWidget {
     });
   }
 }
+

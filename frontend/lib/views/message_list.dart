@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:moyeo/view_models/message_list_view_model.dart';
 import 'package:moyeo/views/push_alarm_page.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
 import '../view_models/chatbot_detail_view_model.dart';
-import '../view_models/chatbot_list_view_model.dart';
 import 'chatbot_detail_page.dart';
 
-class ChatbotListPage extends StatelessWidget {
+class MessageListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Consumer<AppViewModel>(
       builder: (_, appViewModel, __) {
-        return Consumer<ChatbotListViewModel>(
+        return Consumer<MessageListViewModel>(
           builder: (_, viewModel, __) {
             return DefaultTabController(
               initialIndex: 0,
@@ -39,10 +39,10 @@ class ChatbotListPage extends StatelessWidget {
                   indicatorWeight: 1,
                   tabs: [
                     Center(
-                      child: Text("여봇"),
+                      child: Text("여봇의 오지랖"),
                     ),
                     Center(
-                      child: Text("푸시"),
+                      child: Text("인기인의 증거"),
                     ),
                   ],
                 ),
@@ -112,7 +112,7 @@ class ChatbotListPage extends StatelessWidget {
                 ),
               ),
             );
-          },
+          }
         );
       },
     );

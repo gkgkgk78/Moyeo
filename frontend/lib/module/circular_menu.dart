@@ -92,6 +92,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   Navigator.pop(context);
                   const storage = FlutterSecureStorage();
                   storage.deleteAll();
+                  appViewModel.deleteFCMToken();
                   Navigator.pushAndRemoveUntil(
                     context,
                     PageRouteBuilder(
@@ -142,7 +143,10 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   Icons.notifications,
                   color: Colors.white,
                 ),
-                onClick: () {},
+                onClick: () {
+                  Navigator.pop(context);
+                  appViewModel.goMessageListPage();
+                },
               ),
             ),
           ),
@@ -176,7 +180,6 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
             child: GestureDetector(
               onTap: () {
                 if (animationController.isCompleted) {
-                  appViewModel.deleteFCMToken();
                   Navigator.pop(context);
                   Navigator.push(
                     context,
@@ -189,7 +192,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                 }
               },
               child: Container(
-                margin: EdgeInsets.only(bottom: 10),
+                margin: const EdgeInsets.only(bottom: 10),
                 height: 70,
                 width: 70,
                 decoration: const BoxDecoration(
