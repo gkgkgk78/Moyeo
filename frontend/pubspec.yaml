@@ -106,6 +106,7 @@ dependencies:
   # main carousel/card
   carousel_slider: ^4.2.1
   image_card: ^0.0.4
+  card_swiper : ^2.0.1
 
 
   # chat_bubbles
