@@ -3,21 +3,17 @@ package com.moyeo.main.service;
 import com.moyeo.main.dto.BasePostDto;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.MyPostDtoRes;
-import com.moyeo.main.dto.PostMembers;
+import com.moyeo.main.dto.MemberInfoRes;
 import com.moyeo.main.dto.TimelinePostInner;
 import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.entity.*;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.entity.Favorite;
-import com.moyeo.main.entity.Nation;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.TimeLine;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.repository.FavoriteRepository;
-import com.moyeo.main.repository.NationRepository;
-import com.moyeo.main.repository.PhotoRepository;
 import com.moyeo.main.repository.PostRepository;
 import com.moyeo.main.repository.TimeLineRepository;
 import com.moyeo.main.repository.UserRepository;
@@ -107,13 +103,13 @@ public class TimeLineServiceImpl implements TimeLineService {
         // 모여 타임라인 id 리스트
         List<Long> moyeoTimelineIdList = timeLineAndMoyeoRepository.findAllMoyeoTimelineIdByTimlineId(timeLine.getTimelineId()).orElse(null);
         if(moyeoTimelineIdList == null) {
-            return addPostToResponse(timeLine, postList, isMine);
+            return addPostToResponse(timeLine, postList, isMine, timelineUser);
         }
 
         // <모여 포스트 리스트도 가져오기!>
         List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllByMoyeoTimelineIdIn(moyeoTimelineIdList);
         if(moyeoPosts == null || moyeoPosts.size() == 0) {
-            return addPostToResponse(timeLine, postList, isMine);
+            return addPostToResponse(timeLine, postList, isMine, timelineUser);
         }
         log.info("모여 포스트 리스트 가져오기...");
         List<BasePostDto> moyeoPostList = moyeoPosts.stream()
@@ -133,7 +129,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
                 return BasePostDto.builder(post
                         , isFavorite
-                        , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                        , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
                     .build();
             })
             .collect(Collectors.toList());
@@ -143,10 +139,10 @@ public class TimeLineServiceImpl implements TimeLineService {
         Collections.sort(postList, Comparator.comparing(BasePostDto::getCreateTime));
 
 
-        return addPostToResponse(timeLine, postList, isMine);
+        return addPostToResponse(timeLine, postList, isMine, timelineUser);
     }
 
-    public TimelinePostOuter addPostToResponse(TimeLine timeLine, List<BasePostDto> postList, Boolean isMine) {
+    public TimelinePostOuter addPostToResponse(TimeLine timeLine, List<BasePostDto> postList, Boolean isMine, User timelineUser) {
         // TimelinePostOuter
         TimelinePostOuter timelinePostOuter = new TimelinePostOuter();
         timelinePostOuter.setIsComplete(timeLine.getIsComplete());
@@ -156,6 +152,25 @@ public class TimeLineServiceImpl implements TimeLineService {
             return timelinePostOuter;
         }
         timelinePostOuter.setTitle(timeLine.getTitle());
+        // 추가. nowMoyeo
+        Boolean nowMoyeo = false;
+        Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(timelineUser.getUserId(), null);
+        if(moyeoMembers.isPresent()){
+            nowMoyeo = true; // 현재 동행 중
+        }
+        timelinePostOuter.setNowMoyeo(nowMoyeo);
+        // 추가. nowMembers
+        if(nowMoyeo) {
+            Long moyeoTimelineId = moyeoMembers.get().getMoyeoTimelineId();
+            List<MemberInfoRes> nowMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(moyeoTimelineId, null).orElse(null).stream()
+                // .map(moyeoMembers -> new MemberInfoRes(moyeoMembers))
+                .map(mem -> new MemberInfoRes(mem.getUserId()))
+                .collect(Collectors.toList());
+            timelinePostOuter.setNowMembers(nowMembers);
+        } else {
+            timelinePostOuter.setNowMembers(null);
+        }
+
 
         // TimelinePostInner
         TimelinePostInner timelinePostInner = new TimelinePostInner();
