@@ -47,16 +47,10 @@ def index():
 
     # 밑의 name에서 보내주고자 하는 내용이 담길 것임
     ee = ctx.invoke(autogpt.cli.main, name=temp_data)
-    print(ee + "3" , file=sys.stdout)
+    print(ee)
+    want_data = data_header["Title"]
 
-    with app.app_context():
-        # 로그 출력
-        current_app.logger.info(f'ee: {ee}')
-
-    #want_data = data_header["Title"]
-    want_data = data_header.get("Title", "")  # data_header 딕셔너리에서 "Title" 키에 해당하는 값을 추출. 없으면 빈 문자열을 반환함
-
-    #   return json.dumps({"result": ee}), 200, {'Content-Type': 'application/json'}
+    #return json.dumps({"result": ee}), 200, {'Content-Type': 'application/json'}
 
     to_chatgpt = ee
 
@@ -74,13 +68,13 @@ def index():
     # papago.engTOko("hi i am yoonhee")
     #print(to_chatgpt)
     # gpt명령 내리기
-
     last = chatgpt.chattogpt(to_chatgpt)
-    print(last + "4" , file=sys.stdout)
 
-    with app.app_context():
-        # 로그 출력
-        current_app.logger.info(f'last: {last}')
+
+
+
+
+
 
     return json.dumps({"result": last}), 200, {'Content-Type': 'application/json'}
 
