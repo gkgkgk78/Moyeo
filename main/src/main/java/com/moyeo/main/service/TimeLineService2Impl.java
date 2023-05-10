@@ -111,7 +111,7 @@ public class TimeLineService2Impl implements TimeLineService2 {
         log.info("모여 포스트 리스트 가져오기...");
         List<BasePostDto> moyeoPostList = moyeoPosts.stream()
                 .filter(post -> {
-                    MoyeoPublic moyeoPublic = moyeoPublicRepository.findByUserIdAndMoyeoPostId(timelineUser, post);
+                    MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(timelineUser, post);
                     if(moyeoPublic == null) return false;
                     if(isMine) { // 내 타임라인을 조회하는 거라면 삭제된 포스트는 제외하고 가져와야 한다.
                         return !moyeoPublic.getIsDeleted();
