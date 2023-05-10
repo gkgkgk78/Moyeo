@@ -56,12 +56,11 @@ public class FcmServiceImpl implements FcmService {
 
 
     @Override
-    public void send(String token,String content) throws Exception {
+    public void send(String token, String content) throws Exception {
 
 
         Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
         Message message = Message.builder()
-
                 .setAndroidConfig(AndroidConfig.builder()
                         .setTtl(3600 * 1000)
                         .setPriority(AndroidConfig.Priority.HIGH)
@@ -71,7 +70,6 @@ public class FcmServiceImpl implements FcmService {
                                 .setBody(content) // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())
-
                         .build())
                 .putData("requestId", "나야나") // request 식별 정보(requestId) 넣기
                 .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정

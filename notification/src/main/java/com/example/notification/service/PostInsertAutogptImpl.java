@@ -50,6 +50,7 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
                 String a1 = yeobotClient.sendYeobotData(goal2[i], goal1[i]);
                 log.info("autogpt에게 응답 받음 " + a1.toString());
                 //System.out.println(a1.toString());
+                log.info("받은 토큰 정보"+post.getDeviceToken());
                 //받은 응답을 바탕으로 푸시 알림을 해줘야 함
                 fcmService.send(post.getDeviceToken(), a1);
                 User user = userRepository.getByUserId(post.getUserId());
