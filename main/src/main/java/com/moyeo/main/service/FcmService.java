@@ -7,5 +7,5 @@ public interface FcmService {
 
     public void send(User user) throws BaseException;
 
-
+    public void send(User user, Long moyeoTimelineId, String title, String content) throws BaseException;
 }
