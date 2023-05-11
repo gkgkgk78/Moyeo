@@ -36,8 +36,9 @@ class TimelineListItem extends StatelessWidget {
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(color: Colors.black45, width: 1.5),
+              side: const BorderSide(color: Colors.transparent, width: 1),
             ),
+            elevation: 3,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Row(
               children: [
