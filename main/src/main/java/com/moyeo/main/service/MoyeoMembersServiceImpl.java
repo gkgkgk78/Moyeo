@@ -48,13 +48,16 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
 
         log.info("동행 초대 푸시 알림 보내기...");
-        fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
+        fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림", "동행에 참여하시겠습니까?");
 
-        // // TODO
-        // log.info("메시지 함에 저장");
-        // messageBoxRepository.save(MessageBox.builder()
-        //     .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
-        //     .userId(invitee).build());
+        // TODO
+        log.info("메시지 함에 저장");
+        messageBoxRepository.save(MessageBox.builder()
+                .userId(invitee)
+                .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
+                .createTime(LocalDateTime.now())
+                .inviteKey(moyeoTimelineId)
+                .build());
 
         log.info("동행 초대 끝...");
         return moyeoTimelineId;
