@@ -138,6 +138,44 @@ public class TestMoyeoController {
 
     }
 
+    @PostMapping("/ing/activity")
+    public ResponseEntity<String> activityRecommendationsForTraveller() {
+        log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 시작");
+        //로그인 정보에서 uid 받아오기
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("서울특별시");
+        lad[1] = new String("강남구");
+        lad[2] = new String("역삼동");
+        lad[3] = new String("테헤란로");
+        latestAddress.add(lad);
+
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        // 프롬프트 반환
+        String goal = "Recommend me some fun things to do near "+ addressList.get(0) + " "
+                + addressList.get(1) + " "
+                + addressList.get(2) + " today.";
+
+        //return ResponseEntity.ok(goal);
+
+        String caseType = "activity";
+
+        log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
+
+        // Flask 서버에 데이터 전송
+        String result = yeobotClient.sendYeobotData(caseType, goal);
+
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
 
     //여행중이 아닌 유저 여행지 추천
     @PostMapping("/yet/place")
