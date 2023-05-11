@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.moyeo.main.dto.MemberInfoRes;
 import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.MoyeoTimeLine;
+import com.moyeo.main.entity.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,6 +36,12 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
 
     Optional<List<MoyeoPost>> findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(String location1, String location2, String location3, String location4);
 
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM moyeo_post mp\n"
+        + "JOIN moyeo_favorite mf ON mp.moyeo_post_id = mf.moyeo_post_id\n"
+        + "WHERE mf.user_id = :userId")
+    List<MoyeoPost> findAllFavoriteMoyeoPost(Long userId);
 
     @Query(nativeQuery = true, value = "SELECT a.* FROM moyeo_post a WHERE a.moyeo_timeline_id IN :moyeoTimelineIdList")
     List<MoyeoPost> findAllByMoyeoTimelineIdIn(List<Long> moyeoTimelineIdList);

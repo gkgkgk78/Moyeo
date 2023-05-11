@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
-
-
     private final AwsS3 awsS3;
     private final PostRepository postRepository;
     private final MoyeoPostRepository moyeoPostRepository;
@@ -257,19 +255,6 @@ public class PostServiceImpl implements PostService {
     // 메인 피드에서 포스트 조회
     @Override
     public List<GetPostRes> findByLocation(String location) throws Exception {
-        // List<Post> postList = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_KEYWORD));
-        //
-        // List<GetPostRes> getPostResList = new ArrayList<>();
-        // for (Post post : postList) {
-        //
-        //     // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-        //     if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getIsTimelinePublic() == true ) {
-        //         // Long totalFavorite = favoriteRepository.countByPostId(post);
-        //         Long totalFavorite = post.getFavoriteCount();
-        //         getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
-        //     }
-        // }
-
         List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
