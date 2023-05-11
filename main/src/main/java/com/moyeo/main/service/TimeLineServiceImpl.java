@@ -165,7 +165,7 @@ public class TimeLineServiceImpl implements TimeLineService {
                 .collect(Collectors.toList());
             timelinePostOuter.setNowMembers(nowMembers);
         } else {
-            timelinePostOuter.setNowMembers(new ArrayList<>()); // TODO 프론트한테 null 말고 빈 배열로 보내줘야함!!
+            timelinePostOuter.setNowMembers(new ArrayList<>());
         }
 
         if(postList == null || postList.size() == 0) {
@@ -205,9 +205,8 @@ public class TimeLineServiceImpl implements TimeLineService {
 
         // 이미 여행 중인지 체크 TODO
         log.info("유저ID: {}", now.getUserId());
-        Optional<TimeLine> travelTimeLine = timeLineRepository.findFirstByUserIdAndIsComplete(now, false);
-        if(travelTimeLine.isPresent()) {
-            new BaseException(ErrorMessage.ALREADY_TRAVELING);
+        if(timeLineRepository.findFirstByUserIdAndIsComplete(now, false).isPresent()) {
+            throw new BaseException(ErrorMessage.ALREADY_TRAVELING);
         }
 
         //여기서 넘어온 uid는 User의 uid아이디 입니다.
