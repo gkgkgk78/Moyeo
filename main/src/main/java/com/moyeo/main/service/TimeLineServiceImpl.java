@@ -146,9 +146,6 @@ public class TimeLineServiceImpl implements TimeLineService {
         timelinePostOuter.setIsComplete(timeLine.getIsComplete());
         timelinePostOuter.setIsPublic(timeLine.getIsTimelinePublic());
         timelinePostOuter.setIsMine(isMine);
-        if(postList == null || postList.size() == 0) {
-            return timelinePostOuter;
-        }
         timelinePostOuter.setTitle(timeLine.getTitle());
 
         // 추가. nowMoyeo
@@ -169,6 +166,10 @@ public class TimeLineServiceImpl implements TimeLineService {
             timelinePostOuter.setNowMembers(nowMembers);
         } else {
             timelinePostOuter.setNowMembers(null);
+        }
+
+        if(postList == null || postList.size() == 0) {
+            return timelinePostOuter;
         }
 
 
