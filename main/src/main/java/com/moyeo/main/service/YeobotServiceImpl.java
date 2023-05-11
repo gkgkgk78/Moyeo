@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -25,6 +26,9 @@ public class YeobotServiceImpl implements YeobotService{
         // Post와 MoyeoPost에서 각각 최신 게시글의 id 가져오기
         Long latestPostId = postRepository.findLatestPost(userId);
         Long latestMoyeoPostId = moyeoPostRepository.findLatestMoyeoPost(userId);
+
+        System.out.println("최근 모여포스트id : "+latestMoyeoPostId);
+        System.out.println("최근 포스트id : "+latestPostId);
 
         // 최신 게시글의 id를 이용하여 주소 정보를 가져오기
         List<String[]> latestPostAddress = postRepository.findAddressById(latestPostId, userId);
