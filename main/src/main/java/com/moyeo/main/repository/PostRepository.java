@@ -33,7 +33,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
 
-    @Query(value = "SELECT post_id FROM post WHERE user_id = :userId ORDER BY create_time LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT post_id FROM post WHERE user_id = :userId ORDER BY create_time DESC LIMIT 1", nativeQuery = true)
     Long findLatestPost(@Param("userId") Long userId);
 
     @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId AND userId.userId = :userId")
