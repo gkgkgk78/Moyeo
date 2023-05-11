@@ -1,8 +1,10 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_card/image_card.dart';
 import 'package:provider/provider.dart';
+
+import 'package:image_card/image_card.dart';
+import 'package:card_swiper/card_swiper.dart';
 
 import '../models/Timeline.dart';
 import '../view_models/app_view_model.dart';
@@ -25,7 +27,7 @@ class TimelineListItemMain extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Colors.red),
         ),
-        margin: EdgeInsets.only(left: MyWidth*(0.1), right: MyWidth*(0.1), bottom: MyHeight*(0.25)),
+        margin: EdgeInsets.only(top:MyHeight*(0.01), left: MyWidth*(0.1), right: MyWidth*(0.1), bottom: MyHeight*(0.25)),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();

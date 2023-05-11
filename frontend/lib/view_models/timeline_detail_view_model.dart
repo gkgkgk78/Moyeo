@@ -9,6 +9,7 @@ import '../services/moyeo_repository.dart';
 import '../models/Post.dart';
 import '../models/TimelineInfo.dart';
 import '../views/moyeo_timeline.dart';
+import '../views/moyeo_add_user.dart';
 
 class TimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;
@@ -16,11 +17,15 @@ class TimelineDetailViewModel extends ChangeNotifier {
   bool _isPublic = false;
   bool _isComplete = false;
   String? _title;
+  bool _nowMoyeo = false;
   final int expansionTileAnimationTile = 200;
   final textController = TextEditingController();
   List<TimelineDetail> _timelineDetails = [];
+  // 모여 타임라인
 
   String? get title => _title;
+
+  get nowMoyeo => _nowMoyeo;
 
   get isMine => _isMine;
 
@@ -47,6 +52,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;
     _isComplete = timelineInfo.isComplete;
+    _nowMoyeo = timelineInfo.nowMoyeo;
     notifyListeners();
   }
 
@@ -115,10 +121,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
   }
 
   startMoyeo(context) async {
-    final MoyeoTimelineId = await MoyeoRepository().startMoyeo(context);
-    Navigator.pushNamed(
-        context,
-        'api/auth/timeline/${MoyeoTimelineId.timelineId}'
-    );
+    await MoyeoRepository().startMoyeo(context);
+    notifyListeners();
   }
 }

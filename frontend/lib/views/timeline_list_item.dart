@@ -15,7 +15,7 @@ class TimelineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const cardHeight = 140.0;
+    const cardHeight = 120.0;
     return Consumer<AppViewModel>(builder: (_, appViewModel, __) {
       return Container(
         margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
@@ -34,52 +34,19 @@ class TimelineListItem extends StatelessWidget {
             // );
           },
           child: Card(
+            margin: const EdgeInsets.only(left: 12, right:12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(color: Colors.black45, width: 1.5),
+              side: const BorderSide(color: Colors.transparent, width: 1),
             ),
+            elevation: 3,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Row(
               children: [
                 const SizedBox(width: 20),
                 Expanded(
-                  child: Column(
+                  child: Stack(
                     children: [
-                      Container(
-                          height: cardHeight * 0.2,
-                          decoration: BoxDecoration(
-                            // color: Theme.of(context).primaryColor,
-                            color: Colors.black54,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 30),
-                              const Text(
-                                "Danim",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              const SizedBox(width: 10),
-                              const Icon(
-                                Icons.flight_takeoff,
-                                color: Colors.white,
-                              ),
-                              Expanded(
-                                  child: Text(
-                                '${timeline.startPlace} ~ ${timeline.finishPlace}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.right,
-                                style: const TextStyle(color: Colors.red),
-                              )),
-                              const SizedBox(width: 30)
-                            ],
-                          )),
                       Expanded(
                         child: Container(
                           // 티켓 디자인 추가
@@ -96,20 +63,26 @@ class TimelineListItem extends StatelessWidget {
                             )
                           ),
                           padding: const EdgeInsets.only(
-                              top: 10, right: 10, bottom: 10),
+                              top: 10,
+                              right: 10,
+                              bottom: 10
+                          ),
                           child: Row(
                             children: [
+                              Container(
+                                height: 30,
+                              ),
                               SizedBox(
-                                height: 100,
-                                width: 100,
+                                height: 90,
+                                width: 90,
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   child: timeline.imageUrl.isNotEmpty
                                       ? ExtendedImage.network(
-                                          timeline.imageUrl,
-                                          fit: BoxFit.cover,
-                                          cache: true,
+                                            timeline.imageUrl,
+                                            fit: BoxFit.cover,
+                                            cache: true,
                                         )
                                       : Container(
                                           color: Colors.black12,
@@ -120,7 +93,7 @@ class TimelineListItem extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
+                              SizedBox(width: 10),
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -128,6 +101,7 @@ class TimelineListItem extends StatelessWidget {
                                     Expanded(
                                       child: Row(
                                         children: [
+                                          const SizedBox(height: 15),
                                           const SizedBox(
                                             width: 90,
                                             child: Text(
@@ -213,7 +187,42 @@ class TimelineListItem extends StatelessWidget {
                             ],
                           ),
                         ),
-                      )
+                      ),
+                      Container(
+                          height: cardHeight * 0.2,
+                          decoration: BoxDecoration(
+                            // color: Theme.of(context).primaryColor,
+                            color: Colors.transparent,
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 30),
+                              const Text(
+                                "Moyeo",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(width: 10),
+                              const Icon(
+                                Icons.flight_takeoff,
+                                color: Colors.white,
+                              ),
+                              Expanded(
+                                  child: Text(
+                                    '${timeline.startPlace} ~ ${timeline.finishPlace}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.right,
+                                    style: const TextStyle(color: Colors.white),
+                                  )),
+                              const SizedBox(width: 30)
+                            ],
+                          )),
                     ],
                   ),
                 )

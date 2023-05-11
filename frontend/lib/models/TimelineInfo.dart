@@ -4,6 +4,8 @@ class TimelineInfo {
   final List<TimelineDetail> timelineDetails;
   final bool isComplete;
   final bool isMine;
+  final bool nowMoyeo;
+  final List<Map<String,dynamic>> members;
   bool isPublic;
 
   TimelineInfo({
@@ -11,6 +13,8 @@ class TimelineInfo {
     required this.isPublic,
     required this.isComplete,
     required this.isMine,
+    required this.nowMoyeo,
+    required this.members
   });
 
   factory TimelineInfo.fromJson(Map<String, dynamic> json) {
@@ -22,6 +26,10 @@ class TimelineInfo {
       isPublic: json['isPublic'],
       isComplete: json['isComplete'],
       isMine: json['isMine'],
+      nowMoyeo: json['nowMoyeo'],
+      members: json['members'] == null
+        ? []
+        : List<Map<String,dynamic>>.from(json['members']),
     );
   }
 }

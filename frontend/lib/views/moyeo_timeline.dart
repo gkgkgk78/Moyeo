@@ -285,7 +285,8 @@ class MoyeoTimeline extends StatelessWidget {
                                 // 모여나가기 수정 필요
                                 InkWell(
                                   onTap: (){
-                                    viewModel.outMoyeoTimeline(context);
+                                    //put 요청 수정
+                                    // viewModel.outMoyeoTimeline(context);
                                   },
                                   child:Container(
                                     margin: const EdgeInsets.only(right: 10),

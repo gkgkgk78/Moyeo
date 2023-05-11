@@ -19,7 +19,8 @@ class MoyeoRepository{
     try {
       final dio = await authDio(context);
       Response response = await dio.post('api/auth/moyeo/timeline');
-      return response.data;
+
+      return MoyeoTimeline.fromJson(response.data);
     } catch(e) {
       throw Exception('StartMoyeo Error $e');
     }

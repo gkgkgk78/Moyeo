@@ -2,22 +2,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:moyeo/view_models/post_view_model.dart';
-import 'package:moyeo/views/moyeo_add_user.dart';
-import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
+
+import '../views/moyeo_add_user.dart';
+import '../views/post_list_item.dart';
+
 import '../view_models/app_view_model.dart';
 import '../view_models/timeline_detail_view_model.dart';
-import '../view_models/search_bar_view_model.dart';
-import '../view_models/search_result_view_model.dart';
-import '../view_models/user_search_bar_view_model.dart';
-import '../views/user_search_bar_view.dart';
-import '../views/moyeo_add_user.dart';
 
-import 'package:moyeo/utils/black.dart';
+import '../utils/black.dart';
 
 var logger = Logger();
 
@@ -45,12 +41,6 @@ class TimelineDetailPage extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 5),
                             child: Text(viewModel.isPublic ? '공개' : ' 비공개'),
                           ),
-                          // viewModel.showPublicIcon(),
-                          // Switch(
-                          //     value: viewModel.isPublic,
-                          //     onChanged: (_) {
-                          //       viewModel.changeIsPublic(context);
-                          //     }),
                           FlutterSwitch(
                               width: 50,
                               height: 30,
@@ -124,7 +114,78 @@ class TimelineDetailPage extends StatelessWidget {
                           )
                         ],
                       ),
-                      child: ListView.builder(
+                      child: viewModel.isMine && viewModel.timelineDetails.length == 0
+                          ? ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(left: 1),
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: viewModel.timelineDetails.length+1,
+                          itemBuilder: (BuildContext context, int idx){
+                            return Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text("등록된 포스트가 없습니다"),
+                                  ),
+                                  viewModel.nowMoyeo
+                                  ? Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text("포스트를 등록하거나 모여를 시작해보세요"),
+                                  )
+                                  : Container(),
+                                  viewModel.nowMoyeo
+                                  ? InkWell(
+                                    onTap: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MoyeoAddUser()
+                                          )
+                                      );
+                                    },
+                                    child: Container(
+                                       width: 130,
+                                        margin: const EdgeInsets.only(left: 20) ,
+                                        padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                blurRadius: 1.0,
+                                                spreadRadius: 1.0,
+                                                offset: const Offset(2,2),
+                                              )
+                                            ],
+                                            borderRadius: BorderRadius.circular(10),
+                                            gradient: LinearGradient(
+                                                colors: <Color>[
+                                                  Colors.redAccent,
+                                                  Colors.orangeAccent,
+                                                ]
+                                            )
+                                        ),
+                                        child: Row(
+                                            children:[
+                                              Icon(
+                                                Icons.group_add,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                "  모여 시작하기",
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ]
+                                        )
+                                    ),
+                                  )
+                                  : Container()
+                                ],
+                              ),
+                            );
+                          }
+                      )
+                          : ListView.builder(
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.only(left: 1),
                                 physics: const ClampingScrollPhysics(),
@@ -279,7 +340,8 @@ class TimelineDetailPage extends StatelessWidget {
                                                           colors: <Color>[
                                                             Colors.redAccent,
                                                             Colors.orangeAccent,
-                                                          ])
+                                                          ]
+                                                      )
                                                   ),
                                                   child: Row(
                                                       children:[
@@ -295,46 +357,10 @@ class TimelineDetailPage extends StatelessWidget {
                                                   )
                                                 ),
                                               ),
-                                            InkWell(
-                                              onTap: (){
-                                                viewModel.startMoyeo(context);
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
-                                                decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.5),
-                                                    blurRadius: 1.0,
-                                                    spreadRadius: 1.0,
-                                                    offset: const Offset(2,2),
-                                                    )
-                                                  ],
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  gradient: LinearGradient(
-                                                      colors: <Color>[
-                                                        Colors.redAccent,
-                                                        Colors.orangeAccent,
-                                                      ]
-                                                  )
-                                                ),
-                                                child: Row(
-                                                children:[
-                                                  Icon(
-                                                    Icons.group_add,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Text(
-                                                    "  모여",
-                                                    style: TextStyle(color: Colors.white),
-                                                  ),
-                                                ]
-                                                )
-                                              ),
-                                            )
                                           ]
                                             )
                                       )
+                                      // 포스트를 등록하고 모여 타임라인 시작하기
                                           : Container(),
                                     ],
                                   )
