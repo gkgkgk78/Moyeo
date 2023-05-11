@@ -36,6 +36,52 @@ class TimelineDetailPage extends StatelessWidget {
                 viewModel.isMine
                     ? Row(
                         children: [
+                          viewModel.nowMoyeo && viewModel.timelineDetails.length > 0
+                              ? InkWell(
+                                  onTap: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MoyeoAddUser()
+                                        )
+                                    );
+                                  },
+                                  child: Container(
+                                      width: 130,
+                                      margin: const EdgeInsets.only(left: 20) ,
+                                      padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                      decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.5),
+                                              blurRadius: 1.0,
+                                              spreadRadius: 1.0,
+                                              offset: const Offset(2,2),
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.circular(10),
+                                          gradient: LinearGradient(
+                                              colors: <Color>[
+                                                Colors.redAccent,
+                                                Colors.orangeAccent,
+                                              ]
+                                          )
+                                      ),
+                                      child: Row(
+                                          children:[
+                                            Icon(
+                                              Icons.group_add,
+                                              color: Colors.white,
+                                            ),
+                                            Text(
+                                              "  모여 시작하기",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ]
+                                      )
+                                  ),
+                                )
+                              : Container(),
                           Expanded(child: Container()),
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
