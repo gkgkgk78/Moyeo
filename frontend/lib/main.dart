@@ -33,13 +33,14 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AppViewModel(
+          create: (context) => AppViewModel(
             UserInfo(
               userUid: -1,
               profileImageUrl: '',
               nickname: '',
             ),
-            '홈'
+            '홈',
+            context,
           ),
 
         ),
@@ -47,7 +48,12 @@ void main() async {
           create: (_) => CameraViewModel(),
         ),
       ],
-      child: const MyApp(),
+      child: Builder(
+        builder: (context) {
+          AppViewModel appViewModel = Provider.of<AppViewModel>(context);
+          return const MyApp();
+        },
+      )
     ),
   );
 }

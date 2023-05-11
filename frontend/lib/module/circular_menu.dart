@@ -173,45 +173,80 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
               ),
             ),
           ),
-          Transform(
-            transform: Matrix4.rotationZ(
-                getRadiansFromDegree(rotationAnimation.value)),
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () {
-                if (animationController.isCompleted) {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CameraView(),
+          appViewModel.userInfo.timeLineId == -1
+              ? Transform(
+                  transform: Matrix4.rotationZ(
+                      getRadiansFromDegree(rotationAnimation.value)),
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (animationController.isCompleted) {
+                        Navigator.pop(context);
+                        appViewModel.startTravel(context);
+                      } else {
+                        animationController.forward();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      height: 70,
+                      width: 70,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.redAccent,
+                                Colors.orangeAccent,
+                              ])),
+                      child: const Icon(
+                        Icons.airplane_ticket_outlined,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ),
-                  );
-                } else {
-                  animationController.forward();
-                }
-              },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                height: 70,
-                width: 70,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.redAccent,
-                          Colors.orangeAccent,
-                        ])),
-                child: const Icon(
-                  Icons.camera,
-                  color: Colors.white,
-                  size: 40,
+                  ),
+                )
+              : Transform(
+                  transform: Matrix4.rotationZ(
+                      getRadiansFromDegree(rotationAnimation.value)),
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (animationController.isCompleted) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraView(),
+                          ),
+                        );
+                      } else {
+                        animationController.forward();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      height: 70,
+                      width: 70,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.redAccent,
+                                Colors.orangeAccent,
+                              ])),
+                      child: const Icon(
+                        Icons.camera,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       );
     });

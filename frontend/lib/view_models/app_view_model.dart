@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/services/moyeo_repository.dart';
 import 'package:moyeo/view_models/message_list_view_model.dart';
 import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/timeline_detail_view_model.dart';
@@ -31,11 +33,12 @@ class AppViewModel with ChangeNotifier {
   final GlobalKey<NavigatorState> myFeedNavigatorKey = GlobalKey();
   UserInfo _userInfo;
   String _title = '';
+  BuildContext _context;
   final MyStack<String> _formerTitle = MyStack<String>();
 
-  AppViewModel(this._userInfo, this._title, {this.currentIndex = 0}) {
+  AppViewModel(this._userInfo, this._title, this._context, {this.currentIndex = 0}) {
     initializeFirebase();
-    _initLocalNotification();
+    _initLocalNotification(_context);
   }
 
   String _fcmToken = '';
@@ -206,7 +209,10 @@ class AppViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  int _moyeoTimelineId = -1;
+
   Future<void> initializeFirebase() async {
+    logger.d("시작");
     String? vapidKey = dotenv.env["firebaseValidKey"];
     _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: vapidKey))!;
     logger.d(_fcmToken);
@@ -229,26 +235,57 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
-        NotificationDetails details = const NotificationDetails(
-          android: AndroidNotificationDetails('moyeo1', '모여1'),
-          iOS: DarwinNotificationDetails(
-            presentAlert: true,
-            presentBadge: true,
-            presentSound: true,
-          ),
-        );
+        NotificationDetails details;
+        if (rm.notification?.body?.contains("초대") == true) {
+          NotificationDetails buttonDetails = const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'moyeo1',
+              '모여1',
+              importance: Importance.max,
+              priority: Priority.high,
+              styleInformation: BigTextStyleInformation(''),
+              category: AndroidNotificationCategory.social,
+              actions: [
+                AndroidNotificationAction('okay', '수락'),
+                AndroidNotificationAction('no', '거절'),
+              ],
+            ),
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          );
+          details = buttonDetails;
+          String? moyeoTimeLineId = rm.data["moyeoTimelineId"];
+          _moyeoTimelineId = int.parse(moyeoTimeLineId!);
+        } else {
+          NotificationDetails plainDetails = const NotificationDetails(
+            android: AndroidNotificationDetails('moyeo1', '모여1'),
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          );
+          details = plainDetails;
+        }
 
         FlutterLocalNotificationsPlugin localNotification =
             FlutterLocalNotificationsPlugin();
 
-        localNotification.show(_localMessageId, rm.notification?.title,
-            rm.notification?.body, details);
+        localNotification.show(
+            _localMessageId,
+            rm.notification?.title,
+            rm.notification?.body,
+            details,
+        );
         _localMessageId += 1;
       },
     );
   }
 
-  Future<void> _initLocalNotification() async {
+  Future<void> _initLocalNotification(BuildContext context) async {
     FlutterLocalNotificationsPlugin localNotification =
         FlutterLocalNotificationsPlugin();
     AndroidInitializationSettings initSettingsAndroid =
@@ -265,11 +302,19 @@ class AppViewModel with ChangeNotifier {
     );
     await localNotification.initialize(
       initSettings,
-      onDidReceiveNotificationResponse: (_) {
-        _fromPush = true;
+      onDidReceiveNotificationResponse: (NotificationResponse payload) async {
+        logger.d('누');
+        logger.d(payload.notificationResponseType);
+        if (payload.actionId == 'okay') {
+          // await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
+          logger.d('수락');
+        } else {
+          logger.d('거절');
+        }
         goMessageListPage();
       },
     );
+
   }
 
   bool _fromPush = false;

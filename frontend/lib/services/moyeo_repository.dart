@@ -44,6 +44,16 @@ class MoyeoRepository{
   //   }
   // }
 
+  Future<void> acceptInvite(context, moyeoTimelindId) async {
+    try {
+      final dio = await authDio(context);
+      Response response = await dio.post('api/auth/moyeo/members', data: moyeoTimelindId);
+      return response.data;
+    } catch(e) {
+      throw Exception('StartMoyeo Error $e');
+    }
+  }
+
   Future<void> outMoyeo(context, moyeoTimelineId) async {
     try {
       final dio = await authDio(context);

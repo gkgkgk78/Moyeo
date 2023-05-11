@@ -49,6 +49,8 @@ class CameraViewModel extends ChangeNotifier {
 
   String get imagePath => _imagePath;
 
+  bool _cameraLoading = true;
+  bool get cameraLoading => _cameraLoading;
 
   // double _zoomLevel = 1.0;
   // double get zoomLevel => _zoomLevel;
@@ -59,6 +61,7 @@ class CameraViewModel extends ChangeNotifier {
 
 
   CameraViewModel() {
+    initializeCamera();
     audioPlayerViewModel = AudioPlayerViewModel(_recordedFilePath);
   }
 
@@ -79,7 +82,6 @@ class CameraViewModel extends ChangeNotifier {
       await Permission.location.request();
     }
 
-
     final cameras = await availableCameras();
     _cameras = cameras;
     if (_cameras.isNotEmpty) {
@@ -88,6 +90,7 @@ class CameraViewModel extends ChangeNotifier {
       await _controller.setFlashMode(FlashMode.off);
       notifyListeners();
     }
+    _cameraLoading = false;
   }
 
   Future<void> takePhoto() async {
@@ -445,6 +448,12 @@ class CameraViewModel extends ChangeNotifier {
       return Colors.greenAccent;
     } else {
       return Colors.redAccent;
+    }
+  }
+
+  void changeUploading() {
+    if (_isUploading == true) {
+      _isUploading = false;
     }
   }
 
