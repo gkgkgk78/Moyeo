@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,18 +74,17 @@ public class MessageBoxServiceImpl implements MessageBoxService{
 
 
     @Override
-    public void insertMessage() {
-    /*
-    private User userId;
-    private String content;
-    private Boolean isChecked = false;
-    private LocalDateTime createTime;
-    * */
+    public void insertMessage(Long userId, String content) {
+        User user = userRepository.getByUserId(userId);
+        LocalDateTime createTime = LocalDateTime.now();
 
-
-
+        MessageBox messageBox = MessageBox.builder()
+                .userId(user)
+                .content(content)
+                .createTime(createTime)
+                .build();
+        messageBoxRepository.save(messageBox);
 
     }
-
 
 }
