@@ -43,7 +43,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     public MoyeoPost createPost(AddPostReq addPostReq) throws Exception {
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if (moyeoTimeline.getIsComplete()) {
-            new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
+            throw new BaseException(ErrorMessage.ALREADY_DONE_MOYEO_TIMELINE);
         }
 
         MoyeoPost moyeoPost = new MoyeoPost();

@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService {
     public Post createPost(AddPostReq addPostReq) throws Exception {
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if (timeline.getIsComplete() == true) {
-            new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
+            throw new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
         }
 
         Post post = new Post();
@@ -181,7 +181,7 @@ public class PostServiceImpl implements PostService {
 
         String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
         if (result.contains("\"result\":\"FAILED\"")) {
-            new BaseException(ErrorMessage.NOT_STT_SAVE);
+            throw new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
 
         log.info("clova result: {}", result);
