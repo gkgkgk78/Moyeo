@@ -1,6 +1,7 @@
 package com.moyeo.main.service;
 
 import com.moyeo.main.dto.BasePostDto;
+import com.moyeo.main.dto.MemberInfoRes;
 import com.moyeo.main.entity.Favorite;
 import com.moyeo.main.entity.MoyeoFavorite;
 import com.moyeo.main.entity.MoyeoPost;
@@ -106,29 +107,23 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<BasePostDto> findFavoritePost (Long userUid) throws Exception {
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        // List<Favorite> favoriteList = favoriteRepository.findAllByUserId(user).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER_FAV_POST));
 
-        // List<Post> favoritePostList = new ArrayList<>();
-        // for (Favorite favorite : favoriteList) {
-        //     Post post = favorite.getPostId();
-        //     favoritePostList.add(post);
-        // }
+        // 일반 포스트
+        List<BasePostDto> postList = postRepository.findAllFavoritePost(userUid).stream()
+                .map(post -> BasePostDto.builder(post, null).build())
+                .collect(Collectors.toList());
 
-        List<Long> postIdList = favoriteRepository.findAllPostIdByUserId(userUid).orElse(null);
-        List<Long> moyeoPostIdList = moyeoFavoriteRepository.findAllMoyeoPostIdByUserId(userUid).orElse(null);
-        if(postIdList == null && moyeoPostIdList == null) throw  new BaseException(ErrorMessage.NOT_EXIST_USER_FAV_POST);
+        // 모여 포스트
+        List<BasePostDto> moyeoPostList = moyeoPostRepository.findAllFavoriteMoyeoPost(userUid).stream()
+                .map(post -> BasePostDto.builder(post
+                        , null
+                        , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
+                    .build())
+                .collect(Collectors.toList());
 
-        // List<PostUnionMoyeoPostInterface> favoritePostList = postRepository.findPostsAndMoyeoPosts(postIdList, moyeoPostIdList).orElseThrow().stream()
-        //     .map(post -> {
-        //         // if(post.getIsMoyeo()) {
-        //         //     // post.setMembers(moyeoPublicRepository.findByMoyeoPostId(post.getPostId()).stream().map(PostMembers::new).collect(Collectors.toList()));
-        //         // }
-        //         return post;
-        //     })
-        //     .collect(Collectors.toList());
-        List<Post> posts = postRepository.findAllPostIn(postIdList);
-        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllMoyeoPostIn(moyeoPostIdList);
+        postList.addAll(moyeoPostList);
+        Collections.sort(postList, Comparator.comparing(BasePostDto::getCreateTime, Comparator.reverseOrder()));
 
-        return postService.addPostsWithMoyeoPosts(posts, moyeoPosts);
+        return postList;
     }
 }
