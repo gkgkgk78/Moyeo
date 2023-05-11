@@ -402,28 +402,35 @@ public class TimeLineServiceImpl implements TimeLineService {
         String startPlace = "";
         String lastPlace = "";
 
-        if(startpost != null && (startMoyeoPostForThumbnail == null || startMoyeoPostForThumbnail != null && startpost.getCreateTime().isBefore(startMoyeoPostForThumbnail.getCreateTime()))) {
+        if(startpost == null && startMoyeoPostForAddress == null) {
+            return ThumbnailAndPlace.builder()
+                .thumbnailUrl(thumbnailUrl)
+                .startPlace(startPlace)
+                .lastPlace(lastPlace).build();
+        }
+
+        if(startpost != null && (startMoyeoPostForThumbnail == null || startpost.getCreateTime().isBefore(startMoyeoPostForThumbnail.getCreateTime()))) {
             // 일반 포스트가 start!
             List<Photo> photoList = startpost.getPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
-        } else if(startMoyeoPostForThumbnail != null && (startpost == null || startpost != null && startMoyeoPostForThumbnail.getCreateTime().isBefore(startpost.getCreateTime()))) {
+        } else { // if(startMoyeoPostForThumbnail != null && (startpost == null || startMoyeoPostForThumbnail.getCreateTime().isBefore(startpost.getCreateTime()))) {
             // 모여 포스트가 start!
             List<MoyeoPhoto> photoList = startMoyeoPostForThumbnail.getMoyeoPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
         }
 
-        if(startpost != null && (startMoyeoPostForAddress == null || startMoyeoPostForAddress != null && startpost.getCreateTime().isBefore(startMoyeoPostForAddress.getCreateTime()))) {
+        if(startpost != null && (startMoyeoPostForAddress == null || startpost.getCreateTime().isBefore(startMoyeoPostForAddress.getCreateTime()))) {
             // 일반 포스트가 start!
             startPlace = startpost.getAddress2();
-        } else if(startMoyeoPostForAddress != null && (startpost == null || startpost != null && startMoyeoPostForAddress.getCreateTime().isBefore(startpost.getCreateTime()))) {
+        } else { //if(startMoyeoPostForAddress != null && (startpost == null || startMoyeoPostForAddress.getCreateTime().isBefore(startpost.getCreateTime()))) {
             // 모여 포스트가 start!
             startPlace = startMoyeoPostForAddress.getAddress2();
         }
 
-        if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
+        if(lastpost != null && (lastMoyeoPost == null || lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
             // 일반 포스트가 last!
             lastPlace = lastpost.getAddress2();
-        } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
+        } else { // if(lastMoyeoPost != null && (lastpost == null || lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
             // 모여 포스트가 last!
             lastPlace = lastMoyeoPost.getAddress2();
         }
@@ -439,22 +446,29 @@ public class TimeLineServiceImpl implements TimeLineService {
         String startPlace = "";
         String lastPlace = "";
 
-        if(startpost != null && (startMoyeoPost == null || startMoyeoPost != null && startpost.getCreateTime().isBefore(startMoyeoPost.getCreateTime()))) {
+        if(startpost == null && startMoyeoPost == null) {
+            return ThumbnailAndPlace.builder()
+                .thumbnailUrl(thumbnailUrl)
+                .startPlace(startPlace)
+                .lastPlace(lastPlace).build();
+        }
+
+        if(startpost != null && (startMoyeoPost == null || startpost.getCreateTime().isBefore(startMoyeoPost.getCreateTime()))) {
             // 일반 포스트가 start!
             List<Photo> photoList = startpost.getPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
             startPlace = startpost.getAddress2();
-        } else if(startMoyeoPost != null && (startpost == null || startpost != null && startMoyeoPost.getCreateTime().isBefore(startpost.getCreateTime()))) {
+        } else { // if(startMoyeoPost != null && (startpost == null || startpost != null && startMoyeoPost.getCreateTime().isBefore(startpost.getCreateTime()))) {
             // 모여 포스트가 start!
             List<MoyeoPhoto> photoList = startMoyeoPost.getMoyeoPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
             startPlace = startMoyeoPost.getAddress2();
         }
 
-        if(lastpost != null && (lastMoyeoPost == null || lastMoyeoPost != null && lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
+        if(lastpost != null && (lastMoyeoPost == null || lastpost.getCreateTime().isAfter(lastMoyeoPost.getCreateTime()))) {
             // 일반 포스트가 last!
             lastPlace = lastpost.getAddress2();
-        } else if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
+        } else { // if(lastMoyeoPost != null && (lastpost == null || lastpost != null && lastMoyeoPost.getCreateTime().isAfter(lastpost.getCreateTime()))) {
             // 모여 포스트가 last!
             lastPlace = lastMoyeoPost.getAddress2();
         }
