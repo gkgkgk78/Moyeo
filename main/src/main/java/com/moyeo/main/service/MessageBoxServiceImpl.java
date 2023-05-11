@@ -39,6 +39,7 @@ public class MessageBoxServiceImpl implements MessageBoxService{
                     .content(message.getContent())
                     .isChecked(message.getIsChecked())
                     .createTime(message.getCreateTime())
+                    .inviteKey(message.getInviteKey())
                     .build());
         }
         return MyMessageDtos;
