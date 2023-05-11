@@ -3,6 +3,7 @@ package com.example.batch.config;
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
 import com.example.batch.RestaurantRecommendDto.MessageBox;
 import com.example.batch.RestaurantRecommendDto.PushTable;
+import com.example.batch.RestaurantRecommendDto.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,10 @@ import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -106,7 +111,7 @@ public class BatchConfig {
                 String m = response.getBody();
                 Map<String, String> responseMap = mapper.readValue(m, Map.class);
                 log.info("AUTO-GPT message:{}",responseMap);
-
+                String result = responseMap.get("result");
                 headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
                 mapper = new ObjectMapper();
@@ -115,10 +120,15 @@ public class BatchConfig {
                 map.put("message",responseMap.get("result"));
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
                 ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
-                log.info("result :{}",responseMap.get("result"));
-                return MessageBox.builder()
-
-                        .content(responseMap.get("result"))
+                String respo = res.getBody();
+                responseMap = mapper.readValue(respo, Map.class);
+                log.info("id :{}",responseMap.get("id"));
+                String  a = responseMap.get("id");
+                Long b = Long.valueOf(a);
+            return MessageBox.builder()
+                        .userId(User.builder().userId(Long.valueOf(responseMap.get("id"))).build())
+                        .content(result)
+                        .createTime(LocalDateTime.now())
                         .build();
 //                return FirebaseCM.builder()
 //                        .id(item.getDeviceToken())
