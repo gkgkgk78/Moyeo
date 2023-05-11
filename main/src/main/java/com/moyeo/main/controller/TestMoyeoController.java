@@ -175,7 +175,7 @@ public class TestMoyeoController {
 
         log.info("response insert 작업 완료");
 
-        //fcmService.send(user);
+        fcmService.send(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
