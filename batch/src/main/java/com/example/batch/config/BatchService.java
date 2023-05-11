@@ -93,7 +93,7 @@ public class BatchService {
             try {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
-                headers.add("Title","restaurant");
+                headers.add("Title","pushdining");
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String,Object> map = new HashMap<>();
                 map.put("data",goal);
