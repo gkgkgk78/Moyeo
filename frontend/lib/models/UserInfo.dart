@@ -3,12 +3,14 @@ class UserInfo {
   final String profileImageUrl;
   final String nickname;
   int timeLineId;
+  int moyeoTimelineId;
   int timelineNum;
 
   UserInfo({
     required this.userUid,
     required this.profileImageUrl,
     required this.nickname,
+    this.moyeoTimelineId = -1,
     this.timeLineId = -1,
     this.timelineNum = 0,
   });
@@ -18,6 +20,7 @@ class UserInfo {
       userUid: json['userUid'],
       profileImageUrl: json['profileImageUrl'],
       nickname: json['nickname'],
+      moyeoTimelineId: json['moyeoTimelineId'] ?? -1,
       timeLineId: json['timeLineId'] ?? -1,
       timelineNum: json['timelineNum'] ?? 0,
     );

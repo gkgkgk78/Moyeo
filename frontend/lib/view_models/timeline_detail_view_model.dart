@@ -22,7 +22,6 @@ class TimelineDetailViewModel extends ChangeNotifier {
   final textController = TextEditingController();
   List<TimelineDetail> _timelineDetails = [];
   // 모여 타임라인
-
   String? get title => _title;
 
   get nowMoyeo => _nowMoyeo;
@@ -120,8 +119,20 @@ class TimelineDetailViewModel extends ChangeNotifier {
     Navigator.pop(context);
   }
 
+  // 모여 시작하기
   startMoyeo(context) async {
     await MoyeoRepository().startMoyeo(context);
     notifyListeners();
   }
+
+  addMoyeoUser(context, List<Map<String,dynamic>> userList) async {
+    await MoyeoRepository().addMoyeoUser(context, userList);
+    notifyListeners();
+  }
+
+  //모여 나가기
+ outMoyeo(context, int moyeoTimelineId) async {
+    await TimelineRepository().outMoyeo(context, moyeoTimelineId);
+    notifyListeners();
+ }
 }

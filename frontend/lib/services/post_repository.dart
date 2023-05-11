@@ -41,6 +41,7 @@ class PostRepository {
   }
 
   // 동행 포스트 공개여부
+  // 기본값 1 요청 들어갈때마다 바뀜
   Future<bool> changePostPublic(
       BuildContext context, int postId) async {
     try {
@@ -65,39 +66,13 @@ class PostRepository {
   }
 
   // 모여 포스트 삭제하기
-  Future<void> deleteMoyeoPost(BuildContext context, int moyeo_postId) async {
+  Future<void> deleteMoyeoPost(BuildContext context, int postId) async {
     try{
       final dio = await authDio(context);
-      Response response = await dio.delete('api/auth/post/$moyeo_postId');
+      Response response = await dio.delete('api/auth/moyeo/$postId');
       return response.data;
     } catch(e) {
       throw Exception('DeletePost Error $e');
-    }
-  }
-
-  // 모여 나가기
-  Future<void> outMoyeo(context, moyeoTimelineId) async {
-    try {
-      final dio = await authDio(context);
-      await dio.put('/api/auth/moyeo/members', data: moyeoTimelineId);
-    } catch (e) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('종료 실패'),
-          content: const Text('포스트가 없는 여행은 종료할 수 없습니다.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-              },
-              child: const Text('확인'),
-            ),
-          ],
-        ),
-      );
-      throw Exception('Fail to delete moyeotimeline $e');
     }
   }
 }

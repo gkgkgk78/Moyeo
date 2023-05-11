@@ -271,97 +271,140 @@ class TimelineDetailPage extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       viewModel.timelineDetails.length > 0
-                                          ? Container(
-                                            margin: EdgeInsets.only(right: 35, top:5),
-                                            child:Row(
-                                            children:[
-                                              InkWell(
-                                                onTap: (){
-                                                  showDialog(
-                                                      barrierDismissible: false,
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(
-                                                        title: const Text('여행 제목을 입력해 주세요'),
-                                                        content: TextField(
-                                                          onChanged: (String value) {
-                                                            viewModel.changeTitle(value);
-                                                            },
-                                                          decoration: const InputDecoration(
-                                                            labelText: '제목',
-                                                            hintText: '필수 입니다.'),
-                                                      ),
-                                                      actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              if (viewModel.title != null) {
-                                                                appViewModel.userInfo.timeLineId =
-                                                                    -1;
-                                                                appViewModel
-                                                                    .changeTitleToFormer();
-                                                                appViewModel.changeTitle(
-                                                                  viewModel.title!,
-                                                                );
-                                                                Navigator.pop(context);
-                                                                viewModel.endTimeline(
-                                                                  appViewModel.myFeedNavigatorKey
-                                                                      .currentContext,
-                                                                );
-                                                              }
-                                                            },
-                                                            child: const Text(
-                                                              '여행 종료',
-                                                            ),
-                                                          ),
+                                          ? !viewModel.nowMoyeo
+                                            ? Container(
+                                              margin: EdgeInsets.only(right: 35, top:5),
+                                              child:Row(
+                                              children:[
+                                                InkWell(
+                                                  onTap: (){
+                                                    showDialog(
+                                                        barrierDismissible: false,
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          title: const Text('여행 제목을 입력해 주세요'),
+                                                          content: TextField(
+                                                            onChanged: (String value) {
+                                                              viewModel.changeTitle(value);
+                                                              },
+                                                            decoration: const InputDecoration(
+                                                              labelText: '제목',
+                                                              hintText: '필수 입니다.'),
+                                                        ),
+                                                        actions: [
                                                             TextButton(
                                                               onPressed: () {
-                                                                viewModel.resetTitle();
-                                                                Navigator.pop(context);
+                                                                if (viewModel.title != null) {
+                                                                  appViewModel.userInfo.timeLineId =
+                                                                      -1;
+                                                                  appViewModel
+                                                                      .changeTitleToFormer();
+                                                                  appViewModel.changeTitle(
+                                                                    viewModel.title!,
+                                                                  );
+                                                                  Navigator.pop(context);
+                                                                  viewModel.endTimeline(
+                                                                    appViewModel.myFeedNavigatorKey
+                                                                        .currentContext,
+                                                                  );
+                                                                }
                                                               },
-                                                              child: const Text('취소'),
+                                                              child: const Text(
+                                                                '여행 종료',
+                                                              ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                      );
-                                                },
-                                                child: Container(
-                                                  margin: const EdgeInsets.only(right: 10),
-                                                  padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
-                                                  decoration: BoxDecoration(
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color: Colors.grey.withOpacity(0.5),
-                                                          blurRadius: 1.0,
-                                                          spreadRadius: 1.0,
-                                                          offset: const Offset(2,2),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  viewModel.resetTitle();
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: const Text('취소'),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                  },
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(right: 10),
+                                                    padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                                    decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey.withOpacity(0.5),
+                                                            blurRadius: 1.0,
+                                                            spreadRadius: 1.0,
+                                                            offset: const Offset(2,2),
+                                                          )
+                                                        ],
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        gradient: LinearGradient(
+                                                            colors: <Color>[
+                                                              Colors.redAccent,
+                                                              Colors.orangeAccent,
+                                                            ]
                                                         )
-                                                      ],
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      gradient: LinearGradient(
-                                                          colors: <Color>[
-                                                            Colors.redAccent,
-                                                            Colors.orangeAccent,
-                                                          ]
-                                                      )
+                                                    ),
+                                                    child: Row(
+                                                        children:[
+                                                          Icon(
+                                                            Icons.done,
+                                                            color: Colors.white,
+                                                          ),
+                                                          Text(
+                                                            " 여행 끝",
+                                                            style: TextStyle(color: Colors.white),
+                                                          ),
+                                                        ]
+                                                    )
                                                   ),
-                                                  child: Row(
-                                                      children:[
-                                                        Icon(
-                                                          Icons.done,
-                                                          color: Colors.white,
-                                                        ),
-                                                        Text(
-                                                          " 여행 끝",
-                                                          style: TextStyle(color: Colors.white),
-                                                        ),
-                                                      ]
-                                                  )
                                                 ),
-                                              ),
-                                          ]
+                                            ]
+                                              )
                                             )
-                                      )
-                                      // 포스트를 등록하고 모여 타임라인 시작하기
-                                          : Container(),
+                                        // 포스트를 등록하고 모여 타임라인 시작하기
+                                            : Container()
+                                          : InkWell(
+                                              onTap: (){
+                                                viewModel.outMoyeo(
+                                                    context,
+                                                    appViewModel.userInfo.moyeoTimelineId
+                                                );
+                                              },
+                                              child: Container(
+                                                width: 115,
+                                                margin: const EdgeInsets.only(top:5, bottom:5, left: 20, right: 20) ,
+                                                padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                                decoration: BoxDecoration(
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.grey.withOpacity(0.5),
+                                                        blurRadius: 1.0,
+                                                        spreadRadius: 1.0,
+                                                        offset: const Offset(2,2),
+                                                      )
+                                                    ],
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    gradient: LinearGradient(
+                                                        colors: <Color>[
+                                                          Colors.redAccent,
+                                                          Colors.orangeAccent,
+                                                        ]
+                                                    )
+                                                ),
+                                                child: Row(
+                                                    children:[
+                                                      Icon(
+                                                        Icons.group_remove,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Text(
+                                                        "  모여 나가기",
+                                                        style: TextStyle(color: Colors.white),
+                                                      ),
+                                                    ]
+                                                )
+                                            ),
+                                        ),
                                     ],
                                   )
                                 : Container(),

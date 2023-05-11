@@ -119,4 +119,33 @@ class TimelineRepository {
       throw Exception('Fail to delete timeline $e');
     }
   }
+
+  // 모여나가기
+  Future<void> outMoyeo(context, moyeoTimelineId) async {
+    try {
+      final dio = await authDio(context);
+      await dio.put(
+          '/api/auth/moyeo/members',
+          data: {'moyeoTimelineId':moyeoTimelineId}
+      );
+    } catch (e) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('종료 실패'),
+          content: const Text('포스트가 없는 여행은 종료할 수 없습니다.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+      throw Exception('Fail to delete moyeotimeline $e');
+    }
+  }
 }

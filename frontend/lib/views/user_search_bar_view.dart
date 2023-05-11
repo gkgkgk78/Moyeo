@@ -146,12 +146,12 @@ class UserSearchBar extends StatelessWidget {
                                   BorderSide(color: Colors.black54, width: 2)),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
-                            borderSide: BorderSide(color: Colors.black54, width: 3),
+                            borderSide: BorderSide(color: Colors.grey, width: 1.5),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                             borderSide:
-                                BorderSide(color: Colors.blueAccent, width: 3),
+                                BorderSide(color: Colors.orangeAccent, width: 3),
                           ),
                           suffixIcon: Icon(Icons.search, color: Colors.blueAccent),
                           hintText: "검색...",
