@@ -10,6 +10,7 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.ChatService;
 import com.moyeo.main.service.FcmService;
+import com.moyeo.main.service.MessageBoxService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class YeobotController {
     private final YeobotClient yeobotClient;
     private final ChatService chatService;
     private final FcmService fcmService;
+    private final MessageBoxService messageBoxService;
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -95,9 +97,12 @@ public class YeobotController {
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -151,9 +156,12 @@ public class YeobotController {
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -184,9 +192,12 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -217,9 +228,12 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
