@@ -95,7 +95,7 @@ public class YeobotController {
 
         //goal 제대로 만들어졌는지 점검
         System.out.println(goal);
-        log.info(goal);
+        log.info("goal : {}",goal);
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
@@ -154,7 +154,7 @@ public class YeobotController {
 
         //goal 제대로 만들어졌는지 점검
         System.out.println(goal);
-        log.info(goal);
+        log.info("goal : {}",goal);
 
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
 
@@ -192,7 +192,8 @@ public class YeobotController {
 
         //goal 제대로 만들어졌는지 점검
         System.out.println(goal);
-        log.info(goal);
+        log.info("goal : {}",goal);
+        log.info("goal : {}",goal.toString());
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
@@ -232,7 +233,7 @@ public class YeobotController {
 
         //goal 제대로 만들어졌는지 점검
         System.out.println(goal);
-        log.info(goal);
+        log.info("goal : {}",goal);
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
