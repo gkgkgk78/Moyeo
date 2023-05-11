@@ -12,7 +12,7 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -357,7 +357,7 @@ public class PostServiceImpl implements PostService {
             moyeoPostList = moyeoPosts.stream()
                     .map(post -> BasePostDto.builder(post
                                     , null
-                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
                             .build())
                     .collect(Collectors.toList());
         }

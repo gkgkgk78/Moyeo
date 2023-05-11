@@ -1,18 +1,15 @@
 package com.moyeo.main.controller;
 
-import com.moyeo.main.conponent.ClovaSpeechClient;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.TimelinePostOuter;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.service.TimeLineService;
-import com.moyeo.main.service.TimeLineService2;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,7 +30,6 @@ import java.util.List;
 @Tag(name = "Timeline")
 public class TimelineController {
     private final TimeLineService timeLineService;
-    private final TimeLineService2 timeLineService2;
 
     //타임라인 한개 조회 => 이제 이걸 해야함 , 넘겨줄때 여행한 국가 리스트 순서대로 해서 만들어 넘겨주면 될듯
     @GetMapping("/{uid}")
@@ -44,8 +40,7 @@ public class TimelineController {
         User user = null;
         if (auth != null && auth.getPrincipal() != null)
             user = (User) auth.getPrincipal();
-        // TimelinePostOuter timeline = timeLineService.searchOneTimeline(uid, user);
-        TimelinePostOuter timeline = timeLineService2.searchOneTimeline(uid, user);
+        TimelinePostOuter timeline = timeLineService.searchOneTimeline(uid, user);
         if (timeline==null)
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
         log.info("timeLine info :{}",timeline.getTimeline());
@@ -125,7 +120,8 @@ public class TimelineController {
     public ResponseEntity<?> getTimelineLatestWithPaging(@PathVariable Integer page) throws Exception {
         log.info("메인피드 최신순 타임라인 조회 시작");
         Pageable pageable = PageRequest.of(page, 15, Sort.by("createTime").descending());
-        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineOrderBylatestPaging(pageable);
+        // List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineOrderBylatestPaging(pageable);
+        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.getTimelineList(pageable);
         log.info("메인피드 최신순 타임라인 조회 종료");
         if (timelinelist != null) {
             return new ResponseEntity<>(timelinelist, HttpStatus.OK);
@@ -142,12 +138,16 @@ public class TimelineController {
     @Operation(summary = "타임라인 조회 (내 페이지에서)", description = "최신순으로 조회된다. with paging")
     public ResponseEntity<?> getMyTimelineListWithPaging(@PathVariable Integer page) throws Exception {
         log.info("내 피드에서 내 타임라인 리스트 조회 기능 시작");
+
         Pageable pageable = PageRequest.of(page, 15);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
         if (auth != null && auth.getPrincipal() != null)
             user = (User) auth.getPrincipal();
-        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchMyTimelineWithPaging(user, pageable);
+
+        // List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchMyTimelineWithPaging(user, pageable);
+        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.getTimelineList(user, pageable);
+
         log.info("내 피드에서 내 타임라인 리스트 조회 기능 종료");
         return new ResponseEntity<>(timelinelist, HttpStatus.OK);
     }
@@ -157,9 +157,13 @@ public class TimelineController {
     @GetMapping("/other/{uid}/{page}")
     @Operation(summary = "타임라인 조회 (다른 유저의 피드에서)", description = "최신순으로 조회된다. with paging")
     public ResponseEntity<?> getAnotherTimelineListWithPaging(@PathVariable Long uid, @PathVariable Integer page) throws Exception {
-        Pageable pageable = PageRequest.of(page, 15);
         log.info("다른 유저의 피드에서 타임라인 조회 기능 시작");
-        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineNotPublicWithPaging(uid, pageable);
+
+        Pageable pageable = PageRequest.of(page, 15, Sort.by("createTime").descending());
+
+        // List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineNotPublicWithPaging(uid, pageable);
+        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.getTimelineList(uid, pageable);
+
         log.info("다른 유저의 피드에서 타임라인 조회 기능 종료");
         return new ResponseEntity<>(timelinelist, HttpStatus.OK);
 
