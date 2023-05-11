@@ -45,6 +45,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "select * from post where post_id in :postIdList")
     List<Post> findAllPostIn(List<Long> postIdList);
 
+    @Query(nativeQuery = true, value = "SELECT p.*\n"
+        + "FROM post p\n"
+        + "JOIN favorite f ON p.post_id = f.post_id\n"
+        + "WHERE f.user_id = :userId")
+    List<Post> findAllFavoritePost(Long userId);
+
     // @Query(nativeQuery = true, value = "select post_id, create_time, modify_time, address1, address2, address3, address4, favorite_count, text, voice_length, voice_url, nation_id, false as is_moyeo\n"
     //     + "from post\n"
     //     + "where post_id in :postIdList\n"

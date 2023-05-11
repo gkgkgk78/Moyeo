@@ -28,7 +28,7 @@ public class MoyeoMembersController {
 	private final MoyeoMembersService moyeoMembersService;
 
 	@PostMapping("/invite")
-	@Operation(summary = "동행 초대, 푸시 알림 보내기")
+	@Operation(summary = "동행 초대, 푸시 알림 보내기 & 메시지 함에 저장")
 	public ResponseEntity<?> inviteMoyeoMembers(@RequestBody MoyeoMembersReq moyeoMembersReq) throws Exception {
 		log.info("동행 초대 시작...");
 
