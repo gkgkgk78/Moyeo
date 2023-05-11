@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
     private UserInfoRes entityToResponseDTO(User user) {
         Integer timelineNum = timeLineRepository.countAllByUserId(user);
         Long timeLineId = -1L;
-        Long moyeoTimelineId = null; // 추가
+        Long moyeoTimelineId = -1L; // 추가
         if (timeLineService.isTraveling(user.getUserId()) != null) {
             timeLineId = timeLineService.isTraveling(user.getUserId()).getTimelineId();
 
