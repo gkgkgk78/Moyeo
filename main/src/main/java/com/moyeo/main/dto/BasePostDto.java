@@ -9,12 +9,9 @@ import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.Nation;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
-import com.moyeo.main.entity.TimeLine;
-import com.moyeo.main.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 @Builder(builderMethodName = "BasePostDtoBuilder")
 @Getter
@@ -38,7 +35,7 @@ public class BasePostDto {
 
 	private Boolean isFavorite;
 	private Boolean isMoyeo;
-	private List<PostMembers> members;
+	private List<MemberInfoRes> members;
 
 	public static BasePostDto.BasePostDtoBuilder builder(Post entity, Boolean isFavorite) {
 		List<String> photos = new ArrayList<>();
@@ -67,7 +64,7 @@ public class BasePostDto {
 			;
 	}
 
-	public static BasePostDto.BasePostDtoBuilder builder(MoyeoPost entity, Boolean isFavorite, List<PostMembers> members) {
+	public static BasePostDto.BasePostDtoBuilder builder(MoyeoPost entity, Boolean isFavorite, List<MemberInfoRes> members) {
 		List<String> photos = new ArrayList<>();
 		for (MoyeoPhoto photo : entity.getMoyeoPhotoList()) {
 			photos.add(photo.getPhotoUrl());
