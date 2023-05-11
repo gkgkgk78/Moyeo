@@ -56,7 +56,7 @@ public class FcmServiceImpl implements FcmService {
 
 
     @Override
-    public void send(String token, String content) throws Exception {
+    public void send(String token, String content,String title) throws Exception {
 
 
         log.info("들어온 토큰 확인"+token);
@@ -67,7 +67,7 @@ public class FcmServiceImpl implements FcmService {
                         .setPriority(AndroidConfig.Priority.HIGH)
                         .setDirectBootOk(true)
                         .setNotification(AndroidNotification.builder()
-                                .setTitle("Test 진행중") // 알림 제목
+                                .setTitle(title) // 알림 제목
                                 .setBody(content) // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())

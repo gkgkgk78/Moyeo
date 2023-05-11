@@ -18,21 +18,9 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
     private final YeobotClient yeobotClient;
     private final FcmService fcmService;
 
-    private final UserRepository userRepository;
-
     private final ChatService chatService;
 
-    /*
-    * 맛집
-        String goal = "Search for a good restaurant near " + addressList.get(0) +" "+ addressList.get(1) +" "+ addressList.get(2) +" "+ addressList.get(3) +".";
-        String caseType = "restaurant";
-
-
-        액티비티
-        String goal = "Recommend me some fun things to do near "+ addressList.get(0) + " "+ addressList.get(1) + " " + addressList.get(2) + " today.";
-        String caseType = "activity";
-
-    ** */
+    private final MessageBoxService messageBoxService;
 
     @Override
     public void insert(PostInsertReq post) {
@@ -43,21 +31,23 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
         String act = "Recommend me some fun things to do near " + post.getAddress1() + " " + post.getAddress2() + " " + post.getAddress3() + " today.";
         String goal1[] = {res, act};
         String goal2[] = {"restaurant", "activity"};
-
+        String title[] = {"맛집 추천", "액티비티 추천"};
 
         try {
-
             for (int i = 0; i < 2; i++) {
                 String a1 = yeobotClient.sendYeobotData(goal2[i], goal1[i]);
                 log.info("autogpt에게 응답 받음 " + a1.toString());
                 //System.out.println(a1.toString());
-                log.info("받은 토큰 정보"+post.getDeviceToken());
                 //받은 응답을 바탕으로 푸시 알림을 해줘야 함
-                fcmService.send(post.getDeviceToken(), a1);
-                User user = userRepository.getByUserId(post.getUserId());
+                fcmService.send(post.getDeviceToken(), a1, title[i]);
+
                 Chat chat = Chat.builder(a1).build();
-                chatService.insertAutogpt(post.getUserId().toString(), chat);
+                chatService.insertAutogpt(post.getUserId().toString(), chat);//mongodb에 넣는 작업
+
+                //이제 messagebox에 insert 하면 된다.
+                messageBoxService.insert(post.getUserId().toString(), a1);
             }
+            log.info("받은 토큰 정보" + post.getDeviceToken());
 
         } catch (Exception e) {
             log.info(e.getMessage());
