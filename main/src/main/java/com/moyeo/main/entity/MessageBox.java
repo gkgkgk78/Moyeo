@@ -35,4 +35,6 @@ public class MessageBox {
 
     private LocalDateTime createTime;
 
+    private Long inviteKey;
+
 }
