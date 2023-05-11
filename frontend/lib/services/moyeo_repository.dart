@@ -29,24 +29,22 @@ class MoyeoRepository{
   // 유저 추가하고 초대 알림 보내기
   Future<MoyeoTimeline> addMoyeoUser(
       BuildContext context, List<Map<String,dynamic>> userList) async {
-  // Future<MoyeoTimeline> addMoyeoUser(
-  //     BuildContext context, List<Map<String,int>> userList) async {
-  //   try {
-  //     // 이전 로직
-  //     // List<Map<String,int>> userIdList = [];
-  //     //
-  //     // for (var user in userList){
-  //     //   userIdList.add({"userId":user.userUid});
-  //     // }
-  //
-  //     final dio = await authDio(context);
-  //     Response response = await dio
-  //       .post('api/auth/moyeo/members', data:userList);
-  //     return response.data;
-  //   } catch(e) {
-  //     throw Exception('AddMoyeoUser Error $e');
-  //   }
-  // }
+    try {
+      // 이전 로직
+      // List<Map<String,int>> userIdList = [];
+      //
+      // for (var user in userList){
+      //   userIdList.add({"userId":user.userUid});
+      // }
+
+      final dio = await authDio(context);
+      Response response = await dio
+        .post('api/auth/moyeo/members', data:userList);
+      return response.data;
+    } catch(e) {
+      throw Exception('AddMoyeoUser Error $e');
+    }
+  }
 
   Future<void> acceptInvite(context, moyeoTimelindId) async {
     try {
@@ -58,23 +56,23 @@ class MoyeoRepository{
     }
   }
 
-  Future<void> outMoyeo(context, moyeoTimelineId) async {
-    try {
-      // 이전 로직
-      // List<Map<String,int>> userIdList = [];
-      //
-      // for (var user in userList){
-      //   userIdList.add({"userId":user.userUid});
-      // }
-
-      final dio = await authDio(context);
-      Response response = await dio
-        .post('api/auth/moyeo/members/invite', data:userList);
-      return response.data;
-    } catch(e) {
-      throw Exception('AddMoyeoUser Error $e');
-    }
-  }
+  // Future<void> outMoyeo(context, moyeoTimelineId) async {
+  //   try {
+  //     // 이전 로직
+  //     // List<Map<String,int>> userIdList = [];
+  //     //
+  //     // for (var user in userList){
+  //     //   userIdList.add({"userId":user.userUid});
+  //     // }
+  //
+  //     final dio = await authDio(context);
+  //     Response response = await dio
+  //       .post('api/auth/moyeo/members/invite', data:userList);
+  //     return response.data;
+  //   } catch(e) {
+  //     throw Exception('AddMoyeoUser Error $e');
+  //   }
+  // }
 
   Future<Map<String, dynamic>> changeFavoritePost(
       BuildContext context, int postId, userUid) async {

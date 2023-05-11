@@ -82,9 +82,6 @@ class ChatbotViewModel extends ChangeNotifier {
   Future<void> startChat(context) async {
     _messages = await ChatbotRepository().ChatDetailFromServer(context);
     notifyListeners();
-    if (_messages.last.message == "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?" ||
-        _messages.last.message == "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?") {
-    } else {
       if (isTravel == -1) {
         submitMessage(
           ChatMessage(
@@ -100,7 +97,7 @@ class ChatbotViewModel extends ChangeNotifier {
           ),
         );
       }
-    }
+
     goBottom();
     notifyListeners();
   }
