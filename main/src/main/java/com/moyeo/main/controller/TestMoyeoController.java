@@ -54,6 +54,7 @@ public class TestMoyeoController {
     private final ChatService chatService;
 
     private final AsyncTestService asyncTestService;
+    private final MessageBoxService messageBoxService;
 
 
     @PostMapping("/login")
@@ -168,10 +169,13 @@ public class TestMoyeoController {
         log.info("response insert 작업 시작");
 
         chatService.insertResponse(user, result);
+        log.info("몽고디비저장완료");
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("메시지박스저장완료");
 
         log.info("response insert 작업 완료");
 
-        fcmService.send(user);
+        //fcmService.send(user);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
