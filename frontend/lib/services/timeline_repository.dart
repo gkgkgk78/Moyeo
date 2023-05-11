@@ -1,10 +1,13 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import '../models/Timeline.dart';
 import '../models/TimelineInfo.dart';
 import '../utils/auth_dio.dart';
+
+var logger = Logger();
 
 class TimelineRepository {
   TimelineRepository._internal();
@@ -54,6 +57,7 @@ class TimelineRepository {
     try {
       final dio = await authDio(context);
       Response response = await dio.get('api/auth/timeline/$timelineId');
+      logger.d(response.data);
       return TimelineInfo.fromJson(response.data);
     } catch (error) {
       throw Exception('Fail to get timeline: $error');
