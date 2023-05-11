@@ -24,7 +24,6 @@ public class AutogptController {
 
     @PostMapping(value = "")
     public void getFavoritePostList(@ModelAttribute PostInsertReq req) throws Exception {
-        System.out.println("들어옴");
         log.info("비동기 post insert 후 autogpt작업 시작");
         postInsertAutogpt.insert(req);
         log.info("비동기 post insert 후 autogpt작업 완료");
