@@ -93,6 +93,10 @@ public class YeobotController {
         String goal = "Search for a good restaurant near " + addressList.get(0) +" "+ addressList.get(1) +" "+ addressList.get(2) +" "+ addressList.get(3) +".";
         String caseType = "restaurant";
 
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info(goal);
+
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
@@ -146,9 +150,11 @@ public class YeobotController {
                 + addressList.get(1) + " "
                 + addressList.get(2) + " today.";
 
-        //return ResponseEntity.ok(goal);
-
         String caseType = "activity";
+
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info(goal);
 
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
 
@@ -181,7 +187,12 @@ public class YeobotController {
         String purpose = request.getPurpose();
 
         String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
+
         String caseType = "place";
+
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info(goal);
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
@@ -218,6 +229,10 @@ public class YeobotController {
         // 추천 결과 문자열 생성
         String goal = "Recommend me some fun things to do near " + destination + " during " + season +".";
         String caseType = "activity";
+
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info(goal);
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
