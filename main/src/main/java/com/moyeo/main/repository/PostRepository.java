@@ -51,6 +51,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         + "WHERE f.user_id = :userId")
     List<Post> findAllFavoritePost(Long userId);
 
+    @Query(nativeQuery = true, value = "SELECT p.*\n"
+        + "FROM post p\n"
+        + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"
+        + "WHERE (p.address1 LIKE '%:location%' OR p.address2 LIKE '%:location%' OR p.address3 LIKE '%:location%' OR p.address4 LIKE '%:location%')\n"
+        + "  AND t.is_timeline_public = true\n"
+        + "  AND t.is_complete = true")
+    List<Post> findAllMainFeedPostByLocation(String location);
+
     // @Query(nativeQuery = true, value = "select post_id, create_time, modify_time, address1, address2, address3, address4, favorite_count, text, voice_length, voice_url, nation_id, false as is_moyeo\n"
     //     + "from post\n"
     //     + "where post_id in :postIdList\n"
