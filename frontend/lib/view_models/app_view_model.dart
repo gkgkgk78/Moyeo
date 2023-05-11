@@ -37,6 +37,12 @@ class AppViewModel with ChangeNotifier {
   final MyStack<String> _formerTitle = MyStack<String>();
 
   AppViewModel(this._userInfo, this._title, this._context, {this.currentIndex = 0}) {
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+          (newToken) {
+        _fcmToken = newToken;
+        notifyListeners();
+      },
+    );
     initializeFirebase();
     _initLocalNotification(_context);
   }
@@ -211,17 +217,12 @@ class AppViewModel with ChangeNotifier {
 
   int _moyeoTimelineId = -1;
 
+
   Future<void> initializeFirebase() async {
-    logger.d("시작");
-    String? vapidKey = dotenv.env["firebaseValidKey"];
-    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: vapidKey))!;
+    String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
+    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
     logger.d(_fcmToken);
-    FirebaseMessaging.instance.onTokenRefresh.listen(
-      (newToken) async {
-        _fcmToken = newToken;
-        logger.d(_fcmToken);
-      },
-    );
+    notifyListeners();
     // 알림 권한 요청
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -303,7 +304,6 @@ class AppViewModel with ChangeNotifier {
     await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
-        logger.d('누');
         logger.d(payload.notificationResponseType);
         if (payload.actionId == 'okay') {
           // await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
@@ -327,9 +327,6 @@ class AppViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteFCMToken() {
-    FirebaseMessaging.instance.deleteToken();
-  }
 
   bool _modalVisible = false;
 

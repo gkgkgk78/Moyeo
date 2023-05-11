@@ -27,8 +27,6 @@ void main() async {
   KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
 
-
-
   runApp(
     MultiProvider(
       providers: [

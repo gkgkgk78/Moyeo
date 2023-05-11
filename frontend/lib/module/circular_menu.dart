@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
@@ -88,18 +89,22 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   Icons.logout,
                   color: Colors.red,
                 ),
-                onClick: () {
+                onClick: () async {
                   Navigator.pop(context);
                   const storage = FlutterSecureStorage();
                   storage.deleteAll();
-                  appViewModel.deleteFCMToken();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const LoginPage(),
-                    ),
-                    (routes) => false,
-                  );
+                  FirebaseMessaging.instance.deleteToken();
+                  Future.delayed(const Duration(seconds: 5));
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => const LoginPage(),
+                      ),
+                          (routes) => false,
+                    );
+                  }
+                  logger.d("로그아웃 완료");
                 },
               ),
             ),
