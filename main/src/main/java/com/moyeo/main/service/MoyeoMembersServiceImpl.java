@@ -50,11 +50,11 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         log.info("동행 초대 푸시 알림 보내기...");
         fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
 
-        // TODO
-        log.info("메시지 함에 저장");
-        messageBoxRepository.save(MessageBox.builder()
-            .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
-            .userId(invitee).build());
+        // // TODO
+        // log.info("메시지 함에 저장");
+        // messageBoxRepository.save(MessageBox.builder()
+        //     .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
+        //     .userId(invitee).build());
 
         log.info("동행 초대 끝...");
         return moyeoTimelineId;
