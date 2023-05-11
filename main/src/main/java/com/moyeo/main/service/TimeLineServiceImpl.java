@@ -413,7 +413,7 @@ public class TimeLineServiceImpl implements TimeLineService {
             // 일반 포스트가 start!
             List<Photo> photoList = startpost.getPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
-        } else { // if(startMoyeoPostForThumbnail != null && (startpost == null || startMoyeoPostForThumbnail.getCreateTime().isBefore(startpost.getCreateTime()))) {
+        } else if(startMoyeoPostForThumbnail != null && (startpost == null || startMoyeoPostForThumbnail.getCreateTime().isBefore(startpost.getCreateTime()))) {
             // 모여 포스트가 start!
             List<MoyeoPhoto> photoList = startMoyeoPostForThumbnail.getMoyeoPhotoList();
             if(photoList != null && photoList.size() != 0) thumbnailUrl = photoList.get(0).getPhotoUrl();
