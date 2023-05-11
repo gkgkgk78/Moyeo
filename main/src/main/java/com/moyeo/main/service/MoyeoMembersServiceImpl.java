@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.moyeo.main.dto.MoyeoMembersReq;
 import com.moyeo.main.dto.RegistMoyeoRes;
+import com.moyeo.main.entity.MessageBox;
 import com.moyeo.main.entity.MoyeoMembers;
 import com.moyeo.main.entity.MoyeoTimeLine;
 import com.moyeo.main.entity.TimeLine;
@@ -16,6 +17,7 @@ import com.moyeo.main.entity.TimeLineAndMoyeo;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.repository.MessageBoxRepository;
 import com.moyeo.main.repository.MoyeoMembersRepository;
 import com.moyeo.main.repository.MoyeoTimeLineRepository;
 import com.moyeo.main.repository.TimeLineAndMoyeoRepository;
@@ -34,6 +36,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final TimeLineAndMoyeoRepository timeLineAndMoyeoRepository;
     private final MoyeoTimeLineRepository moyeoTimeLineRepository;
+    private final MessageBoxRepository messageBoxRepository;
     private final UserRepository userRepository;
     private final FcmService fcmService;
 
@@ -44,10 +47,14 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         Long moyeoTimelineId = moyeoMembersReq.getMoyeoTimelineId();
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
 
-        // TODO 메시지 함?
-
         log.info("동행 초대 푸시 알림 보내기...");
         fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림 테스트!!", "동행 초대 알림 도착...!!");
+
+        // TODO
+        log.info("메시지 함에 저장");
+        messageBoxRepository.save(MessageBox.builder()
+            .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
+            .userId(invitee).build());
 
         log.info("동행 초대 끝...");
         return moyeoTimelineId;
@@ -100,7 +107,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         log.info("여행 중인지 체크 중...");
         TimeLine timeLine = timeLineRepository.findFirstByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
         log.info("이미 동행 중인지 체크 중...");
-        // 다른 동행에 참여 중이면 안된다. TODO 테스트
+        // 다른 동행에 참여 중이면 안된다.
         if(moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null).isPresent()) {
             throw new BaseException(ErrorMessage.ALREADY_MOYEO);
         }
