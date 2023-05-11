@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/models/PushAlarm.dart';
 import 'package:moyeo/services/message_repository.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ import '../models/UserInfo.dart';
 var logger = Logger();
 
 class MessageListViewModel extends ChangeNotifier {
-  List _pushList = [];
+  List<PushAlarm> _pushList = [];
   List get pushList => _pushList;
 
   List _inviteList = [];
@@ -32,7 +33,6 @@ class MessageListViewModel extends ChangeNotifier {
 
   Future<void> getPushList(BuildContext context) async {
     _pushList = await MessageRepository().getPushList(context, userInfo.userUid);
-    logger.d(_pushList);
     notifyListeners();
   }
 

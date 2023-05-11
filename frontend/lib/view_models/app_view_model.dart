@@ -217,6 +217,8 @@ class AppViewModel with ChangeNotifier {
 
   int _moyeoTimelineId = -1;
 
+  String _pushTitle = "";
+  String _pushBody = "";
 
   Future<void> initializeFirebase() async {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
@@ -237,19 +239,15 @@ class AppViewModel with ChangeNotifier {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
         NotificationDetails details;
-        if (rm.notification?.body?.contains("초대") == true) {
+        if (rm.notification?.body?.contains("동행") == true) {
           NotificationDetails buttonDetails = const NotificationDetails(
             android: AndroidNotificationDetails(
-              'moyeo1',
+              '초대1',
               '모여1',
               importance: Importance.max,
               priority: Priority.high,
               styleInformation: BigTextStyleInformation(''),
               category: AndroidNotificationCategory.social,
-              actions: [
-                AndroidNotificationAction('okay', '수락'),
-                AndroidNotificationAction('no', '거절'),
-              ],
             ),
             iOS: DarwinNotificationDetails(
               presentAlert: true,
@@ -257,6 +255,10 @@ class AppViewModel with ChangeNotifier {
               presentSound: true,
             ),
           );
+          logger.d(rm.notification?.title);
+          logger.d(rm.notification?.body);
+          _pushTitle = (rm.notification?.title)!;
+          _pushBody = (rm.notification?.body)!;
           details = buttonDetails;
           String? moyeoTimeLineId = rm.data["moyeoTimelineId"];
           _moyeoTimelineId = int.parse(moyeoTimeLineId!);
@@ -304,12 +306,9 @@ class AppViewModel with ChangeNotifier {
     await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
-        logger.d(payload.notificationResponseType);
-        if (payload.actionId == 'okay') {
-          // await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
-          logger.d('수락');
-        } else {
-          logger.d('거절');
+        // _moyeoTimelineId
+        if(_pushBody.contains("동행")) {
+          MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
         }
         goMessageListPage();
       },

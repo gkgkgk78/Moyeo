@@ -76,7 +76,7 @@ class MessageListPage extends StatelessWidget {
                               child: Image.network(
                                   "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
                             ),
-                            title: Text(viewModel.pushList[index]["message"]),
+                            title: Text(viewModel.pushList[index].content),
                           ),
                         );
                       },
