@@ -39,19 +39,24 @@ class AudioPlayerView extends StatelessWidget {
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
                                   colors: [
-                                Colors.redAccent,
-                                Colors.deepPurpleAccent,
-                                Colors.orangeAccent,
-                              ])),
+                                    Colors.redAccent,
+                                    Colors.deepPurpleAccent,
+                                    Colors.orangeAccent,
+                                  ])),
                           child: SliderTheme(
                             data: SliderThemeData(
-                                trackShape: CustomTrackShape(),
-                                thumbColor: Colors.transparent,
-                                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 20),
-                                overlayColor: Colors.blueAccent,
-                                trackHeight: 14,
-                                activeTrackColor: Colors.transparent,
-                                inactiveTrackColor: Colors.white),
+                              trackShape: CustomTrackShape(),
+                              thumbColor: Colors.transparent,
+                              thumbShape: const RoundSliderThumbShape(
+                                  enabledThumbRadius: 20,
+                                  disabledThumbRadius: 0,
+                                  elevation: 0.0,
+                                  pressedElevation: 10.0),
+                              overlayColor: Colors.transparent,
+                              trackHeight: 14,
+                              activeTrackColor: Colors.transparent,
+                              inactiveTrackColor: Colors.white,
+                            ),
                             child: Slider(
                               // 현재 위치
                               value: viewModel.audioPosition.inMicroseconds
@@ -82,7 +87,8 @@ class AudioPlayerView extends StatelessWidget {
                                 trackShape: CustomTrackShape(),
                                 overlayShape: SliderComponentShape.noOverlay,
                                 thumbColor: Colors.transparent,
-                                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 20),
+                                thumbShape: const RoundSliderThumbShape(
+                                    enabledThumbRadius: 20),
                                 overlayColor: Colors.blueAccent,
                                 trackHeight: 14,
                                 activeTrackColor: Colors.transparent,

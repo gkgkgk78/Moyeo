@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,23 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/services/moyeo_repository.dart';
+import 'package:moyeo/view_models/message_list_view_model.dart';
 import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/timeline_detail_view_model.dart';
+import 'package:moyeo/views/message_list.dart';
+import 'package:moyeo/views/push_alarm_page.dart';
 import 'package:provider/provider.dart';
 
-import '../firebase_options.dart';
 import '../models/UserInfo.dart';
-import '../services/firebase_repository.dart';
 import '../services/timeline_repository.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_detail_page.dart';
-import '../views/chatbot_list_page.dart';
 import '../views/home_feed_page.dart';
 import '../views/modify_profile.dart';
 import '../views/my_feed_view.dart';
 import '../views/timeline_detail_page.dart';
 import 'chatbot_detail_view_model.dart';
-import 'chatbot_list_view_model.dart';
 import 'my_feed_view_model.dart';
 
 class AppViewModel with ChangeNotifier {
@@ -32,10 +33,18 @@ class AppViewModel with ChangeNotifier {
   final GlobalKey<NavigatorState> myFeedNavigatorKey = GlobalKey();
   UserInfo _userInfo;
   String _title = '';
+  BuildContext _context;
   final MyStack<String> _formerTitle = MyStack<String>();
 
-  AppViewModel(this._userInfo, this._title, {this.currentIndex = 0}) {
+  AppViewModel(this._userInfo, this._title, this._context, {this.currentIndex = 0}) {
+    FirebaseMessaging.instance.onTokenRefresh.listen(
+          (newToken) {
+        _fcmToken = newToken;
+        notifyListeners();
+      },
+    );
     initializeFirebase();
+    _initLocalNotification(_context);
   }
 
   String _fcmToken = '';
@@ -45,6 +54,8 @@ class AppViewModel with ChangeNotifier {
   String get title => _title;
 
   UserInfo get userInfo => _userInfo;
+
+  int _localMessageId = 0;
 
   final logger = Logger();
 
@@ -73,7 +84,7 @@ class AppViewModel with ChangeNotifier {
     changeTitle("채팅 리스트");
     Future.delayed(
       const Duration(milliseconds: 100),
-          () {
+      () {
         Navigator.pushNamed(
           myFeedNavigatorKey.currentContext!,
           '/chatbot',
@@ -91,6 +102,20 @@ class AppViewModel with ChangeNotifier {
         Navigator.pushNamed(
           myFeedNavigatorKey.currentContext!,
           '/modify/profile',
+        );
+      },
+    );
+  }
+
+  goMessageListPage() {
+    changePage(1);
+    changeTitle('날 귀찮게 했던 것들');
+    Future.delayed(
+      const Duration(milliseconds: 100),
+      () {
+        Navigator.pushNamed(
+          myFeedNavigatorKey.currentContext!,
+          '/messages',
         );
       },
     );
@@ -149,8 +174,14 @@ class AppViewModel with ChangeNotifier {
       page = const ModifyProfile();
     } else if (settings.name == '/chatbot') {
       page = ChangeNotifierProvider(
-          create: (_) => ChatbotViewModel(context, isTravel: _userInfo.timeLineId),
-          child: const ChatbotPage(),
+        create: (_) =>
+            ChatbotViewModel(context, isTravel: _userInfo.timeLineId),
+        child: const ChatbotPage(),
+      );
+    } else if (settings.name == '/messages') {
+      page = ChangeNotifierProvider(
+        create: (_) => MessageListViewModel(context, userInfo: _userInfo),
+        child: MessageListPage(),
       );
     } else {
       page = MultiProvider(
@@ -184,11 +215,16 @@ class AppViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  int _moyeoTimelineId = -1;
+
+  String _pushTitle = "";
+  String _pushBody = "";
+
   Future<void> initializeFirebase() async {
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-      _fcmToken = newToken;
-      logger.d(_fcmToken);
-    });
+    String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
+    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
+    logger.d(_fcmToken);
+    notifyListeners();
     // 알림 권한 요청
     await FirebaseMessaging.instance.requestPermission(
       alert: true,
@@ -200,14 +236,102 @@ class AppViewModel with ChangeNotifier {
       sound: true,
     );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage rm) {
-    });
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage rm) {
+        NotificationDetails details;
+        if (rm.notification?.body?.contains("동행") == true) {
+          NotificationDetails buttonDetails = const NotificationDetails(
+            android: AndroidNotificationDetails(
+              '초대1',
+              '모여1',
+              importance: Importance.max,
+              priority: Priority.high,
+              styleInformation: BigTextStyleInformation(''),
+              category: AndroidNotificationCategory.social,
+            ),
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          );
+          logger.d(rm.notification?.title);
+          logger.d(rm.notification?.body);
+          _pushTitle = (rm.notification?.title)!;
+          _pushBody = (rm.notification?.body)!;
+          details = buttonDetails;
+          String? moyeoTimeLineId = rm.data["moyeoTimelineId"];
+          _moyeoTimelineId = int.parse(moyeoTimeLineId!);
+        } else {
+          NotificationDetails plainDetails = const NotificationDetails(
+            android: AndroidNotificationDetails('moyeo1', '모여1'),
+            iOS: DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          );
+          details = plainDetails;
+        }
+
+        FlutterLocalNotificationsPlugin localNotification =
+            FlutterLocalNotificationsPlugin();
+
+        localNotification.show(
+            _localMessageId,
+            rm.notification?.title,
+            rm.notification?.body,
+            details,
+        );
+        _localMessageId += 1;
+      },
+    );
   }
 
+  Future<void> _initLocalNotification(BuildContext context) async {
+    FlutterLocalNotificationsPlugin localNotification =
+        FlutterLocalNotificationsPlugin();
+    AndroidInitializationSettings initSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/launcher_icon');
+    DarwinInitializationSettings initSettingsIOS =
+        const DarwinInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+    InitializationSettings initSettings = InitializationSettings(
+      android: initSettingsAndroid,
+      iOS: initSettingsIOS,
+    );
+    await localNotification.initialize(
+      initSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse payload) async {
+        // _moyeoTimelineId
+        if(_pushBody.contains("동행")) {
+          MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
+        }
+        goMessageListPage();
+      },
+    );
+
+  }
+
+  bool _fromPush = false;
+  bool get fromPush => _fromPush;
+
+  void changeFromPush() {
+    if (_fromPush == true) {
+      _fromPush = false;
+    }
+    notifyListeners();
+  }
+
+
   bool _modalVisible = false;
+
   bool get modalVisible => _modalVisible;
 
-  void chageModalVisible () {
+  void chageModalVisible() {
     if (_modalVisible == false) {
       _modalVisible = true;
     } else {

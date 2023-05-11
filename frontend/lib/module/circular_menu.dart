@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
@@ -88,17 +89,22 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   Icons.logout,
                   color: Colors.red,
                 ),
-                onClick: () {
+                onClick: () async {
                   Navigator.pop(context);
                   const storage = FlutterSecureStorage();
                   storage.deleteAll();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const LoginPage(),
-                    ),
-                    (routes) => false,
-                  );
+                  FirebaseMessaging.instance.deleteToken();
+                  Future.delayed(const Duration(seconds: 5));
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (_, __, ___) => const LoginPage(),
+                      ),
+                          (routes) => false,
+                    );
+                  }
+                  logger.d("로그아웃 완료");
                 },
               ),
             ),
@@ -142,7 +148,10 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   Icons.notifications,
                   color: Colors.white,
                 ),
-                onClick: () {},
+                onClick: () {
+                  Navigator.pop(context);
+                  appViewModel.goMessageListPage();
+                },
               ),
             ),
           ),
@@ -169,45 +178,80 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
               ),
             ),
           ),
-          Transform(
-            transform: Matrix4.rotationZ(
-                getRadiansFromDegree(rotationAnimation.value)),
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () {
-                if (animationController.isCompleted) {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CameraView(),
+          appViewModel.userInfo.timeLineId == -1
+              ? Transform(
+                  transform: Matrix4.rotationZ(
+                      getRadiansFromDegree(rotationAnimation.value)),
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (animationController.isCompleted) {
+                        Navigator.pop(context);
+                        appViewModel.startTravel(context);
+                      } else {
+                        animationController.forward();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      height: 70,
+                      width: 70,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.redAccent,
+                                Colors.orangeAccent,
+                              ])),
+                      child: const Icon(
+                        Icons.airplane_ticket_outlined,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ),
-                  );
-                } else {
-                  animationController.forward();
-                }
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                height: 70,
-                width: 70,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Colors.redAccent,
-                          Colors.orangeAccent,
-                        ])),
-                child: const Icon(
-                  Icons.camera,
-                  color: Colors.white,
-                  size: 40,
+                  ),
+                )
+              : Transform(
+                  transform: Matrix4.rotationZ(
+                      getRadiansFromDegree(rotationAnimation.value)),
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
+                      if (animationController.isCompleted) {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraView(),
+                          ),
+                        );
+                      } else {
+                        animationController.forward();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      height: 70,
+                      width: 70,
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.redAccent,
+                                Colors.orangeAccent,
+                              ])),
+                      child: const Icon(
+                        Icons.camera,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ],
       );
     });
