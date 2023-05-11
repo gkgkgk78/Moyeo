@@ -17,12 +17,15 @@ class TimelineDetailViewModel extends ChangeNotifier {
   bool _isPublic = false;
   bool _isComplete = false;
   String? _title;
+  bool _nowMoyeo = false;
   final int expansionTileAnimationTile = 200;
   final textController = TextEditingController();
   List<TimelineDetail> _timelineDetails = [];
   // 모여 타임라인
 
   String? get title => _title;
+
+  get nowMoyeo => _nowMoyeo;
 
   get isMine => _isMine;
 
@@ -49,6 +52,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;
     _isComplete = timelineInfo.isComplete;
+    _nowMoyeo = timelineInfo.nowMoyeo;
     notifyListeners();
   }
 

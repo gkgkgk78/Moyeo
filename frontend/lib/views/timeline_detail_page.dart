@@ -2,22 +2,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:moyeo/view_models/post_view_model.dart';
-import 'package:moyeo/views/moyeo_add_user.dart';
-import 'package:moyeo/views/post_list_item.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
+
+import '../views/moyeo_add_user.dart';
+import '../views/post_list_item.dart';
+
 import '../view_models/app_view_model.dart';
 import '../view_models/timeline_detail_view_model.dart';
-import '../view_models/search_bar_view_model.dart';
-import '../view_models/search_result_view_model.dart';
-import '../view_models/user_search_bar_view_model.dart';
-import '../views/user_search_bar_view.dart';
-import '../views/moyeo_add_user.dart';
 
-import 'package:moyeo/utils/black.dart';
+import '../utils/black.dart';
 
 var logger = Logger();
 
@@ -132,11 +128,14 @@ class TimelineDetailPage extends StatelessWidget {
                                     padding: const EdgeInsets.all(10),
                                     child: Text("등록된 포스트가 없습니다"),
                                   ),
-                                  Container(
+                                  viewModel.nowMoyeo
+                                  ? Container(
                                     padding: const EdgeInsets.all(10),
                                     child: Text("포스트를 등록하거나 모여를 시작해보세요"),
-                                  ),
-                                  InkWell(
+                                  )
+                                  : Container(),
+                                  viewModel.nowMoyeo
+                                  ? InkWell(
                                     onTap: (){
                                       Navigator.push(
                                           context,
@@ -179,7 +178,8 @@ class TimelineDetailPage extends StatelessWidget {
                                             ]
                                         )
                                     ),
-                                  ),
+                                  )
+                                  : Container()
                                 ],
                               ),
                             );

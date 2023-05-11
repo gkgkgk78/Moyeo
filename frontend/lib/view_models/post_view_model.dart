@@ -27,11 +27,10 @@ class PostViewModel extends ChangeNotifier {
   }
 
   //공유 변경
-  //changePostPublic(BuildContext context) async {
-  //     _isPublic =
-  //     await PostRepository().changePostPublic(context, timelineId);
-  //     notifyListeners();
-  //   }
+  changePostPublic(BuildContext context, int postId) async {
+      await PostRepository().changePostPublic(context, postId);
+      notifyListeners();
+    }
 
   // post 삭제
   deletePost(context) async {

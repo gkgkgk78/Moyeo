@@ -15,7 +15,7 @@ class TimelineListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const cardHeight = 140.0;
+    const cardHeight = 120.0;
     return Consumer<AppViewModel>(builder: (_, appViewModel, __) {
       return Container(
         margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
@@ -34,10 +34,12 @@ class TimelineListItem extends StatelessWidget {
             // );
           },
           child: Card(
+            margin: const EdgeInsets.only(left: 12, right:12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(color: Colors.black45, width: 1.5),
+              side: const BorderSide(color: Colors.transparent, width: 1),
             ),
+            elevation: 3,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Row(
               children: [
@@ -61,15 +63,18 @@ class TimelineListItem extends StatelessWidget {
                             )
                           ),
                           padding: const EdgeInsets.only(
-                              top: 10, right: 10, bottom: 10),
+                              top: 10,
+                              right: 10,
+                              bottom: 10
+                          ),
                           child: Row(
                             children: [
                               Container(
                                 height: 30,
                               ),
                               SizedBox(
-                                height: 100,
-                                width: 100,
+                                height: 90,
+                                width: 90,
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),

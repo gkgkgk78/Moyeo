@@ -16,10 +16,12 @@ import '../view_models/app_view_model.dart';
 import '../view_models/post_view_model.dart';
 
 class PostDetail extends StatelessWidget {
+
   const PostDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool isSwitched = true;
     return Consumer<PostViewModel>(builder: (context, viewModel, _) {
       return Row(
         children: [
@@ -138,32 +140,38 @@ class PostDetail extends StatelessWidget {
                             Icons.delete,
                             color: Colors.red,
                           ),
-                        )
+                        ),
                         /////////////////////////////////////////////////////////////////
                         // 포스트 공유 버튼 들어가는 자리
-                        // Container(
-                        //   child: Row(
-                        //     children: [
-                        //       Padding(
-                        //         padding: const EdgeInsets.only(right: 5),
-                        //         // 모여 컬럼
-                        //         // child: Text(viewModel.post.isPublic? '공개' : ' 비공개'),
-                        //       ),
-                        //       FlutterSwitch(
-                        //           width: 50,
-                        //           height: 30,
-                        //           toggleSize: 20,
-                        //           activeColor: Colors.orangeAccent.withOpacity(0.7),
-                        //           activeIcon: Icon(Icons.share),
-                        //           inactiveColor: Colors.grey.withOpacity(0.7),
-                        //           inactiveIcon: Icon(Icons.cancel_sharp),
-                        //           value: viewModel.post.isPublic,
-                        //           onToggle: (_){
-                        //             viewModel.changePostPublic(context);
-                        //           }),
-                        //     ],
-                        //   ),
-                        // ),
+                        Container(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                // 모여 컬럼
+                                child: Text(isSwitched? '공개' : ' 비공개'),
+                              ),
+                              FlutterSwitch(
+                                  width: 40,
+                                  height: 20,
+                                  toggleSize: 15,
+                                  activeColor: Colors.orangeAccent.withOpacity(0.7),
+                                  activeIcon: Icon(Icons.share),
+                                  inactiveColor: Colors.grey.withOpacity(0.7),
+                                  inactiveIcon: Icon(Icons.cancel_sharp),
+                                  value: isSwitched,
+                                  onToggle: (_){
+                                    viewModel.changePostPublic(
+                                        context,
+                                        viewModel.post.postId
+                                    );
+                                    isSwitched
+                                    ? isSwitched = false
+                                    : isSwitched = true;
+                                  }),
+                            ],
+                          ),
+                        ),
                         ///////////////////////////////////////////////////////////////
                       ],
                     ),
