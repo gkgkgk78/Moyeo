@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:extended_image/extended_image.dart';
 
-import 'package:moyeo/view_models/app_view_model.dart';
-import 'package:moyeo/view_models/search_bar_view_model.dart';
-import 'package:moyeo/view_models/user_search_bar_view_model.dart';
-import 'package:moyeo/views/user_search_bar_view.dart';
+import '../view_models/app_view_model.dart';
+import '../view_models/search_bar_view_model.dart';
+import '../view_models/user_search_bar_view_model.dart';
+
+
+import '../views/user_search_bar_view.dart';
 
 
 class MoyeoAddUser extends StatelessWidget{
@@ -23,6 +25,7 @@ class MoyeoAddUser extends StatelessWidget{
                 return Consumer<SelectedUsersProvider>(
                     builder: (context, selectedUsersProvider, _){
                       final selectedUser = selectedUsersProvider.selectedUsers;
+                      final List<Map<String,dynamic>> userList = [];
                       return Stack(
                             children: [
                                 GestureDetector(
@@ -97,7 +100,16 @@ class MoyeoAddUser extends StatelessWidget{
                                     bottom:MediaQuery.of(context).size.height*(0.07),
                                     child: InkWell(
                                       onTap: (){
-
+                                        for (var person in selectedUser) {
+                                          userList.add(
+                                              {"userId":person.userUid,
+                                                "moyeoTimeline":appViewModel.userInfo.timeLineId
+                                              }
+                                              );
+                                        }
+                                        final addUserProvider =
+                                        Provider.of<SelectedUsersProvider>(context, listen: false);
+                                        addUserProvider.addMoyeoUser(context, userList);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
@@ -125,7 +137,7 @@ class MoyeoAddUser extends StatelessWidget{
                                             color: Colors.white,
                                           ),
                                           Text(
-                                             "  모여 시작하기",
+                                             "  모여 초대 보내기",
                                             style: TextStyle(color: Colors.white),
                                           ),
                                         ]

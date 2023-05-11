@@ -33,21 +33,15 @@ class PostViewModel extends ChangeNotifier {
     }
 
   // post 삭제
-  deletePost(context) async {
-    await PostRepository().deletePost(context, post.postId);
+  deletePost(context, int postId) async {
+    await PostRepository().deletePost(context, postId);
     notifyListeners();
   }
 
   // 모여 포스트 삭제
-  deleteMoyeoPost(context) async {
+  deleteMoyeoPost(context, int postId) async {
     // 모여 포스트 아이디로 변경필요
-    await PostRepository().deleteMoyeoPost(context, post.postId);
+    await PostRepository().deleteMoyeoPost(context, postId);
     notifyListeners();
   }
-
-  // 모여 나가기
-  // outMoyeo(context) async {
-  //   await PostRepository().outMoyeo(context, moyeoTimelineId);
-  //   notifyListeners();
-  // }
 }

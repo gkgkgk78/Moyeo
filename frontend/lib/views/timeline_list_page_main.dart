@@ -48,6 +48,7 @@ class TimelineListPageMain extends StatelessWidget {
                   ),
                 ),
                 noItemsFoundIndicatorBuilder: (context) => SizedBox(
+                  width: MediaQuery.of(context).size.width*(0.5),
                   height: MediaQuery.of(context).size.height*(0.6),
                   child: Center(
                       child: Column(
