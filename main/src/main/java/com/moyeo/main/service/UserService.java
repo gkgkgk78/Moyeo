@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserService {
     // 유저 조회
-    List<UserInfoRes> searchUserByNickname(String search);
+    List<UserInfoRes> searchUserByNickname(String search, Boolean isMoyeo);
 
     TokenRes signUpKakao(UserLoginReq userLoginReq) throws JsonProcessingException;
 
