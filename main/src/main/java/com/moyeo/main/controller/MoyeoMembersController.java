@@ -23,11 +23,23 @@ import lombok.extern.log4j.Log4j2;
 @RequestMapping("/api/auth/moyeo/members")
 @RequiredArgsConstructor
 @Log4j2
-@Tag(name = "MoyeoMembers", description = "모여 멤버 참여, 나가기 기능")
+@Tag(name = "MoyeoMembers", description = "모여 멤버 초대, 참여, 나가기 기능")
 public class MoyeoMembersController {
-
-
 	private final MoyeoMembersService moyeoMembersService;
+
+	@PostMapping("/invite")
+	@Operation(summary = "동행 초대, 푸시 알림 보내기")
+	public ResponseEntity<?> inviteMoyeoMembers(@RequestBody MoyeoMembersReq moyeoMembersReq) throws Exception {
+		log.info("동행 초대 시작...");
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = null;
+		if (auth != null && auth.getPrincipal() != null) {
+			user = (User) auth.getPrincipal();
+		}
+
+		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(user, moyeoMembersReq));
+	}
 
 	@PostMapping
 	@Operation(summary = "동행 참여")

@@ -1,12 +1,9 @@
 package com.moyeo.main.dto;
 
-import com.moyeo.main.entity.MoyeoPhoto;
-import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +22,7 @@ public class MyPostDtoRes {
     private Boolean isFavorite; //정보를 가지고 온 유저가 , 해당 포스트에 좋아요를 눌렀는가 여부에 대해
     private Long favoriteCount;
     private Boolean isMoyeo;
-    private List<PostMembers> members;
+    private List<MemberInfoRes> members;
 
     public static MyPostDtoResBuilder builder(Post post,List<String>photoList,Long favoriteCount,Boolean favorite) {
 

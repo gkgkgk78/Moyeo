@@ -58,7 +58,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         // 모여타임라인에 소속된 멤버수(멤버즈카운트)가 1일 경우 post 작성이 불가능.
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if(moyeoTimeline.getMembersCount() <= 1) {
-            throw new BaseException(ErrorMessage.NOT_POST_EXCEPTION);
+            throw new BaseException(ErrorMessage.NOT_ALLOWED_MOYEO_POST_REGISTRATION);
         }
 
         List<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(addPostReq.getTimelineId(), null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MEMBERS));
@@ -114,7 +114,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     @Transactional
     public void updateMoyeoPost(User user, Long moyeoPostId) throws Exception {
         // 공개 여부 수정하기
-
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
 
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
