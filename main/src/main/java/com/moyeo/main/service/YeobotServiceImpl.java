@@ -31,12 +31,14 @@ public class YeobotServiceImpl implements YeobotService{
         List<String[]> latestMoyeoPostAddress = moyeoPostRepository.findAddressByMoyeoPostId(latestMoyeoPostId);
 
         // 두 게시글 중에서 더 최신의 게시글을 선택해서 주소 반환
-        if (latestMoyeoPostAddress == null) {
-            return latestPostAddress;
-        } else if (latestPostAddress == null) {
-            return latestMoyeoPostAddress;
-        } else if(latestPostAddress == null && latestMoyeoPostAddress == null){
+        if(latestPostAddress.isEmpty() && latestMoyeoPostAddress.isEmpty()) {
             throw new BaseException(ErrorMessage.NOT_EXIST_LATEST_ADDRESS);
+        }
+        else if(latestMoyeoPostAddress.isEmpty()) {
+            return latestPostAddress;
+        }
+        else if(latestPostAddress.isEmpty()) {
+            return latestMoyeoPostAddress;
         }
         else {
             LocalDateTime latestPostTime = postRepository.findCreateTimeByPostId(latestPostId);
