@@ -1,7 +1,7 @@
 package com.example.batch.config;
 
-import com.example.batch.RestTemplateResponseErrorHandler;
 import com.example.batch.RestaurantRecommendDto.FirebaseCM;
+import com.example.batch.RestaurantRecommendDto.MessageBox;
 import com.example.batch.RestaurantRecommendDto.PushTable;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,12 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Slf4j
 @Configuration
@@ -63,7 +61,7 @@ public class BatchConfig {
     @JobScope
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
-                .<PushTable, FirebaseCM>chunk(3)
+                .<PushTable, MessageBox>chunk(3)
                 .reader(this.itemReader())
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
@@ -74,15 +72,15 @@ public class BatchConfig {
     }
     @Bean
     @StepScope
-    public JpaItemWriter<FirebaseCM> itemWriter() {
-        JpaItemWriter<FirebaseCM> writer = new JpaItemWriter<>();
+    public ItemWriter<MessageBox> itemWriter() {
+        JpaItemWriter<MessageBox> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
 
         return writer;
     }
     @Bean
     @StepScope
-    public ItemProcessor<PushTable,FirebaseCM> itemProcessor() {
+    public ItemProcessor<PushTable, MessageBox> itemProcessor() {
         return item -> {
             log.info("item : {}",item);
             String goal = "Search for a good restaurant near " + item.getAddress1() + " " + item.getAddress2() + " " + item.getAddress3()+" "+item.getAddress4() +".";
@@ -118,10 +116,14 @@ public class BatchConfig {
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
                 ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
                 log.info("result :{}",responseMap.get("result"));
-                return FirebaseCM.builder()
-                        .id(item.getDeviceToken())
-                        .message("푸시전송완료")
+                return MessageBox.builder()
+
+                        .content(responseMap.get("result"))
                         .build();
+//                return FirebaseCM.builder()
+//                        .id(item.getDeviceToken())
+//                        .message("푸시전송완료")
+//                        .build();
 //            }catch (RestClientException e){
 //                log.info("Skip-AutoGpt500");
 //                throw new SkipException("Skip 합니다.") {
