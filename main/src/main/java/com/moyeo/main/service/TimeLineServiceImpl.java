@@ -165,7 +165,7 @@ public class TimeLineServiceImpl implements TimeLineService {
                 .collect(Collectors.toList());
             timelinePostOuter.setNowMembers(nowMembers);
         } else {
-            timelinePostOuter.setNowMembers(null);
+            timelinePostOuter.setNowMembers(new ArrayList<>()); // TODO 프론트한테 null 말고 빈 배열로 보내줘야함!!
         }
 
         if(postList == null || postList.size() == 0) {

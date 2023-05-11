@@ -31,11 +31,10 @@ public class BasePostDto {
 	// private TimeLine timelineId;
 	// private User userId;
 	private Long favoriteCount;
-
-
 	private Boolean isFavorite;
 	private Boolean isMoyeo;
 	private List<MemberInfoRes> members;
+	private Long timelineId; // 추가
 
 	public static BasePostDto.BasePostDtoBuilder builder(Post entity, Boolean isFavorite) {
 		List<String> photos = new ArrayList<>();
@@ -60,7 +59,8 @@ public class BasePostDto {
 			.favoriteCount(entity.getFavoriteCount())
 			.isFavorite(isFavorite)
 			.isMoyeo(false)
-			.members(null)
+			.members(new ArrayList<>())
+			.timelineId(entity.getTimelineId().getTimelineId())
 			;
 	}
 
@@ -86,6 +86,7 @@ public class BasePostDto {
 			.isFavorite(isFavorite)
 			.isMoyeo(true)
 			.members(members)
+			.timelineId(entity.getMoyeoTimelineId().getMoyeoTimelineId())
 			;
 	}
 
