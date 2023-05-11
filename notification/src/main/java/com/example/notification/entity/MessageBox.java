@@ -30,6 +30,11 @@ public class MessageBox {
     @ColumnDefault("0")
     private Boolean isChecked = false;
 
+
     private LocalDateTime createTime;
 
+
 }
+
+
+
