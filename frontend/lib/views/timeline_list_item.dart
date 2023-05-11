@@ -45,7 +45,7 @@ class TimelineListItem extends StatelessWidget {
               children: [
                 const SizedBox(width: 20),
                 Expanded(
-                  child: Stack(
+                  child: Column(
                     children: [
                       Expanded(
                         child: Container(
@@ -69,11 +69,8 @@ class TimelineListItem extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
-                              Container(
-                                height: 30,
-                              ),
                               SizedBox(
-                                height: 90,
+                                height: 130,
                                 width: 90,
                                 child: ClipRRect(
                                   borderRadius: const BorderRadius.all(
@@ -98,6 +95,34 @@ class TimelineListItem extends StatelessWidget {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    Expanded(
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(height: 15),
+                                            const SizedBox(
+                                              width: 90,
+                                              // child: Text(
+                                              //     "MOYEO",
+                                              //   style: TextStyle(
+                                              //       color: Colors.white,
+                                              //       fontWeight: FontWeight.bold),
+                                              // ),
+                                            ),
+                                            Expanded(
+                                                child: Container(
+                                                  width: 80,
+                                                  child: Text(
+                                                    '${timeline.startPlace} ~ ${timeline.finishPlace}',
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    textAlign: TextAlign.right,
+                                                    style: const TextStyle(color: Colors.white),
+                                                  ),
+                                                )
+                                            )
+                                          ],
+                                        )
+                                    ),
                                     Expanded(
                                       child: Row(
                                         children: [
@@ -188,41 +213,41 @@ class TimelineListItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Container(
-                          height: cardHeight * 0.2,
-                          decoration: BoxDecoration(
-                            // color: Theme.of(context).primaryColor,
-                            color: Colors.transparent,
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(width: 30),
-                              const Text(
-                                "Moyeo",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              const SizedBox(width: 10),
-                              const Icon(
-                                Icons.flight_takeoff,
-                                color: Colors.white,
-                              ),
-                              Expanded(
-                                  child: Text(
-                                    '${timeline.startPlace} ~ ${timeline.finishPlace}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.right,
-                                    style: const TextStyle(color: Colors.white),
-                                  )),
-                              const SizedBox(width: 30)
-                            ],
-                          )),
+                      // Container(
+                      //     height: cardHeight * 0.2,
+                      //     decoration: BoxDecoration(
+                      //       // color: Theme.of(context).primaryColor,
+                      //       color: Colors.transparent,
+                      //       borderRadius: const BorderRadius.only(
+                      //         bottomLeft: Radius.circular(20),
+                      //       ),
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       mainAxisAlignment: MainAxisAlignment.start,
+                      //       crossAxisAlignment: CrossAxisAlignment.center,
+                      //       children: [
+                      //         const SizedBox(width: 30),
+                      //         const Text(
+                      //           "Moyeo",
+                      //           style: TextStyle(color: Colors.white),
+                      //         ),
+                      //         const SizedBox(width: 10),
+                      //         const Icon(
+                      //           Icons.flight_takeoff,
+                      //           color: Colors.white,
+                      //         ),
+                      //         Expanded(
+                      //             child: Text(
+                      //               '${timeline.startPlace} ~ ${timeline.finishPlace}',
+                      //               maxLines: 1,
+                      //               overflow: TextOverflow.ellipsis,
+                      //               textAlign: TextAlign.right,
+                      //               style: const TextStyle(color: Colors.white),
+                      //             )),
+                      //         const SizedBox(width: 30)
+                      //       ],
+                      //     )),
                     ],
                   ),
                 )
