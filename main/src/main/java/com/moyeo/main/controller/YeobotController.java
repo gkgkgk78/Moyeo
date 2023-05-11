@@ -193,6 +193,7 @@ public class YeobotController {
         //goal 제대로 만들어졌는지 점검
         System.out.println(goal);
         log.info("goal : {}",goal);
+        log.info("goal : {}",goal.toString());
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
