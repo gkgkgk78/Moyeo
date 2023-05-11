@@ -46,7 +46,7 @@ class PostRepository {
     try {
       final dio = await authDio(context);
       Response response =
-      await dio.put('api/auth/moyeo/post/$postId',queryParameters:{'isMoyeo':true});
+      await dio.put('api/auth/moyeo/post/$postId');
       return response.data;
     } catch (e) {
       throw Exception('Fail to change timeline public: $e');
