@@ -51,7 +51,7 @@ public class ChatServiceImpl implements ChatService {
             log.info("MongoDB에 저장 로직 시작");
             Chat chat = new Chat();
             chat.setMessage(result);
-            chat.setSender("YeoBot");
+            chat.setSender("gpt");
             chat.setCreateTime(LocalDateTime.now());
             mongoTemplate.insert(chat, user.getUserId().toString());
             log.info("MongoDB에 저장 완료");
