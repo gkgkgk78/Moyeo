@@ -1,6 +1,5 @@
 package com.example.batch.config;
 
-import com.example.batch.RestaurantRecommendDto.FirebaseCM;
 import com.example.batch.RestaurantRecommendDto.MessageBox;
 import com.example.batch.RestaurantRecommendDto.PushTable;
 import com.example.batch.RestaurantRecommendDto.User;
@@ -25,22 +24,19 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.persistence.EntityManagerFactory;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Slf4j
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
-public class BatchConfig {
+public class BatchService {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
@@ -94,20 +90,18 @@ public class BatchConfig {
 //                    .errorHandler(new RestTemplateResponseErrorHandler())
                     .build();
 
-            // create headers
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("Title","restaurant");
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String,Object> map = new HashMap<>();
-            map.put("data",goal);
-            // create param
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.add("Title","restaurant");
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String,Object> map = new HashMap<>();
+                map.put("data",goal);
 
-            HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
-//            try {
+                HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
                 ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 
-                log.info("AUTO-GPT result:{}",response.getBody());
+//                log.info("AUTO-GPT result:{}",response.getBody());
                 String m = response.getBody();
                 Map<String, String> responseMap = mapper.readValue(m, Map.class);
                 log.info("AUTO-GPT message:{}",responseMap);
@@ -130,19 +124,15 @@ public class BatchConfig {
                         .content(result)
                         .createTime(LocalDateTime.now())
                         .build();
-//                return FirebaseCM.builder()
-//                        .id(item.getDeviceToken())
-//                        .message("푸시전송완료")
-//                        .build();
-//            }catch (RestClientException e){
-//                log.info("Skip-AutoGpt500");
-//                throw new SkipException("Skip 합니다.") {
-//                    @Override
-//                    public String getMessage() {
-//                        return super.getMessage();
-//                    }
-//                };
-//            }
+            }catch (RestClientException e){
+                log.info("Skip-AutoGpt500");
+                throw new SkipException("Skip 합니다.") {
+                    @Override
+                    public String getMessage() {
+                        return super.getMessage();
+                    }
+                };
+            }
         };
     }
 
@@ -150,10 +140,6 @@ public class BatchConfig {
     @StepScope
     public JpaPagingItemReader<PushTable> itemReader() {
         log.info("start : {}","시작합니다");
-//        log.info("end : {}",end);
-//        Map<String,Object> parameter = new HashMap<>();
-//        parameter.put("start",start);
-//        parameter.put("end",end);
         return new JpaPagingItemReaderBuilder<PushTable>()
 //                .queryString("SELECT t.postId, t.userId, t.address1, t.address2, t.address3, t.address4, t.deviceToken, t.createTime" +
 //                        "FROM (" +
@@ -184,8 +170,6 @@ public class BatchConfig {
 //                        "WHERE t.rn = 1" +
 //                        "ORDER BY t.createTime DESC")
                 .queryString("SELECT P from PushTable P")
-//                .queryString("SELECT MP FROM Moyeo_post MP inner join MP.moyeoTimeline MTL")
-//                .parameterValues(parameter)
                 .pageSize(3)
                 .entityManagerFactory(entityManagerFactory)
                 .name("PostReader")
