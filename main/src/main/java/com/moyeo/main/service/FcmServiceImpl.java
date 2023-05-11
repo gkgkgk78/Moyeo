@@ -111,9 +111,10 @@ public class FcmServiceImpl implements FcmService {
                     .build())
 
                 .build())
-            .putData("inviterId", inviter.getUserId().toString()) // TODO
-            .putData("inviteeId", invitee.getUserId().toString()) // TODO
-            .putData("moyeoTimelineId", moyeoTimelineId.toString()) // TODO
+            // .putData("inviterId", inviter.getUserId().toString())
+            // .putData("inviteeId", invitee.getUserId().toString())
+            .putData("userId", invitee.getUserId().toString())
+            .putData("moyeoTimelineId", moyeoTimelineId.toString())
             .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정
             .build();
 
