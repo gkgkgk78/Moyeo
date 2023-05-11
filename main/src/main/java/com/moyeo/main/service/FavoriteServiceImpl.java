@@ -110,13 +110,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         // 일반 포스트
         List<BasePostDto> postList = postRepository.findAllFavoritePost(userUid).stream()
-                .map(post -> BasePostDto.builder(post, null).build())
+                .map(post -> BasePostDto.builder(post, true).build())
                 .collect(Collectors.toList());
 
         // 모여 포스트
         List<BasePostDto> moyeoPostList = moyeoPostRepository.findAllFavoriteMoyeoPost(userUid).stream()
                 .map(post -> BasePostDto.builder(post
-                        , null
+                        , true
                         , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
                     .build())
                 .collect(Collectors.toList());
