@@ -47,7 +47,6 @@ public class PostInsertAutogptImpl implements PostInsertAutogpt {
                 //이제 messagebox에 insert 하면 된다.
                 messageBoxService.insert(post.getUserId().toString(), a1);
             }
-            log.info("받은 토큰 정보" + post.getDeviceToken());
 
         } catch (Exception e) {
             log.info(e.getMessage());

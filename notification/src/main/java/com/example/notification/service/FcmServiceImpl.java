@@ -56,11 +56,8 @@ public class FcmServiceImpl implements FcmService {
 
 
     @Override
-    public void send(String token, String content,String title) throws Exception {
-
-
-        log.info("들어온 토큰 확인"+token);
-        Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
+    public void send(String token, String content, String title) throws Exception {
+        
         Message message = Message.builder()
                 .setAndroidConfig(AndroidConfig.builder()
                         .setTtl(3600 * 1000)
@@ -107,7 +104,7 @@ public class FcmServiceImpl implements FcmService {
                 .putData("requestId", "나야나") // request 식별 정보(requestId) 넣기
                 .setToken(deviceToken) // 요청자의 디바이스에 대한 registration token으로 설정
                 .build();
-        log.info("message :{}",message.toString());
+        log.info("message :{}", message.toString());
 
         // Send a message to the device corresponding to the provided registration token.
         String response;
@@ -115,7 +112,7 @@ public class FcmServiceImpl implements FcmService {
             response = FirebaseMessaging.getInstance().send(message);
             log.info("알림 성공!");
         } catch (FirebaseMessagingException e) {
-            log.info("error:{}",e.getMessage());
+            log.info("error:{}", e.getMessage());
             log.info("알림 실패");
             throw new Exception(e.getMessage());
         }
