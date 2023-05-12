@@ -43,7 +43,7 @@ class MoyeoTimelineDetailViewModel extends ChangeNotifier {
   loadTimelineDetails(context) async {
     final timelineInfo = await TimelineRepository()
         .getTimelineDetailsByTimelineId(context, timelineId);
-    _timelineDetails = timelineInfo.timelineDetails;
+    _timelineDetails = timelineInfo.timelineDetails!;
     _isMine = timelineInfo.isMine;
     _isPublic = timelineInfo.isPublic;
     _isComplete = timelineInfo.isComplete;

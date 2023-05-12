@@ -14,7 +14,6 @@ var logger = Logger();
 
 class ChatbotViewModel extends ChangeNotifier {
   int isTravel;
-  BuildContext _context;
 
   String _inputText = "";
 
@@ -66,7 +65,7 @@ class ChatbotViewModel extends ChangeNotifier {
   String _newSeason = "";
   String _newPurpose = "";
 
-  ChatbotViewModel(this._context, {required this.isTravel}) {
+  ChatbotViewModel(BuildContext context, {required this.isTravel}) {
     // 키보드가 안 보이면 언포커스
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -77,15 +76,12 @@ class ChatbotViewModel extends ChangeNotifier {
         }
       },
     );
-    startChat();
+    startChat(context);
   }
 
-  Future<void> startChat() async {
-    _messages = await ChatbotRepository().ChatDetailFromServer(_context);
+  Future<void> startChat(context) async {
+    _messages = await ChatbotRepository().ChatDetailFromServer(context);
     notifyListeners();
-    if (_messages.last.message == "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?" ||
-        _messages.last.message == "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?") {
-    } else {
       if (isTravel == -1) {
         submitMessage(
           ChatMessage(
@@ -101,7 +97,7 @@ class ChatbotViewModel extends ChangeNotifier {
           ),
         );
       }
-    }
+
     goBottom();
     notifyListeners();
   }
@@ -113,30 +109,30 @@ class ChatbotViewModel extends ChangeNotifier {
     goBottom();
   }
 
-  Future<void> submitMessageListToServer() async {
+  Future<void> submitMessageListToServer(BuildContext context) async {
     for (ChatMessage element in _newMessages) {
-      await ChatbotRepository().ChatToServer(_context, element);
+      await ChatbotRepository().ChatToServer(context, element);
     }
-    if (_context.mounted) {
+    if (context.mounted) {
       Future.delayed(
         const Duration(seconds: 5),
         () {
-          Navigator.pop(_context);
+          Navigator.pop(context);
         },
       );
     }
   }
 
-  void notTravelSubmit() {
+  void notTravelSubmit(BuildContext context) {
     if (_haveDestination) {
-      notTravelHaveDestSubmit(_inputText);
+      notTravelHaveDestSubmit(_inputText, context);
     } else {
-      notTravelNoDestSubmit(_inputText);
+      notTravelNoDestSubmit(_inputText, context);
     }
   }
 
   // 여행중이 아니고 목적지가 있을 때
-  Future<void> notTravelHaveDestSubmit(String text) async {
+  Future<void> notTravelHaveDestSubmit(String text, BuildContext context) async {
     if (_newDestination == '') {
       _newDestination = text;
       submitMessage(
@@ -153,7 +149,7 @@ class ChatbotViewModel extends ChangeNotifier {
         () {
           submitMessage(
             ChatMessage(
-              message: '${text}! 참 좋은 나라죠.\n어느 계절에 떠나시고 싶으신가요?',
+              message: '$text! 참 좋은 나라죠.\n어느 계절에 떠나시고 싶으신가요?',
               sender: 'gpt',
             ),
           );
@@ -220,9 +216,9 @@ class ChatbotViewModel extends ChangeNotifier {
           purpose: _newPurpose,
         );
         _chatbotRequest = newRequest;
-        if (_context.mounted) {
+        if (context.mounted) {
           ChatbotRepository()
-              .RecommendActivityNotTraveling(_context, newRequest);
+              .RecommendActivityNotTraveling(context, newRequest);
         }
         await Future.delayed(const Duration(seconds: 1), () {
           submitMessage(
@@ -231,7 +227,7 @@ class ChatbotViewModel extends ChangeNotifier {
               sender: 'gpt',
             ),
           );
-          submitMessageListToServer();
+          submitMessageListToServer(context);
           notifyListeners();
         });
         return;
@@ -241,7 +237,7 @@ class ChatbotViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> notTravelNoDestSubmit(String text) async {
+  Future<void> notTravelNoDestSubmit(String text, BuildContext context) async {
     if (_newDestination == '') {
       _newDestination = text;
       submitMessage(
@@ -256,13 +252,13 @@ class ChatbotViewModel extends ChangeNotifier {
       await Future.delayed(const Duration(seconds: 2), () {
         submitMessage(
           ChatMessage(
-            message: '${text}! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?',
+            message: '$text! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?',
             sender: 'gpt',
           ),
         );
         notifyListeners();
-      });
-      ;
+      },
+      );
       return;
     }
     if (_newSeason == '') {
@@ -314,8 +310,7 @@ class ChatbotViewModel extends ChangeNotifier {
             );
             notifyListeners();
           }
-          ;
-        });
+        },);
         return;
       } else {
         return;
@@ -333,11 +328,11 @@ class ChatbotViewModel extends ChangeNotifier {
       unFocus();
       notifyListeners();
       await Future.delayed(
-        Duration(seconds: 2),
+        const Duration(seconds: 2),
         () {
           submitMessage(
             ChatMessage(
-              message: '${_newSeason}에\n${_newDestination}을 가시는 군요',
+              message: '$_newSeason에\n$_newDestination을 가시는 군요',
               sender: 'gpt',
             ),
           );
@@ -350,8 +345,8 @@ class ChatbotViewModel extends ChangeNotifier {
         purpose: _newPurpose,
       );
       _chatbotRequest = newRequest;
-      if (_context.mounted) {
-        ChatbotRepository().RecommendPlace(_context, newRequest);
+      if (context.mounted) {
+        ChatbotRepository().RecommendPlace(context, newRequest);
       }
       await Future.delayed(
         const Duration(seconds: 1),
@@ -362,7 +357,7 @@ class ChatbotViewModel extends ChangeNotifier {
               sender: 'gpt',
             ),
           );
-          submitMessageListToServer();
+          submitMessageListToServer(context);
           notifyListeners();
         },
       );
@@ -378,21 +373,10 @@ class ChatbotViewModel extends ChangeNotifier {
     }
   }
 
-  // 채팅을 하나 만듦
-  Future<void> createNewChat() async {}
-
-  // 채팅 내용을 가져옴
-  Future<void> getChatDetail() async {
-    _messages = await ChatbotRepository().ChatDetailFromServer(_context);
-    notifyListeners();
-  }
-
-  Future<void> chatToServer(message) async {}
 
   // 언포커스
   void unFocus() {
     _chatbotFocus.unfocus();
-    ;
     notifyListeners();
   }
 
@@ -468,7 +452,7 @@ class ChatbotViewModel extends ChangeNotifier {
                   '\n답변이 완료되면 알림으로 알려드리겠습니다~',
               sender: 'gpt'),
         );
-        submitMessageListToServer();
+        submitMessageListToServer(context);
         notifyListeners();
       },
     );
@@ -488,9 +472,9 @@ class ChatbotViewModel extends ChangeNotifier {
               message: '알겠습니다!'
                   '\n최신 포스트 위치를 기준으로\n맛있는 식당을 추천해드릴게요.'
                   '\n답변이 완료되면 알림으로 알려드리겠습니다~',
-              sender: 'gpt'),
+              sender: 'gpt',),
         );
-        submitMessageListToServer();
+        submitMessageListToServer(context);
         notifyListeners();
       },
     );

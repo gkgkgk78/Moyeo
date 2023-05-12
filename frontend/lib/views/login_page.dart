@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +41,18 @@ class LoginPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('여행의 뜻을 함께하다',
-                      style: TextStyle(fontSize: 25, height: 1.2),),
-                      const Text('모두의 여행',
-                      style: TextStyle(fontSize: 25, height: 1.2),),
-                      const Text('모여',
-                      style: TextStyle(fontSize: 60, height: 1.2),),
+                      const Text(
+                        '여행의 뜻을 함께하다',
+                        style: TextStyle(fontSize: 25, height: 1.2),
+                      ),
+                      const Text(
+                        '모두의 여행',
+                        style: TextStyle(fontSize: 25, height: 1.2),
+                      ),
+                      const Text(
+                        '모여',
+                        style: TextStyle(fontSize: 60, height: 1.2),
+                      ),
                       Container(
                         color: Colors.transparent,
                         margin: const EdgeInsets.all(20.0),
@@ -55,49 +60,62 @@ class LoginPage extends StatelessWidget {
                           'assets/lottie/boarding_pass_ticket.json',
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (_) {
-                              return Dialog(
-                                backgroundColor: Colors.transparent,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // The loading indicator
-                                      Lottie.asset(
-                                          'assets/lottie/around_the_world.json',
-                                          frameRate: FrameRate.max),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
-                                      // Some text
-                                      const Text(
-                                        '로그인 중...',
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    ],
-                                  ),
+                      appViewModel.fcmToken == ''
+                          ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.4),
+                                  BlendMode.darken,
+                              ),
+                              child: Image.asset(
+                                  'assets/images/kakao_login.png',
+                                  height: 50,
                                 ),
-                              );
-                            },
-                          );
-                          // 원래 로그인 로직
-                          viewModel.loginButtonPressed(
-                              context, appViewModel.updateUserInfo
-                              // , appViewModel.fcmToken
-                          );
-                        },
-                        child: Image.asset(
-                          'assets/images/kakao_login.png',
-                          height: 50,
-                        ),
-                      ),
+                            ),
+                          )
+                          : InkWell(
+                              onTap: () {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (_) {
+                                    return Dialog(
+                                      backgroundColor: Colors.transparent,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            // The loading indicator
+                                            Lottie.asset(
+                                                'assets/lottie/around_the_world.json',
+                                                frameRate: FrameRate.max),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            // Some text
+                                            const Text(
+                                              '로그인 중...',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                                // 원래 로그인 로직
+                                viewModel.loginButtonPressed(
+                                    context, appViewModel.updateUserInfo);
+                              },
+                              child: Image.asset(
+                                'assets/images/kakao_login.png',
+                                height: 50,
+                              ),
+                            ),
                     ],
                   ),
                 );

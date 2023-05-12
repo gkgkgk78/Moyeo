@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
 import 'package:moyeo/firebase_options.dart';
@@ -26,18 +27,18 @@ void main() async {
   KakaoSdk.init(nativeAppKey: dotenv.env['nativeAppKey']);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
 
-
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => AppViewModel(
+          create: (context) => AppViewModel(
             UserInfo(
               userUid: -1,
               profileImageUrl: '',
               nickname: '',
             ),
-            '홈'
+            '홈',
+            context,
           ),
 
         ),
@@ -45,7 +46,12 @@ void main() async {
           create: (_) => CameraViewModel(),
         ),
       ],
-      child: const MyApp(),
+      child: Builder(
+        builder: (context) {
+          AppViewModel appViewModel = Provider.of<AppViewModel>(context);
+          return const MyApp();
+        },
+      )
     ),
   );
 }
@@ -190,3 +196,4 @@ class MyHomePage extends StatelessWidget {
     });
   }
 }
+
