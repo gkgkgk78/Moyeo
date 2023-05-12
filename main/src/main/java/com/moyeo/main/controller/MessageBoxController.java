@@ -22,15 +22,15 @@ public class MessageBoxController {
     private final MessageBoxService messageBoxService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getMessagesByUser(@PathVariable Long userId) {
+    public ResponseEntity<?> getMessagesByUser() {
         log.info("메시지함 조회 로직 시작");
         //로그인 정보에서 uid 받아오기
-//        Long userId = null;
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if(auth != null && auth.getPrincipal() != null) {
-//            User user = (User) auth.getPrincipal();
-//            userId = user.getUserId();
-//        }
+        Long userId = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null && auth.getPrincipal() != null) {
+            User user = (User) auth.getPrincipal();
+            userId = user.getUserId();
+        }
         List<MyMessageBoxDTO> myMessageBoxDTOS = messageBoxService.getMessagesByUser(userId);
         log.info("메시지함 조회 로직 완료");
         return new ResponseEntity<>(myMessageBoxDTOS, HttpStatus.OK);
@@ -45,15 +45,15 @@ public class MessageBoxController {
     }
 
     @PutMapping("/readall/{userId}")
-    public ResponseEntity<?> markAsCheckedAllByUserId(@PathVariable Long userId) {
+    public ResponseEntity<?> markAsCheckedAllByUserId() {
         log.info("메시지 전체 조회처리 로직 시작");
         //로그인 정보에서 uid 받아오기
-//        Long userId = null;
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        if(auth != null && auth.getPrincipal() != null) {
-//            User user = (User) auth.getPrincipal();
-//            userId = user.getUserId();
-//        }
+        Long userId = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null && auth.getPrincipal() != null) {
+            User user = (User) auth.getPrincipal();
+            userId = user.getUserId();
+        }
         messageBoxService.markAsCheckedAll(userId);
         log.info("메시지 전체 조회처리 로직 완료");
         return new ResponseEntity<>(HttpStatus.OK);
