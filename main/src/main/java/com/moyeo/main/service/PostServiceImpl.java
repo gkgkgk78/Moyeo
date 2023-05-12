@@ -166,6 +166,8 @@ public class PostServiceImpl implements PostService {
         long frameLength = audioInputStream.getFrameLength();
         double durationInSeconds = (frameLength / format.getFrameRate());
 
+        Files.delete(target); // TODO
+
         int check_time = (int) durationInSeconds;
         //System.out.println("Duration: " + durationInSeconds + " seconds");
         if (check_time > 30) {
@@ -181,10 +183,15 @@ public class PostServiceImpl implements PostService {
 
         // String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
         File convertedVoiceFile = multiFileToFile.transTo(voiceFile);
-        String result = clovaSpeechClient.upload(convertedVoiceFile, requestEntity);
-        if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제하는 로직 추가
-            convertedVoiceFile.delete();
+        String result;
+        try {
+            result = clovaSpeechClient.upload(convertedVoiceFile, requestEntity);
+        } finally {
+            if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제하는 로직 추가
+                convertedVoiceFile.delete();
+            }
         }
+
 
         if (result.contains("\"result\":\"FAILED\"")) {
             throw new BaseException(ErrorMessage.NOT_STT_SAVE);
@@ -202,7 +209,7 @@ public class PostServiceImpl implements PostService {
         String voiceUrl = "";
 
         voiceUrl = awsS3.upload(voiceFile, "Moyeo/Voice");
-        Files.delete(target);//파일을 삭제하는 코드임
+        // Files.delete(target);//파일을 삭제하는 코드임
         log.info("voiceUrl info :{}", voiceUrl);
         // voiceFile -> text 변환 : 응답받은 json 파일에서 text 추출
         // voiceFile S3에 올리고 voiceURL 가져오기
