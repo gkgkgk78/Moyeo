@@ -3,6 +3,8 @@ package com.moyeo.main.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.moyeo.main.dto.PostInsertReq;
+import com.moyeo.main.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,10 +21,6 @@ import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.id.MoyeoPublicID;
-import com.moyeo.main.repository.MoyeoMembersRepository;
-import com.moyeo.main.repository.MoyeoPostRepository;
-import com.moyeo.main.repository.MoyeoPublicRepository;
-import com.moyeo.main.repository.MoyeoTimeLineRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +34,10 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final PostServiceImpl postService;
+
+    private final UserRepository userRepository;
+
+    private final AsyncTestService asyncTestService;
 
 
     // 포스트 생성 및 저장
@@ -79,7 +81,17 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         LocalDateTime createTime = savedPost.getCreateTime();
         // moyeo_public 에 등록
         // List<MoyeoPublic> moyeoPublicList = new ArrayList<>();
+
+
         for (MoyeoMembers moyeoMember : moyeoMembers) {
+
+            //해당 부분은 moyeopost insert 시 관련하여
+            //푸시 알림을 위해 작업 하는 단계
+            User temp_user = userRepository.getByUserId(moyeoMember.getUserId().getUserId());
+            PostInsertReq req = PostInsertReq.builder(addPostReq, temp_user).build();
+            asyncTestService.test(req);//해당 단계에서 비동기로 푸시 알람을 보낼 예정
+
+
             MoyeoPublic moyeoPublic = new MoyeoPublic();
             moyeoPublic.setUserId(moyeoMember.getUserId());
             moyeoPublic.setMoyeoPostId(savedPost);
@@ -88,6 +100,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
 
             // moyeoPublicList.add(moyeoPublic);
         }
+
 
         // imageURL, voiceURL db에 저장하기
         log.info("Starting savePost transaction");
@@ -115,7 +128,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     public void updateMoyeoPost(User user, Long moyeoPostId) throws Exception {
         // 공개 여부 수정하기
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
-
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
         MoyeoPublic moyeoPublic = moyeoPublicRepository.findById(moyeoPublicID).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_PUBLIC));
         moyeoPublic.updateIsPublic();
