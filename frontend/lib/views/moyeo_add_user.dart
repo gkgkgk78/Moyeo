@@ -20,7 +20,7 @@ class MoyeoAddUser extends StatelessWidget{
     return Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
           return ChangeNotifierProvider(
-              create: (_) => SelectedUsersProvider(),
+              create: (BuildContext context) => SelectedUsersProvider(context, nowMoyeo: appViewModel.userInfo.moyeoTimelineId),
               builder:(context, _) {
                 return Consumer<SelectedUsersProvider>(
                     builder: (context, selectedUsersProvider, _){
@@ -103,13 +103,12 @@ class MoyeoAddUser extends StatelessWidget{
                                         for (var person in selectedUser) {
                                           userList.add(
                                               {"userId":person.userUid,
-                                                "moyeoTimelineId":appViewModel.userInfo.timeLineId
                                               }
                                               );
                                         }
                                         final addUserProvider =
                                         Provider.of<SelectedUsersProvider>(context, listen: false);
-                                        addUserProvider.addMoyeoUser(context, userList);
+                                        addUserProvider.addMoyeoUser(context, userList, appViewModel.userInfo.moyeoTimelineId);
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),

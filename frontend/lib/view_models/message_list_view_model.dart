@@ -18,16 +18,14 @@ class MessageListViewModel extends ChangeNotifier {
 
   late UserInfo userInfo;
 
-  late AppViewModel _appViewModel;
-
   int _initialIndex = 0;
   int get initialIndex => _initialIndex;
 
-  MessageListViewModel(BuildContext context, {required this.userInfo}) {
-    _appViewModel = Provider.of<AppViewModel>(context);
-    if(_appViewModel.fromPush == true) {
+  MessageListViewModel(BuildContext context, bool fromPush, {required this.userInfo}) {
+    if (fromPush == true) {
       _initialIndex = 1;
     }
+
     getPushList(context);
   }
 
@@ -41,7 +39,6 @@ class MessageListViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
-    _appViewModel.changeFromPush();
     super.dispose();
   }
 }
