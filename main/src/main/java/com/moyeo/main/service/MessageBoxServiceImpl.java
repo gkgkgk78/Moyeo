@@ -19,11 +19,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MessageBoxServiceImpl implements MessageBoxService{
+public class MessageBoxServiceImpl implements MessageBoxService {
 
     private final MessageBoxRepository messageBoxRepository;
     private final UserRepository userRepository;
-
 
 
     @Override
@@ -85,6 +84,5 @@ public class MessageBoxServiceImpl implements MessageBoxService{
                 .build();
         messageBoxRepository.save(messageBox);
 
-    }
 
 }
