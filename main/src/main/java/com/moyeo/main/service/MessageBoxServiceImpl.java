@@ -83,6 +83,6 @@ public class MessageBoxServiceImpl implements MessageBoxService {
                 .createTime(createTime)
                 .build();
         messageBoxRepository.save(messageBox);
-
+    }
 
 }
