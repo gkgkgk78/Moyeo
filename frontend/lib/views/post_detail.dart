@@ -108,7 +108,8 @@ class PostDetail extends StatelessWidget {
                         ),
                         Expanded(child: Container()),
                         // 삭제 버튼 구현 할 자리
-                        IconButton(
+                        appViewModel.userInfo.moyeoTimelineId != -1
+                        ? IconButton(
                           onPressed: () {
                             showDialog(
                               barrierDismissible: false,
@@ -143,7 +144,8 @@ class PostDetail extends StatelessWidget {
                             Icons.delete,
                             color: Colors.red,
                           ),
-                        ),
+                        )
+                        :Container(),
                         // 포스트 공유 버튼 들어가는 자리
                         Container(
                           child: Row(

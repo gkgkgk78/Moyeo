@@ -302,7 +302,9 @@ class CameraViewModel extends ChangeNotifier {
       'flagFile': flag,
       'imageFiles': imageFiles,
       'voiceFile': audioFile,
-      'timelineId': userInfo.timeLineId,
+      'timelineId': userInfo.moyeoTimelineId == -1
+          ? userInfo.timeLineId
+          : userInfo.moyeoTimelineId,
       'address1': locationInfo.country,
       'address2': locationInfo.address2,
       'address3': locationInfo.address3,
@@ -311,7 +313,9 @@ class CameraViewModel extends ChangeNotifier {
     _isUploading = true;
     notifyListeners();
     if (context.mounted) {
-      await UploadRepository().uploadToServer(context, formData);
+      userInfo.moyeoTimelineId == -1
+      ? await UploadRepository().uploadToServer(context, formData)
+      : await UploadRepository().uploadToMoyeo(context, formData);
     }
     _isUploading = false;
     notifyListeners();

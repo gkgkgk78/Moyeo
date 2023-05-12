@@ -1,9 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:moyeo/view_models/app_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../models/TimelineDetail.dart';
+import '../models/UserInfo.dart';
 import '../services/timeline_repository.dart';
 import '../services/moyeo_repository.dart';
+import '../services/user_repository.dart';
 
 class TimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;
@@ -115,7 +119,11 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   // 모여 시작하기
   startMoyeo(context) async {
-    await MoyeoRepository().startMoyeo(context);
+    final res = await MoyeoRepository().startMoyeo(context);
+    UserInfo userInfo = await UserRepository().getUserInfo(context);
+    userInfo.moyeoTimelineId = res.moyeoTimelineId;
+    AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
+    appVM.updateUserInfo(userInfo);
     notifyListeners();
   }
 
@@ -125,8 +133,12 @@ class TimelineDetailViewModel extends ChangeNotifier {
   }
 
   //모여 나가기
- outMoyeo(context, int moyeoTimelineId) async {
-    await TimelineRepository().outMoyeo(context, moyeoTimelineId);
+ outMoyeo(context, int userId, int moyeoTimelineId) async {
+    await TimelineRepository().outMoyeo(context, userId, moyeoTimelineId);
+    UserInfo userInfo = await UserRepository().getUserInfo(context);
+    userInfo.moyeoTimelineId = -1;
+    AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
+    appVM.updateUserInfo(userInfo);
     notifyListeners();
  }
 }

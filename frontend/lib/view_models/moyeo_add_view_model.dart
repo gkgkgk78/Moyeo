@@ -4,11 +4,7 @@ import 'package:moyeo/models/UserInfo.dart';
 
 import '../models/TimelineDetail.dart';
 import '../services/timeline_repository.dart';
-import '../services/moyeo_repository.dart';
 
-import '../models/Post.dart';
-import '../models/TimelineInfo.dart';
-import '../views/moyeo_timeline.dart';
 
 class MoyeoTimelineDetailViewModel extends ChangeNotifier {
   final int timelineId;

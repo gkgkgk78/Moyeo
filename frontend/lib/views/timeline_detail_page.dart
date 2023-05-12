@@ -420,6 +420,7 @@ class TimelineDetailPage extends StatelessWidget {
                                         onTap: (){
                                           viewModel.outMoyeo(
                                               context,
+                                              appViewModel.userInfo.userUid,
                                               appViewModel.userInfo.moyeoTimelineId
                                           );
                                         },

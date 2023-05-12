@@ -95,8 +95,8 @@ class MoyeoAddUser extends StatelessWidget{
                                 selectedUser.length != 0
                                   ? Positioned(
                                     top:MediaQuery.of(context).size.height*(0.68),
-                                    left: MediaQuery.of(context).size.width*(0.34),
-                                    right: MediaQuery.of(context).size.width*(0.34),
+                                    left: MediaQuery.of(context).size.width*(0.32),
+                                    right: MediaQuery.of(context).size.width*(0.32),
                                     bottom:MediaQuery.of(context).size.height*(0.07),
                                     child: InkWell(
                                       onTap: (){
@@ -107,6 +107,10 @@ class MoyeoAddUser extends StatelessWidget{
                                             context,
                                             appViewModel.userInfo.moyeoTimelineId,
                                         );
+                                        Navigator.pop(context);
+                                        // Navigator.pushReplacementNamed(
+                                        //     context,
+                                        //     'api/auth/timeline/${appViewModel.userInfo.timeLineId}');
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),

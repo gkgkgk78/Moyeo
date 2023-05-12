@@ -22,4 +22,17 @@ class UploadRepository {
       throw Exception('Fail to upload to Server: ${error.message}');
     }
   }
+
+  Future<dynamic> uploadToMoyeo(BuildContext context, FormData formData) async {
+    try {
+      final dio = await authDio(context);
+      Response response = await dio.post("api/auth/post",
+          data: formData,
+          queryParameters:{'isMoyeo':true},);
+      return response;
+    } on DioError catch (error) {
+      throw Exception('Fail to upload to Server: ${error.message}');
+    }
+  }
+
 }
