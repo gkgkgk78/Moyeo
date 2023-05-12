@@ -11,8 +11,7 @@ public enum ErrorMessage {
     UNDEFINED_EXCEPTION("정의되지 않은 에러입니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     BINDING_FAIL_EXCEPTION("내부 서버에서 오류가 발생하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     NOT_PERMISSION_EXCEPTION("권한이 없거나 부족합니다.", HttpStatus.FORBIDDEN),
-    NOT_POST_EXCEPTION("멤버 수가 1명이면 포스트 등록을 못 합니다.", HttpStatus.FORBIDDEN),
-
+    NOT_ALLOWED_MOYEO_POST_REGISTRATION("2명 이상일 때 모여 포스트를 등록할 수 있습니다.", HttpStatus.FORBIDDEN),
     NOT_EXIST_ROUTE("존재하지 않는 경로입니다.", HttpStatus.BAD_REQUEST),
 
     NOT_EXIST_USER("존재하지 않는 유저 입니다", HttpStatus.BAD_REQUEST),
@@ -30,6 +29,7 @@ public enum ErrorMessage {
     NOT_EXIST_USER_FAV_POST("유저가 좋아요를 누른 포스트가 없습니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_KEYWORD("해당 지역명 키워드를 포함한 포스트가 없습니다.", HttpStatus.BAD_REQUEST),
     ALREADY_DONE_TIMELINE("이미 완료된 타임라인입니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_DONE_MOYEO_TIMELINE("이미 완료된 모여 타임라인입니다.", HttpStatus.BAD_REQUEST),
 
     NOT_EXIST_TIMELINE_PAGING("존재하지 않는 타임라인 페이징의 페이지 입니다", HttpStatus.BAD_REQUEST),
     OVER_VOICE_TIME("제한시간(30초)를 넘긴 오디오 파일 입니다", HttpStatus.BAD_REQUEST),
@@ -50,6 +50,7 @@ public enum ErrorMessage {
     FIREBASE_SEND_ERROR("firebase 알림 메시지 전송중 에러", HttpStatus.INTERNAL_SERVER_ERROR),
 
     NOT_EXIST_LATEST_ADDRESS("최근 주소 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
+    NOT_EXIST_LATEST_TIME("최근 시간 정보가 존재하지 않습니다.", HttpStatus.NOT_FOUND),
     FLASK_SERVER_ERROR("플라스크 서버 연결에 문제가 있습니다.", HttpStatus.BAD_REQUEST),
 
     NO_MESSAGE_FOR_USER("해당 유저가 수신한 메시지가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),

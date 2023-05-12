@@ -12,7 +12,7 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
-
-
     private final AwsS3 awsS3;
     private final PostRepository postRepository;
     private final MoyeoPostRepository moyeoPostRepository;
@@ -57,7 +55,7 @@ public class PostServiceImpl implements PostService {
     public Post createPost(AddPostReq addPostReq) throws Exception {
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if (timeline.getIsComplete() == true) {
-            new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
+            throw new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
         }
 
         Post post = new Post();
@@ -183,7 +181,7 @@ public class PostServiceImpl implements PostService {
 
         String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
         if (result.contains("\"result\":\"FAILED\"")) {
-            new BaseException(ErrorMessage.NOT_STT_SAVE);
+            throw new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
 
         log.info("clova result: {}", result);
@@ -257,19 +255,6 @@ public class PostServiceImpl implements PostService {
     // 메인 피드에서 포스트 조회
     @Override
     public List<GetPostRes> findByLocation(String location) throws Exception {
-        // List<Post> postList = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_KEYWORD));
-        //
-        // List<GetPostRes> getPostResList = new ArrayList<>();
-        // for (Post post : postList) {
-        //
-        //     // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-        //     if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getIsTimelinePublic() == true ) {
-        //         // Long totalFavorite = favoriteRepository.countByPostId(post);
-        //         Long totalFavorite = post.getFavoriteCount();
-        //         getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
-        //     }
-        // }
-
         List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
         if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
@@ -357,7 +342,7 @@ public class PostServiceImpl implements PostService {
             moyeoPostList = moyeoPosts.stream()
                     .map(post -> BasePostDto.builder(post
                                     , null
-                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
                             .build())
                     .collect(Collectors.toList());
         }

@@ -90,4 +90,42 @@ public class FcmServiceImpl implements FcmService {
 
 
     }
+
+    @Override
+    public void send(User inviter, User invitee, Long moyeoTimelineId, String title, String content) throws BaseException {
+        //      device 토큰값 갱신반영이 안될 경우 메시지전송 에러 발생함 : 현재 갱신기준(: 앱 재설치)
+        String token = invitee.getDeviceToken();
+        Instant sendTime = Instant.now().plus(Duration.ofMinutes(10));
+        Message message = Message.builder()
+            .setAndroidConfig(AndroidConfig.builder()
+                .setTtl(3600 * 1000)
+                .setPriority(AndroidConfig.Priority.HIGH)
+                //                        .setRestrictedPackageName("com.moyeo.moyeo") // 애플리케이션 패키지 이름
+                .setDirectBootOk(true)
+                .setNotification(AndroidNotification.builder()
+                    .setTitle(title) // 알림 제목
+                    .setBody(content) // 알림 본문
+                    .setIcon("@drawable/bling")
+                    .build())
+
+                .build())
+            // .putData("inviterId", inviter.getUserId().toString())
+            // .putData("inviteeId", invitee.getUserId().toString())
+            .putData("userId", invitee.getUserId().toString())
+            .putData("moyeoTimelineId", moyeoTimelineId.toString())
+            .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정
+            .build();
+
+
+        // Send a message to the device corresponding to the provided registration token.
+        try {
+            String response = FirebaseMessaging.getInstance().send(message);
+            System.out.println(response.toString());
+        } catch (FirebaseMessagingException e) {
+            System.out.println(e.getMessage());
+            throw new BaseException(ErrorMessage.FIREBASE_SEND_ERROR);
+        }
+
+    }
+
 }

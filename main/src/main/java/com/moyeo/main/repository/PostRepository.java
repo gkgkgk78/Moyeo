@@ -33,7 +33,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
 
-    @Query(value = "SELECT post_id FROM post WHERE user_id = :userId ORDER BY create_time LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT post_id FROM post WHERE user_id = :userId ORDER BY create_time DESC LIMIT 1", nativeQuery = true)
     Long findLatestPost(@Param("userId") Long userId);
 
     @Query("SELECT address1, address2, address3, address4 FROM Post WHERE postId = :postId AND userId.userId = :userId")
@@ -44,6 +44,20 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(nativeQuery = true, value = "select * from post where post_id in :postIdList")
     List<Post> findAllPostIn(List<Long> postIdList);
+
+    @Query(nativeQuery = true, value = "SELECT p.*\n"
+        + "FROM post p\n"
+        + "JOIN favorite f ON p.post_id = f.post_id\n"
+        + "WHERE f.user_id = :userId")
+    List<Post> findAllFavoritePost(Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT p.*\n"
+        + "FROM post p\n"
+        + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"
+        + "WHERE (p.address1 LIKE '%:location%' OR p.address2 LIKE '%:location%' OR p.address3 LIKE '%:location%' OR p.address4 LIKE '%:location%')\n"
+        + "  AND t.is_timeline_public = true\n"
+        + "  AND t.is_complete = true")
+    List<Post> findAllMainFeedPostByLocation(String location);
 
     // @Query(nativeQuery = true, value = "select post_id, create_time, modify_time, address1, address2, address3, address4, favorite_count, text, voice_length, voice_url, nation_id, false as is_moyeo\n"
     //     + "from post\n"
