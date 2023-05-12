@@ -27,7 +27,7 @@ class MoyeoRepository{
   }
 
   // 유저 추가하고 초대 알림 보내기
-  Future<MoyeoTimeline> addMoyeoUser(
+  Future<bool> addMoyeoUser(
       BuildContext context, List<Map<String,dynamic>> userList) async {
     try {
       // 이전 로직

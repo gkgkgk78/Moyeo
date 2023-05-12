@@ -36,9 +36,14 @@ class TimelineDetailPage extends StatelessWidget {
                 viewModel.isMine
                     ? Row(
                         children: [
-                          !viewModel.nowMoyeo && viewModel.timelineDetails.length > 0
+                          !viewModel.nowMoyeo
+                              && viewModel.timelineDetails.length > 0
+                              && !viewModel.isComplete
                               ? InkWell(
                                   onTap: (){
+                                    // 모여 시작하기
+                                    viewModel.startMoyeo(context);
+                                    // 유저 추가하기
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -365,8 +370,7 @@ class TimelineDetailPage extends StatelessWidget {
                                               )
                                             )
                                         // 포스트를 등록하고 모여 타임라인 시작하기
-                                            : Container()
-                                          : InkWell(
+                                            : InkWell(
                                               onTap: (){
                                                 viewModel.outMoyeo(
                                                     context,
@@ -407,7 +411,8 @@ class TimelineDetailPage extends StatelessWidget {
                                                     ]
                                                 )
                                             ),
-                                        ),
+                                        )
+                                          : Container(),
                                     ],
                                   )
                                 : Container(),

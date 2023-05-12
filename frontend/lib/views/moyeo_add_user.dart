@@ -103,7 +103,7 @@ class MoyeoAddUser extends StatelessWidget{
                                         for (var person in selectedUser) {
                                           userList.add(
                                               {"userId":person.userUid,
-                                                "moyeoTimeline":appViewModel.userInfo.timeLineId
+                                                "moyeoTimelineId":appViewModel.userInfo.timeLineId
                                               }
                                               );
                                         }

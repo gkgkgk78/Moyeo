@@ -89,7 +89,9 @@ class LoginPage extends StatelessWidget {
                           );
                           // 원래 로그인 로직
                           viewModel.loginButtonPressed(
-                              context, appViewModel.updateUserInfo, appViewModel.fcmToken);
+                              context, appViewModel.updateUserInfo
+                              // , appViewModel.fcmToken
+                          );
                         },
                         child: Image.asset(
                           'assets/images/kakao_login.png',
