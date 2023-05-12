@@ -30,7 +30,6 @@ public class FcmServiceImpl implements FcmService {
     private String route;
 
 
-
     @PostConstruct
     public void initialize() throws BaseException {
         // initialize Admin SDK using OAuth 2.0 refresh token
@@ -38,7 +37,7 @@ public class FcmServiceImpl implements FcmService {
         FileInputStream remoteToken = null;
 
         try {
-    //        remoteToken = new FileInputStream("src/main/resources/firebase.json");
+            //        remoteToken = new FileInputStream("src/main/resources/firebase.json");
             remoteToken = new FileInputStream(route);
         } catch (FileNotFoundException e) {
             log.info(e.getMessage());
@@ -74,7 +73,6 @@ public class FcmServiceImpl implements FcmService {
                                 .setBody("결과를 확인하러 갈까요?") // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())
-
                         .build())
                 .putData("requestId", user.getUserId().toString()) // request 식별 정보(requestId) 넣기
                 .setToken(token) // 요청자의 디바이스에 대한 registration token으로 설정
