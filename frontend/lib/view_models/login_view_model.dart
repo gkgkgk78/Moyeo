@@ -20,7 +20,7 @@ class LoginViewModel extends ChangeNotifier {
     _appViewModel = Provider.of<AppViewModel>(context,listen: false);
   }
 
-  tryLogin(context, Function update) async {
+  Future<void> tryLogin(context, Function update) async {
     if ((await storage.read(key: 'accessToken') == null)) return;
     if ((_appViewModel.fcmToken == '')) {
       Future.delayed(Duration(seconds: 2),
