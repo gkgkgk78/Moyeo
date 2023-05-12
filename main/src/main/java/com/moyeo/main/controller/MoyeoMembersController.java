@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,6 +42,21 @@ public class MoyeoMembersController {
 		}
 
 		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(user, moyeoMembersReqList));
+		// return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/{moyeoTimelineId}")
+	@Operation(summary = "동행 초대, 푸시 알림 보내기 & 메시지 함에 저장")
+	public ResponseEntity<?> inviteMoyeoMembers(@PathVariable Long moyeoTimelineId, @RequestBody List<MoyeoMembersReq> userIdList) throws Exception {
+		log.info("동행 초대 시작...");
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = null;
+		if (auth != null && auth.getPrincipal() != null) {
+			user = (User) auth.getPrincipal();
+		}
+
+		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers2(user, moyeoTimelineId, userIdList));
 	}
 
 	@PostMapping

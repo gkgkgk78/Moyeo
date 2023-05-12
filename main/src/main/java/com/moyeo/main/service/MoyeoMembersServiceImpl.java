@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.moyeo.main.dto.InviteMoyeoMembersRes;
 import com.moyeo.main.dto.MoyeoMembersReq;
 import com.moyeo.main.dto.RegistMoyeoRes;
 import com.moyeo.main.entity.MessageBox;
@@ -40,6 +41,51 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final MessageBoxRepository messageBoxRepository;
     private final UserRepository userRepository;
     private final FcmService fcmService;
+
+    @Override
+    public InviteMoyeoMembersRes inviteMoyeoMembers2(User inviter, Long moyeoTimelineId, List<MoyeoMembersReq> userIdList) throws BaseException {
+
+        moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
+
+        int totalInviteCount = userIdList.size();
+        int successInviteCount = 0;
+
+        for(MoyeoMembersReq moyeoMembersReq: userIdList) {
+
+            // User invitee = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+            // User invitee = userRepository.getByUserId(moyeoMembersReq.getUserId());
+            Optional<User> inviteeUser = userRepository.findById(moyeoMembersReq.getUserId());
+            if(inviteeUser.isEmpty()) {
+                log.info("userId {}는 존재하지 않는 유저입니다.", moyeoMembersReq.getUserId());
+                continue;
+            }
+            User invitee = inviteeUser.get();
+
+
+            // log.info("(동행 초대 푸시 알림 보내기)");
+            fcmService.send(inviter, invitee, moyeoTimelineId, "동행 초대 알림", "동행에 참여하시겠습니까?");
+
+            // log.info("(메시지 함에 저장)");
+            messageBoxRepository.save(MessageBox.builder()
+                .userId(invitee)
+                .content(inviter.getNickname() + "님이 동행에 초대하셨습니다.")
+                .createTime(LocalDateTime.now())
+                .inviteKey(moyeoTimelineId)
+                .build());
+
+            successInviteCount++;
+        }
+
+        if(successInviteCount == 0) {
+            throw new BaseException(ErrorMessage.NOT_EXIST_USER);
+        }
+
+        log.info("동행 초대 끝...");
+
+        return InviteMoyeoMembersRes.builder()
+            .successInviteCount(successInviteCount)
+            .totalInviteCount(totalInviteCount).build();
+    }
 
     @Override
     public Boolean inviteMoyeoMembers(User user, List<MoyeoMembersReq> moyeoMembersReqList) throws BaseException {
