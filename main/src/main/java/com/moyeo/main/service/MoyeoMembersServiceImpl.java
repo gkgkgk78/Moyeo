@@ -43,7 +43,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final FcmService fcmService;
 
     @Override
-    public InviteMoyeoMembersRes inviteMoyeoMembers2(User inviter, Long moyeoTimelineId, List<MoyeoMembersReq> userIdList) throws BaseException {
+    public InviteMoyeoMembersRes inviteMoyeoMembers(User inviter, Long moyeoTimelineId, List<MoyeoMembersReq> userIdList) throws BaseException {
 
         moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
 
