@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
+import 'package:lottie/lottie.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -92,10 +93,12 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   color: Colors.red,
                 ),
                 onClick: () async {
+                  appViewModel.changeLogouting();
                   const storage = FlutterSecureStorage();
                   await storage.deleteAll();
                   await appViewModel.deleteFCMToken();
                   Future.delayed(const Duration(milliseconds: 500));
+                  appViewModel.changeLogouting();
                   if (context.mounted) {
                     Navigator.pop(context);
                     await Navigator.pushAndRemoveUntil(
@@ -103,7 +106,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) => const LoginPage(),
                       ),
-                          (routes) => false,
+                      (routes) => false,
                     );
                   }
                 },
@@ -253,6 +256,16 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                     ),
                   ),
                 ),
+          Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: appViewModel.isLogouting == false
+                  ? SizedBox.shrink()
+                  : Lottie.asset(
+                      'assets/lottie/logout.json',
+                    ))
         ],
       );
     });

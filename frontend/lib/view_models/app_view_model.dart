@@ -358,4 +358,16 @@ class AppViewModel with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  bool _isLogouting = false;
+  bool get isLogouting => _isLogouting;
+
+  void changeLogouting() {
+    if (_isLogouting == false) {
+      _isLogouting = true;
+    } else {
+      _isLogouting = false;
+    }
+    notifyListeners();
+  }
 }
