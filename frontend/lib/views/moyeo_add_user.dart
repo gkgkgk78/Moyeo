@@ -25,7 +25,7 @@ class MoyeoAddUser extends StatelessWidget{
                 return Consumer<SelectedUsersProvider>(
                     builder: (context, selectedUsersProvider, _){
                       final selectedUser = selectedUsersProvider.selectedUsers;
-                      final List<Map<String,dynamic>> userList = [];
+
                       return Stack(
                             children: [
                                 GestureDetector(
@@ -100,15 +100,13 @@ class MoyeoAddUser extends StatelessWidget{
                                     bottom:MediaQuery.of(context).size.height*(0.07),
                                     child: InkWell(
                                       onTap: (){
-                                        for (var person in selectedUser) {
-                                          userList.add(
-                                              {"userId":person.userUid,
-                                              }
-                                              );
-                                        }
                                         final addUserProvider =
                                         Provider.of<SelectedUsersProvider>(context, listen: false);
-                                        addUserProvider.addMoyeoUser(context, userList, appViewModel.userInfo.moyeoTimelineId);
+
+                                        addUserProvider.addMoyeoUser(
+                                            context,
+                                            appViewModel.userInfo.moyeoTimelineId,
+                                        );
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),

@@ -25,8 +25,16 @@ class SelectedUsersProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  addMoyeoUser(context, List<Map<String,dynamic>> userList, int moyeoTimelineId) async {
-    await MoyeoRepository().addMoyeoUser(context, userList, moyeoTimelineId);
+  addMoyeoUser(context, int moyeoTimelineId) async {
+    final List<Map<String,dynamic>> userList = [];
+
+    for (var person in selectedUsers) {
+      userList.add(
+          {"userId":person.userUid,}
+      );
+    }
+
+    await MoyeoRepository().addMoyeoUser(context, moyeoTimelineId, userList);
     notifyListeners();
   }
 
