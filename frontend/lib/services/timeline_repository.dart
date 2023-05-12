@@ -125,12 +125,14 @@ class TimelineRepository {
   }
 
   // 모여나가기
-  Future<void> outMoyeo(context, moyeoTimelineId) async {
+  Future<void> outMoyeo(context, userId, moyeoTimelineId) async {
     try {
       final dio = await authDio(context);
       await dio.put(
           '/api/auth/moyeo/members',
-          data: {'moyeoTimelineId':moyeoTimelineId}
+          data: {'userId':userId,
+            'moyeoTimelineId':moyeoTimelineId
+          }
       );
     } catch (e) {
       showDialog(
