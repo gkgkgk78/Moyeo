@@ -1,5 +1,7 @@
 package com.moyeo.main.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +31,7 @@ public class MoyeoMembersController {
 
 	@PostMapping("/invite")
 	@Operation(summary = "동행 초대, 푸시 알림 보내기 & 메시지 함에 저장")
-	public ResponseEntity<?> inviteMoyeoMembers(@RequestBody MoyeoMembersReq moyeoMembersReq) throws Exception {
+	public ResponseEntity<?> inviteMoyeoMembers(@RequestBody List<MoyeoMembersReq> moyeoMembersReqList) throws Exception {
 		log.info("동행 초대 시작...");
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -38,7 +40,7 @@ public class MoyeoMembersController {
 			user = (User) auth.getPrincipal();
 		}
 
-		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(user, moyeoMembersReq));
+		return ResponseEntity.ok(moyeoMembersService.inviteMoyeoMembers(user, moyeoMembersReqList));
 	}
 
 	@PostMapping
