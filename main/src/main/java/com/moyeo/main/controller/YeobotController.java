@@ -13,6 +13,7 @@ import com.moyeo.main.service.FcmService;
 import com.moyeo.main.service.MessageBoxService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ import java.util.List;
 @RequestMapping("/api/auth/yeobot")
 @RestController
 @Slf4j
+@Log4j2
 public class YeobotController {
 
     private final YeobotService yeobotService;
