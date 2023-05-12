@@ -43,6 +43,16 @@ class AppViewModel with ChangeNotifier {
         notifyListeners();
       },
     );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.notification?.body?.contains('동행') == true) {
+        MoyeoRepository().acceptInvite(_context, message.data["moyeoTimelinId"]);
+      } else {
+        goMessageListPage();
+      }
+
+    },
+    );
+
     initializeFirebase();
     _initLocalNotification(_context);
   }
@@ -238,6 +248,7 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
+        logger.d(rm.notification?.body);
         NotificationDetails details;
         if (rm.notification?.body?.contains("동행") == true) {
           NotificationDetails buttonDetails = const NotificationDetails(
@@ -318,6 +329,14 @@ class AppViewModel with ChangeNotifier {
 
   bool _fromPush = false;
   bool get fromPush => _fromPush;
+
+  Future<void> deleteFCMToken() async {
+    String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
+    await FirebaseMessaging.instance.deleteToken();
+    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
+    logger.d(_fcmToken);
+    notifyListeners();
+  }
 
   void changeFromPush() {
     if (_fromPush == true) {

@@ -25,6 +25,8 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
       degThreeTranslationAnimation;
   late Animation rotationAnimation;
 
+  bool isMenuVisible = true;
+
   double getRadiansFromDegree(double degree) {
     double unitRadian = 57.295779513;
     return degree / unitRadian;
@@ -90,13 +92,13 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   color: Colors.red,
                 ),
                 onClick: () async {
-                  Navigator.pop(context);
                   const storage = FlutterSecureStorage();
-                  storage.deleteAll();
-                  FirebaseMessaging.instance.deleteToken();
-                  Future.delayed(const Duration(seconds: 5));
+                  await storage.deleteAll();
+                  await appViewModel.deleteFCMToken();
+                  Future.delayed(const Duration(milliseconds: 500));
                   if (context.mounted) {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.pop(context);
+                    await Navigator.pushAndRemoveUntil(
                       context,
                       PageRouteBuilder(
                         pageBuilder: (_, __, ___) => const LoginPage(),
@@ -104,7 +106,6 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                           (routes) => false,
                     );
                   }
-                  logger.d("로그아웃 완료");
                 },
               ),
             ),
