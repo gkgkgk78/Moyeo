@@ -42,7 +42,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final FcmService fcmService;
 
     @Override
-    public void inviteMoyeoMembers(User user, List<MoyeoMembersReq> moyeoMembersReqList) throws BaseException {
+    public Boolean inviteMoyeoMembers(User user, List<MoyeoMembersReq> moyeoMembersReqList) throws BaseException {
 
         for(MoyeoMembersReq moyeoMembersReq: moyeoMembersReqList) {
 
@@ -74,6 +74,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         }
 
         log.info("동행 초대 끝...");
+        return true;
     }
 
     @Override
