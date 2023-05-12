@@ -3,12 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:logger/logger.dart';
 import 'package:moyeo/models/MoyeoTimeline.dart';
 import 'package:moyeo/models/UserInfo.dart';
 
 import '../utils/auth_dio.dart';
-
+var logger = Logger();
 class MoyeoRepository{
+
   MoyeoRepository._internal();
 
   static final MoyeoRepository _instance = MoyeoRepository._internal();
@@ -27,7 +29,7 @@ class MoyeoRepository{
   }
 
   // 유저 추가하고 초대 알림 보내기
-  Future<MoyeoTimeline> addMoyeoUser(
+  Future<bool> addMoyeoUser(
       BuildContext context, List<Map<String,dynamic>> userList) async {
     try {
       // 이전 로직
@@ -36,10 +38,9 @@ class MoyeoRepository{
       // for (var user in userList){
       //   userIdList.add({"userId":user.userUid});
       // }
-
       final dio = await authDio(context);
       Response response = await dio
-        .post('api/auth/moyeo/members', data:userList);
+        .post('api/auth/moyeo/members/invite', data:userList);
       return response.data;
     } catch(e) {
       throw Exception('AddMoyeoUser Error $e');
