@@ -179,7 +179,13 @@ public class PostServiceImpl implements PostService {
         ClovaSpeechClient.NestRequestEntity requestEntity = new ClovaSpeechClient.NestRequestEntity();
         //        String result = clovaSpeechClient.url(voiceUrl, requestEntity);
 
-        String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
+        // String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
+        File convertedVoiceFile = multiFileToFile.transTo(voiceFile);
+        String result = clovaSpeechClient.upload(convertedVoiceFile, requestEntity);
+        if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제하는 로직 추가
+            convertedVoiceFile.delete();
+        }
+
         if (result.contains("\"result\":\"FAILED\"")) {
             throw new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
