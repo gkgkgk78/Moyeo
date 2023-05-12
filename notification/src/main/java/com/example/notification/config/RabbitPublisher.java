@@ -14,7 +14,7 @@ public class RabbitPublisher {
 
     private static final String EXCHANGE_NAME = "sample.exchange";
     private static final String QUEUE_NAME = "sample.queue";
-    private static final String ROUTING_KEY = "sample.oingdaddy.#";
+    private static final String ROUTING_KEY = "key1";
 
     @Bean
     TopicExchange exchange() {
