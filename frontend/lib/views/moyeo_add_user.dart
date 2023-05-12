@@ -20,7 +20,7 @@ class MoyeoAddUser extends StatelessWidget{
     return Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
           return ChangeNotifierProvider(
-              create: (_) => SelectedUsersProvider(),
+              create: (BuildContext context) => SelectedUsersProvider(context, nowMoyeo: appViewModel.userInfo.moyeoTimelineId),
               builder:(context, _) {
                 return Consumer<SelectedUsersProvider>(
                     builder: (context, selectedUsersProvider, _){

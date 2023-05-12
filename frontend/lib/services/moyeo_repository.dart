@@ -3,12 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:logger/logger.dart';
 import 'package:moyeo/models/MoyeoTimeline.dart';
 import 'package:moyeo/models/UserInfo.dart';
 
 import '../utils/auth_dio.dart';
-
+var logger = Logger();
 class MoyeoRepository{
+
   MoyeoRepository._internal();
 
   static final MoyeoRepository _instance = MoyeoRepository._internal();
@@ -42,7 +44,10 @@ class MoyeoRepository{
   Future<void> acceptInvite(context, moyeoTimelindId) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post('api/auth/moyeo/members', data: moyeoTimelindId);
+      Map<String, dynamic> moyeoData = {
+        "moyeoTimelineId" : moyeoTimelindId
+      };
+      Response response = await dio.post('api/auth/moyeo/members', data: moyeoData);
       return response.data;
     } catch(e) {
       throw Exception('StartMoyeo Error $e');

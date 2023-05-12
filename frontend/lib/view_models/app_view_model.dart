@@ -43,6 +43,16 @@ class AppViewModel with ChangeNotifier {
         notifyListeners();
       },
     );
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      if (message.notification?.body?.contains('동행') == true) {
+        MoyeoRepository().acceptInvite(_context, message.data["moyeoTimelinId"]);
+      } else {
+        goMessageListPage();
+      }
+
+    },
+    );
+
     initializeFirebase();
     _initLocalNotification(_context);
   }
@@ -180,7 +190,7 @@ class AppViewModel with ChangeNotifier {
       );
     } else if (settings.name == '/messages') {
       page = ChangeNotifierProvider(
-        create: (_) => MessageListViewModel(context, userInfo: _userInfo),
+        create: (_) => MessageListViewModel(context, _fromPush, userInfo: _userInfo),
         child: MessageListPage(),
       );
     } else {
@@ -238,6 +248,7 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
+        logger.d(rm.notification?.body);
         NotificationDetails details;
         if (rm.notification?.body?.contains("동행") == true) {
           NotificationDetails buttonDetails = const NotificationDetails(
@@ -308,9 +319,11 @@ class AppViewModel with ChangeNotifier {
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
         // _moyeoTimelineId
         if(_pushBody.contains("동행")) {
+          _fromPush = true;
           MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
         }
-        goMessageListPage();
+        await goMessageListPage();
+        _fromPush = false;
       },
     );
 
@@ -318,6 +331,14 @@ class AppViewModel with ChangeNotifier {
 
   bool _fromPush = false;
   bool get fromPush => _fromPush;
+
+  Future<void> deleteFCMToken() async {
+    String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
+    await FirebaseMessaging.instance.deleteToken();
+    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
+    logger.d(_fcmToken);
+    notifyListeners();
+  }
 
   void changeFromPush() {
     if (_fromPush == true) {
@@ -336,6 +357,18 @@ class AppViewModel with ChangeNotifier {
       _modalVisible = true;
     } else {
       _modalVisible = false;
+    }
+    notifyListeners();
+  }
+
+  bool _isLogouting = false;
+  bool get isLogouting => _isLogouting;
+
+  void changeLogouting() {
+    if (_isLogouting == false) {
+      _isLogouting = true;
+    } else {
+      _isLogouting = false;
     }
     notifyListeners();
   }
