@@ -119,8 +119,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  addMoyeoUser(context, List<Map<String,dynamic>> userList) async {
-    await MoyeoRepository().addMoyeoUser(context, userList);
+  addMoyeoUser(context, int moyeoTimelineId, List<Map<String,dynamic>> userList) async {
+    await MoyeoRepository().addMoyeoUser(context, moyeoTimelineId, userList);
     notifyListeners();
   }
 

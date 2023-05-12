@@ -36,13 +36,10 @@ class TimelineDetailPage extends StatelessWidget {
                 viewModel.isMine
                     ? Row(
                         children: [
-                          !viewModel.nowMoyeo
-                              && viewModel.timelineDetails.length > 0
+                          viewModel.nowMoyeo // 모여 중이고 여행끝이 아닐때 때 회원 추가 
                               && !viewModel.isComplete
                               ? InkWell(
                                   onTap: (){
-                                    // 모여 시작하기
-                                    viewModel.startMoyeo(context);
                                     // 유저 추가하기
                                     Navigator.push(
                                         context,
@@ -79,7 +76,7 @@ class TimelineDetailPage extends StatelessWidget {
                                               color: Colors.white,
                                             ),
                                             Text(
-                                              "  모여 시작하기",
+                                              "  모여 초대하기",
                                               style: TextStyle(color: Colors.white),
                                             ),
                                           ]
@@ -87,6 +84,54 @@ class TimelineDetailPage extends StatelessWidget {
                                   ),
                                 )
                               : Container(),
+                          !viewModel.nowMoyeo && !viewModel.isComplete// 모여중이 아닐경우 모여 시작 버튼 보임
+                          ? InkWell(
+                            onTap: (){
+                              // 모여 시작하기
+                              viewModel.startMoyeo(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MoyeoAddUser()
+                                  )
+                              );
+                            },
+                            child: Container(
+                              width: 130,
+                              margin: const EdgeInsets.only(left: 20) ,
+                              padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      blurRadius: 1.0,
+                                      spreadRadius: 1.0,
+                                      offset: const Offset(2,2),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: LinearGradient(
+                                      colors: <Color>[
+                                        Colors.redAccent,
+                                        Colors.orangeAccent,
+                                      ]
+                                  )
+                              ),
+                              child: Row(
+                                  children:[
+                                    Icon(
+                                      Icons.group_add,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      "  모여 시작하기",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ]
+                              )
+                          ),
+                          )
+                          : Container(),
                           Expanded(child: Container()),
                           Padding(
                             padding: const EdgeInsets.only(right: 5),
@@ -278,8 +323,7 @@ class TimelineDetailPage extends StatelessWidget {
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      viewModel.timelineDetails.length > 0
-                                          ? !viewModel.nowMoyeo
+                                      viewModel.timelineDetails.length > 0 && !viewModel.nowMoyeo
                                             ? Container(
                                               margin: EdgeInsets.only(right: 35, top:5),
                                               child:Row(
@@ -370,49 +414,51 @@ class TimelineDetailPage extends StatelessWidget {
                                               )
                                             )
                                         // 포스트를 등록하고 모여 타임라인 시작하기
-                                            : InkWell(
-                                              onTap: (){
-                                                viewModel.outMoyeo(
-                                                    context,
-                                                    appViewModel.userInfo.moyeoTimelineId
-                                                );
-                                              },
-                                              child: Container(
-                                                width: 115,
-                                                margin: const EdgeInsets.only(top:5, bottom:5, left: 20, right: 20) ,
-                                                padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
-                                                decoration: BoxDecoration(
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.grey.withOpacity(0.5),
-                                                        blurRadius: 1.0,
-                                                        spreadRadius: 1.0,
-                                                        offset: const Offset(2,2),
-                                                      )
-                                                    ],
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    gradient: LinearGradient(
-                                                        colors: <Color>[
-                                                          Colors.redAccent,
-                                                          Colors.orangeAccent,
-                                                        ]
-                                                    )
-                                                ),
-                                                child: Row(
-                                                    children:[
-                                                      Icon(
-                                                        Icons.group_remove,
-                                                        color: Colors.white,
-                                                      ),
-                                                      Text(
-                                                        "  모여 나가기",
-                                                        style: TextStyle(color: Colors.white),
-                                                      ),
+                                          : Container(),
+                                      viewModel.nowMoyeo
+                                      ? InkWell(
+                                        onTap: (){
+                                          viewModel.outMoyeo(
+                                              context,
+                                              appViewModel.userInfo.moyeoTimelineId
+                                          );
+                                        },
+                                        child: Container(
+                                            width: 115,
+                                            margin: const EdgeInsets.only(top:5, bottom:5, left: 20, right: 20) ,
+                                            padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                            decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey.withOpacity(0.5),
+                                                    blurRadius: 1.0,
+                                                    spreadRadius: 1.0,
+                                                    offset: const Offset(2,2),
+                                                  )
+                                                ],
+                                                borderRadius: BorderRadius.circular(10),
+                                                gradient: LinearGradient(
+                                                    colors: <Color>[
+                                                      Colors.redAccent,
+                                                      Colors.orangeAccent,
                                                     ]
                                                 )
                                             ),
-                                        )
-                                          : Container(),
+                                            child: Row(
+                                                children:[
+                                                  Icon(
+                                                    Icons.group_remove,
+                                                    color: Colors.white,
+                                                  ),
+                                                  Text(
+                                                    "  모여 나가기",
+                                                    style: TextStyle(color: Colors.white),
+                                                  ),
+                                                ]
+                                            )
+                                        ),
+                                      )
+                                      : Container(),
                                     ],
                                   )
                                 : Container(),

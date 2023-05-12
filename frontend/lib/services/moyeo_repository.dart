@@ -27,19 +27,12 @@ class MoyeoRepository{
   }
 
   // 유저 추가하고 초대 알림 보내기
-  Future<bool> addMoyeoUser(
-      BuildContext context, List<Map<String,dynamic>> userList) async {
+  Future<Map<String, int>> addMoyeoUser(
+      BuildContext context, int moyeoTimelineId, List<Map<String,dynamic>> userList) async {
     try {
-      // 이전 로직
-      // List<Map<String,int>> userIdList = [];
-      //
-      // for (var user in userList){
-      //   userIdList.add({"userId":user.userUid});
-      // }
-
       final dio = await authDio(context);
       Response response = await dio
-        .post('api/auth/moyeo/members', data:userList);
+        .post('api/auth/moyeo/members/${moyeoTimelineId}', data:userList);
       return response.data;
     } catch(e) {
       throw Exception('AddMoyeoUser Error $e');

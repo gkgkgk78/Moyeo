@@ -24,7 +24,7 @@ class LoginViewModel extends ChangeNotifier {
     if ((await storage.read(key: 'accessToken') == null)) return;
     if ((_appViewModel.fcmToken == '')) {
       Future.delayed(Duration(seconds: 2),
-          tryLogin(context, update)
+          // tryLogin(context, update)
       );
     }
 
