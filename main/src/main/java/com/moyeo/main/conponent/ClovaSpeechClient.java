@@ -36,8 +36,8 @@ public class ClovaSpeechClient {
     // public void setINVOKE_URL(String value) {
     //     INVOKE_URL = value;
     // }
-    private static final String SECRET = "058088bb4e64483d8bb892ac32507b7c";
-    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5061/5a47dca7418b8d67af71cdb7d5f767f7cea24457cc3fad3865ddd3b0f402166d";
+    private static final String SECRET = "592982c3fa2a412285086935bda98053";
+    private static final String INVOKE_URL = "https://clovaspeech-gw.ncloud.com/external/v1/5145/e03f18cde53cf07414fe17af87c96360a31e5bafd3a8ed2b8bed6e9164e94811";
 
     private CloseableHttpClient httpClient = HttpClients.createDefault();
     private Gson gson = new Gson();

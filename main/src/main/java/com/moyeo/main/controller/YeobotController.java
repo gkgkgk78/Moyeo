@@ -10,6 +10,7 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.ChatService;
 import com.moyeo.main.service.FcmService;
+import com.moyeo.main.service.MessageBoxService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class YeobotController {
     private final YeobotClient yeobotClient;
     private final ChatService chatService;
     private final FcmService fcmService;
+    private final MessageBoxService messageBoxService;
 
     //유저가 여행중인지 여부 반환
     @PostMapping("/istravelling")
@@ -91,13 +93,20 @@ public class YeobotController {
         String goal = "Search for a good restaurant near " + addressList.get(0) +" "+ addressList.get(1) +" "+ addressList.get(2) +" "+ addressList.get(3) +".";
         String caseType = "restaurant";
 
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info("goal : {}",goal);
+
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -141,9 +150,11 @@ public class YeobotController {
                 + addressList.get(1) + " "
                 + addressList.get(2) + " today.";
 
-        //return ResponseEntity.ok(goal);
-
         String caseType = "activity";
+
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info("goal : {}",goal);
 
         log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
 
@@ -151,9 +162,12 @@ public class YeobotController {
         String result = yeobotClient.sendYeobotData(caseType, goal);
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -173,7 +187,13 @@ public class YeobotController {
         String purpose = request.getPurpose();
 
         String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
+
         String caseType = "place";
+
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info("goal : {}",goal);
+        log.info("goal : {}",goal.toString());
 
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
@@ -184,9 +204,12 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
@@ -208,6 +231,10 @@ public class YeobotController {
         String goal = "Recommend me some fun things to do near " + destination + " during " + season +".";
         String caseType = "activity";
 
+        //goal 제대로 만들어졌는지 점검
+        System.out.println(goal);
+        log.info("goal : {}",goal);
+
         // Flask 서버에 데이터 전송
         String result = yeobotClient.sendYeobotData(caseType, goal);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -217,9 +244,12 @@ public class YeobotController {
         System.out.println(user + " is user");
 
         log.info("response insert 작업 시작");
-
+        // MongoDB에 저장
         chatService.insertResponse(user, result);
-
+        log.info("mongoDB에 저장 완료");
+        // MessageBox에 저장
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("messageBox에 저장 완료");
         log.info("response insert 작업 완료");
 
         fcmService.send(user);
