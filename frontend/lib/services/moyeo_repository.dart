@@ -29,19 +29,12 @@ class MoyeoRepository{
   }
 
   // 유저 추가하고 초대 알림 보내기
-  Future<bool> addMoyeoUser(
-      BuildContext context, List<Map<String,dynamic>> userList) async {
+  Future<void> addMoyeoUser(
+      BuildContext context, List<Map<String,dynamic>> userList, int moyeoTimelineId) async {
     try {
-      // 이전 로직
-      // List<Map<String,int>> userIdList = [];
-      //
-      // for (var user in userList){
-      //   userIdList.add({"userId":user.userUid});
-      // }
       final dio = await authDio(context);
       Response response = await dio
-        .post('api/auth/moyeo/members/invite', data:userList);
-      return response.data;
+        .post('api/auth/moyeo/members/$moyeoTimelineId', data:userList);
     } catch(e) {
       throw Exception('AddMoyeoUser Error $e');
     }
@@ -50,7 +43,10 @@ class MoyeoRepository{
   Future<void> acceptInvite(context, moyeoTimelindId) async {
     try {
       final dio = await authDio(context);
-      Response response = await dio.post('api/auth/moyeo/members', data: moyeoTimelindId);
+      Map<String, dynamic> moyeoData = {
+        "moyeoTimelineId" : moyeoTimelindId
+      };
+      Response response = await dio.post('api/auth/moyeo/members', data: moyeoData);
       return response.data;
     } catch(e) {
       throw Exception('StartMoyeo Error $e');

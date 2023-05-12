@@ -190,7 +190,7 @@ class AppViewModel with ChangeNotifier {
       );
     } else if (settings.name == '/messages') {
       page = ChangeNotifierProvider(
-        create: (_) => MessageListViewModel(context, userInfo: _userInfo),
+        create: (_) => MessageListViewModel(context, _fromPush, userInfo: _userInfo),
         child: MessageListPage(),
       );
     } else {
@@ -319,9 +319,11 @@ class AppViewModel with ChangeNotifier {
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
         // _moyeoTimelineId
         if(_pushBody.contains("동행")) {
+          _fromPush = true;
           MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
         }
-        goMessageListPage();
+        await goMessageListPage();
+        _fromPush = false;
       },
     );
 
