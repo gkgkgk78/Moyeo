@@ -23,6 +23,7 @@ class UploadRepository {
     }
   }
 
+  // 모여 포스트 요청
   Future<dynamic> uploadToMoyeo(BuildContext context, FormData formData) async {
     try {
       final dio = await authDio(context);
