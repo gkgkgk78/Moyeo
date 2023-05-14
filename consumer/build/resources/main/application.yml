@@ -1,0 +1,8 @@
+server:
+  port: 5500
+spring:
+  rabbitmq:
+    host: k8a107.p.ssafy.io
+    port: 8081
+    username: moyeo
+    password: moyeorabbit1234

@@ -40,6 +40,8 @@ dependencies {
     //mongodb
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
+    // amqp
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 }
 
 tasks.named('test') {
