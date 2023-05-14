@@ -19,6 +19,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
   final int expansionTileAnimationTile = 200;
   final textController = TextEditingController();
   List<TimelineDetail> _timelineDetails = [];
+  List<Map<String, dynamic>>? _members = [];
   // 모여 타임라인
   String? get title => _title;
 
@@ -31,6 +32,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
   get isComplete => _isComplete;
 
   get timelineDetails => _timelineDetails;
+
+  get members => _members;
 
   changeTitle(String newTitle) {
     _title = newTitle;
@@ -50,6 +53,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
     _isPublic = timelineInfo.isPublic;
     _isComplete = timelineInfo.isComplete;
     _nowMoyeo = timelineInfo.nowMoyeo;
+    _members = timelineInfo.members;
     notifyListeners();
   }
 

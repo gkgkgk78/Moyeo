@@ -44,7 +44,7 @@ class TimelineDetailPage extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => MoyeoAddUser()
+                                            builder: (context) => MoyeoAddUser(members: viewModel.members),
                                         )
                                     );
                                   },
@@ -92,7 +92,7 @@ class TimelineDetailPage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MoyeoAddUser()
+                                    builder: (context) => MoyeoAddUser(members: viewModel.members),
                                   )
                               );
                             },
