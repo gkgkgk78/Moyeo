@@ -109,10 +109,5 @@ class MoyeoTimelineDetailViewModel extends ChangeNotifier {
     await TimelineRepository().deleteTimeline(context, timelineId);
     Navigator.pop(context);
   }
-  // PUT요청
-  // outMoyeoTimeline(context) async {
-  //   await MoyeoRepository().outMoyeo(context, moyeoTimelineId);
-  //   Navigator.pop(context);
-  // }
 
 }

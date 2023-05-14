@@ -13,7 +13,10 @@ import '../views/user_search_bar_view.dart';
 
 
 class MoyeoAddUser extends StatelessWidget{
-  const MoyeoAddUser({Key? key}) : super(key: key);
+
+  final List<Map<String, dynamic>> members;
+
+  const MoyeoAddUser({required this.members, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -106,6 +109,7 @@ class MoyeoAddUser extends StatelessWidget{
                                         addUserProvider.addMoyeoUser(
                                             context,
                                             appViewModel.userInfo.moyeoTimelineId,
+                                            this.members
                                         );
                                         Navigator.pop(context);
                                         // Navigator.pushReplacementNamed(
