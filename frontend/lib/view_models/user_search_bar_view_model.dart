@@ -23,7 +23,7 @@ class SelectedUsersProvider extends ChangeNotifier{
     _selectedUsers.remove(user);
     notifyListeners();
   }
-// add 모여 유저시 moyeotimeline 아이디 변경되도록 부탁하기
+
   addMoyeoUser(context, int moyeoTimelineId, List<Map<String, dynamic>> members) async {
     final List<Map<String,dynamic>> userList = [];
 
