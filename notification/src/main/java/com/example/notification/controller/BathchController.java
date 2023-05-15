@@ -43,7 +43,7 @@ public class BathchController {
 //        map.put("id",id+"");
         BatchMessage batchMessage = BatchMessage.builder().id(id).message(message).deviceToken(deviceToken).build();
         log.info("BatchMessage  info : {}",batchMessage);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,batchMessage);
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME,batchMessage);
 //        Map<String,String> responseMap = Map.of("result",result,"id",id+"");
         return ResponseEntity.ok("responseMap");
     }
