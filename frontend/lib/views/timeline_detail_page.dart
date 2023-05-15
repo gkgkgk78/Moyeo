@@ -62,7 +62,7 @@ class TimelineDetailPage extends StatelessWidget {
                                             )
                                           ],
                                           borderRadius: BorderRadius.circular(10),
-                                          gradient: LinearGradient(
+                                          gradient: const LinearGradient(
                                               colors: <Color>[
                                                 Colors.redAccent,
                                                 Colors.orangeAccent,
@@ -70,7 +70,7 @@ class TimelineDetailPage extends StatelessWidget {
                                           )
                                       ),
                                       child: Row(
-                                          children:[
+                                          children:const [
                                             Icon(
                                               Icons.group_add,
                                               color: Colors.white,
@@ -110,7 +110,7 @@ class TimelineDetailPage extends StatelessWidget {
                                     )
                                   ],
                                   borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(
+                                  gradient: const LinearGradient(
                                       colors: <Color>[
                                         Colors.redAccent,
                                         Colors.orangeAccent,
@@ -118,7 +118,7 @@ class TimelineDetailPage extends StatelessWidget {
                                   )
                               ),
                               child: Row(
-                                  children:[
+                                  children:const [
                                     Icon(
                                       Icons.group_add,
                                       color: Colors.white,
@@ -142,9 +142,9 @@ class TimelineDetailPage extends StatelessWidget {
                               height: 30,
                               toggleSize: 20,
                               activeColor: Colors.orangeAccent.withOpacity(0.7),
-                              activeIcon: Icon(Icons.share),
+                              activeIcon: const Icon(Icons.share),
                               inactiveColor: Colors.grey.withOpacity(0.7),
-                              inactiveIcon: Icon(Icons.cancel_sharp),
+                              inactiveIcon: const Icon(Icons.cancel_sharp),
                               value: viewModel.isPublic,
                               onToggle: (_){
                                 viewModel.changeIsPublic(context);
@@ -224,7 +224,7 @@ class TimelineDetailPage extends StatelessWidget {
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 1,
                             blurRadius: 1,
-                            offset: Offset(2,2),
+                            offset: const Offset(2,2),
                           )
                         ],
                       ),
@@ -235,24 +235,22 @@ class TimelineDetailPage extends StatelessWidget {
                           physics: const ClampingScrollPhysics(),
                           itemCount: viewModel.timelineDetails.length+1,
                           itemBuilder: (BuildContext context, int idx){
-                            return Container(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text("등록된 포스트가 없습니다"),
-                                  ),
-                                  !viewModel.nowMoyeo
-                                  ? Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text("포스트를 등록하거나 모여를 시작해보세요"),
-                                  )
-                                  : Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Text("모여 여행 포스트를 등록해보세요")
-                                  ),
-                                ],
-                              ),
+                            return Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: const Text("등록된 포스트가 없습니다"),
+                                ),
+                                !viewModel.nowMoyeo
+                                ? Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: const Text("포스트를 등록하거나 모여를 시작해보세요"),
+                                )
+                                : Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: const Text("모여 여행 포스트를 등록해보세요")
+                                ),
+                              ],
                             );
                           }
                       )
@@ -343,7 +341,7 @@ class TimelineDetailPage extends StatelessWidget {
                                     children: [
                                       viewModel.timelineDetails.length > 0 && !viewModel.nowMoyeo
                                             ? Container(
-                                              margin: EdgeInsets.only(right: 35, top:5),
+                                              margin: const EdgeInsets.only(right: 35, top:5),
                                               child:Row(
                                               children:[
                                                 InkWell(

@@ -55,12 +55,14 @@ class AppViewModel with ChangeNotifier {
             if (_context.mounted) {
               _userInfo = await UserRepository().getUserInfo(_context);
             }
+            _messageLimitTimer.cancel();
+            _messageLimitSecond = 0;
           }
         } else {
-          _messageLimitTimer.cancel();
-          _messageLimitSecond = 0;
           goMessageListPage();
         }
+        _messageLimitTimer.cancel();
+        _messageLimitSecond = 0;
         notifyListeners();
       },
     );

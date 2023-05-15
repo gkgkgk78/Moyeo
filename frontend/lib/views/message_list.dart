@@ -90,18 +90,10 @@ class MessageListPage extends StatelessWidget {
                       ),
                     )
                     : ListView.builder(
-                      itemCount: viewModel.pushList.length,
+                      itemCount: viewModel.inviteList.length,
                       itemBuilder: (BuildContext context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            appViewModel.changeTitle("왔던 알림");
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PushAlarmPage(),
-                              ),
-                            );
-                          },
+                        return Padding(
+                          padding: const EdgeInsets.only(top:5, bottom: 5),
                           child: ListTile(
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
