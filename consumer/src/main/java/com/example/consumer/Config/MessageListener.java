@@ -12,4 +12,9 @@ public class MessageListener {
     public void receiveMessage(Message message){
         log.info("Mesaage info : {}",message);
     }
+
+    @RabbitListener(queues = "batch.queue")
+    public void receiveMessageFromBatch(Message message){
+        log.info("ReceiveMessageFromBatch Server info : {}",message);
+    }
 }
