@@ -20,7 +20,7 @@ class AvatarPile extends StatelessWidget {
     return Container(
       width: 200,
       height: pileSize,
-      child: Stack(
+      child: Row(
         children: [
           Container(
             padding: EdgeInsets.only(top:5),
@@ -33,10 +33,14 @@ class AvatarPile extends StatelessWidget {
           ),
           Expanded(child: Container()),
           for (int i = 0; i < avatars.length; i++)
-            Positioned(
-              right: i * avatarOverlap * avatarSize,
+            Container(
+              margin: EdgeInsets.only(left: 1),
               child: avatars[i],
             ),
+            // Positioned(
+            //   right: i * avatarOverlap * avatarSize,
+            //   child: avatars[i],
+            // ),
         ],
       ),
     );

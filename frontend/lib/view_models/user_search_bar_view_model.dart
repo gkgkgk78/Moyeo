@@ -28,13 +28,13 @@ class SelectedUsersProvider extends ChangeNotifier{
     final List<Map<String,dynamic>> userList = [];
 
     for (var person in selectedUsers) {
-      for (var member in members){
-        if (member['userUid'] != person.userUid){
+      // for (var member in members){
+      //   if (member['userUid'] != person.userUid){
           userList.add(
             {"userId":person.userUid,}
           );
-        }
-      }
+        // }
+      // }
     }
 
     await MoyeoRepository().addMoyeoUser(context, moyeoTimelineId, userList);
