@@ -71,11 +71,11 @@ class SearchBarViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    // isSearching = false;
-    // searchKeyWord = "";
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   // isSearching = false;
+  //   // searchKeyWord = "";
+  //   super.dispose();
+  // }
 }

@@ -33,7 +33,7 @@ class HomeUserInfo extends StatelessWidget{
                     height: 50,
                     child: Text(
                       appViewModel.userInfo.timeLineId != -1
-                      ? appViewModel.userInfo.nowMoyeo
+                      ? appViewModel.userInfo.moyeoTimelineId != -1
                         ? "모여 여행중"
                         : "여행중"
                       : "휴식중"
