@@ -85,36 +85,6 @@ class TimelineDetailPage extends StatelessWidget {
                                   ),
                                 )
                               : Container(),
-                          viewModel.nowMoyeo
-                              && !viewModel.isComplete
-                              ? Container(
-                              child: AvatarPile(
-                                avatars: List.generate(
-                                  viewModel.members.length,
-                                      (index) {
-                                    var people = viewModel.members[index];
-                                    return CircleAvatar(
-                                        radius: 15,
-                                        backgroundImage: NetworkImage(people['profileImageUrl'].toString())
-                                    );
-                                  },
-                                ),
-                                title:
-                                viewModel.members.length > 1    
-                                ? viewModel.members.length < 3 
-                                    ? '${
-                                    viewModel.members[1]['nickname']}님 과 여행 중'
-                                    : '${
-                                    viewModel.
-                                    members[1]['nickname']}님 외 '
-                                    '${viewModel.members.length-2}명 과 동행중'
-                                : "아직 동행이 추가되지 않았습니다",
-                                pileSize: 30,
-                                avatarSize: 30,
-                                avatarOverlap: 0.5,
-                              )
-                          )
-                              : Container(),
                           !viewModel.nowMoyeo && !viewModel.isComplete// 모여중이 아닐경우 모여 시작 버튼 보임
                           ? InkWell(
                             onTap: (){
@@ -240,6 +210,36 @@ class TimelineDetailPage extends StatelessWidget {
                           )
                         ],
                       )
+                    : Container(),
+                viewModel.nowMoyeo
+                    && !viewModel.isComplete && viewModel.nowMoyeo
+                    ? Container(
+                    child: AvatarPile(
+                      avatars: List.generate(
+                        viewModel.members.length,
+                            (index) {
+                          var people = viewModel.members[index];
+                          return CircleAvatar(
+                              radius: 15,
+                              backgroundImage: NetworkImage(people['profileImageUrl'].toString())
+                          );
+                        },
+                      ),
+                      title:
+                      viewModel.members.length > 1
+                          ? viewModel.members.length < 3
+                          ? '${
+                          viewModel.members[1]['nickname']}님 과 여행 중'
+                          : '${
+                          viewModel.
+                          members[1]['nickname']}님 외 '
+                          '${viewModel.members.length-2}명 과 동행중'
+                          : "아직 동행이 추가되지 않았습니다",
+                      pileSize: 30,
+                      avatarSize: 30,
+                      avatarOverlap: 0.5,
+                    )
+                )
                     : Container(),
                     Container(
                       margin: const EdgeInsets.only(

@@ -13,12 +13,14 @@ import '../view_models/search_result_view_model.dart';
 import 'my_feed_view.dart';
 
 class UserSearchBar extends StatelessWidget {
-  const UserSearchBar({super.key});
+  final List<Map<String, dynamic>> members;
+
+  const UserSearchBar({required this.members, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final tapUser = Provider.of<SelectedUsersProvider>(context, listen: true);
-
+    Set<Map<String, dynamic>> memberSet = members.toSet();
     return Consumer<AppViewModel>(
       builder: (context, appViewModel, _) {
         return Consumer<SearchBarViewModel>(
@@ -33,7 +35,9 @@ class UserSearchBar extends StatelessWidget {
                         children: [
                               // 키워드가 없을 때엔 검색 결과창이 뜨지 않는다.
                               viewModel.myFocus.hasFocus &&
-                                      viewModel.searchKeyWord != "" && isKeyboardVisible
+                                      viewModel.searchKeyWord != "" &&
+                                  isKeyboardVisible
+                                  // && memberSet.intersection(viewModel.searchedResults.toSet()) == {}
                                   ? Expanded(
                                       child: Container(
                                         margin: const EdgeInsets.only(top: 30),
@@ -78,8 +82,11 @@ class UserSearchBar extends StatelessWidget {
                                                   return GestureDetector(
                                                     onTap: () {
                                                       tapUser.addUser(
-                                                          viewModel.searchedResults[index-1]
+                                                          viewModel.searchedResults[index-1], members
                                                       );
+                                                      viewModel.unFocus();
+                                                      FocusScope.of(context).unfocus();
+
                                                     },
                                                     child: Column(
                                                       children: [
