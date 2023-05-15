@@ -1,53 +1,7 @@
-<<<<<<< HEAD
-//package com.example.consumer.Config;
-//
-//import com.example.consumer.dto.BatchMessage;
-//import org.springframework.amqp.core.Message;
-//import org.springframework.amqp.core.MessageProperties;
-//import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
-//import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-//import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
-//import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-//import org.springframework.amqp.support.converter.MessageConversionException;
-//import org.springframework.amqp.support.converter.MessageConverter;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//
-//import java.io.ByteArrayInputStream;
-//import java.io.IOException;
-//import java.io.ObjectInputStream;
-//
-//@Configuration
-//public class ListenerConfig {
-//    @Bean
-//    public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(ConnectionFactory connectionFactory){
-//        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-//        factory.setConnectionFactory(connectionFactory);
-//        factory.setMessageConverter(new MessageConverter() {
-//            @Override
-//            public Message toMessage(Object o, MessageProperties messageProperties) throws MessageConversionException {
-//                return null;
-//            }
-//
-//            @Override
-//            public Object fromMessage(Message message) throws MessageConversionException {
-//                try (ObjectInputStream ois  = new ObjectInputStream((new ByteArrayInputStream(message.getBody())))){
-//                    return (BatchMessage) ois.readObject();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    return null;
-//                }
-//            }
-//        });
-//        return factory;
-//    }
-//}
-=======
 package com.example.consumer.Config;
 
 import com.example.consumer.dto.BatchMessage;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -56,6 +10,7 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -65,27 +20,26 @@ import java.io.ObjectInputStream;
 
 @Configuration
 public class ListenerConfig {
-    @Bean
-    public RabbitListenerContainerFactory<?> rabbitListenerContainerFactory(ConnectionFactory connectionFactory){
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(new MessageConverter() {
-            @Override
-            public Message toMessage(Object o, MessageProperties messageProperties) throws MessageConversionException {
-                return null;
-            }
+    @Value("${batch-exchange}")
+    private String EXCHANGE_NAME;
+    @Value("${batch-queue}")
+    private String QUEUE_NAME;
+    @Value("${batch-route-key}")
+    private String ROUTING_KEY;
 
-            @Override
-            public Object fromMessage(Message message) throws MessageConversionException {
-                try (ObjectInputStream ois  = new ObjectInputStream((new ByteArrayInputStream(message.getBody())))){
-                    return (BatchMessage) ois.readObject();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-        });
-        return factory;
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(EXCHANGE_NAME);
+    }
+
+    @Bean
+    Queue queue() {
+        return new Queue(QUEUE_NAME);
+    }
+
+    @Bean
+    Binding binding (Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
 
     @Bean
@@ -101,4 +55,3 @@ public class ListenerConfig {
     }
 
 }
->>>>>>> 64dbd05e3ebfe365df3e5e9f211f8ddf06c7e2e6
