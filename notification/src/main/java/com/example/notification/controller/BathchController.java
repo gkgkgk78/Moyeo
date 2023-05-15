@@ -1,5 +1,6 @@
 package com.example.notification.controller;
 
+import com.example.notification.dto.BatchMessage;
 import com.example.notification.service.FcmService;
 import com.example.notification.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +36,13 @@ public class BathchController {
         log.info("Batch Restaurant Reco MESSAGE :{}",message);
         log.info("EXCHAGE NAME :{}",EXCHANGE_NAME);
         log.info("ROUTING KET :{}",ROUTING_KEY);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,"hello");
 //        String result = fcmService.pushNoti(deviceToken,message);
 //        log.info("Batch Restaurant Reco result :{}",result);
         Long id = userService.findByDeviceToken(deviceToken);
         log.info("해당 id : {}",id);
+//        map.put("id",id+"");
+
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,BatchMessage.builder().id(id).message(message).deviceToken(deviceToken).build());
 //        Map<String,String> responseMap = Map.of("result",result,"id",id+"");
         return ResponseEntity.ok("responseMap");
     }

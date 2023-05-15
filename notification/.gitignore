@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 application.yml
 firebase.json
-usr/firebase.json
+src/usr/firebase.json
 ### STS ###
 .apt_generated
 .classpath
