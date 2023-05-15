@@ -156,6 +156,8 @@ class CameraViewModel extends ChangeNotifier {
     );
     _recordedFilePath = '';
     _recordedFileName = '';
+    _haveLocation = false;
+    _havingLocation = false;
     notifyListeners();
   }
 
@@ -333,6 +335,7 @@ class CameraViewModel extends ChangeNotifier {
     }
     _isUploading = false;
     notifyListeners();
+    clear();
     if (context.mounted) {
       Navigator.pop(context);
       Navigator.pop(context);
