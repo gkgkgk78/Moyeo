@@ -45,8 +45,12 @@ class AppViewModel with ChangeNotifier {
     );
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       if (message.notification?.body?.contains('동행') == true) {
-        MoyeoRepository().acceptInvite(_context, message.data["moyeoTimelinId"]);
+        if (_messageLimitSecond <= 61) {
+          MoyeoRepository().acceptInvite(_context, message.data["moyeoTimelinId"]);
+        }
       } else {
+        _messageLimitTimer.cancel();
+        _messageLimitSecond = 0;
         goMessageListPage();
       }
 
@@ -230,6 +234,9 @@ class AppViewModel with ChangeNotifier {
   String _pushTitle = "";
   String _pushBody = "";
 
+  late Timer _messageLimitTimer;
+  int _messageLimitSecond = 0;
+
   Future<void> initializeFirebase() async {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
     _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
@@ -246,9 +253,13 @@ class AppViewModel with ChangeNotifier {
       sound: true,
     );
 
+
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
-        logger.d(rm.notification?.body);
+        _messageLimitTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+          _messageLimitSecond += 1;
+        });
+
         NotificationDetails details;
         if (rm.notification?.body?.contains("동행") == true) {
           NotificationDetails buttonDetails = const NotificationDetails(
@@ -320,9 +331,16 @@ class AppViewModel with ChangeNotifier {
         // _moyeoTimelineId
         if(_pushBody.contains("동행")) {
           _fromPush = true;
-          MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
+          if (_messageLimitSecond <=61) {
+            MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
+            _messageLimitTimer.cancel();
+            _messageLimitSecond = 0;
+          }
+        } else {
+          _messageLimitTimer.cancel();
+          _messageLimitSecond = 0;
+          await goMessageListPage();
         }
-        await goMessageListPage();
         _fromPush = false;
       },
     );
@@ -336,7 +354,6 @@ class AppViewModel with ChangeNotifier {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
     await FirebaseMessaging.instance.deleteToken();
     _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
-    logger.d(_fcmToken);
     notifyListeners();
   }
 

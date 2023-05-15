@@ -21,6 +21,16 @@ class MessageRepository {
     }
   }
 
+  Future<dynamic> readOnePush(BuildContext context, int messageId) async {
+    try {
+      final dio = await authDio(context);
+      Response response = await dio.get("api/auth/message/$messageId");
+      return response.data;
+    } catch (error) {
+      throw Exception('Fail to get alarm list from Server: ${error}');
+    }
+  }
+
   // Future<void> getInviteAlarm(BuildContext context) async {}
 
 }
