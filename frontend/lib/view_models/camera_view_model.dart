@@ -154,6 +154,8 @@ class CameraViewModel extends ChangeNotifier {
       address4: "",
       flag: null,
     );
+    _recordedFilePath = '';
+    _recordedFileName = '';
     notifyListeners();
   }
 
