@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitPublisher {
 
-    private static final String EXCHANGE_NAME = "sample.exchange";
-    private static final String QUEUE_NAME = "sample.queue";
-    private static final String ROUTING_KEY = "key1";
+    private static final String EXCHANGE_NAME = "batch.autogpt";
+    private static final String QUEUE_NAME = "batch.queue";
+    private static final String ROUTING_KEY = "batch.key";
 
     @Bean
     TopicExchange exchange() {
