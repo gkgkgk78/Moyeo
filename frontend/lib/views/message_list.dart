@@ -47,36 +47,20 @@ class MessageListPage extends StatelessWidget {
                 body: TabBarView(
                   children: [
                     ListView.builder(
-                      itemCount: viewModel.pushList.length,
+                      itemCount: viewModel.gptList.length,
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(
                           onTap: () {
-                            appViewModel.changeTitle("여봇과의 추억");
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => MultiProvider(
-                            //       providers: [
-                            //         ChangeNotifierProvider<ChatbotViewModel>(
-                            //           create: (_) => ChatbotViewModel(
-                            //             context,
-                            //             isTravel:
-                            //                 appViewModel.userInfo.timeLineId,
-                            //           ),
-                            //         ),
-                            //       ],
-                            //       child: const ChatbotPage(),
-                            //     ),
-                            //   ),
-                            // );
+                            viewModel.readOneMessage(context, viewModel.gptList[index].messageId);
                           },
                           child: ListTile(
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
-                              child: Image.network(
-                                  "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
+                              child: Image.asset(
+                                  'assets/images/canton.png'
+                              ),
                             ),
-                            title: Text(viewModel.pushList[index].content),
+                            title: Text(viewModel.gptList[index].content),
                           ),
                         );
                       },
@@ -97,11 +81,9 @@ class MessageListPage extends StatelessWidget {
                           child: ListTile(
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(40),
-                              child: Image.network(
-                                  "https://yt3.googleusercontent.com/ytc/AGIKgqM8zh66fZqGKeTkopHaU9GM4zvyuFnQhXThr37u=s900-c-k-c0x00ffffff-no-rj"),
+                              child: Image.asset('assets/images/shakinghand.png'),
                             ),
-                            title: Text(viewModel.inviteList[index]["title"]),
-                            subtitle: Text(viewModel.inviteList[index]["sub"]),
+                            title: Text(viewModel.inviteList[index]["content"]),
                           ),
                         );
                       },

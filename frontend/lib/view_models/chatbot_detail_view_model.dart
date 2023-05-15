@@ -149,7 +149,7 @@ class ChatbotViewModel extends ChangeNotifier {
         () {
           submitMessage(
             ChatMessage(
-              message: '$text! 참 좋은 나라죠.\n어느 계절에 떠나시고 싶으신가요?',
+              message: '$text! 참 좋은 나라죠.\n어느 계절에 떠나시고 싶으신가요?\n봄, 여름, 가을, 겨울 중에 말씀해주세요!',
               sender: 'gpt',
             ),
           );
@@ -252,7 +252,7 @@ class ChatbotViewModel extends ChangeNotifier {
       await Future.delayed(const Duration(seconds: 2), () {
         submitMessage(
           ChatMessage(
-            message: '$text! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?',
+            message: '$text! 참 좋은 지역이죠.\n어느 계절에 떠나시고 싶으신가요?\n봄, 여름, 가을, 겨울 중에 말씀해주세요!',
             sender: 'gpt',
           ),
         );

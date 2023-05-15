@@ -18,6 +18,7 @@ class CameraView extends StatelessWidget {
           onWillPop: () async {
             appViewModel.changeTitleToFormer();
             viewModel.changeUploading();
+            viewModel.clear();
             return true;
           },
           child: Scaffold(

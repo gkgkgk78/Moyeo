@@ -145,6 +145,11 @@ class CameraViewModel extends ChangeNotifier {
     }
   }
 
+  void clear() {
+    _allFileList = [];
+    notifyListeners();
+  }
+
   // 줌 기능
   // Future<void> changeZoomLevel(double scale) async {
   //   logger.d(scale);
