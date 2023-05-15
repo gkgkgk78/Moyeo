@@ -1,5 +1,6 @@
 package com.example.consumer.Config;
 
+import com.example.consumer.dto.BatchMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -14,7 +15,7 @@ public class MessageListener {
     }
 
     @RabbitListener(queues = "batch.queue")
-    public void receiveMessageFromBatch(Message message){
-        log.info("ReceiveMessageFromBatch Server info : {}",message);
+    public void receiveMessageFromBatch(BatchMessage batchMessage){
+        log.info("ReceiveMessageFromBatch Server info : {}",batchMessage);
     }
 }
