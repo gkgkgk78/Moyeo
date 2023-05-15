@@ -20,12 +20,12 @@ import java.io.ObjectInputStream;
 
 @Configuration
 public class ListenerConfig {
-    @Value("${batch-exchange}")
-    private String EXCHANGE_NAME;
-    @Value("${batch-queue}")
-    private String QUEUE_NAME;
-    @Value("${batch-route-key}")
-    private String ROUTING_KEY;
+//    @Value("${batch-exchange}")
+    private String EXCHANGE_NAME="batch.autogpt";
+//    @Value("${batch-queue}")
+    private String QUEUE_NAME="batch.queue";
+//    @Value("${batch-route-key}")
+    private String ROUTING_KEY="batch.key";
 
     @Bean
     TopicExchange exchange() {
