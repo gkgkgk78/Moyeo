@@ -147,6 +147,13 @@ class CameraViewModel extends ChangeNotifier {
 
   void clear() {
     _allFileList = [];
+    _locationInfo = LocationInformation(
+      country: "",
+      address2: "",
+      address3: "",
+      address4: "",
+      flag: null,
+    );
     notifyListeners();
   }
 
