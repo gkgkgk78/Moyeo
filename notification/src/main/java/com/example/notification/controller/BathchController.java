@@ -41,8 +41,9 @@ public class BathchController {
         Long id = userService.findByDeviceToken(deviceToken);
         log.info("해당 id : {}",id);
 //        map.put("id",id+"");
-
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,BatchMessage.builder().id(id).message(message).deviceToken(deviceToken).build());
+        BatchMessage batchMessage = BatchMessage.builder().id(id).message(message).deviceToken(deviceToken).build();
+        log.info("BatchMessage  info : {}",batchMessage);
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,batchMessage);
 //        Map<String,String> responseMap = Map.of("result",result,"id",id+"");
         return ResponseEntity.ok("responseMap");
     }
