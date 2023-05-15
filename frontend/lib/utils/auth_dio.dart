@@ -44,7 +44,7 @@ Future<Dio> authDio(BuildContext context) async {
           Response response = await refreshDio.post(
             'api/login/reissuance',
             options: Options(headers: {'refreshToken': 'Bearer $refreshToken'}),
-            data: {'userUid': int.parse(userUid ?? '')},
+            data: {'userUid': int.tryParse(userUid ?? '')},
           );
           if (response.statusCode! < 400) {
             final String? newAccessToken =

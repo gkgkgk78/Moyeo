@@ -5,6 +5,7 @@ class UserInfo {
   int timeLineId;
   int moyeoTimelineId;
   int timelineNum;
+  bool nowMoyeo;
 
   UserInfo({
     required this.userUid,
@@ -13,6 +14,7 @@ class UserInfo {
     this.moyeoTimelineId = -1,
     this.timeLineId = -1,
     this.timelineNum = 0,
+    this.nowMoyeo = false,
   });
 
   factory UserInfo.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class UserInfo {
       moyeoTimelineId: json['moyeoTimelineId'] ?? -1,
       timeLineId: json['timeLineId'] ?? -1,
       timelineNum: json['timelineNum'] ?? 0,
+      nowMoyeo: json['nowMoyeo'] ?? false,
     );
   }
 }

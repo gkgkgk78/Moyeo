@@ -44,7 +44,7 @@ class TimelineDetailPage extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => MoyeoAddUser()
+                                            builder: (context) => MoyeoAddUser(members: viewModel.members),
                                         )
                                     );
                                   },
@@ -92,7 +92,7 @@ class TimelineDetailPage extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MoyeoAddUser()
+                                    builder: (context) => MoyeoAddUser(members: viewModel.members),
                                   )
                               );
                             },
@@ -155,34 +155,52 @@ class TimelineDetailPage extends StatelessWidget {
                               showDialog(
                                 barrierDismissible: false,
                                 context: context,
-                                builder: (ctx) => AlertDialog(
-                                  title: const Text('타임라인 삭제'),
-                                  content: const Text('타임라인을  삭제하시겠습니까?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        viewModel.deleteTimeline(context);
-                                        appViewModel.userInfo.timeLineId = -1;
-                                        appViewModel.userInfo.timelineNum--;
-                                        appViewModel.changeTitle(
-                                            appViewModel.userInfo.nickname);
-                                        Navigator.pop(ctx);
-                                        Navigator.popAndPushNamed(context, '/');
-                                      },
-                                      child: const Text(
-                                        '삭제',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(ctx);
-                                      },
-                                      child: const Text('취소'),
-                                    ),
-                                  ],
-                                ),
-                              );
+                                builder: (ctx) =>
+                                // 모여 끝내기 전에 타임라인 삭제 금지
+                                    appViewModel.userInfo.moyeoTimelineId == -1
+                                    ? AlertDialog(
+                                        title: const Text('타임라인 삭제'),
+                                        content: const Text('타임라인을  삭제하시겠습니까?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              viewModel.deleteTimeline(context);
+                                              appViewModel.userInfo.timeLineId = -1;
+                                              appViewModel.userInfo.timelineNum--;
+                                              appViewModel.changeTitle(
+                                                  appViewModel.userInfo.nickname);
+                                              Navigator.pop(ctx);
+                                              Navigator.popAndPushNamed(context, '/');
+                                            },
+                                            child: const Text(
+                                              '삭제',
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(ctx);
+                                            },
+                                            child: const Text('취소'),
+                                          ),
+                                        ],
+                                      )
+                                    : AlertDialog(
+                                        title: const Text('타임라인 삭제'),
+                                        content: const Text('모여 중엔 타임라인을 삭제할 수 없습니다.'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(ctx);
+                                            },
+                                            child: const Text(
+                                               '닫기',
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    );
                             },
                             icon: const Icon(
                               Icons.delete,
@@ -420,6 +438,7 @@ class TimelineDetailPage extends StatelessWidget {
                                         onTap: (){
                                           viewModel.outMoyeo(
                                               context,
+                                              appViewModel.userInfo.userUid,
                                               appViewModel.userInfo.moyeoTimelineId
                                           );
                                         },

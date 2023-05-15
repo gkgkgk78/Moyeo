@@ -13,7 +13,10 @@ import '../views/user_search_bar_view.dart';
 
 
 class MoyeoAddUser extends StatelessWidget{
-  const MoyeoAddUser({Key? key}) : super(key: key);
+
+  final List<Map<String, dynamic>> members;
+
+  const MoyeoAddUser({required this.members, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
@@ -95,8 +98,8 @@ class MoyeoAddUser extends StatelessWidget{
                                 selectedUser.length != 0
                                   ? Positioned(
                                     top:MediaQuery.of(context).size.height*(0.68),
-                                    left: MediaQuery.of(context).size.width*(0.34),
-                                    right: MediaQuery.of(context).size.width*(0.34),
+                                    left: MediaQuery.of(context).size.width*(0.32),
+                                    right: MediaQuery.of(context).size.width*(0.32),
                                     bottom:MediaQuery.of(context).size.height*(0.07),
                                     child: InkWell(
                                       onTap: (){
@@ -106,7 +109,12 @@ class MoyeoAddUser extends StatelessWidget{
                                         addUserProvider.addMoyeoUser(
                                             context,
                                             appViewModel.userInfo.moyeoTimelineId,
+                                            this.members
                                         );
+                                        Navigator.pop(context);
+                                        // Navigator.pushReplacementNamed(
+                                        //     context,
+                                        //     'api/auth/timeline/${appViewModel.userInfo.timeLineId}');
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
