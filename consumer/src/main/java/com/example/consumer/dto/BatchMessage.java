@@ -11,6 +11,9 @@ public class BatchMessage implements Serializable {
     private long id;
     private String message;
     private String deviceToken;
-
+    public BatchMessage(long id,String message ,String deviceToken){
+        this.id = id;
+        this.message = message;
+    }
 }
 
