@@ -100,15 +100,15 @@ class TimelineDetailPage extends StatelessWidget {
                                   },
                                 ),
                                 title:
-                                viewModel.members.length < 3
+                                viewModel.members.length > 1    
+                                ? viewModel.members.length < 3 
                                     ? '${
                                     viewModel.members[1]['nickname']}님 과 여행 중'
                                     : '${
                                     viewModel.
                                     members[1]['nickname']}님 외 '
-                                    '${viewModel.
-                                members.
-                                length-2}명 과 동행중',
+                                    '${viewModel.members.length-2}명 과 동행중'
+                                : "아직 동행이 추가되지 않았습니다",
                                 pileSize: 30,
                                 avatarSize: 30,
                                 avatarOverlap: 0.5,
