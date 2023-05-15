@@ -407,7 +407,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                           )
                                                         ],
                                                         borderRadius: BorderRadius.circular(10),
-                                                        gradient: LinearGradient(
+                                                        gradient: const LinearGradient(
                                                             colors: <Color>[
                                                               Colors.redAccent,
                                                               Colors.orangeAccent,
@@ -415,7 +415,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                         )
                                                     ),
                                                     child: Row(
-                                                        children:[
+                                                        children:const [
                                                           Icon(
                                                             Icons.done,
                                                             color: Colors.white,
@@ -456,7 +456,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                   )
                                                 ],
                                                 borderRadius: BorderRadius.circular(10),
-                                                gradient: LinearGradient(
+                                                gradient: const LinearGradient(
                                                     colors: <Color>[
                                                       Colors.redAccent,
                                                       Colors.orangeAccent,
@@ -464,7 +464,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                 )
                                             ),
                                             child: Row(
-                                                children:[
+                                                children:const [
                                                   Icon(
                                                     Icons.group_remove,
                                                     color: Colors.white,
