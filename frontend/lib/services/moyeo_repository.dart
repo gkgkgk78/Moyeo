@@ -29,7 +29,7 @@ class MoyeoRepository{
   }
 
   // 유저 추가하고 초대 알림 보내기
-  Future<Map<String, int>> addMoyeoUser(
+  Future<Map<String, dynamic>> addMoyeoUser(
       BuildContext context, int moyeoTimelineId, List<Map<String,dynamic>> userList) async {
     try {
       final dio = await authDio(context);
