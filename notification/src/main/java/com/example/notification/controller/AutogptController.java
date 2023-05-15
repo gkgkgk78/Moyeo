@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AutogptController {
 
 
+
     private final PostInsertAutogpt postInsertAutogpt;
 
     @PostMapping(value = "")
