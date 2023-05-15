@@ -138,12 +138,7 @@ class TimelineRepository {
             'moyeoTimelineId':moyeoTimelineId
           }
       );
-      UserInfo userInfo = await UserRepository().getUserInfo(context);
-      userInfo.moyeoTimelineId = -1;
-      // userInfo.nowMoyeo = false;
 
-      AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
-      appVM.updateUserInfo(userInfo);
     } catch (e) {
       showDialog(
         barrierDismissible: false,
