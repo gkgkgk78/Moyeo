@@ -201,7 +201,13 @@ class PostDetail extends StatelessWidget {
                           );
                         },
                       ),
-                      title: '${
+                      title:
+                      viewModel.post.members.length < 3
+                      ? '${
+                          viewModel.
+                          post.
+                          members[1]['nickname']}님 과 여행 중'
+                      : '${
                           viewModel.
                           post.
                           members[1]['nickname']}님 외 '
