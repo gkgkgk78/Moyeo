@@ -47,27 +47,34 @@ class TimelineListPageMain extends StatelessWidget {
                     child: GradientCircularProgressIndicator()
                   ),
                 ),
-                noItemsFoundIndicatorBuilder: (context) => SizedBox(
-                  width: MediaQuery.of(context).size.width*(0.5),
-                  height: MediaQuery.of(context).size.height*(0.6),
-                  child: Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(
-                        Icons.airplane_ticket_outlined,
-                        color: Colors.grey,
-                        size: 80,
-                      ),
-                      Text(
-                        "다님과 함께 여행을 시작해볼까요?",
-                        style: TextStyle(
-                          color: Colors.grey,
+                noItemsFoundIndicatorBuilder: (context) => Container(
+                    margin: EdgeInsets.only(
+                        left:MediaQuery.of(context).size.width*(0.25) ,
+                        right: MediaQuery.of(context).size.width*(0.25) ,
+                    ),
+                    child:SizedBox(
+                      width: MediaQuery.of(context).size.width*(0.5),
+                      height: MediaQuery.of(context).size.height*(0.6),
+                      child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              Icon(
+                                Icons.airplane_ticket_outlined,
+                                color: Colors.grey,
+                                size: 80,
+                              ),
+                              Text(
+                                "다님과 함께 여행을 시작해볼까요?",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          )
                         ),
-                      ),
-                    ],
-                  )),
-                ),
+                      )
+                    ),
                 itemBuilder: (context, item, index) => TimelineListItemMain(
                   key: Key(item.timelineId.toString()),
                   timeline: item,
