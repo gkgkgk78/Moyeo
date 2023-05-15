@@ -2,10 +2,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:moyeo/services/user_repository.dart';
+import 'package:provider/provider.dart';
 
 import '../models/Timeline.dart';
 import '../models/TimelineInfo.dart';
+import '../models/UserInfo.dart';
 import '../utils/auth_dio.dart';
+import '../view_models/app_view_model.dart';
 
 var logger = Logger();
 
@@ -134,6 +138,12 @@ class TimelineRepository {
             'moyeoTimelineId':moyeoTimelineId
           }
       );
+      UserInfo userInfo = await UserRepository().getUserInfo(context);
+      userInfo.moyeoTimelineId = -1;
+      // userInfo.nowMoyeo = false;
+
+      AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
+      appVM.updateUserInfo(userInfo);
     } catch (e) {
       showDialog(
         barrierDismissible: false,
