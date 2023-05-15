@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import '../models/UserInfo.dart';
 import '../services/timeline_repository.dart';
+import '../services/user_repository.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_detail_page.dart';
 import '../views/home_feed_page.dart';
@@ -36,25 +37,34 @@ class AppViewModel with ChangeNotifier {
   BuildContext _context;
   final MyStack<String> _formerTitle = MyStack<String>();
 
-  AppViewModel(this._userInfo, this._title, this._context, {this.currentIndex = 0}) {
+  AppViewModel(this._userInfo, this._title, this._context,
+      {this.currentIndex = 0}) {
     FirebaseMessaging.instance.onTokenRefresh.listen(
-          (newToken) {
+      (newToken) {
         _fcmToken = newToken;
         notifyListeners();
       },
     );
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      if (message.notification?.body?.contains('동행') == true) {
-        if (_messageLimitSecond <= 61) {
-          MoyeoRepository().acceptInvite(_context, message.data["moyeoTimelinId"]);
+    FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) async {
+        if (message.notification?.body?.contains('동행') == true) {
+          logger.d('동행수락');
+          if (_messageLimitSecond <= 61) {
+            await MoyeoRepository()
+                .acceptInvite(_context, message.data["moyeoTimelineId"]);
+            if (_context.mounted) {
+              _userInfo = await UserRepository().getUserInfo(_context);
+            }
+            _messageLimitTimer.cancel();
+            _messageLimitSecond = 0;
+          }
+        } else {
+          goMessageListPage();
         }
-      } else {
         _messageLimitTimer.cancel();
         _messageLimitSecond = 0;
-        goMessageListPage();
-      }
-
-    },
+        notifyListeners();
+      },
     );
 
     initializeFirebase();
@@ -194,7 +204,8 @@ class AppViewModel with ChangeNotifier {
       );
     } else if (settings.name == '/messages') {
       page = ChangeNotifierProvider(
-        create: (_) => MessageListViewModel(context, _fromPush, userInfo: _userInfo),
+        create: (_) =>
+            MessageListViewModel(context, _fromPush, userInfo: _userInfo),
         child: MessageListPage(),
       );
     } else {
@@ -239,7 +250,8 @@ class AppViewModel with ChangeNotifier {
 
   Future<void> initializeFirebase() async {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
-    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
+    _fcmToken = (await FirebaseMessaging.instance
+        .getToken(vapidKey: firebaseValidKey))!;
     logger.d(_fcmToken);
     notifyListeners();
     // 알림 권한 요청
@@ -252,7 +264,6 @@ class AppViewModel with ChangeNotifier {
       provisional: true,
       sound: true,
     );
-
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
@@ -300,10 +311,10 @@ class AppViewModel with ChangeNotifier {
             FlutterLocalNotificationsPlugin();
 
         localNotification.show(
-            _localMessageId,
-            rm.notification?.title,
-            rm.notification?.body,
-            details,
+          _localMessageId,
+          rm.notification?.title,
+          rm.notification?.body,
+          details,
         );
         _localMessageId += 1;
       },
@@ -329,12 +340,15 @@ class AppViewModel with ChangeNotifier {
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
         // _moyeoTimelineId
-        if(_pushBody.contains("동행")) {
+        if (_pushBody.contains("동행")) {
           _fromPush = true;
-          if (_messageLimitSecond <=61) {
-            MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
+          if (_messageLimitSecond <= 61) {
+            await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
             _messageLimitTimer.cancel();
             _messageLimitSecond = 0;
+            if (context.mounted) {
+              _userInfo = await UserRepository().getUserInfo(context);
+            }
           }
         } else {
           _messageLimitTimer.cancel();
@@ -342,18 +356,20 @@ class AppViewModel with ChangeNotifier {
           await goMessageListPage();
         }
         _fromPush = false;
+        notifyListeners();
       },
     );
-
   }
 
   bool _fromPush = false;
+
   bool get fromPush => _fromPush;
 
   Future<void> deleteFCMToken() async {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
     await FirebaseMessaging.instance.deleteToken();
-    _fcmToken = (await FirebaseMessaging.instance.getToken(vapidKey: firebaseValidKey))!;
+    _fcmToken = (await FirebaseMessaging.instance
+        .getToken(vapidKey: firebaseValidKey))!;
     notifyListeners();
   }
 
@@ -363,7 +379,6 @@ class AppViewModel with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   bool _modalVisible = false;
 
@@ -379,6 +394,7 @@ class AppViewModel with ChangeNotifier {
   }
 
   bool _isLogouting = false;
+
   bool get isLogouting => _isLogouting;
 
   void changeLogouting() {

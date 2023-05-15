@@ -75,7 +75,7 @@ class SearchBarViewModel extends ChangeNotifier {
   // void dispose() {
   //   // TODO: implement dispose
   //   // isSearching = false;
-  //   // searchKeyWord = "";
+  //   // searchKeyWord = "";0
   //   super.dispose();
   // }
 }

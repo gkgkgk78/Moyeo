@@ -143,13 +143,15 @@ class TimelineDetailViewModel extends ChangeNotifier {
   //모여 나가기
  outMoyeo(context, int userId, int moyeoTimelineId) async {
     await TimelineRepository().outMoyeo(context, userId, moyeoTimelineId);
-
-    UserInfo userInfo = await UserRepository().getUserInfo(context);
-    userInfo.moyeoTimelineId = -1;
-    // userInfo.nowMoyeo = false;
-
     AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
-    appVM.updateUserInfo(userInfo);
+    UserInfo newUserInfo = await UserRepository().getUserInfo(context);
+    appVM.updateUserInfo(newUserInfo);
+    // UserInfo userInfo = await UserRepository().getUserInfo(context);
+    // userInfo.moyeoTimelineId = -1;
+    // // userInfo.nowMoyeo = false;
+    //
+    // AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
+    // appVM.updateUserInfo(userInfo);
 
     notifyListeners();
  }
