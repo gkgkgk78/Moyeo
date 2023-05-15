@@ -9,15 +9,16 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
 
 public class BatchQueueConfig {
-    @Value("${batch.exchange}")
-    private static String EXCHANGE_NAME;
-    @Value("${batch.queue}")
-    private static String QUEUE_NAME;
-    @Value("${batch.route-key}")
-    private static String ROUTING_KEY;
+    @Value("${batch-exchange}")
+    private String EXCHANGE_NAME;
+    @Value("${batch-queue}")
+    private String QUEUE_NAME;
+    @Value("${batch-route-key}")
+    private String ROUTING_KEY;
 
     @Bean
     TopicExchange exchange(){
