@@ -59,6 +59,15 @@ class MessageListViewModel extends ChangeNotifier {
     if (context.mounted) {
       await MessageRepository().getPushList(context, userInfo.userUid);
     }
+    notifyListeners();
+  }
+
+  Color checkColor(PushAlarm alarm) {
+    if (alarm.isChecked == true) {
+      return Colors.grey;
+    } else {
+      return Colors.black;
+    }
   }
 
   @override

@@ -164,15 +164,15 @@ class MyHomePage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               Navigator(
-                key: viewModel.homeFeedNavigatorKey,
-                onGenerateRoute: (settings) {
-                  return viewModel.onHomeFeedRoute(context, settings);
-                },
-              ),
-              Navigator(
                 key: viewModel.myFeedNavigatorKey,
                 onGenerateRoute: (settings) {
                   return viewModel.onMyFeedRoute(context, settings);
+                },
+              ),
+              Navigator(
+                key: viewModel.homeFeedNavigatorKey,
+                onGenerateRoute: (settings) {
+                  return viewModel.onHomeFeedRoute(context, settings);
                 },
               ),
             ],

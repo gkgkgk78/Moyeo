@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,32 +28,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
                   },
                   items: [
                     BottomNavigationBarItem(
-                        activeIcon: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return const RadialGradient(
-                              center: Alignment.topLeft,
-                              radius: 1.0,
-                              colors: <Color>[
-                                Colors.red,
-                                Colors.purpleAccent,
-                                Colors.orangeAccent
-                              ],
-                              tileMode: TileMode.repeated,
-                            ).createShader(bounds);
-                          },
-                          blendMode: BlendMode.srcIn,
-                          child: Container(
-                              margin: const EdgeInsets.only(right: 40.0),
-                              child: const Icon(
-                                Icons.home,
-                                size: 36,
-                              )),
-                        ),
-                        icon: Container(
-                            margin: const EdgeInsets.only(right: 40.0),
-                            child: const Icon(Icons.home, color: Colors.grey)),
-                        label: "홈"),
-                    BottomNavigationBarItem(
                       activeIcon: ShaderMask(
                         shaderCallback: (Rect bounds) {
                           return const RadialGradient(
@@ -70,18 +43,44 @@ class CustomBottomNavigationBar extends StatelessWidget {
                         },
                         blendMode: BlendMode.srcIn,
                         child: Container(
-                            margin: const EdgeInsets.only(left: 40.0),
+                            margin: const EdgeInsets.only(right: 40.0),
                             child: const Icon(
                               Icons.account_circle,
                               size: 35,
                             )),
                       ),
                       icon: Container(
-                          margin: const EdgeInsets.only(left: 40.0),
+                          margin: const EdgeInsets.only(right: 40.0),
                           child: const Icon(Icons.account_circle_outlined,
                               color: Colors.grey)),
                       label: "내 모여",
                     ),
+                    BottomNavigationBarItem(
+                        activeIcon: ShaderMask(
+                          shaderCallback: (Rect bounds) {
+                            return const RadialGradient(
+                              center: Alignment.topLeft,
+                              radius: 1.0,
+                              colors: <Color>[
+                                Colors.red,
+                                Colors.purpleAccent,
+                                Colors.orangeAccent
+                              ],
+                              tileMode: TileMode.repeated,
+                            ).createShader(bounds);
+                          },
+                          blendMode: BlendMode.srcIn,
+                          child: Container(
+                              margin: const EdgeInsets.only(left: 40.0),
+                              child: const Icon(
+                                Icons.backpack,
+                                size: 36,
+                              )),
+                        ),
+                        icon: Container(
+                            margin: const EdgeInsets.only(left: 40.0),
+                            child: const Icon(Icons.backpack_outlined, color: Colors.grey)),
+                        label: "홈"),
                   ],
                   selectedItemColor: Colors.purpleAccent.shade100),
             ),

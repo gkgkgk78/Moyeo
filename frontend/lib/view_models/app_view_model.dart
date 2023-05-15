@@ -77,13 +77,13 @@ class AppViewModel with ChangeNotifier {
     pageController.jumpToPage(index);
     if (currentIndex == index) {
       if (index == 0) {
-        Navigator.popAndPushNamed(homeFeedNavigatorKey.currentContext!, '/');
-      } else {
         Navigator.popAndPushNamed(myFeedNavigatorKey.currentContext!, '/');
+      } else {
+        Navigator.popAndPushNamed(homeFeedNavigatorKey.currentContext!, '/');
       }
     }
     currentIndex = index;
-    changeTitle(index == 0 ? '홈' : _userInfo.nickname);
+    changeTitle(index == 0 ? _userInfo.nickname : '홈');
     _formerTitle.clear();
     notifyListeners();
   }
@@ -94,7 +94,7 @@ class AppViewModel with ChangeNotifier {
   }
 
   goYeobotPage() {
-    changePage(1);
+    changePage(0);
     changeTitle("채팅 리스트");
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -108,7 +108,7 @@ class AppViewModel with ChangeNotifier {
   }
 
   goModifyProfilePage() {
-    changePage(1);
+    changePage(0);
     changeTitle('프로필 변경');
     Future.delayed(
       const Duration(milliseconds: 100),
@@ -122,7 +122,7 @@ class AppViewModel with ChangeNotifier {
   }
 
   goMessageListPage() {
-    changePage(1);
+    changePage(0);
     changeTitle('날 귀찮게 했던 것들');
     Future.delayed(
       const Duration(milliseconds: 100),

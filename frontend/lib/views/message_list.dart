@@ -46,12 +46,22 @@ class MessageListPage extends StatelessWidget {
                 ),
                 body: TabBarView(
                   children: [
-                    ListView.builder(
+                    viewModel.gptList.isEmpty
+                    ? Center(
+                      child: Column(
+                        children: const [
+                          Icon(Icons.smart_toy_sharp),
+                          Text("여봇에게 질문을 해볼까요?")
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
                       itemCount: viewModel.gptList.length,
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(
                           onTap: () {
                             viewModel.readOneMessage(context, viewModel.gptList[index].messageId);
+
                           },
                           child: ListTile(
                             leading: ClipRRect(
@@ -60,12 +70,26 @@ class MessageListPage extends StatelessWidget {
                                   'assets/images/canton.png'
                               ),
                             ),
-                            title: Text(viewModel.gptList[index].content),
+                            title: Text(
+                                viewModel.gptList[index].content,
+                              style: TextStyle(
+                                color: viewModel.checkColor(viewModel.gptList[index])
+                              ),
+                            ),
                           ),
                         );
                       },
                     ),
-                    ListView.builder(
+                    viewModel.inviteList.isEmpty
+                    ? Center(
+                      child: Column(
+                        children: const [
+                          Icon(Icons.handshake_outlined),
+                          Text("다른 사람과 여행을 함께 해 보세요!")
+                        ],
+                      ),
+                    )
+                    : ListView.builder(
                       itemCount: viewModel.pushList.length,
                       itemBuilder: (BuildContext context, index) {
                         return GestureDetector(
@@ -83,7 +107,11 @@ class MessageListPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(40),
                               child: Image.asset('assets/images/shakinghand.png'),
                             ),
-                            title: Text(viewModel.inviteList[index]["content"]),
+                            title: Text(viewModel.inviteList[index].content,
+                              style: TextStyle(
+                                  color: viewModel.checkColor(viewModel.gptList[index])
+                              ),
+                            ),
                           ),
                         );
                       },
