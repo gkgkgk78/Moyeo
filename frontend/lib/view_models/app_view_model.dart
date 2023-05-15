@@ -143,7 +143,7 @@ class AppViewModel with ChangeNotifier {
   }
 
   goToTravelingTimelinePage(int timelineId) {
-    changePage(1);
+    changePage(0);
     changeTitle(userInfo.nickname);
     notifyListeners();
     Future.delayed(

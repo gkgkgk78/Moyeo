@@ -33,6 +33,7 @@ class MoyeoRepository{
       BuildContext context, int moyeoTimelineId, List<Map<String,dynamic>> userList) async {
     try {
       final dio = await authDio(context);
+      logger.d(userList);
       Response response = await dio
         .post('api/auth/moyeo/members/${moyeoTimelineId}', data:userList);
       return response.data;
@@ -83,5 +84,4 @@ class MoyeoRepository{
       throw Exception('ChangeFavoritePost Error $e');
     }
   }
-
 }

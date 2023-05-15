@@ -47,30 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBV1Fuk8kWBJOkWwcTAbYiE4YuUEUFnSxk',
-    appId: '1:115201145543:web:1bf8ae074eca5a68609ce2',
-    messagingSenderId: '115201145543',
-    projectId: 'moyeo-project',
-    authDomain: 'moyeo-project.firebaseapp.com',
-    storageBucket: 'moyeo-project.appspot.com',
-    measurementId: 'G-VRC3JDQ7GD',
+    apiKey: 'AIzaSyAvizYfeV0DmTEl44_dJPHZnEn0NZSHDvs',
+    appId: '1:122204542406:web:2856001d479708931f8ec7',
+    messagingSenderId: '122204542406',
+    projectId: 'moyeo-68d53',
+    authDomain: 'moyeo-68d53.firebaseapp.com',
+    storageBucket: 'moyeo-68d53.appspot.com',
+    measurementId: 'G-WWQ7NXF5M0',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA7r8MRYyILuHyk2sp3rK0J9mU9zyfGu8Y',
-    appId: '1:115201145543:android:f231571ff038281b609ce2',
-    messagingSenderId: '115201145543',
-    projectId: 'moyeo-project',
-    storageBucket: 'moyeo-project.appspot.com',
+    apiKey: 'AIzaSyDElB5HGx02Px1DUhaQn54sEWvOzMwQ4D8',
+    appId: '1:122204542406:android:47617dde014541331f8ec7',
+    messagingSenderId: '122204542406',
+    projectId: 'moyeo-68d53',
+    storageBucket: 'moyeo-68d53.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC64W34PmLLeyAd6gbHylzI0PtFQQRedAQ',
-    appId: '1:115201145543:ios:88d363b2b4946b0b609ce2',
-    messagingSenderId: '115201145543',
-    projectId: 'moyeo-project',
-    storageBucket: 'moyeo-project.appspot.com',
-    iosClientId: '115201145543-sudkp0tdht98artr66q89lqfgfpdvpja.apps.googleusercontent.com',
+    apiKey: 'AIzaSyBpspLBDsWr3UMPf4KZD_KscTaEPeZhofM',
+    appId: '1:122204542406:ios:defad81c5c4a8f441f8ec7',
+    messagingSenderId: '122204542406',
+    projectId: 'moyeo-68d53',
+    storageBucket: 'moyeo-68d53.appspot.com',
+    iosClientId: '122204542406-4sq9g93007d6n8vsmufk4h56fh5gdsia.apps.googleusercontent.com',
     iosBundleId: 'com.danim.danim',
   );
 }
