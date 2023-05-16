@@ -14,7 +14,6 @@ import com.moyeo.main.service.MessageBoxService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/auth/yeobot")
 @RestController
-@Slf4j
 @Log4j2
 public class YeobotController {
 
@@ -188,7 +186,7 @@ public class YeobotController {
         String season = request.getSeason();
         String purpose = request.getPurpose();
 
-        String goal = "Recommend me a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
+        String goal = "Search for a good place for travel to go in " + destination + " in " + season + " for " + purpose +".";
 
         String caseType = "place";
 
@@ -230,7 +228,7 @@ public class YeobotController {
         String season = request.getSeason();
 
         // 추천 결과 문자열 생성
-        String goal = "Recommend me some fun things to do near " + destination + " during " + season +".";
+        String goal = "Search for things to do when traveling in or around " + destination + " during " + season +".";
         String caseType = "activity";
 
         //goal 제대로 만들어졌는지 점검
