@@ -30,6 +30,7 @@ public class MessageListener {
         log.info(post.toString());
 
         log.info("비동기 post insert 후 autogpt작업 완료");
+
     }
 
     @RabbitHandler
