@@ -47,4 +47,5 @@ public class BathchController {
 //        Map<String,String> responseMap = Map.of("result",result,"id",id+"");
         return ResponseEntity.ok("responseMap");
     }
+
 }
