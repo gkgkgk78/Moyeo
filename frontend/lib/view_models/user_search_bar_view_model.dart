@@ -18,15 +18,24 @@ class SelectedUsersProvider extends ChangeNotifier{
 
   void addUser(UserInfo user, List<Map<String, dynamic>> members){
     if (user.moyeoTimelineId == -1){
+
+      List<UserInfo> selectedUsersCopy = List.from(_selectedUsers);
+
       for (var member in members){
         if (member['userUid'] != user.userUid){
           if (_selectedUsers.isEmpty){
             _selectedUsers.add(user);
           } else {
+            bool userAlreadySelected = false;
             for (var selected in _selectedUsers) {
-              if (selected.userUid != user.userUid){
-                _selectedUsers.add(user);
+              if (selected.userUid == user.userUid){
+                userAlreadySelected = true;
+                break;
               }
+            }
+
+            if (!userAlreadySelected){
+              _selectedUsers.add(user);
             }
           }
         }

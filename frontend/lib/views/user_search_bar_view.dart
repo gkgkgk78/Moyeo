@@ -87,6 +87,8 @@ class UserSearchBar extends StatelessWidget {
                                                                 .searchedResults[index -
                                                                 1], members
                                                         );
+                                                        viewModel.unFocus();
+                                                        FocusScope.of(context).unfocus();
                                                       } else {
                                                         showDialog(
                                                             barrierDismissible: false,
@@ -108,8 +110,6 @@ class UserSearchBar extends StatelessWidget {
                                                             )
                                                           );
                                                       }
-                                                      viewModel.unFocus();
-                                                      FocusScope.of(context).unfocus();
                                                     },
                                                     child: Column(
                                                       children: [
