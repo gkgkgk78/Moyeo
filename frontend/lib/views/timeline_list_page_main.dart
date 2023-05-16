@@ -65,7 +65,7 @@ class TimelineListPageMain extends StatelessWidget {
                                 size: 80,
                               ),
                               Text(
-                                "다님과 함께 여행을 시작해볼까요?",
+                                "모여와 함께 여행을 시작해볼까요?",
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),

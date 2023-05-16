@@ -40,9 +40,9 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom:30,
-                        child:HomeUserInfo(userInfo: appViewModel.userInfo)),
+                    // Positioned(
+                    //   bottom:30,
+                    //     child:HomeUserInfo(userInfo: appViewModel.userInfo)),
                     Positioned(
                       top: 0,
                       left: 0,

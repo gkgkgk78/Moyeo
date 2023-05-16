@@ -23,11 +23,8 @@ class TimelineListItemMain extends StatelessWidget {
     return Consumer<AppViewModel>(builder: (_, appViewModel, __) {
       return Container(
         width: MyWidth*(0.6),
-        height: MyHeight*(0.5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red),
-        ),
-        margin: EdgeInsets.only(top:MyHeight*(0.01), left: MyWidth*(0.1), right: MyWidth*(0.1), bottom: MyHeight*(0.25)),
+        height: MyHeight*(0.7),
+        margin: EdgeInsets.only(top:MyHeight*(0.01), left: MyWidth*(0.1), right: MyWidth*(0.1)),
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -39,7 +36,7 @@ class TimelineListItemMain extends StatelessWidget {
           },
           child: TransparentImageCard(
             width: MyWidth*(0.6),
-            height: MyHeight*(0.5),
+            height: MyHeight*(0.7),
             borderRadius: 20,
             // 추후에 assetimage로 바꾸기
             imageProvider: NetworkImage(
