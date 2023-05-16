@@ -18,7 +18,7 @@ class TimelineListItem extends StatelessWidget {
     const cardHeight = 120.0;
     return Consumer<AppViewModel>(builder: (_, appViewModel, __) {
       return Container(
-        margin: const EdgeInsets.only(bottom: 5, left: 5, right: 5),
+        margin: const EdgeInsets.only(bottom: 10, left: 5, right: 5),
         height: cardHeight,
         child: GestureDetector(
           onTap: () {

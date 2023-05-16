@@ -464,12 +464,13 @@ class TimelineDetailPage extends StatelessWidget {
                                           : Container(),
                                       viewModel.nowMoyeo
                                       ? InkWell(
-                                        onTap: (){
-                                          viewModel.outMoyeo(
+                                        onTap: () async {
+                                          await viewModel.outMoyeo(
                                               context,
                                               appViewModel.userInfo.userUid,
                                               appViewModel.userInfo.moyeoTimelineId
                                           );
+                                          await viewModel.loadTimelineDetails(context);
                                         },
                                         child: Container(
                                             width: 115,

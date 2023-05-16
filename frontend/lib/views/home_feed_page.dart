@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:moyeo/views/home_userinfo.dart';
 import 'package:moyeo/views/search_bar_view.dart';
 import 'package:moyeo/views/timeline_list_page_main.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,9 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Positioned(
+                      bottom:30,
+                        child:HomeUserInfo(userInfo: appViewModel.userInfo)),
                     Positioned(
                       top: 0,
                       left: 0,
