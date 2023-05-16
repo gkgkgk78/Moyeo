@@ -95,7 +95,7 @@ public class FcmServiceImpl implements FcmService {
                         .setPriority(AndroidConfig.Priority.HIGH)
                         .setDirectBootOk(true)
                         .setNotification(AndroidNotification.builder()
-                                .setTitle("Batch에서 Push Test 진행중") // 알림 제목
+                                .setTitle("맛집추천") // 알림 제목
                                 .setBody(content) // 알림 본문
                                 .setIcon("@drawable/bling")
                                 .build())

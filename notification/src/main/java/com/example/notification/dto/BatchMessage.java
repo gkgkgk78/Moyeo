@@ -1,15 +1,20 @@
 package com.example.notification.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-@Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BatchMessage {
-//    private static final long serialVersionUID = 2349683458261238690L;
-    private long id;
-    private String message;
+    private String Title;
+    private Long userId;
     private String deviceToken;
-
+    private String address1;
+    private String address2;
+    private String address3;
+    private String address4;
 }

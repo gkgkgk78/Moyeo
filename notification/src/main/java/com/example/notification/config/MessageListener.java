@@ -3,6 +3,7 @@ package com.example.notification.config;
 
 import com.example.notification.dto.BatchMessage;
 import com.example.notification.dto.PostInsertReq;
+import com.example.notification.service.BatchAutogpt;
 import com.example.notification.service.PostInsertAutogpt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class MessageListener {
 
 
     private final PostInsertAutogpt postInsertAutogpt;
-
+    private final BatchAutogpt batchAutogpt;
 
 
     @RabbitHandler
@@ -30,8 +31,11 @@ public class MessageListener {
     }
 
     @RabbitHandler
-    public void receiveBatchMessage(BatchMessage batchMessage) {
-
+    public void receiveBatchMessage(BatchMessage batchMessage) throws Exception {
+        log.info("From Batch to Autogpt start");
+        log.info("Message : {}",batchMessage);
+        batchAutogpt.insert(batchMessage);
+        log.info("From Batch to Autogpt end");
     }
 
 
