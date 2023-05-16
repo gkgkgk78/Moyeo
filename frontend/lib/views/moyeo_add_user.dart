@@ -160,7 +160,7 @@ class MoyeoAddUser extends StatelessWidget{
                                         margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
                                         child: ChangeNotifierProvider<SearchBarViewModel>(
                                           create: (_)=> SearchBarViewModel(isMyFeed: false),
-                                          child: const UserSearchBar(),
+                                          child: UserSearchBar(members: members),
                                        ),
                                       ),
                                   )

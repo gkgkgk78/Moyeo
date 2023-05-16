@@ -28,4 +28,15 @@ class UserInfo {
       // nowMoyeo: json['nowMoyeo'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userUid': userUid,
+      'profileImageUrl': profileImageUrl,
+      'nickname': nickname,
+      'moyeoTimelineId': moyeoTimelineId,
+      'timeLineId': timeLineId,
+      'timelineNum': timelineNum,
+    };
+  }
 }

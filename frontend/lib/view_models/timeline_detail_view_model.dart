@@ -155,4 +155,5 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
     notifyListeners();
  }
+
 }

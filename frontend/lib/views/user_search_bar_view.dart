@@ -13,12 +13,14 @@ import '../view_models/search_result_view_model.dart';
 import 'my_feed_view.dart';
 
 class UserSearchBar extends StatelessWidget {
-  const UserSearchBar({super.key});
+  final List<Map<String, dynamic>> members;
+
+  const UserSearchBar({required this.members, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final tapUser = Provider.of<SelectedUsersProvider>(context, listen: true);
-
+    Set<Map<String, dynamic>> memberSet = members.toSet();
     return Consumer<AppViewModel>(
       builder: (context, appViewModel, _) {
         return Consumer<SearchBarViewModel>(
@@ -33,7 +35,9 @@ class UserSearchBar extends StatelessWidget {
                         children: [
                               // 키워드가 없을 때엔 검색 결과창이 뜨지 않는다.
                               viewModel.myFocus.hasFocus &&
-                                      viewModel.searchKeyWord != "" && isKeyboardVisible
+                                      viewModel.searchKeyWord != "" &&
+                                  isKeyboardVisible
+                                  // && memberSet.intersection(viewModel.searchedResults.toSet()) == {}
                                   ? Expanded(
                                       child: Container(
                                         margin: const EdgeInsets.only(top: 30),
@@ -77,9 +81,35 @@ class UserSearchBar extends StatelessWidget {
                                                 } else {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      tapUser.addUser(
-                                                          viewModel.searchedResults[index-1]
-                                                      );
+                                                      if (viewModel.searchedResults[index-1].moyeoTimelineId == -1) {
+                                                        tapUser.addUser(
+                                                            viewModel
+                                                                .searchedResults[index -
+                                                                1], members
+                                                        );
+                                                        viewModel.unFocus();
+                                                        FocusScope.of(context).unfocus();
+                                                      } else {
+                                                        showDialog(
+                                                            barrierDismissible: false,
+                                                            context: context,
+                                                            builder: (ctx) => AlertDialog(
+                                                              title: const Text('동행중인 사용자'),
+                                                              content: const Text('동행 중인 유저는 추가할 수 없습니다.'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.pop(ctx);
+                                                                  },
+                                                                  child: const Text(
+                                                                    '닫기',
+                                                                    style: TextStyle(color: Colors.red),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          );
+                                                      }
                                                     },
                                                     child: Column(
                                                       children: [
@@ -111,6 +141,10 @@ class UserSearchBar extends StatelessWidget {
                                                               .searchedResults[
                                                                   index - 1]
                                                               .nickname),
+                                                          trailing:
+                                                          Text(viewModel.searchedResults[index - 1].moyeoTimelineId == -1
+                                                          ? ""
+                                                          : "동행중"),
                                                         ),
                                                       ],
                                                     ),
