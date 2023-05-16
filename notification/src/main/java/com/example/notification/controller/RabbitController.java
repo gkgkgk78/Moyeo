@@ -2,16 +2,23 @@ package com.example.notification.controller;
 
 
 import com.example.notification.dto.PostInsertReq;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.impl.AMQImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.AmqpException;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rabbitmq.client.impl.AMQImpl.Queue.DeclareOk;
+
+import javax.annotation.PostConstruct;
+
 
 @RequestMapping("/rabbit")
 @RequiredArgsConstructor
@@ -25,6 +32,9 @@ public class RabbitController {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
+    @PostConstruct
+
 
     @GetMapping("/publish1")
     public String samplePublish() {
@@ -47,13 +57,37 @@ public class RabbitController {
         req.setAddress3("역삼동");
         req.setAddress4("테헤란로");
         req.setUserId(8L);
-        req.setDeviceToken("fHBwmuPeRgubZ1-8oIXeaT:APA91bHt6PO4fWkfIyQNnVzamIwF3usHKmVwhEXrXOzbEsia8_ZY_vCvbM8z5nHzqwzSyFDDvvCDy2CRddHNEQucfEIe279HdvTmgTdBYcSK8J4LDs999zVTt19XNNMtyWG5SklohmxF");
-//
-//        public void convertAndSend(String exchange, String routingKey, final Object object) throws AmqpException {
-//            convertAndSend(exchange, routingKey, object, (CorrelationData) null);
-//        }
+        req.setDeviceToken("1234");
+
+
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+
+        try {
+            // RabbitMQ 서버에 연결
+            Connection connection = factory.newConnection();
+            Channel channel = connection.createChannel();
+
+            // 큐 선언
+            AMQImpl.Queue.DeclareOk queueDeclareOk = (DeclareOk) channel.queueDeclarePassive("sample.queue");
+
+            // 큐의 메시지 수 확인
+            int messageCount = queueDeclareOk.getMessageCount();
+            System.out.println("Queue '" + "sample.queue" + "'의 메시지 수: " + messageCount);
+
+            // 연결 종료
+            channel.close();
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         rabbitTemplate.convertAndSend(EXCHANGE_NAME, "key1", req);
+
         System.out.println("보내짐");
+
 
         return "message sending!";
     }
