@@ -23,7 +23,6 @@ public class BatchController {
     @Value("${batch-route-key}")
     private  String ROUTING_KEY;
     private final RabbitTemplate rabbitTemplate;
-
     @PostMapping(value = "/push")
     ResponseEntity<?> pushNotification(@RequestBody Map<String,String> map) throws Exception {
         BatchMessage batchMessage = BatchMessage.builder().Title(map.get("Title")).userId(Long.valueOf(map.get("userId")))
@@ -33,6 +32,7 @@ public class BatchController {
 
         log.info("EXCHAGE NAME :{}",EXCHANGE_NAME);
         log.info("ROUTING KET :{}",ROUTING_KEY);
+//        messageSender.sendMessageBatchMessage(batchMessage);
         rabbitTemplate.convertAndSend(EXCHANGE_NAME,ROUTING_KEY,batchMessage);
         return ResponseEntity.ok("Queue에 보냈습니다.");
     }
