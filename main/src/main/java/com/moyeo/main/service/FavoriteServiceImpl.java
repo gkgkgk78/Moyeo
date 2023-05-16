@@ -126,4 +126,26 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         return postList;
     }
+
+    public List<BasePostDto> findFavoritePostUnionVersion (Long userUid) throws Exception {
+        userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+
+        // 일반 포스트
+        List<BasePostDto> postList = postRepository.findAllFavoritePost(userUid).stream()
+            .map(post -> BasePostDto.builder(post, true).build())
+            .collect(Collectors.toList());
+
+        // 모여 포스트
+        List<BasePostDto> moyeoPostList = moyeoPostRepository.findAllFavoriteMoyeoPost(userUid).stream()
+            .map(post -> BasePostDto.builder(post
+                    , true
+                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
+                .build())
+            .collect(Collectors.toList());
+
+        postList.addAll(moyeoPostList);
+        Collections.sort(postList, Comparator.comparing(BasePostDto::getCreateTime, Comparator.reverseOrder()));
+
+        return postList;
+    }
 }
