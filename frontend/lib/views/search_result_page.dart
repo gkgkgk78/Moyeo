@@ -63,7 +63,7 @@ class SearchResultView extends StatelessWidget {
                                                   appViewModel.changeTitle(
                                                       viewModel
                                                           .searchedPosts[index]
-                                                          .timelineTitle);
+                                                          .timelineTitle!);
                                                   Navigator.pushNamed(context,
                                                       '/timeline/detail/${viewModel.searchedPosts[index].timelineId}');
                                                 },
