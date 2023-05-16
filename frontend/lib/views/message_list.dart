@@ -58,23 +58,30 @@ class MessageListPage extends StatelessWidget {
                     : ListView.builder(
                       itemCount: viewModel.gptList.length,
                       itemBuilder: (BuildContext context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            viewModel.readOneMessage(context, viewModel.gptList[index].messageId);
-
-                          },
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: Image.asset(
-                                  'assets/images/canton.png'
-                              ),
-                            ),
-                            title: Text(
-                                viewModel.gptList[index].content,
-                              style: TextStyle(
-                                color: viewModel.checkColor(viewModel.gptList[index])
-                              ),
+                        return Padding(
+                          padding: const EdgeInsets.only(top:2, bottom: 2),
+                          child: GestureDetector(
+                            onTap: () {},
+                            child: Column(
+                              children: [
+                                ListTile(
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: Image.asset(
+                                        'assets/images/canton.png'
+                                    ),
+                                  ),
+                                  title: Text(
+                                      viewModel.gptList[index].content,
+                                    style: TextStyle(
+                                      color: viewModel.checkColor(viewModel.gptList[index])
+                                    ),
+                                  ),
+                                ),
+                                const Divider(
+                                  color: Colors.orangeAccent,
+                                )
+                              ],
                             ),
                           ),
                         );
@@ -93,17 +100,24 @@ class MessageListPage extends StatelessWidget {
                       itemCount: viewModel.inviteList.length,
                       itemBuilder: (BuildContext context, index) {
                         return Padding(
-                          padding: const EdgeInsets.only(top:5, bottom: 5),
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: Image.asset('assets/images/shakinghand.png'),
-                            ),
-                            title: Text(viewModel.inviteList[index].content,
-                              style: TextStyle(
-                                  color: viewModel.checkColor(viewModel.gptList[index])
+                          padding: const EdgeInsets.only(top:2, bottom: 5),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(40),
+                                  child: Image.asset('assets/images/shakinghand.png'),
+                                ),
+                                title: Text(viewModel.inviteList[index].content,
+                                  style: TextStyle(
+                                      color: viewModel.checkColor(viewModel.gptList[index])
+                                  ),
+                                ),
                               ),
-                            ),
+                              const Divider(
+                                color: Colors.redAccent,
+                              )
+                            ],
                           ),
                         );
                       },

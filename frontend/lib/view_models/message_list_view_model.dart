@@ -34,7 +34,7 @@ class MessageListViewModel extends ChangeNotifier {
     if (fromPush == true) {
       _initialIndex = 1;
     }
-
+    readMessages(context, userInfo.userUid);
     getPushList(context);
   }
 
@@ -54,11 +54,8 @@ class MessageListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> readOneMessage(BuildContext context, int messageId) async {
-    await MessageRepository().readOnePush(context, messageId);
-    if (context.mounted) {
-      await MessageRepository().getPushList(context, userInfo.userUid);
-    }
+  Future<void> readMessages(BuildContext context, int userId) async {
+    await MessageRepository().readPushes(context, userId);
     notifyListeners();
   }
 
