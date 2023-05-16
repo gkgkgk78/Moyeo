@@ -7,13 +7,19 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:logger/logger.dart';
 import 'package:moyeo/models/ChatMessage.dart';
 import 'package:moyeo/models/ChatbotRequest.dart';
+import 'package:moyeo/models/TimelineDetail.dart';
+import 'package:moyeo/services/timeline_repository.dart';
 
+import '../models/TimelineInfo.dart';
 import '../services/chatbot_repository.dart';
 
 var logger = Logger();
 
 class ChatbotViewModel extends ChangeNotifier {
   int isTravel;
+
+  late TimelineInfo _latestTimeline;
+  late TimelineDetail _latestTimelineDetail;
 
   String _inputText = "";
 
@@ -76,28 +82,38 @@ class ChatbotViewModel extends ChangeNotifier {
         }
       },
     );
-    startChat(context);
+    startChat(context, isTravel);
   }
 
-  Future<void> startChat(context) async {
+  Future<void> startChat(context, isTravel) async {
+    _latestTimeline = await TimelineRepository().getTimelineDetailsByTimelineId(context, isTravel);
+    _latestTimelineDetail = _latestTimeline.timelineDetails!.first;
     _messages = await ChatbotRepository().ChatDetailFromServer(context);
     notifyListeners();
       if (isTravel == -1) {
         submitMessage(
           ChatMessage(
-            message: "안녕하세요! 여봇입니다. \n 가시고 싶은 곳은 정하셨나요?",
+            message: "안녕하세요! 여봇입니다. \n가시고 싶은 곳은 정하셨나요?",
             sender: "gpt",
           ),
         );
       } else {
-        submitMessage(
-          ChatMessage(
-            message: "안녕하세요! 여봇입니다.\n 무엇을 도와드릴까요?",
-            sender: "gpt",
-          ),
-        );
+        if (_latestTimelineDetail.postList.isEmpty) {
+          submitMessage(
+            ChatMessage(
+              message: "안녕하세요! 여봇입니다.\n포스트를 등록하시면\n제가 도움을 드릴 수 있을 것 같아요!",
+              sender: "gpt",
+            ),
+          );
+        } else {
+          submitMessage(
+            ChatMessage(
+              message: "안녕하세요! 여봇입니다.\n무엇을 도와드릴까요?",
+              sender: "gpt",
+            ),
+          );
+        }
       }
-
     goBottom();
     notifyListeners();
   }
