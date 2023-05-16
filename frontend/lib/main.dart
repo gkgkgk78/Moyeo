@@ -37,7 +37,7 @@ void main() async {
               profileImageUrl: '',
               nickname: '',
             ),
-            '홈',
+            '나의 기록',
             context,
           ),
 
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Danim',
+      title: 'Moyeo',
       theme: ThemeData(
         fontFamily: "GangwonAll",
         primaryTextTheme: const TextTheme(
