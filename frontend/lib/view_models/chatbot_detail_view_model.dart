@@ -19,7 +19,8 @@ class ChatbotViewModel extends ChangeNotifier {
   int isTravel;
 
   late TimelineInfo _latestTimeline;
-  late TimelineDetail _latestTimelineDetail;
+  late List<TimelineDetail> _latestTimelineDetail;
+  List<TimelineDetail> get latestTimelineDetail => _latestTimelineDetail;
 
   String _inputText = "";
 
@@ -87,7 +88,7 @@ class ChatbotViewModel extends ChangeNotifier {
 
   Future<void> startChat(context, isTravel) async {
     _latestTimeline = await TimelineRepository().getTimelineDetailsByTimelineId(context, isTravel);
-    _latestTimelineDetail = _latestTimeline.timelineDetails!.first;
+    _latestTimelineDetail = _latestTimeline.timelineDetails!;
     _messages = await ChatbotRepository().ChatDetailFromServer(context);
     notifyListeners();
       if (isTravel == -1) {
@@ -98,7 +99,7 @@ class ChatbotViewModel extends ChangeNotifier {
           ),
         );
       } else {
-        if (_latestTimelineDetail.postList.isEmpty) {
+        if (_latestTimelineDetail.isEmpty) {
           submitMessage(
             ChatMessage(
               message: "안녕하세요! 여봇입니다.\n포스트를 등록하시면\n제가 도움을 드릴 수 있을 것 같아요!",
@@ -114,7 +115,6 @@ class ChatbotViewModel extends ChangeNotifier {
           );
         }
       }
-    goBottom();
     notifyListeners();
   }
 
@@ -441,12 +441,10 @@ class ChatbotViewModel extends ChangeNotifier {
 
   // 아래로 스크롤
   void goBottom() {
-    SchedulerBinding.instance.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (_) {
-        _scrollController.animateTo(
+        _scrollController.jumpTo(
           _scrollController.position.maxScrollExtent,
-          duration: const Duration(seconds: 1),
-          curve: Curves.fastOutSlowIn,
         );
       },
     );

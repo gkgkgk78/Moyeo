@@ -19,6 +19,11 @@ class ChatbotPage extends StatelessWidget {
       body: Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
           return Consumer<ChatbotViewModel>(builder: (_, viewModel, __) {
+            WidgetsBinding.instance.addPostFrameCallback(
+                  (_) {
+                viewModel.goBottom();
+              },
+            );
             return WillPopScope(
               onWillPop: () async {
                 appViewModel.changeTitleToFormer();
@@ -41,11 +46,11 @@ class ChatbotPage extends StatelessWidget {
                               crossAxisAlignment: viewModel.getAlignment(index),
                               children: [
                                 Container(
-                                    margin: const EdgeInsets.all(10),
-                                    alignment: Alignment.bottomRight,
-                                    width: 30,
-                                    height: 30,
-                                    child: viewModel.profileImage(index),
+                                  margin: const EdgeInsets.all(10),
+                                  alignment: Alignment.bottomRight,
+                                  width: 30,
+                                  height: 30,
+                                  child: viewModel.profileImage(index),
                                 ),
                                 BubbleSpecialOne(
                                   text: viewModel.messages[index].message,
@@ -55,7 +60,7 @@ class ChatbotPage extends StatelessWidget {
                                 Question(index: index,),
                               ],
                             );
-                          },
+                          }
                         ),
                       ),
                       Column(

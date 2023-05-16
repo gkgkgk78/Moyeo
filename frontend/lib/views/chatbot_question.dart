@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 
 class Question extends StatelessWidget {
   int index;
-  Question({required this.index});
+  Question({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ChatbotViewModel>(
       builder: (_, chatbotViewModel, __) {
-        if (chatbotViewModel.isAnswered == false) {
+        if (chatbotViewModel.isAnswered == false && chatbotViewModel.latestTimelineDetail.isNotEmpty) {
           if (chatbotViewModel.isTravel != -1) {
             // 첫번째 질문
             if ( index == chatbotViewModel.messages.length-1 ) {
