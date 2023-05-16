@@ -42,10 +42,8 @@ public class BatchService {
     private String JOB_NAME = "restaurantRecommendJob";
     private String STEP_NAME = "restaurantRecommendStep";
     private String CHUNK_NAME = "restaurantRecommendChunk";
-    @Value("${flask}")
-    private String autogpt;
-    @Value("${notification}")
-    private String noti;
+    @Value("${sender}")
+    private String sender;
     @Bean
     public Job job(){
         log.info("JOB 실행됨");
@@ -112,7 +110,7 @@ public class BatchService {
 //                map.put("Ttitle","pushdining");
 //                map.put("deviceToken",item.getDeviceToken());
                 Map<String,Object> map = Map.of(
-                        "Ttitle","pushdining",
+                        "Title","pushdining",
                         "userId",item.getUserId(),
                         "deviceToken",item.getDeviceToken(),
                         "address1",item.getAddress1(),
@@ -120,7 +118,7 @@ public class BatchService {
                         "address3", item.getAddress3(),
                         "address4", item.getAddress4());
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
-                ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
+                ResponseEntity<String> res = restTemplate.exchange(sender,HttpMethod.POST,notificationEntity, String.class);
 //                String respo = res.getBody();
 //                responseMap = mapper.readValue(respo, Map.class);
 //                log.info("id :{}",responseMap.get("id"));
