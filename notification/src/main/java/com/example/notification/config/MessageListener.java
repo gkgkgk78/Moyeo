@@ -9,13 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+
 @Slf4j
+@Component
 @RequiredArgsConstructor
-@RabbitListener(queues = {"sample.queue"})
+@RabbitListener(queues = "sample.queue")
 public class MessageListener {
 
 
@@ -26,7 +26,9 @@ public class MessageListener {
     @RabbitHandler
     public void receiveMessage(PostInsertReq post) {
         log.info("비동기 post insert 후 autogpt작업 시작");
-        postInsertAutogpt.insert(post);
+        //postInsertAutogpt.insert(post);
+        log.info(post.toString());
+
         log.info("비동기 post insert 후 autogpt작업 완료");
     }
 
@@ -38,10 +40,11 @@ public class MessageListener {
         log.info("From Batch to Autogpt end");
     }
 
+    @RabbitHandler(isDefault = true)
+    public void handleDefault(Object message){
+        log.info("invoice paid : {} ", message.toString());
+    }
 
-//    @RabbitListener(queues = "batch.queue")
-//    public void receiveMessageFromBatch(Message message) {
-//        log.info("ReceiveMessageFromBatch Server info : {}", message);
-//    }
+
 
 }

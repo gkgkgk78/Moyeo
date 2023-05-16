@@ -1,6 +1,8 @@
-package com.example.notification.dto;
+package com.example.sender.DTO;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Data
