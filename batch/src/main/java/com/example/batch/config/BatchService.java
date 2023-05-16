@@ -1,8 +1,7 @@
 package com.example.batch.config;
 
-import com.example.batch.RestaurantRecommendDto.MessageBox;
+import com.example.batch.RestaurantRecommendDto.BatchStatistic;
 import com.example.batch.RestaurantRecommendDto.PushTable;
-import com.example.batch.RestaurantRecommendDto.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +61,7 @@ public class BatchService {
     @JobScope
     public Step chunkStep() {
         return stepBuilderFactory.get(CHUNK_NAME)
-                .<PushTable, MessageBox>chunk(3)
+                .<PushTable, BatchStatistic>chunk(3)
                 .reader(this.itemReader())
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
@@ -73,18 +72,17 @@ public class BatchService {
     }
     @Bean
     @StepScope
-    public ItemWriter<MessageBox> itemWriter() {
-        JpaItemWriter<MessageBox> writer = new JpaItemWriter<>();
+    public ItemWriter<BatchStatistic> itemWriter() {
+        JpaItemWriter<BatchStatistic> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
-
         return writer;
     }
     @Bean
     @StepScope
-    public ItemProcessor<PushTable, MessageBox> itemProcessor() {
+    public ItemProcessor<PushTable, BatchStatistic> itemProcessor() {
         return item -> {
             log.info("item : {}",item);
-            String goal = "Search for a good restaurant near " + item.getAddress1() + " " + item.getAddress2() + " " + item.getAddress3()+" "+item.getAddress4() +".";
+//            String goal = "Search for a good restaurant near " + item.getAddress1() + " " + item.getAddress2() + " " + item.getAddress3()+" "+item.getAddress4() +".";
 
             RestTemplate restTemplate = new RestTemplateBuilder()
 //                    .errorHandler(new RestTemplateResponseErrorHandler())
@@ -93,37 +91,50 @@ public class BatchService {
             try {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_JSON);
-                headers.add("Title","pushdining");
+//                headers.add("Title","pushdining");
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String,Object> map = new HashMap<>();
-                map.put("data",goal);
+//                Map<String,Object> map = new HashMap<>();
+//                map.put("data",goal);
 
-                HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
-                ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
+//                HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
+//                ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
 
-//                log.info("AUTO-GPT result:{}",response.getBody());
-                String m = response.getBody();
-                Map<String, String> responseMap = mapper.readValue(m, Map.class);
-                log.info("AUTO-GPT message:{}",responseMap);
-                String result = responseMap.get("result");
-                headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                mapper = new ObjectMapper();
-                map = new HashMap<>();
-                map.put("deviceToken",item.getDeviceToken());
-                map.put("message",responseMap.get("result"));
+//                String m = response.getBody();
+//                Map<String, String> responseMap = mapper.readValue(m, Map.class);
+//                log.info("AUTO-GPT message:{}",responseMap);
+//                String result = responseMap.get("result");
+//                headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_JSON);
+//                mapper = new ObjectMapper();
+//                map = new HashMap<>();
+//                map.put("deviceToken",item.getDeviceToken());
+//                map.put("message",responseMap.get("result"));
+//                map.put("Ttitle","pushdining");
+//                map.put("deviceToken",item.getDeviceToken());
+                Map<String,Object> map = Map.of(
+                        "Ttitle","pushdining",
+                        "userId",item.getUserId(),
+                        "deviceToken",item.getDeviceToken(),
+                        "address1",item.getAddress1(),
+                        "address2", item.getAddress2(),
+                        "address3", item.getAddress3(),
+                        "address4", item.getAddress4());
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
                 ResponseEntity<String> res = restTemplate.exchange(noti,HttpMethod.POST,notificationEntity, String.class);
-                String respo = res.getBody();
-                responseMap = mapper.readValue(respo, Map.class);
-                log.info("id :{}",responseMap.get("id"));
-                String  a = responseMap.get("id");
-                Long b = Long.valueOf(a);
-            return MessageBox.builder()
-                        .userId(User.builder().userId(Long.valueOf(responseMap.get("id"))).build())
-                        .content(result)
-                        .createTime(LocalDateTime.now())
-                        .build();
+//                String respo = res.getBody();
+//                responseMap = mapper.readValue(respo, Map.class);
+//                log.info("id :{}",responseMap.get("id"));
+//                String  a = responseMap.get("id");
+//                Long b = Long.valueOf(a);
+
+            return BatchStatistic.builder()
+//                    .batchStatisticId(100l)
+                    .deviceToken(item.getDeviceToken())
+                    .address1(item.getAddress1())
+                    .address2(item.getAddress2())
+                    .address3(item.getAddress3())
+                    .address4(item.getAddress4())
+                    .build();
             }catch (RestClientException e){
                 log.info("Skip-AutoGpt500");
                 throw new SkipException("Skip 합니다.") {
