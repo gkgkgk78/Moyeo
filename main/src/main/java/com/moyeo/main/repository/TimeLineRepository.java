@@ -60,4 +60,14 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query(value = "SELECT CASE WHEN is_complete = true THEN 1 ELSE 0 END FROM time_line WHERE user_id = :userId ORDER BY create_time DESC LIMIT 1", nativeQuery = true)
     int findLatestTimelineStatus(Long userId);
 
+    @Query(value = "SELECT tl.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN (\n"
+        + "\tSELECT DISTINCT timeline_id, moyeo_timeline_id\n"
+        + "    FROM time_line_and_moyeo\n"
+        + ") tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_post mp ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "WHERE mp.moyeo_post_id = :moyeoPostId", nativeQuery = true)
+    List<TimeLine> findAllByMoyeoPostId(Long moyeoPostId);
+
 }
