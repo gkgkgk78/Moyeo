@@ -31,8 +31,6 @@ class SelectedUsersProvider extends ChangeNotifier{
           }
         }
       }
-    } else{
-      // 여기에 다른 동행 참여중인 사람 알림 띄우기
     }
     notifyListeners();
   }

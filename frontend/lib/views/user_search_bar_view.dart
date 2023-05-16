@@ -81,12 +81,35 @@ class UserSearchBar extends StatelessWidget {
                                                 } else {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      tapUser.addUser(
-                                                          viewModel.searchedResults[index-1], members
-                                                      );
+                                                      if (viewModel.searchedResults[index-1].moyeoTimelineId == -1) {
+                                                        tapUser.addUser(
+                                                            viewModel
+                                                                .searchedResults[index -
+                                                                1], members
+                                                        );
+                                                      } else {
+                                                        showDialog(
+                                                            barrierDismissible: false,
+                                                            context: context,
+                                                            builder: (ctx) => AlertDialog(
+                                                              title: const Text('동행중인 사용자'),
+                                                              content: const Text('동행 중인 유저는 추가할 수 없습니다.'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.pop(ctx);
+                                                                  },
+                                                                  child: const Text(
+                                                                    '닫기',
+                                                                    style: TextStyle(color: Colors.red),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          );
+                                                      }
                                                       viewModel.unFocus();
                                                       FocusScope.of(context).unfocus();
-
                                                     },
                                                     child: Column(
                                                       children: [
