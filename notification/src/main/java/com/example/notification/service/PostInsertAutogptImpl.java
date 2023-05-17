@@ -1,10 +1,11 @@
 package com.example.notification.service;
 
 import com.example.notification.component.YeobotClient;
-import com.example.notification.dto.PostInsertReq;
+
 import com.example.notification.entity.Chat;
 import com.example.notification.entity.User;
 import com.example.notification.repository.UserRepository;
+import com.example.sender.DTO.PostInsertReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

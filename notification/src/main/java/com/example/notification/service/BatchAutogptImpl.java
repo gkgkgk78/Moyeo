@@ -1,7 +1,7 @@
 package com.example.notification.service;
 
-import com.example.notification.dto.BatchMessage;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
+import com.example.sender.DTO.BatchMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

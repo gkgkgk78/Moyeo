@@ -1,10 +1,11 @@
 package com.example.notification.config;
 
 
-import com.example.notification.dto.BatchMessage;
-import com.example.notification.dto.PostInsertReq;
+
 import com.example.notification.service.BatchAutogpt;
 import com.example.notification.service.PostInsertAutogpt;
+import com.example.sender.DTO.BatchMessage;
+import com.example.sender.DTO.PostInsertReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
