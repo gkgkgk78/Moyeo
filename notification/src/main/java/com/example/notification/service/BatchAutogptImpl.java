@@ -24,6 +24,7 @@ public class BatchAutogptImpl implements BatchAutogpt{
     @Override
     public void insert(BatchMessage message) throws Exception {
         RestTemplate restTemplate = new RestTemplateBuilder()
+                .errorHandler(new RestTemplateResponseErrorHandler())
                 .build();
         String goal = "Search for a good restaurant near " + message.getAddress1() + " " + message.getAddress2() + " " + message.getAddress3()+" "+message.getAddress4() +".";
         HttpHeaders headers = new HttpHeaders();
