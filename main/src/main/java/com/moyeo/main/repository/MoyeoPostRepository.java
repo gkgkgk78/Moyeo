@@ -81,6 +81,19 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
         + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
         + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
         + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false AND mpb.is_public = true\n"
+        + "AND mp.create_time < :compareCreateTime\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstPublicMoyeoPostByCreateTimeLessThan(Long timelineId, Long userId, LocalDateTime compareCreateTime);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
         + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
         + "GROUP BY mp.moyeo_post_id\n"
         + "LIMIT 1")
@@ -94,10 +107,37 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
         + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
         + "WHERE tl.timeline_id = :timelineId\n"
         + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
+        + "AND mp.create_time < :compareCreateTime\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "LIMIT 1")
+    MoyeoPost findFirstMoyeoPostByCreateTimeLessThan(Long timelineId, Long userId, LocalDateTime compareCreateTime);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
         + "GROUP BY mp.moyeo_post_id\n"
         + "ORDER BY moyeo_post_id DESC\n"
         + "LIMIT 1")
     MoyeoPost findLastMoyeoPost(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN time_line_and_moyeo tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_time_line mtl ON tlam.moyeo_timeline_id = mtl.moyeo_timeline_id\n"
+        + "JOIN moyeo_post mp ON mtl.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mp.moyeo_post_id = mpb.moyeo_post_id\n"
+        + "WHERE tl.timeline_id = :timelineId\n"
+        + "AND mpb.user_id = :userId AND mpb.is_deleted = false\n"
+        + "AND mp.create_time > :compareCreateTime\n"
+        + "GROUP BY mp.moyeo_post_id\n"
+        + "ORDER BY moyeo_post_id DESC\n"
+        + "LIMIT 1")
+    MoyeoPost findLastMoyeoPostByCreateTimeGreaterThan(Long timelineId, Long userId, LocalDateTime compareCreateTime);
 
     @Query(nativeQuery = true, value = "SELECT mp.*\n"
         + "FROM time_line tl\n"

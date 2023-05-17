@@ -290,7 +290,7 @@ public class PostServiceImpl implements PostService {
                         Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
                         return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
                     })
-                    .map(post -> GetPostRes.builder(post).build())
+                    .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
                     .collect(Collectors.toList());
         }
 
@@ -329,8 +329,8 @@ public class PostServiceImpl implements PostService {
                         if (timeLine == null) return false;
                         return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
                     })
-                    .map(post -> GetPostRes.builder(post).build())
-                    .collect(Collectors.toList());
+                .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
+                .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
