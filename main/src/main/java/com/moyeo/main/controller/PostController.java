@@ -50,10 +50,7 @@ public class PostController {
                                      @RequestPart MultipartFile voiceFile,
                                      @Valid @ModelAttribute AddPostReq addPostReq,
                                      @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
-        // 입력 테스트중
-        System.out.println("flagFile:" + flagFile);
-        log.info("timeline id : {}", addPostReq.getTimelineId());
-        log.info("국가 이름 : {}", addPostReq.getAddress1());
+        log.info("포스트 등록 시작...");
         if (isMoyeo == false) {
             Post savedPost = postService.createPost(addPostReq);
 
@@ -63,6 +60,7 @@ public class PostController {
             // addPost 요청에 대한 응답으로 timelineId 반환
             Map<String, Object> res = new HashMap<>();
             res.put("timelineId", addPostReq.getTimelineId());
+            log.info("포스트 등록 종료...");
             return ResponseEntity.ok(res);
         } else {
             MoyeoPost savedPost = moyeoPostService.createPost(addPostReq);
@@ -72,6 +70,7 @@ public class PostController {
             // addPost 요청에 대한 응답으로 timelineId 반환
             Map<String, Object> res = new HashMap<>();
             res.put("timelineId", addPostReq.getTimelineId());
+            log.info("포스트(모여) 등록 종료...");
             return ResponseEntity.ok(res);
         }
     }
