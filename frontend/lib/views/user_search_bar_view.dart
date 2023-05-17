@@ -81,7 +81,8 @@ class UserSearchBar extends StatelessWidget {
                                                 } else {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      if (viewModel.searchedResults[index-1].moyeoTimelineId == -1) {
+                                                      if (viewModel.searchedResults[index-1].moyeoTimelineId == -1
+                                                      && viewModel.searchedResults[index-1].timeLineId != -1) {
                                                         tapUser.addUser(
                                                             viewModel
                                                                 .searchedResults[index -
@@ -89,7 +90,7 @@ class UserSearchBar extends StatelessWidget {
                                                         );
                                                         viewModel.unFocus();
                                                         FocusScope.of(context).unfocus();
-                                                      } else {
+                                                      } else if (viewModel.searchedResults[index-1].moyeoTimelineId != -1) {
                                                         showDialog(
                                                             barrierDismissible: false,
                                                             context: context,
@@ -109,6 +110,26 @@ class UserSearchBar extends StatelessWidget {
                                                               ],
                                                             )
                                                           );
+                                                      } else if (viewModel.searchedResults[index-1].timeLineId == -1){
+                                                        showDialog(
+                                                            barrierDismissible: false,
+                                                            context: context,
+                                                            builder: (ctx) => AlertDialog(
+                                                              title: const Text('휴식 중인 사용자'),
+                                                              content: const Text('휴식 중인 유저는 추가할 수 없습니다.'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.pop(ctx);
+                                                                  },
+                                                                  child: const Text(
+                                                                    '닫기',
+                                                                    style: TextStyle(color: Colors.red),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )
+                                                        );
                                                       }
                                                     },
                                                     child: Column(
@@ -142,9 +163,11 @@ class UserSearchBar extends StatelessWidget {
                                                                   index - 1]
                                                               .nickname),
                                                           trailing:
-                                                          Text(viewModel.searchedResults[index - 1].moyeoTimelineId == -1
-                                                          ? ""
-                                                          : "동행중"),
+                                                          viewModel.searchedResults[index - 1].timeLineId == -1
+                                                            ? Text("휴식중")
+                                                            : Text(viewModel.searchedResults[index - 1].moyeoTimelineId == -1
+                                                              ? ""
+                                                              : "동행중"),
                                                         ),
                                                       ],
                                                     ),

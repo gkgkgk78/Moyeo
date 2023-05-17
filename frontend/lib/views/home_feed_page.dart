@@ -12,10 +12,12 @@ import '../view_models/search_bar_view_model.dart';
 import 'chatbot_detail_page.dart';
 
 class HomeFeedPage extends StatelessWidget {
+
   const HomeFeedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    int pageKey = 0;
     return Consumer<AppViewModel>(
       builder: (_, appViewModel, __) {
         return ChangeNotifierProvider(
@@ -60,6 +62,27 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
+                    Positioned(
+                        bottom: 30,
+                        child: Container(
+                        child:Row(
+                          children: [
+                            IconButton(
+                                onPressed: (){
+                                  viewModel.getMainTimelineList(context, pageKey-1);
+                                },
+                                icon: Icon(Icons.arrow_back, color: Colors.red,),
+                            ),
+                            Text(
+                              "${pageKey+1}"
+                            ),
+                            IconButton(
+                                onPressed: (){
+                                  viewModel.getMainTimelineList(context, pageKey+1);
+                                },
+                                icon: Icon(Icons.arrow_forward, color: Colors.red,))
+                          ],
+                        )))
                   ],
                 );
               },

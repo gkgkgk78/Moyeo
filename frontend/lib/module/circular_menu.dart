@@ -291,6 +291,14 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                                     ],
                                   )
                           );
+                        } else if (members.length>1) {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CameraView(),
+                            ),
+                          );
                         }
                       } else {
                         animationController.forward();

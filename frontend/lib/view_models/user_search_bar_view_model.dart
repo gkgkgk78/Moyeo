@@ -8,7 +8,7 @@ import 'app_view_model.dart';
 class SelectedUsersProvider extends ChangeNotifier{
   late AppViewModel _appViewModel;
 
-  List<UserInfo> _selectedUsers = [];
+  late List<UserInfo> _selectedUsers = [];
 
   List<UserInfo> get selectedUsers => _selectedUsers;
 
@@ -17,7 +17,7 @@ class SelectedUsersProvider extends ChangeNotifier{
 
 
   void addUser(UserInfo user, List<Map<String, dynamic>> members){
-    if (user.moyeoTimelineId == -1){
+    if (user.moyeoTimelineId == -1 && user.timeLineId != -1){
 
       List<UserInfo> selectedUsersCopy = List.from(_selectedUsers);
 
