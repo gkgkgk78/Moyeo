@@ -72,7 +72,13 @@ class MessageListPage extends StatelessWidget {
                             return Padding(
                               padding: const EdgeInsets.only(top: 2, bottom: 2),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  if (appViewModel.userInfo.timeLineId != -1) {
+                                    appViewModel.goToTravelingTimelinePage(appViewModel.userInfo.timeLineId);
+                                  } else {
+                                    Navigator.of(context).pop();
+                                  }
+                                },
                                 child: Column(
                                   children: [
                                     ListTile(

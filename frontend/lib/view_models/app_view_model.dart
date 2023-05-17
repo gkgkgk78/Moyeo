@@ -105,7 +105,7 @@ class AppViewModel with ChangeNotifier {
 
   goYeobotPage() {
     changePage(0);
-    changeTitle("채팅 리스트");
+    changeTitle("여봇");
     Future.delayed(
       const Duration(milliseconds: 100),
       () {

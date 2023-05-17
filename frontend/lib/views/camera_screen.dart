@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
@@ -12,6 +13,7 @@ class CameraView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Provider.of로 viewModel 지정
     final viewModel = Provider.of<CameraViewModel>(context, listen: false);
+    viewModel.initializeCamera();
     return Consumer<AppViewModel>(
       builder: (context, appViewModel, _) {
         return WillPopScope(
@@ -30,7 +32,14 @@ class CameraView extends StatelessWidget {
                     builder: (context, cameraViewModel, child) {
                       return Scaffold(
                         body: cameraViewModel.cameraLoading
-                            ? const CircularProgressIndicator()
+                            ? Center(
+                          child: Column(
+                            children: const [
+                              CircularProgressIndicator(),
+                              Text('카메라가 로딩되지 않으면\n나가셨다가 다시 시도해 주세요')
+                            ],
+                          ),
+                        )
                             : Stack(
                                 children: [
                                   // 카메라 화면
