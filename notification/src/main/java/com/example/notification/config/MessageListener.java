@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class MessageListener {
 
 
+
     private final PostInsertAutogpt postInsertAutogpt;
     private final BatchAutogpt batchAutogpt;
 
@@ -26,7 +27,7 @@ public class MessageListener {
     @RabbitHandler
     public void receiveMessage(PostInsertReq post) {
         log.info("비동기 post insert 후 autogpt작업 시작");
-        //postInsertAutogpt.insert(post);
+        postInsertAutogpt.insert(post);
         log.info(post.toString());
 
         log.info("비동기 post insert 후 autogpt작업 완료");
