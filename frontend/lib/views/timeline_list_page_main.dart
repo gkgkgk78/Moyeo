@@ -14,6 +14,21 @@ class TimelineListPageMain extends StatelessWidget {
 
   const TimelineListPageMain({super.key, required this.pagingController});
 
+
+  // // 이전 페이지로 이동
+  // void goToPreviousPage() {
+  //   if (pagingController.previousPageKey != null) {
+  //     pagingController.previousPage();
+  //   }
+  // }
+  //
+  // // 다음 페이지로 이동
+  // void goToNextPage() {
+  //   if (pagingController.nextPageKey != null) {
+  //     pagingController.nextPage();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) => Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
@@ -65,7 +80,7 @@ class TimelineListPageMain extends StatelessWidget {
                                 size: 80,
                               ),
                               Text(
-                                "다님과 함께 여행을 시작해볼까요?",
+                                "모여와 함께 여행을 시작해볼까요?",
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
