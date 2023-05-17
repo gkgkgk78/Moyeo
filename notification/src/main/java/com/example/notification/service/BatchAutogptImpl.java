@@ -20,6 +20,7 @@ public class BatchAutogptImpl implements BatchAutogpt{
     @Value("${flask-url}")
     private String autogpt;
     private final FcmService fcmService;
+    private final MessageBoxService messageBoxService;
     @Override
     public void insert(BatchMessage message) throws Exception {
         RestTemplate restTemplate = new RestTemplateBuilder()
@@ -40,7 +41,7 @@ public class BatchAutogptImpl implements BatchAutogpt{
 
         String result = fcmService.pushNoti(message.getDeviceToken(), responseMap.get("result"));
 
-
+        messageBoxService.insert(message.getUserId()+"",result);
 
     }
 }
