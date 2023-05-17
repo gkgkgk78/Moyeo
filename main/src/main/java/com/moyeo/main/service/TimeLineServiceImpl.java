@@ -1,6 +1,7 @@
 package com.moyeo.main.service;
 
 import com.moyeo.main.dto.BasePostDto;
+import com.moyeo.main.dto.GetTimelineListRes;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.MyPostDtoRes;
 import com.moyeo.main.dto.MemberInfoRes;
@@ -134,8 +135,6 @@ public class TimeLineServiceImpl implements TimeLineService {
         postList.addAll(moyeoPostList);
         Collections.sort(postList, Comparator.comparing(BasePostDto::getCreateTime));
 
-        // TODO 포스트+모여_포스트 그냥 union으로 가져오기..
-
 
         return addPostToResponse(timeLine, postList, isMine, timelineUser);
     }
@@ -150,23 +149,25 @@ public class TimeLineServiceImpl implements TimeLineService {
 
         // 추가. nowMoyeo
         Boolean nowMoyeo = false;
-        Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(timelineUser, null);
-        if(moyeoMembers.isPresent()){
-            nowMoyeo = true; // 현재 동행 중
+        List<MemberInfoRes> nowMembers = new ArrayList<>();
+        if(!timeLine.getIsComplete()) {
+
+            Optional<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(timelineUser, null);
+            if(moyeoMembers.isPresent()){
+                nowMoyeo = true; // 현재 해당 타임라인으로 동행 중
+            }
+
+            // 추가. nowMembers
+            if(nowMoyeo) {
+                Long moyeoTimelineId = moyeoMembers.get().getMoyeoTimelineId();
+                nowMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(moyeoTimelineId, null).orElse(null).stream()
+                    // .map(moyeoMembers -> new MemberInfoRes(moyeoMembers))
+                    .map(mem -> new MemberInfoRes(mem.getUserId()))
+                    .collect(Collectors.toList());
+            }
         }
         timelinePostOuter.setNowMoyeo(nowMoyeo);
-
-        // 추가. nowMembers
-        if(nowMoyeo) {
-            Long moyeoTimelineId = moyeoMembers.get().getMoyeoTimelineId();
-            List<MemberInfoRes> nowMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(moyeoTimelineId, null).orElse(null).stream()
-                // .map(moyeoMembers -> new MemberInfoRes(moyeoMembers))
-                .map(mem -> new MemberInfoRes(mem.getUserId()))
-                .collect(Collectors.toList());
-            timelinePostOuter.setNowMembers(nowMembers);
-        } else {
-            timelinePostOuter.setNowMembers(new ArrayList<>());
-        }
+        timelinePostOuter.setNowMembers(nowMembers);
 
         if(postList == null || postList.size() == 0) {
             return timelinePostOuter;
@@ -333,60 +334,68 @@ public class TimeLineServiceImpl implements TimeLineService {
         return list;
     }
 
-    public List<MainTimelinePhotoDtoRes> getTimelineList2(Pageable pageable) {
+    public List<GetTimelineListRes> getTimelineList2() {
         // 메인 페이지에서 타임라인 목록 조회 -> 최신순
         // timline중에서 isComplete = true && isTimelinePublic = true
         // post 제일 첫번째 거 + 마지막 거
         // moyeo_post 제일 TODO
 
-        Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndIsTimelinePublic(true, true, pageable);
+        List<GetTimelineListRes> publicTimelineList = timeLineRepository.getPublicTimelineList();
 
-        List<MainTimelinePhotoDtoRes> list = new ArrayList<>();//넘겨줄 timeline dto생성
-
-        if (timeline.getContent().size() == 0) {
-            return list;
-        }
-
-        for (TimeLine time : timeline) {
-            // Post startpost = postRepository.findTopByTimelineIdOrderByCreateTimeAsc(time);
-            // Post lastpost = postRepository.findTopByTimelineIdOrderByCreateTimeDesc(time);
-            Post startpost = postRepository.findTopByTimelineId(time);
-            Post lastpost = postRepository.findTopByTimelineIdOrderByPostIdDesc(time);
-
-            // String thumbnailUrl = "";
-            // String startPlace = "";
-            // String lastPlace = "";
-            //
-            // if (startpost != null) {
-            //     LocalDateTime startPostCreateTime = startpost.getCreateTime();
-            //     MoyeoPost startMoyeoPost = moyeoPostRepository.findFirstPublicMoyeoPostByCreateTimeLessThan(time.getTimelineId(), time.getUserId().getUserId(), startPostCreateTime);
-            //
-            //     LocalDateTime lastPostCreateTime = startpost.getCreateTime();
-            //     MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPostByCreateTimeGreaterThan(time.getTimelineId(), time.getUserId().getUserId(), lastPostCreateTime);
-            //
-            //     if()
-            // } else {
-            //     MoyeoPost startMoyeoPost = moyeoPostRepository.findFirstPublicMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-            //     // MoyeoPost startMoyeoPostForAddress = moyeoPostRepository.findFirstMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-            //     MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-            // }
-
-            // moyeo post 가져오기
-            MoyeoPost startMoyeoPostForThumbnail = moyeoPostRepository.findFirstPublicMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-            MoyeoPost startMoyeoPostForAddress = moyeoPostRepository.findFirstMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-            MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
-
-
-            ThumbnailAndPlace tumbnailAndPlace = getThumbnailAndPlace(startpost, lastpost, startMoyeoPostForThumbnail, startMoyeoPostForAddress, lastMoyeoPost);
-
-            User user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-
-            // responseDto 리스트에 추가
-            list.add(MainTimelinePhotoDtoRes.builder(time, user, tumbnailAndPlace.getThumbnailUrl(), tumbnailAndPlace.getStartPlace(), tumbnailAndPlace.getLastPlace()).build());
+        for(GetTimelineListRes timelineRes : publicTimelineList) {
 
         }
 
-        return list;
+        return timeLineRepository.getPublicTimelineList();
+
+        // Page<TimeLine> timeline = timeLineRepository.findAllByIsCompleteAndIsTimelinePublic(true, true, pageable);
+        //
+        // List<MainTimelinePhotoDtoRes> list = new ArrayList<>();//넘겨줄 timeline dto생성
+        //
+        // if (timeline.getContent().size() == 0) {
+        //     return list;
+        // }
+        //
+        // for (TimeLine time : timeline) {
+        //     // Post startpost = postRepository.findTopByTimelineIdOrderByCreateTimeAsc(time);
+        //     // Post lastpost = postRepository.findTopByTimelineIdOrderByCreateTimeDesc(time);
+        //     Post startpost = postRepository.findTopByTimelineId(time);
+        //     Post lastpost = postRepository.findTopByTimelineIdOrderByPostIdDesc(time);
+        //
+        //     // String thumbnailUrl = "";
+        //     // String startPlace = "";
+        //     // String lastPlace = "";
+        //     //
+        //     // if (startpost != null) {
+        //     //     LocalDateTime startPostCreateTime = startpost.getCreateTime();
+        //     //     MoyeoPost startMoyeoPost = moyeoPostRepository.findFirstPublicMoyeoPostByCreateTimeLessThan(time.getTimelineId(), time.getUserId().getUserId(), startPostCreateTime);
+        //     //
+        //     //     LocalDateTime lastPostCreateTime = startpost.getCreateTime();
+        //     //     MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPostByCreateTimeGreaterThan(time.getTimelineId(), time.getUserId().getUserId(), lastPostCreateTime);
+        //     //
+        //     //     if()
+        //     // } else {
+        //     //     MoyeoPost startMoyeoPost = moyeoPostRepository.findFirstPublicMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //     //     // MoyeoPost startMoyeoPostForAddress = moyeoPostRepository.findFirstMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //     //     MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //     // }
+        //
+        //     // moyeo post 가져오기
+        //     MoyeoPost startMoyeoPostForThumbnail = moyeoPostRepository.findFirstPublicMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //     MoyeoPost startMoyeoPostForAddress = moyeoPostRepository.findFirstMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //     MoyeoPost lastMoyeoPost = moyeoPostRepository.findLastMoyeoPost(time.getTimelineId(), time.getUserId().getUserId());
+        //
+        //
+        //     ThumbnailAndPlace tumbnailAndPlace = getThumbnailAndPlace(startpost, lastpost, startMoyeoPostForThumbnail, startMoyeoPostForAddress, lastMoyeoPost);
+        //
+        //     User user = userRepository.findById(time.getUserId().getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+        //
+        //     // responseDto 리스트에 추가
+        //     list.add(MainTimelinePhotoDtoRes.builder(time, user, tumbnailAndPlace.getThumbnailUrl(), tumbnailAndPlace.getStartPlace(), tumbnailAndPlace.getLastPlace()).build());
+        //
+        // }
+        //
+        // return list;
     }
 
     @Override
