@@ -12,6 +12,8 @@ var logger = Logger();
 class HomeFeedViewModel extends ChangeNotifier {
   int searchedUserUid;
   final int myUserUid;
+  int _pageKey = 0;
+  int get pageKey => _pageKey;
 
   final PagingController<int, Timeline> pagingController =
       PagingController(firstPageKey: 0);
@@ -54,6 +56,7 @@ class HomeFeedViewModel extends ChangeNotifier {
     } catch (e) {
       throw Exception('get timeline list fail: $e');
     }
+    notifyListeners();
   }
 
   Future<void> getUserTimelineList(BuildContext context, int pageKey) async {

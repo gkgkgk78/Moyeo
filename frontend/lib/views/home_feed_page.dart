@@ -17,7 +17,6 @@ class HomeFeedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int pageKey = 0;
     return Consumer<AppViewModel>(
       builder: (_, appViewModel, __) {
         return ChangeNotifierProvider(
@@ -42,9 +41,6 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   bottom:30,
-                    //     child:HomeUserInfo(userInfo: appViewModel.userInfo)),
                     Positioned(
                       top: 0,
                       left: 0,
@@ -64,25 +60,32 @@ class HomeFeedPage extends StatelessWidget {
                     ),
                     Positioned(
                         bottom: 30,
-                        child: Container(
-                        child:Row(
-                          children: [
+                        child: Consumer<HomeFeedViewModel> (
+                          builder: (_, viewModel, __){
+                            return Row(
+                            children: [
                             IconButton(
                                 onPressed: (){
-                                  viewModel.getMainTimelineList(context, pageKey-1);
-                                },
+                                  if (viewModel.pageKey > 0) {
+                                    viewModel.getMainTimelineList(
+                                        context, viewModel.pageKey - 1);
+                                    viewModel.pagingController.refresh();
+                                  }},
                                 icon: Icon(Icons.arrow_back, color: Colors.red,),
                             ),
                             Text(
-                              "${pageKey+1}"
+                              "${viewModel.pageKey+1}"
                             ),
                             IconButton(
                                 onPressed: (){
-                                  viewModel.getMainTimelineList(context, pageKey+1);
-                                },
+                                  viewModel.getMainTimelineList(context, viewModel.pageKey+1);
+                                  viewModel.pagingController.refresh();
+                                  },
                                 icon: Icon(Icons.arrow_forward, color: Colors.red,))
                           ],
-                        )))
+                        );
+                          }
+                ))
                   ],
                 );
               },

@@ -244,7 +244,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                     onTap: () async {
                       List<Map<String, dynamic>> members = await _fetchData(appViewModel.userInfo.timeLineId);
                       // 동행 1명일 때는 포스트 동작 막기
-                      if (animationController.isCompleted) {;
+                      if (animationController.isCompleted) {
                         // 모여 중이 아니거나
                         if (appViewModel.userInfo.moyeoTimelineId == -1){
                             Navigator.pop(context);

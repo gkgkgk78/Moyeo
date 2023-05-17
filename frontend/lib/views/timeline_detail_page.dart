@@ -88,16 +88,18 @@ class TimelineDetailPage extends StatelessWidget {
                               : Container(),
                           !viewModel.nowMoyeo && !viewModel.isComplete// 모여중이 아닐경우 모여 시작 버튼 보임
                           ? InkWell(
-                            onTap: (){
+                            onTap: () async{
                               // 모여 시작하기
-                              viewModel.startMoyeo(context);
-                              Navigator.pop(context);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MoyeoAddUser(members: viewModel.members),
-                                  )
-                              );
+                              await viewModel.startMoyeo(context);
+                              await viewModel.loadTimelineDetails(context);
+                              // Navigator.pop(context);
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => MoyeoAddUser(members: viewModel.members),
+                              //     )
+                              // );
+
                             },
                             child: Container(
                               width: 130,
