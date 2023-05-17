@@ -66,7 +66,7 @@ class CameraFloatingActionButton extends StatelessWidget {
                                 height: 250,
                                 decoration: const BoxDecoration(
                                     color: Colors.transparent),
-                                child: const CustomCircularMenu()),
+                                child: CustomCircularMenu(userInfo: appViewModel.userInfo)),
                           ),
                         ),
                       ],

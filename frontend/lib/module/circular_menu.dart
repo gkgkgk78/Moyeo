@@ -8,6 +8,7 @@ import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../models/TimelineInfo.dart';
+import '../models/UserInfo.dart';
 import '../utils/auth_dio.dart';
 import '../views/camera_screen.dart';
 import '../views/login_page.dart';
@@ -16,7 +17,9 @@ import '../views/moyeo_add_user.dart';
 var logger = Logger();
 
 class CustomCircularMenu extends StatefulWidget {
-  const CustomCircularMenu({super.key});
+  final UserInfo userInfo;
+
+  const CustomCircularMenu({Key? key, required this.userInfo});
 
   @override
   _CustomCircularMenuState createState() => _CustomCircularMenuState();
@@ -204,47 +207,10 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                       getRadiansFromDegree(rotationAnimation.value)),
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () async {
-                      List<Map<String, dynamic>> members = await _fetchData(appViewModel.userInfo.timeLineId);
-                      // 동행 1명일 때는 포스트 동작 막기
+                    onTap: () {
                       if (animationController.isCompleted) {
-                        // 모여 중이 아니거나
-                        if (appViewModel.userInfo.moyeoTimelineId == -1){
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CameraView(),
-                            ),
-                          );
-                          // 모여 중이라면 nowMember가 빈배열이 아니여야함.
-                        } else if (members.isEmpty) {
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (ctx) =>
-                                  AlertDialog(
-                                    title: const Text("혼자야?"),
-                                    content: const Text("혼자서는 포스트를 등록 할 수 없습니다."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed:(){
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => MoyeoAddUser(members: members),
-                                              )
-                                          );
-                                        } ,
-                                        child: const Text(
-                                          "동행 추가하러가기",
-                                          style: TextStyle(color: Colors.orangeAccent),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                          );
-                        }
+                        Navigator.pop(context);
+                        appViewModel.startTravel(context);
                       } else {
                         animationController.forward();
                       }
@@ -275,15 +241,57 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                       getRadiansFromDegree(rotationAnimation.value)),
                   alignment: Alignment.center,
                   child: GestureDetector(
-                    onTap: () {
-                      if (animationController.isCompleted) {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CameraView(),
-                          ),
-                        );
+                    onTap: () async {
+                      List<Map<String, dynamic>> members = await _fetchData(appViewModel.userInfo.timeLineId);
+                      // 동행 1명일 때는 포스트 동작 막기
+                      if (animationController.isCompleted) {;
+                        // 모여 중이 아니거나
+                        if (appViewModel.userInfo.moyeoTimelineId == -1){
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CameraView(),
+                              ),
+                            );
+                        // 모여 중이라면 nowMember가 빈배열이 아니여야함.
+                        } else if (members.length<=1) {
+                          showDialog(
+                            barrierDismissible: false,
+                              context: context,
+                              builder: (ctx) =>
+                                  AlertDialog(
+                                    title: const Text("혼자야?"),
+                                    content: const Text("혼자서는 포스트를 등록 할 수 없습니다."),
+                                    actions: [
+                                      TextButton(
+                                          onPressed:(){
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => MoyeoAddUser(members: members),
+                                                )
+                                            );
+                                          } ,
+                                          child: const Text(
+                                            "동행 추가하러가기",
+                                            style: TextStyle(color: Colors.orangeAccent),
+                                          ),
+                                      ),
+                                      TextButton(
+                                          onPressed:(){
+                                            Navigator.pop(context);
+                                          },
+                                          child: const Text(
+                                            "뒤로가기",
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                      )
+                                    ],
+                                  )
+                          );
+                        }
                       } else {
                         animationController.forward();
                       }
