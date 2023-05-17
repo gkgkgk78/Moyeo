@@ -63,11 +63,21 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query(value = "SELECT tl.*\n"
         + "FROM time_line tl\n"
         + "JOIN (\n"
-        + "\tSELECT DISTINCT timeline_id, moyeo_timeline_id\n"
+        + "    SELECT DISTINCT timeline_id, moyeo_timeline_id\n"
         + "    FROM time_line_and_moyeo\n"
         + ") tlam ON tl.timeline_id = tlam.timeline_id\n"
         + "JOIN moyeo_post mp ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
-        + "WHERE mp.moyeo_post_id = :moyeoPostId", nativeQuery = true)
+        + "WHERE mp.moyeo_post_id = :moyeoPostId AND tl.is_complete = true AND tl.is_timeline_public = true", nativeQuery = true)
     List<TimeLine> findAllByMoyeoPostId(Long moyeoPostId);
+
+    @Query(value = "SELECT tl.*\n"
+        + "FROM time_line tl\n"
+        + "JOIN (\n"
+        + "    SELECT DISTINCT timeline_id, moyeo_timeline_id\n"
+        + "    FROM time_line_and_moyeo\n"
+        + ") tlam ON tl.timeline_id = tlam.timeline_id\n"
+        + "JOIN moyeo_post mp ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "WHERE mp.moyeo_post_id = :moyeoPostId AND tl.is_complete = true AND tl.user_id = :userId", nativeQuery = true)
+    List<TimeLine> findAllMineByMoyeoPostId(Long moyeoPostId, Long userId);
 
 }

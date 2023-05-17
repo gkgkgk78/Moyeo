@@ -282,16 +282,29 @@ public class PostServiceImpl implements PostService {
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
         if (moyeoPosts != null && moyeoPosts.size() != 0) {
-            moyeoPostList = moyeoPosts.stream()
-                    .filter(post -> {
-                        // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
-                        MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
-                        Boolean isAllPublic = status.getIsAllPublic() == 1L;
-                        Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
-                        return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
-                    })
-                    .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
-                    .collect(Collectors.toList());
+            for(MoyeoPost moyeoPost : moyeoPosts) {
+                // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+                if(!moyeoPost.getMoyeoTimelineId().getIsComplete()) continue;
+                List<TimeLine> timeLineList = timelineRepository.findAllByMoyeoPostId(moyeoPost.getMoyeoPostId());
+                if(timeLineList.isEmpty()) continue;
+
+                MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(moyeoPost.getMoyeoPostId());
+                Boolean isAllPublic = status.getIsAllPublic() == 1L;
+                Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+                if(!isAllPublic || isAnyDeleted) continue;
+
+                moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+            }
+            // moyeoPostList = moyeoPosts.stream()
+            //         .filter(post -> {
+            //             // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
+            //             MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
+            //             Boolean isAllPublic = status.getIsAllPublic() == 1L;
+            //             Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+            //             return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
+            //         })
+            //         .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
+            //         .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
@@ -321,16 +334,29 @@ public class PostServiceImpl implements PostService {
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
         if (moyeoPosts != null && moyeoPosts.size() != 0) {
-            moyeoPostList = moyeoPosts.stream()
-                    .filter(post -> {
-                        // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
-                        MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, post);
-                        TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
-                        if (timeLine == null) return false;
-                        return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
-                    })
-                .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
-                .collect(Collectors.toList());
+            for(MoyeoPost moyeoPost : moyeoPosts) {
+                List<TimeLine> timeLineList = timelineRepository.findAllMineByMoyeoPostId(moyeoPost.getMoyeoPostId(), userUid);
+                if(timeLineList.isEmpty()) continue;
+
+                // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+                MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, moyeoPost);
+                // TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
+                // if (timeLine == null) return false;
+                // return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
+                if(moyeoPublic == null || moyeoPublic.getIsDeleted()) continue;
+
+                moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+            }
+            // moyeoPostList = moyeoPosts.stream()
+            //         .filter(post -> {
+            //             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+            //             MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, post);
+            //             TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
+            //             if (timeLine == null) return false;
+            //             return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
+            //         })
+            //     .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
+            //     .collect(Collectors.toList());
         }
 
         postList.addAll(moyeoPostList);
