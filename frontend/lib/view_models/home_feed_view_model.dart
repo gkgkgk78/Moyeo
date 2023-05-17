@@ -12,8 +12,8 @@ var logger = Logger();
 class HomeFeedViewModel extends ChangeNotifier {
   int searchedUserUid;
   final int myUserUid;
-  int _pageKey = 0;
-  int get pageKey => _pageKey;
+  int pageKey = 0;
+  // int get pageKey => _pageKey;
 
   final PagingController<int, Timeline> pagingController =
       PagingController(firstPageKey: 0);
@@ -25,18 +25,18 @@ class HomeFeedViewModel extends ChangeNotifier {
   }) {
 
     if (searchedUserUid == -1) {
-      pagingController.addPageRequestListener((pageKey) {
+      // pagingController.addPageRequestListener((pageKey) {
         getMainTimelineList(context, pageKey);
-      });
+      // });
     } else if (searchedUserUid != -1 && myUserUid != -1) {
       if (searchedUserUid == myUserUid) {
-        pagingController.addPageRequestListener((pageKey) {
+        // pagingController.addPageRequestListener((pageKey) {
           getMyTimelineList(context, pageKey);
-        });
+        // });
       } else {
-        pagingController.addPageRequestListener((pageKey) {
+        // pagingController.addPageRequestListener((pageKey) {
           getUserTimelineList(context, pageKey);
-        });
+        // });
       }
     }
   }
@@ -48,7 +48,8 @@ class HomeFeedViewModel extends ChangeNotifier {
       // final newItems = test;
       final isLastPage = newItems.length < 5;
       if (isLastPage) {
-        pagingController.appendLastPage(newItems);
+        // pagingController.appendLastPage(newItems);
+        return;
       } else {
         final nextPageKey = pageKey + 1;
         pagingController.appendPage(newItems, nextPageKey);
