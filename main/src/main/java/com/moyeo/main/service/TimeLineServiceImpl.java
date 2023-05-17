@@ -31,6 +31,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,6 +51,8 @@ public class TimeLineServiceImpl implements TimeLineService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     private final MoyeoFavoriteRepository moyeoFavoriteRepository;
     private final PhotoRepository photoRepository;
+    private final MoyeoMembersService moyeoMembersService;
+    private final MoyeoPostService moyeoPostService;
 
 
     @Override
@@ -262,10 +266,26 @@ public class TimeLineServiceImpl implements TimeLineService {
 
 
     @Override
+    @Transactional
     public void deleteTimeline(Long uid, User user) throws Exception {
         TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+
         if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
+        
+        // 동행 중이라면 동행을 먼저 끝내야 한다.
+        Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null);
+        if (optionalMembers.isPresent()) {
+            // 이미 동행중이라면 동행 끝내기 기능 수행
+            moyeoMembersService.updateMoyeoMembers(user, optionalMembers.get().getMoyeoTimelineId());
+        }
+        // 모여 포스트 is_deleted => true
+        List<Long> moyeoPostIdList = moyeoPostRepository.findAllMoyeoPostIdByTimelineId(uid, user.getUserId());
+        for(Long moyeoPostId : moyeoPostIdList) {
+            moyeoPostService.deleteMoyeoPost(user, moyeoPostId);
+        }
+
+
         List<Post> post_list = postRepository.findAllByTimelineId(now);
         for (Post p : post_list) {
             postService.deletePostById(p.getPostId());
