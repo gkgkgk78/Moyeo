@@ -69,17 +69,37 @@ class CameraViewModel extends ChangeNotifier {
     AndroidDeviceInfo deviceInfo = await deviceInfoPlugin.androidInfo;
     final sdkInfo = deviceInfo.version.sdkInt;
     if (sdkInfo >= 33) {
-      await Permission.camera.request();
-      await Permission.photos.request();
-      await Permission.videos.request();
-      await Permission.audio.request();
-      await Permission.manageExternalStorage.request();
-      await Permission.location.request();
+      if (await Permission.camera.isDenied) {
+        await Permission.camera.request();
+      }
+      if (await Permission.photos.isDenied) {
+        await Permission.photos.request();
+      }
+      if (await Permission.videos.isDenied) {
+        await Permission.videos.request();
+      }
+      if (await Permission.audio.isDenied) {
+        await Permission.audio.request();
+      }
+      if (await Permission.manageExternalStorage.isDenied) {
+        await Permission.manageExternalStorage.request();
+      }
+      if (await Permission.location.isDenied) {
+        await Permission.location.request();
+      }
     } else {
-      await Permission.camera.request();
-      await Permission.storage.request();
-      await Permission.manageExternalStorage.request();
-      await Permission.location.request();
+      if (await Permission.camera.isDenied) {
+        await Permission.camera.request();
+      }
+      if (await Permission.storage.isDenied) {
+        await Permission.storage.request();
+      }
+      if (await Permission.manageExternalStorage.isDenied) {
+        await Permission.manageExternalStorage.request();
+      }
+      if (await Permission.location.isDenied) {
+        await Permission.location.request();
+      }
     }
 
     final cameras = await availableCameras();

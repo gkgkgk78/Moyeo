@@ -12,22 +12,21 @@ var logger = Logger();
 
 class MessageListViewModel extends ChangeNotifier {
   List<PushAlarm> _pushList = [];
-
   List get pushList => _pushList;
 
   List<PushAlarm> _gptList = [];
-
   List get gptList => _gptList;
 
   List<PushAlarm> _inviteList = [];
-
   List get inviteList => _inviteList;
 
   late UserInfo userInfo;
 
   int _initialIndex = 0;
-
   int get initialIndex => _initialIndex;
+
+  bool _isGetting = true;
+  bool get isGetting => _isGetting;
 
   MessageListViewModel(BuildContext context, bool fromPush,
       {required this.userInfo}) {
@@ -51,6 +50,7 @@ class MessageListViewModel extends ChangeNotifier {
         return el.inviteKey != null;
       },
     ).toList();
+    _isGetting = false;
     notifyListeners();
   }
 

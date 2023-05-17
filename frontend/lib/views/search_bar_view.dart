@@ -67,7 +67,7 @@ class SearchBar extends StatelessWidget {
                                                 if (index == 0) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      appViewModel.changeTitle(viewModel.searchKeyWord!);
+                                                      appViewModel.changeTitle('"${viewModel.searchKeyWord!}" 검색 결과');
                                                       FocusScope.of(context).unfocus();
                                                       Navigator.push(
                                                         context,
@@ -102,12 +102,11 @@ class SearchBar extends StatelessWidget {
                                                 } else {
                                                   return GestureDetector(
                                                     onTap: () {
-
                                                       appViewModel.changeTitle(
-                                                          viewModel
+                                                          '${viewModel
                                                               .searchedResults[
-                                                                  index - 1]
-                                                              .nickname);
+                                                          index - 1]
+                                                              .nickname}의 모여');
                                                       FocusScope.of(context).unfocus();
                                                       Navigator.push(
                                                         context,
@@ -210,7 +209,7 @@ class SearchBar extends StatelessWidget {
                                             height: 50,
                                             child: GestureDetector(
                                               onTap: () {
-                                                appViewModel.changeTitle(viewModel.searchKeyWord!);
+                                                appViewModel.changeTitle('"${viewModel.searchKeyWord!}" 검색 결과');
                                                 FocusScope.of(context).unfocus();
                                                 Navigator.push(
                                                   context,
@@ -259,7 +258,7 @@ class SearchBar extends StatelessWidget {
                           viewModel.searchUser(context, keyword);
                         },
                         onSubmitted: (String keyWord) {
-                          appViewModel.changeTitle(keyWord);
+                          appViewModel.changeTitle('"${viewModel.searchKeyWord!}" 검색 결과');
                           viewModel.unFocus();
                           Navigator.push(
                             context,
@@ -272,7 +271,7 @@ class SearchBar extends StatelessWidget {
                                     keyWord,
                                     isMyFeed: viewModel.isMyFeed,
                                   ),
-                                  child: SearchResultView(),
+                                  child: const SearchResultView(),
                                 );
                               },
                               transitionDuration: Duration.zero,

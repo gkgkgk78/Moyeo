@@ -93,7 +93,7 @@ class AppViewModel with ChangeNotifier {
       }
     }
     currentIndex = index;
-    changeTitle(index == 0 ? _userInfo.nickname : '홈');
+    changeTitle(index == 0 ? '나의 모여' : '모두의 여행');
     _formerTitle.clear();
     notifyListeners();
   }
@@ -105,7 +105,7 @@ class AppViewModel with ChangeNotifier {
 
   goYeobotPage() {
     changePage(0);
-    changeTitle("채팅 리스트");
+    changeTitle("여봇");
     Future.delayed(
       const Duration(milliseconds: 100),
       () {
@@ -154,7 +154,7 @@ class AppViewModel with ChangeNotifier {
 
   goToTravelingTimelinePage(int timelineId) {
     changePage(0);
-    changeTitle(userInfo.nickname);
+    changeTitle('나의 모여');
     notifyListeners();
     Future.delayed(
       const Duration(milliseconds: 100),

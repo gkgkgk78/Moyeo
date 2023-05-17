@@ -32,25 +32,31 @@ class TimelineListPage extends StatelessWidget {
                       child: GradientCircularProgressIndicator()
                   ),
                 ),
-                noItemsFoundIndicatorBuilder: (context) => SizedBox(
-                  height: 300,
-                  child: Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(
-                        Icons.airplane_ticket_outlined,
-                        color: Colors.grey,
-                        size: 80,
-                      ),
-                      Text(
-                        "다님과 함께 여행을 시작해볼까요?",
-                        style: TextStyle(
+                noItemsFoundIndicatorBuilder: (context) => GestureDetector(
+                  onTap: () {
+                    appViewModel.startTravel(context);
+                  },
+                  child: SizedBox(
+                    height: 300,
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Icon(
+                          Icons.airplane_ticket_outlined,
                           color: Colors.grey,
+                          size: 80,
                         ),
-                      ),
-                    ],
-                  )),
+                        Text(
+                          "다님과 함께 여행을 시작해볼까요?\n\n화면을 탭하거나\n카메라 버튼을 탭해서 메뉴를 펄쳐보세요!",
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )),
+                  ),
                 ),
                 itemBuilder: (context, item, index) => TimelineListItem(
                   key: Key(item.timelineId.toString()),
