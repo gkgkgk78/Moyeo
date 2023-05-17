@@ -93,7 +93,7 @@ class AppViewModel with ChangeNotifier {
       }
     }
     currentIndex = index;
-    changeTitle(index == 0 ? _userInfo.nickname : '홈');
+    changeTitle(index == 0 ? '나의 모여' : '모두의 여행');
     _formerTitle.clear();
     notifyListeners();
   }
@@ -154,7 +154,7 @@ class AppViewModel with ChangeNotifier {
 
   goToTravelingTimelinePage(int timelineId) {
     changePage(0);
-    changeTitle(userInfo.nickname);
+    changeTitle('나의 모여');
     notifyListeners();
     Future.delayed(
       const Duration(milliseconds: 100),
