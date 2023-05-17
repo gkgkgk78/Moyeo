@@ -161,4 +161,13 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
         + "GROUP BY mp.moyeo_post_id")
     List<MoyeoPost> findAllMoyeoPost(Long timelineId, Long userId);
 
+    @Query(nativeQuery = true, value = "SELECT mp.moyeo_post_id\n"
+        + "FROM moyeo_post mp\n"
+        + "JOIN (\n"
+        + "    SELECT DISTINCT moyeo_timeline_id\n"
+        + "    FROM time_line_and_moyeo\n"
+        + "    WHERE timeline_id = :timelineId\n"
+        + ") tlam ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mpb.moyeo_post_id = mp.moyeo_post_id AND mpb.user_id = :userId")
+    List<Long> findAllMoyeoPostIdByTimelineId(Long timelineId, Long userId);
 }
