@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:moyeo/utils/black.dart';
 import 'package:provider/provider.dart';
 
 import '../models/UserInfo.dart';
@@ -62,7 +63,9 @@ class UserInformationView extends StatelessWidget {
               children: [
                 Text(
                   userInfo.timeLineId == -1 ? '휴식중' : '여행중',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold),
                 ),
                 const Text('상태'),
               ],
