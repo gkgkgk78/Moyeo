@@ -44,7 +44,7 @@ class HomeFeedViewModel extends ChangeNotifier {
       final newItems =
           await TimelineRepository().getMainTimelineByPageNum(context, pageKey);
       // final newItems = test;
-      final isLastPage = newItems.length < 15;
+      final isLastPage = newItems.length < 5;
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
       } else {
@@ -60,7 +60,7 @@ class HomeFeedViewModel extends ChangeNotifier {
     final newItems = await TimelineRepository()
         .getOtherTimelineByPageNum(context, pageKey, searchedUserUid);
     // final newItems = test;
-    final isLastPage = newItems.length < 15;
+    final isLastPage = newItems.length < 5;
     if (isLastPage) {
       pagingController.appendLastPage(newItems);
     } else {

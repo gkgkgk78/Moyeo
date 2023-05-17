@@ -65,7 +65,8 @@ class UserInformationView extends StatelessWidget {
                   userInfo.timeLineId == -1 ? '휴식중' : '여행중',
                   style: const TextStyle(
                       color: CustomColors.black,
-                      fontWeight: FontWeight.bold),
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
                 const Text('상태'),
               ],

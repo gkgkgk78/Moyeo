@@ -23,7 +23,7 @@ class MoyeoAddUser extends StatelessWidget{
     return Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
           return ChangeNotifierProvider(
-              create: (BuildContext context) => SelectedUsersProvider(context, nowMoyeo: appViewModel.userInfo.moyeoTimelineId),
+              create: (BuildContext context) => SelectedUsersProvider(context,nowMoyeo: appViewModel.userInfo.moyeoTimelineId),
               builder:(context, _) {
                 return Consumer<SelectedUsersProvider>(
                     builder: (context, selectedUsersProvider, _){
@@ -103,8 +103,7 @@ class MoyeoAddUser extends StatelessWidget{
                                     bottom:MediaQuery.of(context).size.height*(0.07),
                                     child: InkWell(
                                       onTap: (){
-                                        final addUserProvider =
-                                        Provider.of<SelectedUsersProvider>(context, listen: false);
+                                        final addUserProvider = selectedUsersProvider;
 
                                         addUserProvider.addMoyeoUser(
                                             context,

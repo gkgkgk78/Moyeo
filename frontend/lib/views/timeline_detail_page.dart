@@ -15,6 +15,7 @@ import '../view_models/app_view_model.dart';
 import '../view_models/timeline_detail_view_model.dart';
 
 import '../utils/black.dart';
+import 'camera_screen.dart';
 
 var logger = Logger();
 
@@ -90,6 +91,7 @@ class TimelineDetailPage extends StatelessWidget {
                             onTap: (){
                               // 모여 시작하기
                               viewModel.startMoyeo(context);
+                              Navigator.pop(context);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -275,12 +277,114 @@ class TimelineDetailPage extends StatelessWidget {
                                 !viewModel.nowMoyeo
                                 ? Container(
                                   padding: const EdgeInsets.all(10),
-                                  child: const Text("포스트를 등록하거나 모여를 시작해보세요"),
+                                  child: Column(
+                                    children:[
+                                      const Text("포스트를 등록하거나 모여를 시작해보세요"),
+                                      InkWell(
+                                        onTap: (){
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => CameraView(),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 130,
+                                          margin: const EdgeInsets.only(left: 20) ,
+                                          padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                          decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.5),
+                                                  blurRadius: 1.0,
+                                                  spreadRadius: 1.0,
+                                                  offset: const Offset(2,2),
+                                                )
+                                              ],
+                                              borderRadius: BorderRadius.circular(10),
+                                              gradient: const LinearGradient(
+                                                  colors: <Color>[
+                                                    Colors.redAccent,
+                                                    Colors.orangeAccent,
+                                                  ]
+                                              )
+                                          ),
+                                          child: Row(
+                                              children:const [
+                                                Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                ),
+                                                Text(
+                                                  "  포스트 등록",
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                              ]
+                                          )
+                                        ),
+                                      )
+                                    ]
+                                  )
                                 )
-                                : Container(
+                                : viewModel.members.length > 1
+                                  ? Container(
                                   padding: const EdgeInsets.all(10),
-                                  child: const Text("모여 여행 포스트를 등록해보세요")
-                                ),
+                                  child: Column(
+                                      children:[
+                                        const Text("모여 여행 포스트를 등록해주세요"),
+                                        InkWell(
+                                          onTap: (){
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => CameraView(),
+                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                              width: 130,
+                                              margin: const EdgeInsets.only(left: 20) ,
+                                              padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                              decoration: BoxDecoration(
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey.withOpacity(0.5),
+                                                      blurRadius: 1.0,
+                                                      spreadRadius: 1.0,
+                                                      offset: const Offset(2,2),
+                                                    )
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  gradient: const LinearGradient(
+                                                      colors: <Color>[
+                                                        Colors.redAccent,
+                                                        Colors.orangeAccent,
+                                                      ]
+                                                  )
+                                              ),
+                                              child: Row(
+                                                  children:const [
+                                                    Icon(
+                                                      Icons.add,
+                                                      color: Colors.white,
+                                                    ),
+                                                    Text(
+                                                      "  모여 포스트 등록",
+                                                      style: TextStyle(color: Colors.white),
+                                                    ),
+                                                  ]
+                                              )
+                                          ),
+                                        )
+                                      ]
+                                  )
+                                )
+                                    : Container(
+                                  child: const Text("동행자를 추가해 주세요."),
+                                )
                               ],
                             );
                           }
