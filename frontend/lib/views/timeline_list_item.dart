@@ -43,7 +43,21 @@ class TimelineListItem extends StatelessWidget {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Row(
               children: [
-                const SizedBox(width: 20),
+                Container(
+            decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: <Color>[
+                Color(0xff4B75C9),
+                Color(0xc9D16DDA),
+                Color(0xffFFBB66),
+                Color(0xffFF8E00)
+              ],
+              ),
+            ),
+                    width: 10
+                ),
                 Expanded(
                   child: Column(
                     children: [
