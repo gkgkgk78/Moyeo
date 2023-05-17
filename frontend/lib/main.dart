@@ -64,6 +64,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Moyeo',
       theme: ThemeData(
+        textSelectionTheme: const TextSelectionThemeData(
+          selectionHandleColor: Colors.orange
+        ) ,
         fontFamily: "GangwonAll",
         primaryTextTheme: const TextTheme(
             titleLarge: TextStyle(

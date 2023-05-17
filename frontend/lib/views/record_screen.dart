@@ -129,7 +129,7 @@ class RecordView extends StatelessWidget {
                                               .uploadFileFromGallery();
                                         }
                                       },
-                                      icon: const Icon(Icons.photo_outlined),
+                                      icon: const Icon(Icons.folder_copy),
                                       color: Colors.white,
                                     ),
                                   ),

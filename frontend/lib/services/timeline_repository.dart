@@ -61,7 +61,6 @@ class TimelineRepository {
     try {
       final dio = await authDio(context);
       Response response = await dio.get('api/auth/timeline/$timelineId');
-      logger.d(response.data);
       return TimelineInfo.fromJson(response.data);
     } catch (error) {
       throw Exception('Fail to get timeline: $error');

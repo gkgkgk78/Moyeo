@@ -34,6 +34,7 @@ class SearchRepository {
     try {
       final dio = await authDio(context);
       Response response = await dio.get('/api/auth/post/main/$keyword');
+      logger.d(response.data);
       return List.from(response.data.map((json) => SearchedPost.fromJson(json)));
     } on DioError catch (error) {
       throw Exception('Fail to get search Posts: ${error.message}');
@@ -44,6 +45,7 @@ class SearchRepository {
     try {
       final dio = await authDio(context);
       Response response = await dio.get('/api/auth/post/mine/$keyword');
+      logger.d(response.data);
       return List.from(response.data.map((json) => SearchedPost.fromJson(json)));
     } on DioError catch (error) {
       throw Exception('Fail to get search Posts: ${error.message}');

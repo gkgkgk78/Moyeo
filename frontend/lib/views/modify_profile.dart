@@ -1,6 +1,7 @@
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
@@ -62,12 +63,26 @@ class ModifyProfile extends StatelessWidget {
                   child: SizedBox(
                     height: 80,
                     child: TextField(
+                      focusNode: viewModel.inputFocus,
                       controller: viewModel.textEditController,
                       onChanged: (value) {
-                        viewModel.nickname = value;
+                        viewModel.changeNicknameInput(context, value);
                       },
+                      cursorColor: Colors.redAccent,
                       decoration: InputDecoration(
-                        labelText: 'Enter your nickname',
+                        labelText: '원하시는 닉네임을 입력해주세요!',
+                        labelStyle: TextStyle(
+                          color: viewModel.inputFocus.hasFocus
+                              ? Colors.purple
+                            : Colors.grey
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                            color: Colors.limeAccent,
+                            width: 2.0,
+                          ),
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(

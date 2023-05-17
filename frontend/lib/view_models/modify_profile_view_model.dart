@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
@@ -19,6 +18,9 @@ class ModifyProfileViewModel extends ChangeNotifier {
 
   bool get isLive => _isLive;
 
+  final FocusNode _inputFocus = FocusNode();
+  FocusNode get inputFocus => _inputFocus;
+
   ModifyProfileViewModel(profileImageUrl, nickname) {
     _nickname = nickname;
     _imagePath = profileImageUrl;
@@ -34,6 +36,16 @@ class ModifyProfileViewModel extends ChangeNotifier {
             filename: _selectedImageFile!.name,
             contentType: MediaType('image', 'png'),
           );
+    if (_nickname.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text("닉네임인데 빈 문자열은 좀ㅎㅎ"),
+          );
+        },
+      );
+    }
     final FormData formData = FormData.fromMap({
       'profileImage': multipartFile,
       'nickname': _nickname,
@@ -81,9 +93,19 @@ class ModifyProfileViewModel extends ChangeNotifier {
 
   get nickname => _nickname;
 
-  set nickname(value) {
-    _nickname = value;
-    notifyListeners();
+  void changeNicknameInput(BuildContext context, String inputText) {
+    if (inputText.length >= 9) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text("닉네임은 최대 8자까지만!"),
+          );
+        },
+      );
+    } else {
+      _nickname = inputText;
+    }
   }
 
   @override

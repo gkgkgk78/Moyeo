@@ -29,7 +29,7 @@ class AudioPlayerViewModel extends ChangeNotifier {
       _duration = newDuration;
       notifyListeners();
     });
-    if (_audioFilePath != null) initDuration();
+    if (_audioFilePath != '') initDuration();
   }
 
   Future<void> initDuration() async {
