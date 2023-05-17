@@ -399,6 +399,7 @@ class TimelineDetailPage extends StatelessWidget {
                                 // Number of nations
                                 itemBuilder: (BuildContext context, int timelineIndex) {
                                   return ExpansionTile(
+                                    initiallyExpanded: true,
                                     tilePadding: const EdgeInsets.only(left: 10),
                                     shape: const RoundedRectangleBorder(),
                                     collapsedShape: const RoundedRectangleBorder(),

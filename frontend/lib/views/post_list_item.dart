@@ -20,6 +20,7 @@ class PostListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TimelineDetailViewModel>(builder: (_, viewModel, __) {
       return ExpansionTile(
+        initiallyExpanded:postIndex==0,
         shape: const RoundedRectangleBorder(),
         collapsedShape: const RoundedRectangleBorder(),
         tilePadding: const EdgeInsets.only(left: 5),
