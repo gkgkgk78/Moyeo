@@ -34,6 +34,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final PostServiceImpl postService;
+    private final MoyeoPhotoService moyeoPhotoService;
 
     private final UserRepository userRepository;
 
@@ -56,14 +57,21 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     // 포스트 속성 값 설정 후 재저장
     @Override
     @Transactional
-    public MoyeoPost insertPost(MoyeoPost savedPost, List<MoyeoPhoto> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+    public MoyeoPost insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+    // public MoyeoPost insertPost(MoyeoPost savedPost, List<MoyeoPhoto> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
         // 모여타임라인에 소속된 멤버수(멤버즈카운트)가 1일 경우 post 작성이 불가능.
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
-        if(moyeoTimeline.getMembersCount() <= 1) {
+        if(moyeoTimeline.getMembersCount() != null && moyeoTimeline.getMembersCount() == 1) {
             throw new BaseException(ErrorMessage.NOT_ALLOWED_MOYEO_POST_REGISTRATION);
         }
 
         List<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(addPostReq.getTimelineId(), null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MEMBERS));
+
+
+        MoyeoPost savedPost = createPost(addPostReq);
+
+        List<MoyeoPhoto> photoList = moyeoPhotoService.createPhotoList(imageFiles, savedPost);
+
 
         //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
         postService.checkVoiceFileValidity(voiceFile);
@@ -139,7 +147,8 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
 
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
-        moyeoPublicRepository.deleteMoyeoPost(true);
+        MoyeoPublic moyeoPublic = moyeoPublicRepository.findById(moyeoPublicID).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_PUBLIC));
+        moyeoPublic.setIsDeleted(true);
     }
 
 }
