@@ -268,11 +268,11 @@ public class TimeLineServiceImpl implements TimeLineService {
     @Override
     @Transactional
     public void deleteTimeline(Long uid, User user) throws Exception {
-        TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+        TimeLine now = timeLineRepository.findById(uid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
         if (!now.getUserId().getUserId().equals(user.getUserId()))
             throw new BaseException(ErrorMessage.NOT_PERMIT_USER);
-        
+
         // 동행 중이라면 동행을 먼저 끝내야 한다.
         Optional<MoyeoMembers> optionalMembers = moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null);
         if (optionalMembers.isPresent()) {
