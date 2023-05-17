@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:moyeo/views/search_bar_view.dart';
 import 'package:provider/provider.dart';
 import 'package:extended_image/extended_image.dart';
@@ -7,6 +8,8 @@ import 'package:extended_image/extended_image.dart';
 import '../view_models/app_view_model.dart';
 import '../view_models/search_bar_view_model.dart';
 import '../view_models/search_result_view_model.dart';
+
+var logger = Logger();
 
 class SearchResultView extends StatelessWidget {
   const SearchResultView({super.key});
@@ -69,9 +72,7 @@ class SearchResultView extends StatelessWidget {
                                                     if (viewModel
                                                             .searchedPosts[
                                                                 index]
-                                                            .timelineIds
-                                                            .length ==
-                                                        1) {
+                                                            .isMoyeo == false) {
                                                       appViewModel.changeTitle(
                                                           viewModel
                                                               .searchedPosts[
@@ -91,53 +92,58 @@ class SearchResultView extends StatelessWidget {
                                                                         .symmetric(
                                                                     vertical:
                                                                         100),
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              children: viewModel
-                                                                  .searchedPosts[
-                                                                      index]
-                                                                  .timelineIds
-                                                                  .map(
-                                                                    (moyeoThumb) =>
-                                                                        GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        Navigator.of(dialogContext)
-                                                                            .pop();
-                                                                        appViewModel
-                                                                            .changeTitle('모였던 여행');
-                                                                        Navigator.pushNamed(
-                                                                            context,
-                                                                            '/timeline/detail/${moyeoThumb.timelineId}');
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        margin:
-                                                                            const EdgeInsets.all(5.0),
-                                                                        height:
-                                                                            100,
-                                                                        width:
-                                                                            50,
-                                                                        child:
-                                                                            Column(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.min,
-                                                                          children: [
-                                                                            ExtendedImage.network(moyeoThumb.userProfileUrl),
-                                                                            Text(moyeoThumb.userNickname)
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                  .toList(),
+                                                            child: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                const Text("유저를 선택해주세요!"),
+                                                                SizedBox(
+                                                                  height: 150,
+                                                                  child: ListView(
+                                                                    shrinkWrap: true,
+                                                                    scrollDirection: Axis.horizontal,
+                                                                    children: viewModel
+                                                                        .searchedPosts[
+                                                                            index]
+                                                                        .timelineIds
+                                                                        .map(
+                                                                          (moyeoThumb) =>
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              Navigator.of(dialogContext)
+                                                                                  .pop();
+                                                                              appViewModel
+                                                                                  .changeTitle('모였던 여행');
+                                                                              Navigator.pushNamed(
+                                                                                  context,
+                                                                                  '/timeline/detail/${moyeoThumb.timelineId}');
+                                                                            },
+                                                                            child:
+                                                                                Container(
+                                                                              margin:
+                                                                                  const EdgeInsets.all(5.0),
+                                                                              height:
+                                                                                  100,
+                                                                              width:
+                                                                                  50,
+                                                                              child:
+                                                                                  Column(
+                                                                                mainAxisAlignment:
+                                                                                    MainAxisAlignment.center,
+                                                                                mainAxisSize:
+                                                                                    MainAxisSize.min,
+                                                                                children: [
+                                                                                  ExtendedImage.network(moyeoThumb.userProfileUrl),
+                                                                                  Text(moyeoThumb.userNickname)
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        )
+                                                                        .toList(),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           );
                                                         },

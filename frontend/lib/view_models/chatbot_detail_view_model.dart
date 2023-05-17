@@ -43,6 +43,9 @@ class ChatbotViewModel extends ChangeNotifier {
 
   List<ChatMessage> _newMessages = [];
 
+  bool _showQuestion = false;
+  bool get showQuestion => _showQuestion;
+
   ChatbotRequest _chatbotRequest =
       ChatbotRequest(destination: '', season: '', purpose: '');
 
@@ -87,32 +90,34 @@ class ChatbotViewModel extends ChangeNotifier {
   }
 
   Future<void> startChat(context, isTravel) async {
-    _latestTimeline = await TimelineRepository().getTimelineDetailsByTimelineId(context, isTravel);
-    _latestTimelineDetail = _latestTimeline.timelineDetails!;
     _messages = await ChatbotRepository().ChatDetailFromServer(context);
     notifyListeners();
       if (isTravel == -1) {
-        submitMessage(
+        await submitMessage(
           ChatMessage(
             message: "안녕하세요! 여봇입니다. \n가시고 싶은 곳은 정하셨나요?",
             sender: "gpt",
           ),
         );
+        _showQuestion = true;
       } else {
+        _latestTimelineDetail = (await TimelineRepository().getTimelineDetailsByTimelineId(context, isTravel)).timelineDetails!;
+        notifyListeners();
         if (_latestTimelineDetail.isEmpty) {
-          submitMessage(
+          await submitMessage(
             ChatMessage(
               message: "안녕하세요! 여봇입니다.\n포스트를 등록하시면\n제가 도움을 드릴 수 있을 것 같아요!",
               sender: "gpt",
             ),
           );
         } else {
-          submitMessage(
+          await submitMessage(
             ChatMessage(
               message: "안녕하세요! 여봇입니다.\n무엇을 도와드릴까요?",
               sender: "gpt",
             ),
           );
+          _showQuestion = true;
         }
       }
     notifyListeners();
@@ -532,4 +537,5 @@ class ChatbotViewModel extends ChangeNotifier {
       },
     );
   }
+
 }

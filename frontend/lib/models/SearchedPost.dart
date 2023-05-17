@@ -4,13 +4,16 @@ class SearchedPost {
   final List<moyeoTimelineList> timelineIds;
   final int postId;
   final String? timelineTitle;
+  final bool isMoyeo;
 
   SearchedPost(
       {required this.thumbnailUrl,
       required this.favorite,
       required this.timelineIds,
       required this.postId,
-      required this.timelineTitle});
+      required this.timelineTitle,
+      required this.isMoyeo
+      });
 
   factory SearchedPost.fromJson(Map<String, dynamic> json) {
     return SearchedPost(
@@ -21,6 +24,7 @@ class SearchedPost {
       ))),
       postId: json["postId"],
       timelineTitle: json["timelineTitle"],
+      isMoyeo: json["isMoyeo"],
     );
   }
 }
