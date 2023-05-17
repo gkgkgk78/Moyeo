@@ -1,14 +1,14 @@
 class SearchedPost {
   final String thumbnailUrl;
   final int favorite;
-  final List<moyeoTimelineList> timelineId;
+  final List<moyeoTimelineList> timelineIds;
   final int postId;
   final String? timelineTitle;
 
   SearchedPost(
       {required this.thumbnailUrl,
       required this.favorite,
-      required this.timelineId,
+      required this.timelineIds,
       required this.postId,
       required this.timelineTitle});
 
@@ -16,7 +16,9 @@ class SearchedPost {
     return SearchedPost(
       thumbnailUrl: json["thumbNail"],
       favorite: json["totalFavorite"],
-      timelineId: json["timelineId"],
+      timelineIds: List.from((json["timelineInfoList"].map(
+        (el) => moyeoTimelineList.fromJson(el),
+      ))),
       postId: json["postId"],
       timelineTitle: json["timelineTitle"],
     );
@@ -36,7 +38,7 @@ class moyeoTimelineList {
   factory moyeoTimelineList.fromJson(Map<String, dynamic> json) {
     return moyeoTimelineList(
       timelineId: json['timelineId'],
-      userProfileUrl: json['userProfileUrl'],
+      userProfileUrl: json['userProfileImageUrl'],
       userNickname: json['userNickname'],
     );
   }

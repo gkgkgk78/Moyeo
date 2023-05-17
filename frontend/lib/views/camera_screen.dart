@@ -128,7 +128,7 @@ class CameraView extends StatelessWidget {
                                                   // 녹음 화면으로 이동하는 버튼
                                                   child: IconButton(
                                                     icon: const Icon(
-                                                        Icons.folder,
+                                                        Icons.cloud_upload,
                                                         color: Colors.white),
                                                     onPressed: () {
                                                       if (viewModel.isTaking ==
