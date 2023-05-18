@@ -37,6 +37,7 @@ class CameraViewModel extends ChangeNotifier {
   late String _imagePath;
 
   bool _isTaking = false;
+
   bool get isTaking => _isTaking;
 
   List<XFile> _allFileList = [];
@@ -50,19 +51,30 @@ class CameraViewModel extends ChangeNotifier {
   String get imagePath => _imagePath;
 
   bool _cameraLoading = true;
+
   bool get cameraLoading => _cameraLoading;
+
+  int _countryIndex = 0;
+  int _postCodeIndex = 0;
 
   // double _zoomLevel = 1.0;
   // double get zoomLevel => _zoomLevel;
+  LocationInformation _locationInfo = LocationInformation(
+    country: "",
+    address2: "",
+    address3: "",
+    address4: "",
+    flag: null,
+  );
 
+  LocationInformation get locationInfo => _locationInfo;
 
-  final record = Record();
   String fileName = DateFormat('yyyyMMdd.Hmm.ss').format(DateTime.now());
 
 
   CameraViewModel() {
     initializeCamera();
-    audioPlayerViewModel = AudioPlayerViewModel(_recordedFilePath);
+
   }
 
   Future<void> initializeCamera() async {
@@ -111,10 +123,11 @@ class CameraViewModel extends ChangeNotifier {
       notifyListeners();
     }
     _cameraLoading = false;
+    notifyListeners();
   }
 
   Future<void> takePhoto() async {
-    if (_allFileList.length < 9 ) {
+    if (_allFileList.length < 9) {
       if (_isTaking == false) {
         _isTaking = true;
         notifyListeners();
@@ -149,15 +162,17 @@ class CameraViewModel extends ChangeNotifier {
     notifyListeners(); // Add this line
   }
 
-  Future<void> changeCamera() async{
+  Future<void> changeCamera() async {
     if (_controller.description == _cameras[0]) {
-      CameraController newController = CameraController(_cameras[1], ResolutionPreset.max);
+      CameraController newController = CameraController(
+          _cameras[1], ResolutionPreset.max);
       await _controller.dispose();
       _controller = newController;
       await _controller.initialize();
       notifyListeners();
     } else {
-      CameraController newController = CameraController(_cameras[0], ResolutionPreset.ultraHigh);
+      CameraController newController = CameraController(
+          _cameras[0], ResolutionPreset.ultraHigh);
       await _controller.dispose();
       _controller = newController;
       await _controller.initialize();
@@ -165,208 +180,15 @@ class CameraViewModel extends ChangeNotifier {
     }
   }
 
-  void clear() {
-    _allFileList = [];
-    _locationInfo = LocationInformation(
-      country: "",
-      address2: "",
-      address3: "",
-      address4: "",
-      flag: null,
-    );
-    _recordedFilePath = '';
-    _recordedFileName = '';
-    _haveLocation = false;
-    _havingLocation = false;
-    notifyListeners();
-  }
-
-  // 줌 기능
-  // Future<void> changeZoomLevel(double scale) async {
-  //   logger.d(scale);
-  //   _zoomLevel = scale;
-  //   _controller.setZoomLevel(_zoomLevel);
-  //   notifyListeners();
-  // }
-
-  // 촬영 페이지 관련 기능
-  //////////////////////////////////////////////////////////////////////////////////////
-  // 녹음 페이지 관련 기능
-
-  LocationInformation _locationInfo = LocationInformation(
-    country: "",
-    address2: "",
-    address3: "",
-    address4: "",
-    flag: null,
-  );
-
-  AudioPlayer audioPlayer = AudioPlayer();
-
-  LocationInformation get locationInfo => _locationInfo;
-
-  int _countryIndex = 0;
-  int _postCodeIndex = 0;
-
   bool _haveLocation = false;
-
-  late String _recordedFileName;
-  String _recordedFilePath = "";
-  late AudioPlayerViewModel audioPlayerViewModel;
-
-  Duration _duration = const Duration(seconds: 0);
-  final Duration _audioPosition = Duration.zero;
-
-  bool _isFirstPhotoFromGallery = false;
-
-  bool get isFirstPhotoFromGallery => _isFirstPhotoFromGallery;
-
-  String get recordedFileName => _recordedFileName;
-
-  String get recordedFilePath => _recordedFilePath;
-
-  Duration get duration => _duration;
-
-  Duration get audioPosition => _audioPosition;
-
-  bool _isUploading = false;
-
-  bool get isUploading => _isUploading;
 
   bool _havingLocation = false;
 
   bool get havingLocation => _havingLocation;
 
-  bool _isRecording = false;
-
-  bool get isRecording => _isRecording;
-
-  Timer? _recordingTimer;
-
-  // 녹음 메서드
-  Future<void> startRecording() async {
-    _isRecording = true;
-    notifyListeners();
-    final directory = Directory('/storage/emulated/0/Documents/records');
-    if (!await directory.exists()) {
-      await directory.create(recursive: true);
-    }
-    // 파일 저장 경로 지정
-    if (recordedFilePath != "") {
-      _recordedFilePath = "";
-    }
-    final filePath = '${directory.path}/$fileName.wav';
-    // 레코딩 시작
-    await record.start(path: filePath, encoder: AudioEncoder.wav);
-    _recordedFileName = fileName;
-
-    // 30초 뒤 자동으로 녹음 중단
-    const maxDuration = Duration(milliseconds: 30000);
-
-    _recordingTimer = Timer(
-      maxDuration,
-          () {
-        stopRecording();
-        _isRecording = false;
-      },
-    );
-  }
-
-  // 녹음 끝 파일 저장
-  Future<void> stopRecording() async {
-    _isRecording = false;
-    notifyListeners();
-    await record.stop();
-    if (_recordingTimer?.isActive == true) {
-      _recordingTimer?.cancel();
-    }
-    final directory = Directory('/storage/emulated/0/Documents/records');
-
-    _recordedFilePath = '${directory.path}/$recordedFileName.wav';
-    audioPlayerViewModel.changeFile(_recordedFilePath);
-    notifyListeners();
-  }
-
-  // 갤러리에서 파일 가져오기
-  Future<void> uploadFileFromGallery() async {
-    // 길이가 9 이상이면 작동하지 않음
-    if (_allFileList.length >= 9) {
-      return;
-    }
-
-    if (_allFileList.isEmpty) {
-      _isFirstPhotoFromGallery = true;
-    }
-
-    // multi_image_picker_viewr 라이브러리 사용
-    final pickerController = MultiImagePickerController(
-        maxImages: 9 - _allFileList.length, images: []);
-    Directory externalDirectory =
-    Directory('/storage/emulated/0/Documents/photos');
-    await pickerController.pickImages();
-    // 파일들을 저장해서 경로를 만들고 xFile로 불러옴
-    for (final image in pickerController.images) {
-      if (image.hasPath) {
-        var imageFile = File(image.path!);
-        Uint8List imageUint8 = await imageFile.readAsBytes();
-        List<int> imageData = imageUint8.toList();
-        String? fileName = image.name;
-        String tempPath = '${externalDirectory.path}/$fileName';
-        await File(tempPath).writeAsBytes(imageData);
-        XFile xFile = XFile(tempPath);
-        _allFileList.add(xFile);
-      }
-    }
-    // 변했다고 알려줌
-    notifyListeners();
-  }
-
-  // 파일을 서버로 업로드하기
-  Future<void> postFiles(
-      BuildContext context, UserInfo userInfo, Function move) async {
-    final flag = MultipartFile.fromBytes(locationInfo.flag!,
-        filename: locationInfo.country, contentType: MediaType('image', 'jpg'));
-    final List<MultipartFile> imageFiles = _allFileList
-        .map((el) => MultipartFile.fromFileSync(el.path,
-        filename: el.name, contentType: MediaType('image', 'jpg')))
-        .toList();
-    final audioFile = await MultipartFile.fromFile(recordedFilePath,
-        filename: "$recordedFileName.wav",
-        contentType: MediaType('audio', 'wav'));
-
-    FormData formData = FormData.fromMap({
-      'flagFile': flag,
-      'imageFiles': imageFiles,
-      'voiceFile': audioFile,
-      'timelineId': userInfo.moyeoTimelineId == -1
-          ? userInfo.timeLineId
-          : userInfo.moyeoTimelineId,
-      'address1': locationInfo.country,
-      'address2': locationInfo.address2,
-      'address3': locationInfo.address3,
-      'address4': locationInfo.address4
-    });
-    _isUploading = true;
-    notifyListeners();
-    if (context.mounted) {
-      userInfo.moyeoTimelineId == -1
-      ? await UploadRepository().uploadToServer(context, formData)
-      : await UploadRepository().uploadToMoyeo(context, formData);
-    }
-    _isUploading = false;
-    notifyListeners();
-    clear();
-    if (context.mounted) {
-      Navigator.pop(context);
-      Navigator.pop(context);
-      move(userInfo.timeLineId);
-    }
-  }
-
-// 위치를 받아 오는 함수
   void getLocation() async {
     if (!_haveLocation) {
-      if (isFirstPhotoFromGallery == false) {
+      if (_allFileList.isEmpty) {
         _haveLocation = true;
         _havingLocation = true;
         await dotenv.load(fileName: ".env");
@@ -375,7 +197,8 @@ class CameraViewModel extends ChangeNotifier {
         final curLat = currentPosition.latitude;
         final plainDio = Dio();
         final url =
-            'https://api.geoapify.com/v1/geocode/reverse?lat=$curLat&lon=$curLong&apiKey=${dotenv.env["geolocatorApiKey"]}&lang=ko&type=street&format=json';
+            'https://api.geoapify.com/v1/geocode/reverse?lat=$curLat&lon=$curLong&apiKey=${dotenv
+            .env["geolocatorApiKey"]}&lang=ko&type=street&format=json';
         Response response = await plainDio.get(url);
         if (response.statusCode == 200) {
           if (response.data["results"] != null) {
@@ -422,86 +245,37 @@ class CameraViewModel extends ChangeNotifier {
     }
   }
 
-  void uploadConfirm(BuildContext context, UserInfo myInfo, Function move) {
-    if (_allFileList.isEmpty) {
-      OneButtonMaterialDialog().showFeedBack(context, "사진을 등록해주세요");
-      return;
-    }
-
-    if (_recordedFilePath == "") {
-      OneButtonMaterialDialog().showFeedBack(context, "음성을 녹음해주세요");
-      return;
-    }
-
-    if (_locationInfo ==
-        LocationInformation(
-          country: "",
-          address2: "",
-          address3: "",
-          address4: "",
-          flag: null,
-        )) {
-      OneButtonMaterialDialog().showFeedBack(context, "위치를 불러오지 못했습니다.");
-      return;
-    }
-    final alert = AlertDialog(
-      content: const Text(
-        "포스트를 \n등록할까요?",
-        style: TextStyle(fontSize: 25),
-      ),
-      actions: [
-        GestureDetector(
-            child: const GradientText(
-              "등록할게요",
-              gradient: [Colors.blueAccent,Colors.purple],
-              style: TextStyle(
-                fontSize: 12
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-              postFiles(context, myInfo, move);
-            }),
-        GestureDetector(
-            child: const GradientText(
-              "잠깐만요",
-              gradient: [Colors.orangeAccent,Colors.purpleAccent],
-              style: TextStyle(
-                  fontSize: 12
-              ),
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-            })
-      ],
+  void clear() {
+    _allFileList = [];
+    _locationInfo = LocationInformation(
+      country: "",
+      address2: "",
+      address3: "",
+      address4: "",
+      flag: null,
     );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    _haveLocation = false;
+    _havingLocation = false;
+    notifyListeners();
   }
 
-  Color buttonColor() {
-    if (_isRecording == true) {
-      return Colors.greenAccent;
-    } else {
-      return Colors.redAccent;
-    }
-  }
+  // 줌 기능
+  // Future<void> changeZoomLevel(double scale) async {
+  //   logger.d(scale);
+  //   _zoomLevel = scale;
+  //   _controller.setZoomLevel(_zoomLevel);
+  //   notifyListeners();
+  // }
 
-  void changeUploading() {
-    if (_isUploading == true) {
-      _isUploading = false;
-    }
-  }
+  // 촬영 페이지 관련 기능
+  //////////////////////////////////////////////////////////////////////////////////////
+  // 녹음 페이지 관련 기능
+
+
 
   @override
   void dispose() {
     _controller.dispose();
-    audioPlayerViewModel.dispose();
     super.dispose();
   }
 }
