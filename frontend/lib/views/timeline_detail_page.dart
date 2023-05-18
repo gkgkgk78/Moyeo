@@ -292,67 +292,77 @@ class TimelineDetailPage extends StatelessWidget {
                                 ),
                                 !viewModel.nowMoyeo
                                 ? Container(
-                                    padding: const EdgeInsets.all(10),
+                                    // padding: const EdgeInsets.all(10),
                                     child: Column(
+                                    mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                     children:[
-                                      const Text(
-                                          "포스트를 등록하거나 모여를 시작해보세요",
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          Navigator.pop(context);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => CameraView(),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: MyWidth*(0.32),
-                                          margin: EdgeInsets.only(
-                                              left:MyWidth*(0.06),
-                                              top:MyHeight*(0.02)
-                                          ),
-                                          padding: EdgeInsets.only(
-                                              left: MyWidth*(0.03),
-                                              right: MyWidth*(0.03),
-                                              top:MyHeight*(0.007),
-                                              bottom: MyHeight*(0.007)),
-                                          decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey.withOpacity(0.5),
-                                                  blurRadius: 1.0,
-                                                  spreadRadius: 1.0,
-                                                  offset: const Offset(2,2),
-                                                )
-                                              ],
-                                              borderRadius: BorderRadius.circular(10),
-                                              gradient: const LinearGradient(
-                                                  colors: <Color>[
-                                                    Colors.redAccent,
-                                                    Colors.orangeAccent,
-                                                  ]
-                                              )
-                                          ),
-                                          child: Row(
-                                              children:[
-                                                Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                ),
-                                                Text(
-                                                  "  포스트 등록",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: MyHeight*(0.017)
-                                                  ),
-                                                ),
-                                              ]
-                                          )
-                                        ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        child: const Text(
+                                      "포스트를 등록하거나 모여를 시작해보세요."
                                       )
+                                      ),
+                                      Container(
+                                        padding:EdgeInsets.all(10),
+                                          child:const Text(
+                                          "가운데 동그란 버튼을 눌러 포스트를 등록해보세요.",
+                                      )),
+
+                                      // InkWell(
+                                      //   onTap: (){
+                                      //     Navigator.pop(context);
+                                      //     Navigator.push(
+                                      //       context,
+                                      //       MaterialPageRoute(
+                                      //         builder: (context) => CameraView(),
+                                      //       ),
+                                      //     );
+                                      //   },
+                                      //   child: Container(
+                                      //     width: MyWidth*(0.32),
+                                      //     margin: EdgeInsets.only(
+                                      //         left:MyWidth*(0.06),
+                                      //         top:MyHeight*(0.02)
+                                      //     ),
+                                      //     padding: EdgeInsets.only(
+                                      //         left: MyWidth*(0.03),
+                                      //         right: MyWidth*(0.03),
+                                      //         top:MyHeight*(0.007),
+                                      //         bottom: MyHeight*(0.007)),
+                                      //     decoration: BoxDecoration(
+                                      //         boxShadow: [
+                                      //           BoxShadow(
+                                      //             color: Colors.grey.withOpacity(0.5),
+                                      //             blurRadius: 1.0,
+                                      //             spreadRadius: 1.0,
+                                      //             offset: const Offset(2,2),
+                                      //           )
+                                      //         ],
+                                      //         borderRadius: BorderRadius.circular(10),
+                                      //         gradient: const LinearGradient(
+                                      //             colors: <Color>[
+                                      //               Colors.redAccent,
+                                      //               Colors.orangeAccent,
+                                      //             ]
+                                      //         )
+                                      //     ),
+                                      //     child: Row(
+                                      //         children:[
+                                      //           Icon(
+                                      //             Icons.add,
+                                      //             color: Colors.white,
+                                      //           ),
+                                      //           // Text(
+                                      //           //   "  포스트 등록",
+                                      //           //   style: TextStyle(
+                                      //           //       color: Colors.white,
+                                      //           //       fontSize: MyHeight*(0.017)
+                                      //           //   ),
+                                      //           // ),
+                                      //         ]
+                                      //     )
+                                      //   ),
+                                      // )
                                     ]
                                   )
                                 )
@@ -361,60 +371,60 @@ class TimelineDetailPage extends StatelessWidget {
                                   padding: const EdgeInsets.all(10),
                                   child: Column(
                                       children:[
-                                        const Text("모여 여행 포스트를 등록해주세요"),
-                                        InkWell(
-                                          onTap: (){
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => CameraView(),
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                              width: 130,
-                                              margin: EdgeInsets.only(
-                                                  left:MyWidth*(0.06),
-                                                  top:MyHeight*(0.02)
-                                              ) ,
-                                              padding: EdgeInsets.only(
-                                                  left: MyWidth*(0.03),
-                                                  right: MyWidth*(0.03),
-                                                  top:MyHeight*(0.007),
-                                                  bottom: MyHeight*(0.007)
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 1.0,
-                                                      spreadRadius: 1.0,
-                                                      offset: const Offset(2,2),
-                                                    )
-                                                  ],
-                                                  borderRadius: BorderRadius.circular(10),
-                                                  gradient: const LinearGradient(
-                                                      colors: <Color>[
-                                                        Colors.redAccent,
-                                                        Colors.orangeAccent,
-                                                      ]
-                                                  )
-                                              ),
-                                              child: Row(
-                                                  children:const [
-                                                    Icon(
-                                                      Icons.add,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Text(
-                                                      "  모여 포스트 등록",
-                                                      style: TextStyle(color: Colors.white),
-                                                    ),
-                                                  ]
-                                              )
-                                          ),
-                                        )
+                                        const Text("가운데 버튼을 눌러 포스트를 등록해주세요"),
+                                        // InkWell(
+                                        //   onTap: (){
+                                        //     Navigator.pop(context);
+                                        //     Navigator.push(
+                                        //       context,
+                                        //       MaterialPageRoute(
+                                        //         builder: (context) => CameraView(),
+                                        //       ),
+                                        //     );
+                                        //   },
+                                        //   child: Container(
+                                        //       width: 130,
+                                        //       margin: EdgeInsets.only(
+                                        //           left:MyWidth*(0.06),
+                                        //           top:MyHeight*(0.02)
+                                        //       ) ,
+                                        //       padding: EdgeInsets.only(
+                                        //           left: MyWidth*(0.03),
+                                        //           right: MyWidth*(0.03),
+                                        //           top:MyHeight*(0.007),
+                                        //           bottom: MyHeight*(0.007)
+                                        //       ),
+                                        //       decoration: BoxDecoration(
+                                        //           boxShadow: [
+                                        //             BoxShadow(
+                                        //               color: Colors.grey.withOpacity(0.5),
+                                        //               blurRadius: 1.0,
+                                        //               spreadRadius: 1.0,
+                                        //               offset: const Offset(2,2),
+                                        //             )
+                                        //           ],
+                                        //           borderRadius: BorderRadius.circular(10),
+                                        //           gradient: const LinearGradient(
+                                        //               colors: <Color>[
+                                        //                 Colors.redAccent,
+                                        //                 Colors.orangeAccent,
+                                        //               ]
+                                        //           )
+                                        //       ),
+                                        //       child: Row(
+                                        //           children:const [
+                                        //             Icon(
+                                        //               Icons.add,
+                                        //               color: Colors.white,
+                                        //             ),
+                                        //             Text(
+                                        //               "  모여 포스트 등록",
+                                        //               style: TextStyle(color: Colors.white),
+                                        //             ),
+                                        //           ]
+                                        //       )
+                                        //   ),
+                                        // )
                                       ]
                                   )
                                 )
