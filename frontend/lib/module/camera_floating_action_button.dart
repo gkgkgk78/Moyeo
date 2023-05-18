@@ -59,7 +59,7 @@ class CameraFloatingActionButton extends StatelessWidget {
                         await appViewModel.fetchData(context, appViewModel.userInfo.timeLineId);
                     if (appViewModel.userInfo.timeLineId == -1) {
                       appViewModel.startTravel(context);
-                    } else if (members.length <= 1){
+                    } else if (appViewModel.userInfo.moyeoTimelineId != -1 && members.length <= 1){
                       showDialog(
                           barrierDismissible: false,
                           context: context,
