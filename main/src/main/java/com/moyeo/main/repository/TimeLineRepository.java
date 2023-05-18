@@ -1,5 +1,6 @@
 package com.moyeo.main.repository;
 
+import com.moyeo.main.dto.GetTimelineListRes;
 import com.moyeo.main.entity.TimeLine;
 import com.moyeo.main.entity.User;
 import org.springframework.data.domain.Page;
@@ -79,5 +80,24 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
         + "JOIN moyeo_post mp ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
         + "WHERE mp.moyeo_post_id = :moyeoPostId AND tl.is_complete = true AND tl.user_id = :userId", nativeQuery = true)
     List<TimeLine> findAllMineByMoyeoPostId(Long moyeoPostId, Long userId);
+
+
+    @Query(nativeQuery = true, value = "SELECT tl.timeline_id AS timelineId, tl.title, tl.user_id AS userId, u.nickname, p.photo_url AS photoUrl, p.create_time AS startTime, p.address2 AS startPlace, lp.create_time AS lastTime, p.address2 AS lastPlace\n"
+        + "FROM time_line tl\n"
+        + "LEFT JOIN user u ON tl.user_id = u.user_id\n"
+        + "LEFT JOIN (\n"
+        + "    SELECT p2.*, ph.photo_url, ROW_NUMBER() OVER (PARTITION BY timeline_id) AS rn\n"
+        + "    FROM post p2\n"
+        + "    LEFT JOIN (\n"
+        + "        SELECT *, ROW_NUMBER() OVER (PARTITION BY post_id) AS rn\n"
+        + "        FROM photo ph\n"
+        + "    ) ph ON ph.post_id = p2.post_id AND ph.rn = 1\n"
+        + ") p ON tl.timeline_id = p.timeline_id AND p.rn = 1\n"
+        + "LEFT JOIN (\n"
+        + "    SELECT *, ROW_NUMBER() OVER (PARTITION BY timeline_id ORDER BY post_id DESC) AS rn\n"
+        + "    FROM post\n"
+        + ") lp ON tl.timeline_id = lp.timeline_id AND lp.rn = 1\n"
+        + "WHERE tl.is_complete = true AND tl.is_timeline_public = true")
+    List<GetTimelineListRes> getPublicTimelineList();
 
 }
