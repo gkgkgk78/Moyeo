@@ -74,7 +74,6 @@ class CameraViewModel extends ChangeNotifier {
 
   CameraViewModel() {
     initializeCamera();
-
   }
 
   Future<void> initializeCamera() async {
