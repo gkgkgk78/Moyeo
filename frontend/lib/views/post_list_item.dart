@@ -12,15 +12,16 @@ import '../view_models/timeline_detail_view_model.dart';
 class PostListItem extends StatelessWidget {
   final timelineIndex;
   final postIndex;
+  final lastIndex;
 
   const PostListItem(
-      {super.key, required this.timelineIndex, required this.postIndex});
+      {super.key, required this.timelineIndex, required this.postIndex, required this.lastIndex});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TimelineDetailViewModel>(builder: (_, viewModel, __) {
       return ExpansionTile(
-        initiallyExpanded:postIndex==0,
+        initiallyExpanded:postIndex==lastIndex,
         shape: const RoundedRectangleBorder(),
         collapsedShape: const RoundedRectangleBorder(),
         tilePadding: const EdgeInsets.only(left: 5),

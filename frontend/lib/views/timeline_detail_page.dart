@@ -511,6 +511,8 @@ class TimelineDetailPage extends StatelessWidget {
                                           return PostListItem(
                                             timelineIndex: timelineIndex,
                                             postIndex: postIndex,
+                                            lastIndex: viewModel
+                                                .timelineDetails[timelineIndex].postList.length-1,
                                           );
                                         },
                                       ),
