@@ -35,6 +35,10 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   get members => _members;
 
+  final ScrollController _scrollController = ScrollController();
+
+  ScrollController get scrollController => _scrollController;
+
   changeTitle(String newTitle) {
     _title = newTitle;
     notifyListeners();
@@ -156,4 +160,13 @@ class TimelineDetailViewModel extends ChangeNotifier {
     notifyListeners();
  }
 
+  void goBottom() {
+    WidgetsBinding.instance.addPostFrameCallback(
+          (_) {
+        _scrollController.jumpTo(
+          _scrollController.position.maxScrollExtent,
+        );
+      },
+    );
+  }
 }
