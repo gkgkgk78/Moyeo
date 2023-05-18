@@ -36,7 +36,7 @@ class TimelineListItemMain extends StatelessWidget {
           },
           child: TransparentImageCard(
             contentMarginTop:MyHeight*(0.4),
-            contentPadding: EdgeInsets.only(left: 30),
+            contentPadding: EdgeInsets.only(left: MyWidth*(0.05)),
             width: MyWidth*(0.7),
             height: MyHeight*(0.6),
             borderRadius: 20,
@@ -57,7 +57,7 @@ class TimelineListItemMain extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize:30,
+                    fontSize:MyHeight*(0.03),
                     fontWeight:FontWeight.bold
                 )
             ),
@@ -66,36 +66,36 @@ class TimelineListItemMain extends StatelessWidget {
             children: [
               Container(
                 width: MyWidth*(0.5),
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.only(left: 0),
+                margin: EdgeInsets.all(MyWidth*(0.015)),
+                padding: const EdgeInsets.only(left: 0),
                 child:Text(
                 timeline.nickname,
                 style:TextStyle(
                     color: Colors.white,
-                    fontSize:15,
+                    fontSize:MyHeight*(0.018),
                 ) ,
               )
               ),
               Container(
                   width: MyWidth*(0.5),
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.only(left: 0),
+                  margin: EdgeInsets.all(MyWidth*(0.015)),
+                  padding: const EdgeInsets.only(left: 0),
                   child:Text(
                "${timeline.createTime} ~ ${timeline.finishTime}",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize:15,
+                    fontSize:MyHeight*(0.018),
                 ),
               )),
               Container(
                   width: MyWidth*(0.5),
-                  margin: EdgeInsets.all(5),
-                  padding: EdgeInsets.only(left: 0),
+                  margin: EdgeInsets.all(MyWidth*(0.015)),
+                  padding: const EdgeInsets.only(left: 0),
                   child:Text(
                   "${timeline.startPlace} ~ ${timeline.finishPlace}",
                   style:TextStyle(
                       color: Colors.white,
-                      fontSize:15,
+                      fontSize:MyHeight*(0.018),
                   )
               ))// Text(data)
             ],

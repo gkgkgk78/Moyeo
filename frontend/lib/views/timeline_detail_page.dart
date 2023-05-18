@@ -147,7 +147,7 @@ class TimelineDetailPage extends StatelessWidget {
                           : Container(),
                           Expanded(child: Container()),
                           Padding(
-                            padding: const EdgeInsets.only(right: 5),
+                            padding: EdgeInsets.only(right: MyWidth*(0.02)),
                             child: Text(
                                 viewModel.isPublic ? '공개' : ' 비공개',
                                 style: TextStyle(
@@ -168,7 +168,7 @@ class TimelineDetailPage extends StatelessWidget {
                                 viewModel.changeIsPublic(context);
                               }),
                           IconButton(
-                            padding: EdgeInsets.only(right: MyWidth*(0.06), bottom: 0),
+                            padding: EdgeInsets.only(right: MyWidth*(0.07), bottom: 0),
                             onPressed: () {
                               showDialog(
                                 barrierDismissible: false,
@@ -252,8 +252,8 @@ class TimelineDetailPage extends StatelessWidget {
                           members[1]['nickname']}님 외 '
                           '${viewModel.members.length-2}명 과 동행중'
                           : "아직 동행이 추가되지 않았습니다",
-                      pileSize: 30,
-                      avatarSize: 30,
+                      pileSize: MyWidth*(0.1),
+                      avatarSize: MyWidth*(0.1),
                       avatarOverlap: 0.5,
                     )
                 )
@@ -309,9 +309,16 @@ class TimelineDetailPage extends StatelessWidget {
                                           );
                                         },
                                         child: Container(
-                                          width: 130,
-                                          margin: const EdgeInsets.only(left: 20,top:15) ,
-                                          padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                          width: MyWidth*(0.32),
+                                          margin: EdgeInsets.only(
+                                              left:MyWidth*(0.06),
+                                              top:MyHeight*(0.02)
+                                          ),
+                                          padding: EdgeInsets.only(
+                                              left: MyWidth*(0.03),
+                                              right: MyWidth*(0.03),
+                                              top:MyHeight*(0.007),
+                                              bottom: MyHeight*(0.007)),
                                           decoration: BoxDecoration(
                                               boxShadow: [
                                                 BoxShadow(
@@ -330,14 +337,17 @@ class TimelineDetailPage extends StatelessWidget {
                                               )
                                           ),
                                           child: Row(
-                                              children:const [
+                                              children:[
                                                 Icon(
                                                   Icons.add,
                                                   color: Colors.white,
                                                 ),
                                                 Text(
                                                   "  포스트 등록",
-                                                  style: TextStyle(color: Colors.white),
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: MyHeight*(0.017)
+                                                  ),
                                                 ),
                                               ]
                                           )
@@ -364,8 +374,16 @@ class TimelineDetailPage extends StatelessWidget {
                                           },
                                           child: Container(
                                               width: 130,
-                                              margin: const EdgeInsets.only(left: 20) ,
-                                              padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                              margin: EdgeInsets.only(
+                                                  left:MyWidth*(0.06),
+                                                  top:MyHeight*(0.02)
+                                              ) ,
+                                              padding: EdgeInsets.only(
+                                                  left: MyWidth*(0.03),
+                                                  right: MyWidth*(0.03),
+                                                  top:MyHeight*(0.007),
+                                                  bottom: MyHeight*(0.007)
+                                              ),
                                               decoration: BoxDecoration(
                                                   boxShadow: [
                                                     BoxShadow(
