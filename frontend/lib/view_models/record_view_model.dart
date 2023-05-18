@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/camera_view_model.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,8 @@ import '../module/audio_player_view_model.dart';
 import '../module/gradient_text.dart';
 import '../module/my_alert_dialog.dart';
 import '../services/upload_repository.dart';
+
+var logger = Logger();
 
 class RecordViewModel extends ChangeNotifier {
 
@@ -98,12 +101,8 @@ class RecordViewModel extends ChangeNotifier {
   }
 
   BuildContext context;
-  late CameraViewModel _cameraViewModel;
 
   RecordViewModel({required this.context}) {
-    _cameraViewModel = Provider.of<CameraViewModel>(context, listen: false);
-    _allFileList = _cameraViewModel.allFileList;
-    _locationInfo = _cameraViewModel.locationInfo;
     changeModalState();
     audioPlayerViewModel = AudioPlayerViewModel(_recordedFilePath);
   }
@@ -125,19 +124,16 @@ class RecordViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  late List<XFile> _allFileList;
-
   // 갤러리에서 파일 가져오기
-  Future<void> uploadFileFromGallery() async {
+  Future<void> uploadFileFromGallery(List allFileList) async {
     // 길이가 9 이상이면 작동하지 않음
-    if (_allFileList.length >= 9) {
+    if (allFileList.length >= 9) {
       return;
     }
 
     // multi_image_picker_viewr 라이브러리 사용
     final pickerController = MultiImagePickerController(
-        maxImages: 9 - _allFileList.length, images: []);
+        maxImages: 9 - allFileList.length, images: []);
     Directory externalDirectory =
     Directory('/storage/emulated/0/Documents/photos');
     await pickerController.pickImages();
@@ -151,7 +147,7 @@ class RecordViewModel extends ChangeNotifier {
         String tempPath = '${externalDirectory.path}/$fileName';
         await File(tempPath).writeAsBytes(imageData);
         XFile xFile = XFile(tempPath);
-        _allFileList.add(xFile);
+        allFileList.add(xFile);
       }
     }
     // 변했다고 알려줌
@@ -159,11 +155,11 @@ class RecordViewModel extends ChangeNotifier {
   }
 
   // 파일을 서버로 업로드하기
-  Future<void> postFiles(BuildContext context, UserInfo userInfo,
+  Future<void> postFiles(BuildContext context, UserInfo userInfo, List allFileList , LocationInformation locationInfo,
       Function move) async {
     final flag = MultipartFile.fromBytes(locationInfo.flag!,
         filename: locationInfo.country, contentType: MediaType('image', 'jpg'));
-    final List<MultipartFile> imageFiles = _allFileList
+    final List<MultipartFile> imageFiles = allFileList
         .map((el) =>
         MultipartFile.fromFileSync(el.path,
             filename: el.name, contentType: MediaType('image', 'jpg')))
@@ -193,7 +189,14 @@ class RecordViewModel extends ChangeNotifier {
     }
     _isUploading = false;
     notifyListeners();
-    _cameraViewModel.clear();
+    allFileList.clear();
+    locationInfo = LocationInformation(
+      country: "",
+      address2: "",
+      address3: "",
+      address4: "",
+      flag: null,
+    );
     if (context.mounted) {
       Navigator.pop(context);
       Navigator.pop(context);
@@ -204,8 +207,8 @@ class RecordViewModel extends ChangeNotifier {
 // 위치를 받아 오는 함수
 
 
-  void uploadConfirm(BuildContext context, UserInfo myInfo, Function move) {
-    if (_allFileList.isEmpty) {
+  void uploadConfirm(BuildContext context, UserInfo myInfo, Function move, LocationInformation locationInfo, List allFileList) {
+    if (allFileList.isEmpty) {
       OneButtonMaterialDialog().showFeedBack(context, "사진을 등록해주세요");
       return;
     }
@@ -215,14 +218,7 @@ class RecordViewModel extends ChangeNotifier {
       return;
     }
 
-    if (_locationInfo ==
-        LocationInformation(
-          country: "",
-          address2: "",
-          address3: "",
-          address4: "",
-          flag: null,
-        )) {
+    if (locationInfo.flag == null) {
       OneButtonMaterialDialog().showFeedBack(context, "위치를 불러오지 못했습니다.");
       return;
     }
@@ -242,7 +238,7 @@ class RecordViewModel extends ChangeNotifier {
             ),
             onTap: () {
               Navigator.of(context).pop();
-              postFiles(context, myInfo, move);
+              postFiles(context, myInfo, allFileList, locationInfo, move);
             }),
         GestureDetector(
             child: const GradientText(

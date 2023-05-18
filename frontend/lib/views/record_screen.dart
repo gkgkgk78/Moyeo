@@ -139,7 +139,7 @@ class RecordView extends StatelessWidget {
                                                   "이미지는 \n최대 9장까지 \n등록 가능합니다.");
                                             } else {
                                               recordViewModel
-                                                  .uploadFileFromGallery();
+                                                  .uploadFileFromGallery(cameraViewModel.allFileList);
                                             }
                                           },
                                           icon: const Icon(Icons.folder_copy),
@@ -196,6 +196,8 @@ class RecordView extends StatelessWidget {
                                               appViewModel.userInfo,
                                               appViewModel
                                                   .goToTravelingTimelinePage,
+                                              cameraViewModel.locationInfo,
+                                              cameraViewModel.allFileList
                                             );
                                           },
                                           icon: const Icon(Icons.upload, size: 28),
