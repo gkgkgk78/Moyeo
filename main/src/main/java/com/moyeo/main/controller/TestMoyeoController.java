@@ -4,6 +4,7 @@ package com.moyeo.main.controller;
 import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.ChatReq;
+import com.moyeo.main.dto.GetPostRes;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.entity.Chat;
@@ -12,7 +13,11 @@ import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.repository.PostRepository;
+import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -56,6 +61,12 @@ public class TestMoyeoController {
     private final AsyncTestService asyncTestService;
     private final MessageBoxService messageBoxService;
 
+    private final TimeLineServiceImpl timeLineServiceImpl;
+
+    @GetMapping("/timeline")
+    public ResponseEntity<?> testGetTimelineList() throws Exception {
+        return ResponseEntity.ok(timeLineServiceImpl.getTimelineList2());
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> signUpKakao() throws Exception {

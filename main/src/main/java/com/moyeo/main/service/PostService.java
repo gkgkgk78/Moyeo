@@ -15,7 +15,8 @@ public interface PostService {
     // 포스트 등록
     Post createPost(AddPostReq addPostReq) throws Exception;
     Post makePost() throws Exception;
-    Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception;
+    // Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception;
+    Post insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception;
 
     // 포스트 삭제
     void deletePostById(Long postId) throws Exception;
