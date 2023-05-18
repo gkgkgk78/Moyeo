@@ -161,4 +161,39 @@ public interface MoyeoPostRepository extends JpaRepository<MoyeoPost, Long> {
         + "GROUP BY mp.moyeo_post_id")
     List<MoyeoPost> findAllMoyeoPost(Long timelineId, Long userId);
 
+    @Query(nativeQuery = true, value = "SELECT mp.moyeo_post_id\n"
+        + "FROM moyeo_post mp\n"
+        + "JOIN (\n"
+        + "    SELECT DISTINCT moyeo_timeline_id\n"
+        + "    FROM time_line_and_moyeo\n"
+        + "    WHERE timeline_id = :timelineId\n"
+        + ") tlam ON tlam.moyeo_timeline_id = mp.moyeo_timeline_id\n"
+        + "JOIN moyeo_public mpb ON mpb.moyeo_post_id = mp.moyeo_post_id AND mpb.user_id = :userId")
+    List<Long> findAllMoyeoPostIdByTimelineId(Long timelineId, Long userId);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM moyeo_post mp\n"
+        + "INNER JOIN moyeo_time_line mt ON mp.moyeo_timeline_id = mt.moyeo_timeline_id\n"
+        + "INNER JOIN (\n"
+        + "    SELECT moyeo_post_id, SUM(is_deleted) > 0 AS isAnyDeleted, MIN(is_public) = 1 AS isAllPublic\n"
+        + "    FROM moyeo_public\n"
+        + "    GROUP BY moyeo_post_id\n"
+        + ") mpb ON mpb.moyeo_post_id = mp.moyeo_post_id\n"
+        + "WHERE (mp.address1 LIKE %:location% OR mp.address2 LIKE %:location% OR mp.address3 LIKE %:location% OR mp.address4 LIKE %:location%)\n"
+        + "    AND mt.is_complete = true\n"
+        + "    AND mpb.isAnyDeleted = false AND mpb.isAllPublic = true")
+    List<MoyeoPost> findAllMainFeedMoyeoPostByLocation(String location);
+
+    @Query(nativeQuery = true, value = "SELECT mp.*\n"
+        + "FROM moyeo_post mp\n"
+        + "INNER JOIN moyeo_time_line mt ON mp.moyeo_timeline_id = mt.moyeo_timeline_id\n"
+        + "INNER JOIN (\n"
+        + "    SELECT moyeo_post_id, is_deleted\n"
+        + "    FROM moyeo_public\n"
+        + "    WHERE user_id = :userId AND is_deleted = false\n"
+        + ") mpb ON mpb.moyeo_post_id = mp.moyeo_post_id\n"
+        + "WHERE (mp.address1 LIKE %:location% OR mp.address2 LIKE %:location% OR mp.address3 LIKE %:location% OR mp.address4 LIKE %:location%)\n"
+        + "  AND mt.is_complete = true\n")
+    List<MoyeoPost> findAllMyMoyeoPostByLocation(String location, Long userId);
+
 }

@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService {
             // 프로필 이미지 변경 및 닉네임 변경
             log.info("프로필 이미지 변경 및 닉네임 변경");
             // 프로필 이미지 S3에 업로드 및 imageURL 가져오기
-            String ProfileImageUrl = awsS3.upload(profileImage, "Danim/profile");
+            String ProfileImageUrl = awsS3.upload(profileImage, "Moyeo/profile");
 
             // 이전 프로필 이미지 Url -> s3에서 삭제
             String beforeProfileImageUrl = user.getProfileImageUrl();

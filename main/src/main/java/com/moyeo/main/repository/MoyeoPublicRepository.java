@@ -16,9 +16,6 @@ import com.moyeo.main.id.MoyeoPublicID;
 
 @Repository
 public interface MoyeoPublicRepository extends JpaRepository<MoyeoPublic, MoyeoPublicID> {
-	@Modifying(clearAutomatically = true)
-	@Query("UPDATE MoyeoPublic m set m.isDeleted= :deleted")
-	void deleteMoyeoPost(Boolean deleted);
 
 	MoyeoPublic findFirstByUserIdAndMoyeoPostId(User user, MoyeoPost moyeoPostId);
 

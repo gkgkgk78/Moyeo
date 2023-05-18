@@ -1,5 +1,6 @@
 package com.moyeo.main.repository;
 
+import com.moyeo.main.dto.PostWithIsFavoriteDto;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.TimeLine;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -54,19 +55,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "SELECT p.*\n"
         + "FROM post p\n"
         + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"
-        + "WHERE (p.address1 LIKE '%:location%' OR p.address2 LIKE '%:location%' OR p.address3 LIKE '%:location%' OR p.address4 LIKE '%:location%')\n"
+        + "WHERE (p.address1 LIKE %:location% OR p.address2 LIKE %:location% OR p.address3 LIKE %:location% OR p.address4 LIKE %:location%)\n"
         + "  AND t.is_timeline_public = true\n"
         + "  AND t.is_complete = true")
     List<Post> findAllMainFeedPostByLocation(String location);
 
-    // @Query(nativeQuery = true, value = "select post_id, create_time, modify_time, address1, address2, address3, address4, favorite_count, text, voice_length, voice_url, nation_id, false as is_moyeo\n"
-    //     + "from post\n"
-    //     + "where post_id in :postIdList\n"
-    //     + "union\n"
-    //     + "select a.moyeo_post_id, a.create_time, a.modify_time, a.address1, a.address2, a.address3, a.address4, a.favorite_count, a.text, a.voice_length, a.voice_url, a.nation_id, true as is_moyeo\n"
-    //     + "from moyeo_post a\n"
-    //     + "where a.moyeo_post_id in :moyeoPostIdList\n"
-    //     + "ORDER BY create_time DESC")
-    // Optional<List<PostUnionMoyeoPostInterface>> findPostsAndMoyeoPosts(List<Long> postIdList,  List<Long> moyeoPostIdList);
+    @Query(nativeQuery = true, value = "SELECT p.*\n"
+        + "FROM post p\n"
+        + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"
+        + "WHERE (p.address1 LIKE %:location% OR p.address2 LIKE %:location% OR p.address3 LIKE %:location% OR p.address4 LIKE %:location%)\n"
+        + "  AND p.user_id = :userId\n"
+        + "  AND t.is_complete = true")
+    List<Post> findAllMyPostByLocation(String location, Long userId);
 
 }
