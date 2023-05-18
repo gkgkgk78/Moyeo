@@ -40,13 +40,13 @@ class TimelineListPageMain extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<Timeline>(
-                // firstPageProgressIndicatorBuilder: (_) => Transform.scale(
-                //   scale: 0.2,
-                //   child: const SizedBox(
-                //     height: 400,
-                //     child: GradientCircularProgressIndicator()
-                //   ),
-                // ),
+                firstPageProgressIndicatorBuilder: (_) => Transform.scale(
+                  scale: 0.2,
+                  child: const SizedBox(
+                    height: 400,
+                    child: GradientCircularProgressIndicator()
+                  ),
+                ),
                 noItemsFoundIndicatorBuilder: (context) => Container(
                     margin: EdgeInsets.only(
                         left:MediaQuery.of(context).size.width*(0.25) ,
