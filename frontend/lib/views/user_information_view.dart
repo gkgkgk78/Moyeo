@@ -52,7 +52,8 @@ class UserInformationView extends StatelessWidget {
                 height: 80,
                 fit: BoxFit.cover,
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.grey,
+                  width: 1.7
                 ),
                 cache: true,
                 shape: BoxShape.circle,
