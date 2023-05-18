@@ -35,23 +35,72 @@ class TimelineListItemMain extends StatelessWidget {
             );
           },
           child: TransparentImageCard(
+            contentMarginTop:MyHeight*(0.4),
+            contentPadding: EdgeInsets.only(left: MyWidth*(0.05)),
             width: MyWidth*(0.7),
             height: MyHeight*(0.6),
             borderRadius: 20,
+            endColor: Colors.black,
+            startColor: Colors.transparent,
             // 추후에 assetimage로 바꾸기
-            imageProvider: NetworkImage(
-              timeline.imageUrl.isNotEmpty
-                ? timeline.imageUrl
-                :'assets/images/default_image.png'
+            imageProvider:ResizeImage(
+              NetworkImage(
+                timeline.imageUrl.isNotEmpty
+                    ? timeline.imageUrl
+                    :'assets/images/default_image.png',
+              ),
+              width: 200,
+              allowUpscaling: true,
             ),
             title: Text(
                 timeline.title,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize:20,
+                    fontSize:MyHeight*(0.03),
                     fontWeight:FontWeight.bold
-                )),
+                )
             ),
+          description: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: MyWidth*(0.5),
+                margin: EdgeInsets.all(MyWidth*(0.015)),
+                padding: const EdgeInsets.only(left: 0),
+                child:Text(
+                timeline.nickname,
+                style:TextStyle(
+                    color: Colors.white,
+                    fontSize:MyHeight*(0.018),
+                ) ,
+              )
+              ),
+              Container(
+                  width: MyWidth*(0.5),
+                  margin: EdgeInsets.all(MyWidth*(0.015)),
+                  padding: const EdgeInsets.only(left: 0),
+                  child:Text(
+               "${timeline.createTime} ~ ${timeline.finishTime}",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize:MyHeight*(0.018),
+                ),
+              )),
+              Container(
+                  width: MyWidth*(0.5),
+                  margin: EdgeInsets.all(MyWidth*(0.015)),
+                  padding: const EdgeInsets.only(left: 0),
+                  child:Text(
+                  "${timeline.startPlace} ~ ${timeline.finishPlace}",
+                  style:TextStyle(
+                      color: Colors.white,
+                      fontSize:MyHeight*(0.018),
+                  )
+              ))// Text(data)
+            ],
+          ),
+          ),
           ),
         );
     });

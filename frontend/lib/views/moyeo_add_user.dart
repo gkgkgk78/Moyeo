@@ -20,6 +20,9 @@ class MoyeoAddUser extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    final MyWidth = MediaQuery.of(context).size.width;
+    final MyHeight = MediaQuery.of(context).size.height;
+
     return Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
           return ChangeNotifierProvider(
@@ -41,7 +44,7 @@ class MoyeoAddUser extends StatelessWidget{
                                         top:MediaQuery.of(context).size.height*(0.1),
                                         left:MediaQuery.of(context).size.width*(0.1)
                                     ),
-                                    padding: EdgeInsets.all(20),
+                                    padding: EdgeInsets.all(MyWidth*(0.05)),
                                     width: MediaQuery.of(context).size.width*(0.8),
                                     height: MediaQuery.of(context).size.height*(0.55),
                                         decoration: BoxDecoration(
@@ -89,7 +92,7 @@ class MoyeoAddUser extends StatelessWidget{
                                             child:Text(
                                                 "동행멤버를 추가해주세요",
                                               style: TextStyle(
-                                                fontSize: 20,
+                                                fontSize: MyHeight*(0.03),
                                               ),
                                             )
                                         ),
@@ -104,7 +107,6 @@ class MoyeoAddUser extends StatelessWidget{
                                     child: InkWell(
                                       onTap: (){
                                         final addUserProvider = selectedUsersProvider;
-
                                         addUserProvider.addMoyeoUser(
                                             context,
                                             appViewModel.userInfo.moyeoTimelineId,
@@ -116,7 +118,13 @@ class MoyeoAddUser extends StatelessWidget{
                                         //     'api/auth/timeline/${appViewModel.userInfo.timeLineId}');
                                       },
                                       child: Container(
-                                        padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
+                                        width: MyWidth*(0.4),
+                                        margin: EdgeInsets.only(left: MyWidth*(0.001)) ,
+                                        padding: EdgeInsets.only(
+                                        left:MyWidth*(0.03),
+                                        right:MyWidth*(0.03),
+                                        top:MyHeight*(0.006),
+                                        bottom:MyHeight*(0.006)),
                                         decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
@@ -142,7 +150,10 @@ class MoyeoAddUser extends StatelessWidget{
                                           ),
                                           Text(
                                              "  모여 초대 보내기",
-                                            style: TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                              fontSize: MyHeight*(0.017)
+                                            ),
                                           ),
                                         ]
                                       )
