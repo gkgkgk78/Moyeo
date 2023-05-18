@@ -58,57 +58,57 @@ class HomeFeedPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Positioned(
-                      left: MediaQuery.of(context).size.width*(0.365),
-                        bottom: 40,
-                        child: Consumer<HomeFeedViewModel> (
-                          builder: (_, viewModel, __){
-                            return Row(
-                            children: [
-                            IconButton(
-                                onPressed: (){
-                                  if (viewModel.pageKey > 0) {
-                                    viewModel.pageKey -= 1;
-                                    viewModel.getMainTimelineList(context, viewModel.pageKey);
-                                    viewModel.pagingController.refresh();
-                                  }},
-                                icon: Icon(Icons.arrow_back, color: Colors.red,),
-                                ),
-                                Text(
-                                  "${viewModel.pageKey+1}"
-                                ),
-                                IconButton(
-                                    onPressed: (){
-                                      viewModel.pageKey += 1;
-                                      viewModel.getMainTimelineList(context, viewModel.pageKey);
-                                      viewModel.pagingController.refresh();
-                                      // ? viewModel.pagingController.refresh()
-                                      // : showDialog(
-                                      //     barrierDismissible: false,
-                                      //     context: context,
-                                      //     builder: (ctx) =>
-                                      //         AlertDialog(
-                                      //           title: const Text('마지막 페이지 입니다'),
-                                      //           actions: [
-                                      //             TextButton(
-                                      //               onPressed: () {
-                                      //                 Navigator.pop(ctx);
-                                      //               },
-                                      //               child: const Text(
-                                      //                 '닫기',
-                                      //                 style: TextStyle(color: Colors.red),
-                                      //               ),
-                                      //             ),
-                                      //           ],
-                                      //        )
-                                      //     );
-                                      },
-                                    icon: Icon(Icons.arrow_forward, color: Colors.red,)
-                                )
-                          ],
-                        );
-                          }
-                ))
+                //     Positioned(
+                //       left: MediaQuery.of(context).size.width*(0.365),
+                //         bottom: 40,
+                //         child: Consumer<HomeFeedViewModel> (
+                //           builder: (_, viewModel, __){
+                //             return Row(
+                //             children: [
+                //             IconButton(
+                //                 onPressed: (){
+                //                   if (viewModel.pageKey > 0) {
+                //                     viewModel.pageKey -= 1;
+                //                     viewModel.getMainTimelineList(context, viewModel.pageKey);
+                //                     viewModel.pagingController.refresh();
+                //                   }},
+                //                 icon: Icon(Icons.arrow_back, color: Colors.red,),
+                //                 ),
+                //                 Text(
+                //                   "${viewModel.pageKey+1}"
+                //                 ),
+                //                 IconButton(
+                //                     onPressed: (){
+                //                       viewModel.pageKey += 1;
+                //                       viewModel.getMainTimelineList(context, viewModel.pageKey);
+                //                       viewModel.pagingController.refresh();
+                //                       // ? viewModel.pagingController.refresh()
+                //                       // : showDialog(
+                //                       //     barrierDismissible: false,
+                //                       //     context: context,
+                //                       //     builder: (ctx) =>
+                //                       //         AlertDialog(
+                //                       //           title: const Text('마지막 페이지 입니다'),
+                //                       //           actions: [
+                //                       //             TextButton(
+                //                       //               onPressed: () {
+                //                       //                 Navigator.pop(ctx);
+                //                       //               },
+                //                       //               child: const Text(
+                //                       //                 '닫기',
+                //                       //                 style: TextStyle(color: Colors.red),
+                //                       //               ),
+                //                       //             ),
+                //                       //           ],
+                //                       //        )
+                //                       //     );
+                //                       },
+                //                     icon: Icon(Icons.arrow_forward, color: Colors.red,)
+                //                 )
+                //           ],
+                //         );
+                //           }
+                // ))
                   ],
                 );
               },
