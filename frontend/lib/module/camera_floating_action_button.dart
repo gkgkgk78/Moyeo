@@ -54,9 +54,33 @@ class CameraFloatingActionButton extends StatelessWidget {
                   size: 40,
                 ),
               ),
-                  onTap: () {
+                  onTap: () async {
+                    List<Map<String, dynamic>> members =
+                        await appViewModel.fetchData(context, appViewModel.userInfo.timeLineId);
                     if (appViewModel.userInfo.timeLineId == -1) {
                       appViewModel.startTravel(context);
+                    } else if (members.length <= 1){
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (ctx) =>
+                              AlertDialog(
+                                title: const Text("혼자야?"),
+                                content: const Text("혼자서는 포스트를 등록 할 수 없습니다."),
+                                actions: [
+                                  TextButton(
+                                    onPressed:(){
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      "뒤로가기",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                ],
+                              )
+                      );
+
                     } else {
                       Navigator.push(
                         context,

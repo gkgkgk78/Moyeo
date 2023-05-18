@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +16,11 @@ import 'package:moyeo/views/message_list.dart';
 import 'package:moyeo/views/push_alarm_page.dart';
 import 'package:provider/provider.dart';
 
+import '../models/TimelineInfo.dart';
 import '../models/UserInfo.dart';
 import '../services/timeline_repository.dart';
 import '../services/user_repository.dart';
+import '../utils/auth_dio.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_detail_page.dart';
 import '../views/home_feed_page.dart';
@@ -371,6 +374,18 @@ class AppViewModel with ChangeNotifier {
     _fcmToken = (await FirebaseMessaging.instance
         .getToken(vapidKey: firebaseValidKey))!;
     notifyListeners();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchData(BuildContext context, int timeLineId) async {
+    try{
+      final dio = await authDio(context);
+      Response response = await dio.get("api/auth/timeline/${timeLineId}");
+      Map<String, dynamic> json = response.data;
+      TimelineInfo timelineInfoMembers = TimelineInfo.fromJson(json);
+      return timelineInfoMembers.members ?? [];
+    } catch(e){
+      throw Exception('Error: $e');
+    }
   }
 
   void changeFromPush() {

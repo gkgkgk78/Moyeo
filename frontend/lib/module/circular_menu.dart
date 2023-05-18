@@ -1,5 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logger/logger.dart';
@@ -7,9 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../models/TimelineInfo.dart';
+
 import '../models/UserInfo.dart';
-import '../utils/auth_dio.dart';
 import '../views/camera_screen.dart';
 import '../views/login_page.dart';
 import '../views/moyeo_add_user.dart';
@@ -69,18 +67,6 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
     animationController.addListener(() {
       setState(() {});
     });
-  }
-
-  Future<List<Map<String, dynamic>>> _fetchData(int timeLineId) async {
-    try{
-      final dio = await authDio(context);
-      Response response = await dio.get("api/auth/timeline/${timeLineId}");
-      Map<String, dynamic> json = response.data;
-      TimelineInfo timelineInfoMembers = TimelineInfo.fromJson(json);
-      return timelineInfoMembers.members ?? [];
-    } catch(e){
-      throw Exception('Error: $e');
-    }
   }
 
   @override
@@ -242,7 +228,8 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: () async {
-                      List<Map<String, dynamic>> members = await _fetchData(appViewModel.userInfo.timeLineId);
+                      List<Map<String, dynamic>> members =
+                      await appViewModel.fetchData(context, appViewModel.userInfo.timeLineId);
                       // 동행 1명일 때는 포스트 동작 막기
                       if (animationController.isCompleted) {
                         // 모여 중이 아니거나
@@ -264,21 +251,21 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                                     title: const Text("혼자야?"),
                                     content: const Text("혼자서는 포스트를 등록 할 수 없습니다."),
                                     actions: [
-                                      TextButton(
-                                          onPressed:(){
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => MoyeoAddUser(members: members),
-                                                )
-                                            );
-                                          } ,
-                                          child: const Text(
-                                            "동행 추가하러가기",
-                                            style: TextStyle(color: Colors.orangeAccent),
-                                          ),
-                                      ),
+                                      // TextButton(
+                                      //     onPressed:(){
+                                      //       Navigator.pop(context);
+                                      //       Navigator.push(
+                                      //           context,
+                                      //           MaterialPageRoute(
+                                      //             builder: (context) => MoyeoAddUser(members: members),
+                                      //           )
+                                      //       );
+                                      //     } ,
+                                      //     child: const Text(
+                                      //       "동행 추가하러가기",
+                                      //       style: TextStyle(color: Colors.orangeAccent),
+                                      //     ),
+                                      // ),
                                       TextButton(
                                           onPressed:(){
                                             Navigator.pop(context);
