@@ -9,12 +9,9 @@ import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.entity.Nation;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
-import com.moyeo.main.entity.TimeLine;
-import com.moyeo.main.entity.User;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
 @Builder(builderMethodName = "BasePostDtoBuilder")
 @Getter
@@ -34,11 +31,10 @@ public class BasePostDto {
 	// private TimeLine timelineId;
 	// private User userId;
 	private Long favoriteCount;
-
-
 	private Boolean isFavorite;
 	private Boolean isMoyeo;
-	private List<PostMembers> members;
+	private List<MemberInfoRes> members;
+	private Long timelineId; // 추가
 
 	public static BasePostDto.BasePostDtoBuilder builder(Post entity, Boolean isFavorite) {
 		List<String> photos = new ArrayList<>();
@@ -63,11 +59,12 @@ public class BasePostDto {
 			.favoriteCount(entity.getFavoriteCount())
 			.isFavorite(isFavorite)
 			.isMoyeo(false)
-			.members(null)
+			.members(new ArrayList<>())
+			.timelineId(entity.getTimelineId().getTimelineId())
 			;
 	}
 
-	public static BasePostDto.BasePostDtoBuilder builder(MoyeoPost entity, Boolean isFavorite, List<PostMembers> members) {
+	public static BasePostDto.BasePostDtoBuilder builder(MoyeoPost entity, Boolean isFavorite, List<MemberInfoRes> members) {
 		List<String> photos = new ArrayList<>();
 		for (MoyeoPhoto photo : entity.getMoyeoPhotoList()) {
 			photos.add(photo.getPhotoUrl());
@@ -89,6 +86,7 @@ public class BasePostDto {
 			.isFavorite(isFavorite)
 			.isMoyeo(true)
 			.members(members)
+			.timelineId(entity.getMoyeoTimelineId().getMoyeoTimelineId())
 			;
 	}
 

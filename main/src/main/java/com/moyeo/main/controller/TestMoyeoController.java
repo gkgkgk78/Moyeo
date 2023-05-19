@@ -4,6 +4,7 @@ package com.moyeo.main.controller;
 import com.moyeo.main.conponent.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.ChatReq;
+import com.moyeo.main.dto.GetPostRes;
 import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.entity.Chat;
@@ -12,7 +13,11 @@ import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
+import com.moyeo.main.repository.PostRepository;
+import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +30,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -55,7 +59,14 @@ public class TestMoyeoController {
     private final ChatService chatService;
 
     private final AsyncTestService asyncTestService;
+    private final MessageBoxService messageBoxService;
 
+    private final TimeLineServiceImpl timeLineServiceImpl;
+
+    @GetMapping("/timeline")
+    public ResponseEntity<?> testGetTimelineList() throws Exception {
+        return ResponseEntity.ok(timeLineServiceImpl.getTimelineList2());
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> signUpKakao() throws Exception {
@@ -101,7 +112,7 @@ public class TestMoyeoController {
     }
 
 
-    @PostMapping("/ing/dining")
+    @PostMapping("/ing/restaurant")
     public ResponseEntity<String> restaurantRecommendations() throws Exception {
         //로그인 정보에서 uid 받아오기
 //        Long userId = null;
@@ -133,11 +144,49 @@ public class TestMoyeoController {
         //return ResponseEntity.ok(goal);
         ResponseEntity<String> response = ResponseEntity.ok(goal);
         // Flask 서버에 데이터 전송
-        yeobotClient.sendYeobotData("dining", goal);
-        return response;
+        String result = yeobotClient.sendYeobotData("restaurant", goal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
+    @PostMapping("/ing/activity")
+    public ResponseEntity<String> activityRecommendationsForTraveller() {
+        log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 시작");
+        //로그인 정보에서 uid 받아오기
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("서울특별시");
+        lad[1] = new String("강남구");
+        lad[2] = new String("역삼동");
+        lad[3] = new String("테헤란로");
+        latestAddress.add(lad);
+
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        // 프롬프트 반환
+        String goal = "Recommend me some fun things to do near "+ addressList.get(0) + " "
+                + addressList.get(1) + " "
+                + addressList.get(2) + " today.";
+
+        //return ResponseEntity.ok(goal);
+
+        String caseType = "activity";
+
+        log.info("여행중인 유저에게 액티비티추천 spring 내부 로직 완료");
+
+        // Flask 서버에 데이터 전송
+        String result = yeobotClient.sendYeobotData(caseType, goal);
+
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
 
     //여행중이 아닌 유저 여행지 추천
     @PostMapping("/yet/place")
@@ -169,6 +218,9 @@ public class TestMoyeoController {
         log.info("response insert 작업 시작");
 
         chatService.insertResponse(user, result);
+        log.info("몽고디비저장완료");
+        messageBoxService.insertMessage(user.getUserId(), result);
+        log.info("메시지박스저장완료");
 
         log.info("response insert 작업 완료");
 
@@ -253,4 +305,93 @@ public class TestMoyeoController {
         log.info("notification 테스트 종료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/ing/pushtestrestaurant")
+    public ResponseEntity<String> batchPushTestForRestaurant() throws Exception {
+
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("Osaka");
+        lad[1] = new String("Osaka-shi");
+        lad[2] = new String("Chuo-ku");
+        lad[3] = new String("Osakajo");
+        latestAddress.add(lad);
+
+        // 프롬프트 반환
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        String goal = "Search for a good restaurant near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) + " " + addressList.get(3) + ".";
+        //return ResponseEntity.ok(goal);
+//        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        // Flask 서버에 데이터 전송
+        String result = yeobotClient.sendYeobotData("pushdining", goal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
+
+    @PostMapping("/ing/pushtestactivity")
+    public ResponseEntity<String> batchPushTestForActivity() throws Exception {
+
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("부산광역시");
+        lad[1] = new String("수영구");
+        lad[2] = new String("광안동");
+        lad[3] = new String("");
+        latestAddress.add(lad);
+
+        // 프롬프트 반환
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        String goal = "Recommend me some fun things to do near " + addressList.get(0) + " " + addressList.get(1) + " " + addressList.get(2) +  " now.";
+        //return ResponseEntity.ok(goal);
+//        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        // Flask 서버에 데이터 전송
+        String result = yeobotClient.sendYeobotData("pushactivity", goal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/ing/pushnextarrival")
+    public ResponseEntity<String> batchPushTestForNextArrival() throws Exception {
+
+        List<String[]> latestAddress = new ArrayList<>();
+        String[] lad = new String[4];
+        lad[0] = new String("New York City");
+        lad[1] = new String("from Central Park West to 5th Avenue");
+        lad[2] = new String("59th to 110th Street Manhattan Borough");
+        lad[3] = new String("");
+        latestAddress.add(lad);
+
+        // 프롬프트 반환
+        List<String> addressList = new ArrayList<>();
+
+        for (String[] addresses : latestAddress) {
+            for (String address : addresses) {
+                addressList.add(String.valueOf(address));
+            }
+        }
+
+        String goal = "Recommend me good place to visit near " + addressList.get(0) + " " + addressList.get(1) + ".";
+        //return ResponseEntity.ok(goal);
+//        ResponseEntity<String> response = ResponseEntity.ok(goal);
+        // Flask 서버에 데이터 전송
+        String result = yeobotClient.sendYeobotData("pushnextarrival", goal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
 }

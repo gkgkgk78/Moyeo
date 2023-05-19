@@ -3,6 +3,8 @@ package com.moyeo.main.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.moyeo.main.dto.PostInsertReq;
+import com.moyeo.main.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,10 +21,6 @@ import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.id.MoyeoPublicID;
-import com.moyeo.main.repository.MoyeoMembersRepository;
-import com.moyeo.main.repository.MoyeoPostRepository;
-import com.moyeo.main.repository.MoyeoPublicRepository;
-import com.moyeo.main.repository.MoyeoTimeLineRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +34,11 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final PostServiceImpl postService;
+    private final MoyeoPhotoService moyeoPhotoService;
+
+    private final UserRepository userRepository;
+
+    private final AsyncTestService asyncTestService;
 
 
     // 포스트 생성 및 저장
@@ -43,7 +46,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     public MoyeoPost createPost(AddPostReq addPostReq) throws Exception {
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if (moyeoTimeline.getIsComplete()) {
-            new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
+            throw new BaseException(ErrorMessage.ALREADY_DONE_MOYEO_TIMELINE);
         }
 
         MoyeoPost moyeoPost = new MoyeoPost();
@@ -54,14 +57,21 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     // 포스트 속성 값 설정 후 재저장
     @Override
     @Transactional
-    public MoyeoPost insertPost(MoyeoPost savedPost, List<MoyeoPhoto> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+    public MoyeoPost insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+    // public MoyeoPost insertPost(MoyeoPost savedPost, List<MoyeoPhoto> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
         // 모여타임라인에 소속된 멤버수(멤버즈카운트)가 1일 경우 post 작성이 불가능.
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
-        if(moyeoTimeline.getMembersCount() <= 1) {
-            throw new BaseException(ErrorMessage.NOT_POST_EXCEPTION);
+        if(moyeoTimeline.getMembersCount() != null && moyeoTimeline.getMembersCount() == 1) {
+            throw new BaseException(ErrorMessage.NOT_ALLOWED_MOYEO_POST_REGISTRATION);
         }
 
         List<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(addPostReq.getTimelineId(), null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MEMBERS));
+
+
+        MoyeoPost savedPost = createPost(addPostReq);
+
+        List<MoyeoPhoto> photoList = moyeoPhotoService.createPhotoList(imageFiles, savedPost);
+
 
         //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
         postService.checkVoiceFileValidity(voiceFile);
@@ -79,7 +89,17 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         LocalDateTime createTime = savedPost.getCreateTime();
         // moyeo_public 에 등록
         // List<MoyeoPublic> moyeoPublicList = new ArrayList<>();
+
+
         for (MoyeoMembers moyeoMember : moyeoMembers) {
+
+            //해당 부분은 moyeopost insert 시 관련하여
+            //푸시 알림을 위해 작업 하는 단계
+            User temp_user = userRepository.getByUserId(moyeoMember.getUserId().getUserId());
+            PostInsertReq req = PostInsertReq.builder(addPostReq, temp_user).build();
+            asyncTestService.test(req);//해당 단계에서 비동기로 푸시 알람을 보낼 예정
+
+
             MoyeoPublic moyeoPublic = new MoyeoPublic();
             moyeoPublic.setUserId(moyeoMember.getUserId());
             moyeoPublic.setMoyeoPostId(savedPost);
@@ -88,6 +108,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
 
             // moyeoPublicList.add(moyeoPublic);
         }
+
 
         // imageURL, voiceURL db에 저장하기
         log.info("Starting savePost transaction");
@@ -114,9 +135,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     @Transactional
     public void updateMoyeoPost(User user, Long moyeoPostId) throws Exception {
         // 공개 여부 수정하기
-
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
-
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
         MoyeoPublic moyeoPublic = moyeoPublicRepository.findById(moyeoPublicID).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_PUBLIC));
         moyeoPublic.updateIsPublic();
@@ -128,7 +147,8 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
 
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
-        moyeoPublicRepository.deleteMoyeoPost(true);
+        MoyeoPublic moyeoPublic = moyeoPublicRepository.findById(moyeoPublicID).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_PUBLIC));
+        moyeoPublic.setIsDeleted(true);
     }
 
 }

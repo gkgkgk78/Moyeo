@@ -8,6 +8,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class AsyncService {
 
     @Autowired
     private final OkHttpClient okHttpClient;
+
+
+    @Value("${sender-url}")
+    private String senderUrl;
 
     @Async("sampleExecutor")
     public CompletableFuture<String> testAsync(String message) {
@@ -53,7 +58,7 @@ public class AsyncService {
         formBuilder.add("deviceToken", post.getDeviceToken());
 
         Request request = new Request.Builder()
-                .url("http://localhost:3000/autogpt")
+                .url(senderUrl)
                 .addHeader("Content-Type", "application/json;")
                 .addHeader("Cache-Control", "no-cache")
                 .post(formBuilder.build())

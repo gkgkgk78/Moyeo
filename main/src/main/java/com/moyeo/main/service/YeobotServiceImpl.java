@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
@@ -26,21 +27,29 @@ public class YeobotServiceImpl implements YeobotService{
         Long latestPostId = postRepository.findLatestPost(userId);
         Long latestMoyeoPostId = moyeoPostRepository.findLatestMoyeoPost(userId);
 
+        System.out.println("최근 모여포스트id : "+latestMoyeoPostId);
+        System.out.println("최근 포스트id : "+latestPostId);
+
         // 최신 게시글의 id를 이용하여 주소 정보를 가져오기
         List<String[]> latestPostAddress = postRepository.findAddressById(latestPostId, userId);
         List<String[]> latestMoyeoPostAddress = moyeoPostRepository.findAddressByMoyeoPostId(latestMoyeoPostId);
 
         // 두 게시글 중에서 더 최신의 게시글을 선택해서 주소 반환
-        if (latestMoyeoPostAddress == null) {
-            return latestPostAddress;
-        } else if (latestPostAddress == null) {
-            return latestMoyeoPostAddress;
-        } else if(latestPostAddress == null && latestMoyeoPostAddress == null){
+        if(latestPostAddress.isEmpty() && latestMoyeoPostAddress.isEmpty()) {
             throw new BaseException(ErrorMessage.NOT_EXIST_LATEST_ADDRESS);
+        }
+        else if(latestMoyeoPostAddress.isEmpty()) {
+            return latestPostAddress;
+        }
+        else if(latestPostAddress.isEmpty()) {
+            return latestMoyeoPostAddress;
         }
         else {
             LocalDateTime latestPostTime = postRepository.findCreateTimeByPostId(latestPostId);
             LocalDateTime latestMoyeoPostTime = moyeoPostRepository.findCreateTimeByMoyeoPostId(latestMoyeoPostId);
+            if (latestPostTime == null || latestMoyeoPostTime == null) {
+                throw new BaseException(ErrorMessage.NOT_EXIST_LATEST_TIME);
+            }
             if (latestPostTime.isAfter(latestMoyeoPostTime)) {
                 return latestPostAddress;
             } else {

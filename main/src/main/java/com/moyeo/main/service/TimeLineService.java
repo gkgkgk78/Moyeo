@@ -34,15 +34,19 @@ public interface TimeLineService {
     //타임라인 공개 <->비공개 변경 => 완료
     Boolean changePublic(Long uid,User user) throws Exception;
 
+    // 타임라인 목록 조회 & 페이징 처리
+    List<MainTimelinePhotoDtoRes> getTimelineList(Pageable pageable) throws Exception;
+    List<MainTimelinePhotoDtoRes> getTimelineList(User user, Pageable pageable) throws Exception;
+    List<MainTimelinePhotoDtoRes> getTimelineList(Long userId, Pageable pageable) throws Exception;
 
     //메인 피드상에서 타임라인 페이징 처리해서 조회하는 메서드
     List<MainTimelinePhotoDtoRes> searchTimelineOrderBylatestPaging(Pageable pageable) throws Exception;
 
     //내타임라인 페이징 처리해서 조회
-    List<MainTimelinePhotoDtoRes> searchMyTimelineWithPaging(User user, Pageable pageable) throws Exception;
+    // List<MainTimelinePhotoDtoRes> searchMyTimelineWithPaging(User user, Pageable pageable) throws Exception;
 
     //다른 유저의 피드에서 타임라인 조회 with Paging
-    List<MainTimelinePhotoDtoRes> searchTimelineNotPublicWithPaging(Long uid, Pageable pageable) throws Exception;
+    // List<MainTimelinePhotoDtoRes> searchTimelineNotPublicWithPaging(Long uid, Pageable pageable) throws Exception;
 
 
     //타임 라인 하나 불러올시에, 썸네일, 시작 위치 끝나는 위치,
