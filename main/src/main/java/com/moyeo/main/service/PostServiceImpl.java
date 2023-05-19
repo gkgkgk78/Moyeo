@@ -12,7 +12,7 @@ import com.moyeo.main.exception.ErrorMessage;
 import com.moyeo.main.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class PostServiceImpl implements PostService {
-
-
     private final AwsS3 awsS3;
     private final PostRepository postRepository;
     private final MoyeoPostRepository moyeoPostRepository;
@@ -49,6 +47,7 @@ public class PostServiceImpl implements PostService {
     private final MoyeoPublicRepository moyeoPublicRepository;
     // private final BadWordFilter badWordFilter;
     private final MultiFileToFile multiFileToFile;
+    private final PhotoService photoService;
 
     private final AsyncTestService asyncTestService;
 
@@ -57,7 +56,7 @@ public class PostServiceImpl implements PostService {
     public Post createPost(AddPostReq addPostReq) throws Exception {
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if (timeline.getIsComplete() == true) {
-            new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
+            throw new BaseException(ErrorMessage.ALREADY_DONE_TIMELINE);
         }
 
         Post post = new Post();
@@ -75,11 +74,10 @@ public class PostServiceImpl implements PostService {
     // 포스트 속성 값 설정 후 재저장
     @Transactional
     @Override
-    public Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
-        // Double durationInSeconds = getVoiceFileLength(voiceFile);
-        // String text = getVoiceFileText(voiceFile);
-        // String voiceUrl = uploadAndGetVoiceFileUrl(voiceFile);
-        // Nation nation = uploadAndGetNation(flagFile, addPostReq);
+    public Post insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+    // public Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+        Post savedPost = createPost(addPostReq);
+        List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
 
 
         //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
@@ -168,6 +166,8 @@ public class PostServiceImpl implements PostService {
         long frameLength = audioInputStream.getFrameLength();
         double durationInSeconds = (frameLength / format.getFrameRate());
 
+        Files.delete(target); // TODO
+
         int check_time = (int) durationInSeconds;
         //System.out.println("Duration: " + durationInSeconds + " seconds");
         if (check_time > 30) {
@@ -181,9 +181,20 @@ public class PostServiceImpl implements PostService {
         ClovaSpeechClient.NestRequestEntity requestEntity = new ClovaSpeechClient.NestRequestEntity();
         //        String result = clovaSpeechClient.url(voiceUrl, requestEntity);
 
-        String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
+        // String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
+        File convertedVoiceFile = multiFileToFile.transTo(voiceFile);
+        String result;
+        try {
+            result = clovaSpeechClient.upload(convertedVoiceFile, requestEntity);
+        } finally {
+            if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제하는 로직 추가
+                convertedVoiceFile.delete();
+            }
+        }
+
+
         if (result.contains("\"result\":\"FAILED\"")) {
-            new BaseException(ErrorMessage.NOT_STT_SAVE);
+            throw new BaseException(ErrorMessage.NOT_STT_SAVE);
         }
 
         log.info("clova result: {}", result);
@@ -198,7 +209,7 @@ public class PostServiceImpl implements PostService {
         String voiceUrl = "";
 
         voiceUrl = awsS3.upload(voiceFile, "Moyeo/Voice");
-        Files.delete(target);//파일을 삭제하는 코드임
+        // Files.delete(target);//파일을 삭제하는 코드임
         log.info("voiceUrl info :{}", voiceUrl);
         // voiceFile -> text 변환 : 응답받은 json 파일에서 text 추출
         // voiceFile S3에 올리고 voiceURL 가져오기
@@ -257,43 +268,25 @@ public class PostServiceImpl implements PostService {
     // 메인 피드에서 포스트 조회
     @Override
     public List<GetPostRes> findByLocation(String location) throws Exception {
-        // List<Post> postList = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_KEYWORD));
-        //
-        // List<GetPostRes> getPostResList = new ArrayList<>();
-        // for (Post post : postList) {
-        //
-        //     // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-        //     if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getIsTimelinePublic() == true ) {
-        //         // Long totalFavorite = favoriteRepository.countByPostId(post);
-        //         Long totalFavorite = post.getFavoriteCount();
-        //         getPostResList.add(GetPostRes.builder(post, totalFavorite).build());
-        //     }
-        // }
-
-        List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+        List<Post> posts = postRepository.findAllMainFeedPostByLocation(location); // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllMainFeedMoyeoPostByLocation(location); // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+        if ((posts == null || posts.size() == 0) && (moyeoPosts == null || moyeoPosts.size() == 0)) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
 
         List<GetPostRes> postList = new ArrayList<>();
         if (posts != null && posts.size() != 0) {
             postList = posts.stream()
-                    .filter(post -> post.getTimelineId().getIsComplete() && post.getTimelineId().getIsTimelinePublic()) // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
-                    .map(post -> GetPostRes.builder(post, post.getFavoriteCount()).build())
-                    .collect(Collectors.toList());
+                .map(post -> GetPostRes.builder(post, post.getFavoriteCount()).build())
+                .collect(Collectors.toList());
         }
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
         if (moyeoPosts != null && moyeoPosts.size() != 0) {
-            moyeoPostList = moyeoPosts.stream()
-                    .filter(post -> {
-                        // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
-                        MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
-                        Boolean isAllPublic = status.getIsAllPublic() == 1L;
-                        Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
-                        return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
-                    })
-                    .map(post -> GetPostRes.builder(post).build())
-                    .collect(Collectors.toList());
+            for(MoyeoPost moyeoPost : moyeoPosts) {
+                List<TimeLine> timeLineList = timelineRepository.findAllByMoyeoPostId(moyeoPost.getMoyeoPostId());
+                if(timeLineList.isEmpty()) continue;
+
+                moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+            }
         }
 
         postList.addAll(moyeoPostList);
@@ -307,32 +300,23 @@ public class PostServiceImpl implements PostService {
     public List<GetPostRes> findMyPost(String location, Long userUid) throws Exception {
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
 
-        List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
-        if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+        List<Post> posts = postRepository.findAllMyPostByLocation(location, userUid); // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
+        List<MoyeoPost> moyeoPosts = moyeoPostRepository.findAllMyMoyeoPostByLocation(location, userUid); // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+        if ((posts == null || posts.size() == 0) && (moyeoPosts == null || moyeoPosts.size() == 0)) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
 
         List<GetPostRes> postList = new ArrayList<>();
         for (Post post : posts) {
-            // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
-            if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getUserId().getUserId() == userUid) {
-                // Long totalFavorite = favoriteRepository.countByPostId(post);
-                Long totalFavorite = post.getFavoriteCount();
-                postList.add(GetPostRes.builder(post, totalFavorite).build());
-            }
+            postList.add(GetPostRes.builder(post, post.getFavoriteCount()).build());
         }
 
         List<GetPostRes> moyeoPostList = new ArrayList<>();
         if (moyeoPosts != null && moyeoPosts.size() != 0) {
-            moyeoPostList = moyeoPosts.stream()
-                    .filter(post -> {
-                        // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
-                        MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, post);
-                        TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
-                        if (timeLine == null) return false;
-                        return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
-                    })
-                    .map(post -> GetPostRes.builder(post).build())
-                    .collect(Collectors.toList());
+            for(MoyeoPost moyeoPost : moyeoPosts) {
+                List<TimeLine> timeLineList = timelineRepository.findAllMineByMoyeoPostId(moyeoPost.getMoyeoPostId(), userUid);
+                if(timeLineList.isEmpty()) continue;
+
+                moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+            }
         }
 
         postList.addAll(moyeoPostList);
@@ -357,7 +341,7 @@ public class PostServiceImpl implements PostService {
             moyeoPostList = moyeoPosts.stream()
                     .map(post -> BasePostDto.builder(post
                                     , null
-                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(PostMembers::new).collect(Collectors.toList()))
+                                    , moyeoPublicRepository.findByMoyeoPostId(post).stream().map(MemberInfoRes::new).collect(Collectors.toList()))
                             .build())
                     .collect(Collectors.toList());
         }
@@ -367,5 +351,105 @@ public class PostServiceImpl implements PostService {
 
         return postList;
     }
+
+    // // 메인 피드에서 포스트 조회
+    // @Override
+    // public List<GetPostRes> findByLocation(String location) throws Exception {
+    //     List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
+    //     List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
+    //     if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+    //
+    //     List<GetPostRes> postList = new ArrayList<>();
+    //     if (posts != null && posts.size() != 0) {
+    //         postList = posts.stream()
+    //                 .filter(post -> post.getTimelineId().getIsComplete() && post.getTimelineId().getIsTimelinePublic()) // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+    //                 .map(post -> GetPostRes.builder(post, post.getFavoriteCount()).build())
+    //                 .collect(Collectors.toList());
+    //     }
+    //
+    //     List<GetPostRes> moyeoPostList = new ArrayList<>();
+    //     if (moyeoPosts != null && moyeoPosts.size() != 0) {
+    //         for(MoyeoPost moyeoPost : moyeoPosts) {
+    //             // 완료되지 않은 타임라인의 post 제외 및 공개하지 않은 타임라인의 post 제외
+    //             if(!moyeoPost.getMoyeoTimelineId().getIsComplete()) continue;
+    //             List<TimeLine> timeLineList = timelineRepository.findAllByMoyeoPostId(moyeoPost.getMoyeoPostId());
+    //             if(timeLineList.isEmpty()) continue;
+    //
+    //             MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(moyeoPost.getMoyeoPostId());
+    //             Boolean isAllPublic = status.getIsAllPublic() == 1L;
+    //             Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+    //             if(!isAllPublic || isAnyDeleted) continue;
+    //
+    //             moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+    //         }
+    //         // moyeoPostList = moyeoPosts.stream()
+    //         //         .filter(post -> {
+    //         //             // 완료되지 않은 모여 타임라인의 post 제외 및 비공개 또는 삭제된 포스트 제외 (비공개: 동행 멤버들 중 한명이라도 해당 포스트를 비공개 처리했다면 true, 삭제: ~~한명이라도 삭제했다면 true)
+    //         //             MoyeoPostStatusDto status = moyeoPublicRepository.getMoyeoPostStatus(post.getMoyeoPostId());
+    //         //             Boolean isAllPublic = status.getIsAllPublic() == 1L;
+    //         //             Boolean isAnyDeleted = status.getIsAnyDeleted() == 1L;
+    //         //             return post.getMoyeoTimelineId().getIsComplete() && isAllPublic && !isAnyDeleted;
+    //         //         })
+    //         //         .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
+    //         //         .collect(Collectors.toList());
+    //     }
+    //
+    //     postList.addAll(moyeoPostList);
+    //     Collections.sort(postList, Comparator.comparing(GetPostRes::getCreateTime, Comparator.reverseOrder()));
+    //
+    //     return postList;
+    // }
+    //
+    // // 내 페이지에서 포스트 조회
+    // @Override
+    // public List<GetPostRes> findMyPost(String location, Long userUid) throws Exception {
+    //     User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+    //
+    //     List<Post> posts = postRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
+    //     List<MoyeoPost> moyeoPosts = moyeoPostRepository.findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(location, location, location, location).orElse(null);
+    //     if (posts == null && moyeoPosts == null) throw new BaseException(ErrorMessage.NOT_EXIST_KEYWORD);
+    //
+    //     List<GetPostRes> postList = new ArrayList<>();
+    //     for (Post post : posts) {
+    //         // 내 포스트 중에서 timeline이 완성되지 않은 post 제외
+    //         if (post.getTimelineId().getIsComplete() == true && post.getTimelineId().getUserId().getUserId() == userUid) {
+    //             // Long totalFavorite = favoriteRepository.countByPostId(post);
+    //             Long totalFavorite = post.getFavoriteCount();
+    //             postList.add(GetPostRes.builder(post, totalFavorite).build());
+    //         }
+    //     }
+    //
+    //     List<GetPostRes> moyeoPostList = new ArrayList<>();
+    //     if (moyeoPosts != null && moyeoPosts.size() != 0) {
+    //         for(MoyeoPost moyeoPost : moyeoPosts) {
+    //             List<TimeLine> timeLineList = timelineRepository.findAllMineByMoyeoPostId(moyeoPost.getMoyeoPostId(), userUid);
+    //             if(timeLineList.isEmpty()) continue;
+    //
+    //             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+    //             MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, moyeoPost);
+    //             // TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
+    //             // if (timeLine == null) return false;
+    //             // return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
+    //             if(moyeoPublic == null || moyeoPublic.getIsDeleted()) continue;
+    //
+    //             moyeoPostList.add(GetPostRes.builder(moyeoPost, timeLineList).build());
+    //         }
+    //         // moyeoPostList = moyeoPosts.stream()
+    //         //         .filter(post -> {
+    //         //             // 내 포스트 중에서 timeline이 완성되지 않은 post 제외 + 삭제된 모여포스트 제외
+    //         //             MoyeoPublic moyeoPublic = moyeoPublicRepository.findFirstByUserIdAndMoyeoPostId(user, post);
+    //         //             TimeLine timeLine = timelineRepository.findFirstByUserIdOrderByTimelineIdDesc(user).orElse(null);
+    //         //             if (timeLine == null) return false;
+    //         //             return timeLine.getIsComplete() && moyeoPublic != null && !moyeoPublic.getIsDeleted();
+    //         //         })
+    //         //     .map(post -> GetPostRes.builder(post, timelineRepository.findAllByMoyeoPostId(post.getMoyeoPostId())).build())
+    //         //     .collect(Collectors.toList());
+    //     }
+    //
+    //     postList.addAll(moyeoPostList);
+    //     Collections.sort(postList, Comparator.comparing(GetPostRes::getCreateTime, Comparator.reverseOrder()));
+    //
+    //     return postList;
+    // }
 
 }

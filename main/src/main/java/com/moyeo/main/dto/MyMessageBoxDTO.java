@@ -17,5 +17,6 @@ public class MyMessageBoxDTO {
     private String content;
     private Boolean isChecked;
     private LocalDateTime createTime;
+    private Long inviteKey;
 
 }
