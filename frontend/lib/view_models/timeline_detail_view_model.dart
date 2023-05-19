@@ -122,7 +122,6 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   deleteTimeline(context) async {
     await TimelineRepository().deleteTimeline(context, timelineId);
-    Navigator.pop(context);
   }
 
   // 모여 시작하기

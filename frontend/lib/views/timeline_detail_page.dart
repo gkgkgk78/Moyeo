@@ -182,7 +182,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                     '타임라인을  삭제하시겠습니까?'),
                                                 actions: [
                                                   TextButton(
-                                                    onPressed: () {
+                                                    onPressed: () async {
                                                       viewModel.deleteTimeline(
                                                           context);
                                                       appViewModel.userInfo
