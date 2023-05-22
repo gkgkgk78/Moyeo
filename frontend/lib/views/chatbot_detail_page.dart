@@ -34,6 +34,7 @@ class ChatbotPage extends StatelessWidget {
                   viewModel.unFocus();
                 },
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
                       height: viewModel.boxHeight(constraints),
@@ -42,6 +43,7 @@ class ChatbotPage extends StatelessWidget {
                         itemCount: viewModel.messages.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Column(
+                            mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: viewModel.getAlignment(index),
                             children: [
                               Container(
@@ -65,9 +67,10 @@ class ChatbotPage extends StatelessWidget {
                       ),
                     ),
                     Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         viewModel.ableTextField == false
-                            ? Expanded(
+                            ? Flexible(
                                 child: Container(),
                               )
                             : Row(
