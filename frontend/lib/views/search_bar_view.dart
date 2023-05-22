@@ -85,7 +85,7 @@ class SearchBar extends StatelessWidget {
                                                                   .isMyFeed,
                                                             ),
                                                             child:
-                                                                SearchResultView(),
+                                                                const SearchResultView(),
                                                           ),
                                                           transitionDuration:
                                                               Duration.zero,
@@ -136,7 +136,7 @@ class SearchBar extends StatelessWidget {
                                                                 ),
                                                               ),
                                                             ],
-                                                            child: MyFeedView(),
+                                                            child: const MyFeedView(),
                                                           ),
                                                           transitionDuration:
                                                               Duration.zero,
@@ -224,7 +224,7 @@ class SearchBar extends StatelessWidget {
                                                         isMyFeed:
                                                             viewModel.isMyFeed,
                                                       ),
-                                                      child: SearchResultView(),
+                                                      child: const SearchResultView(),
                                                     ),
                                                     transitionDuration:
                                                         Duration.zero,

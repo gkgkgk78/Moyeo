@@ -40,7 +40,7 @@ class UserInformationView extends StatelessWidget {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => ModifyProfile(),
+                      pageBuilder: (_, __, ___) => const ModifyProfile(),
                       transitionDuration: Duration.zero,
                     ),
                   );
