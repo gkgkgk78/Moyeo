@@ -23,6 +23,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
   // 모여 타임라인
   String? get title => _title;
 
+  int? postId;
+
   get nowMoyeo => _nowMoyeo;
 
   get isMine => _isMine;
@@ -44,7 +46,7 @@ class TimelineDetailViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  TimelineDetailViewModel(BuildContext context, this.timelineId) {
+  TimelineDetailViewModel(BuildContext context, this.timelineId, this.postId) {
     loadTimelineDetails(context);
     notifyListeners();
   }

@@ -228,8 +228,6 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                   alignment: Alignment.center,
                   child: GestureDetector(
                     onTap: () async {
-                      List<Map<String, dynamic>> members =
-                      await appViewModel.fetchData(context, appViewModel.userInfo.timeLineId);
                       // 동행 1명일 때는 포스트 동작 막기
                       if (animationController.isCompleted) {
                         // 모여 중이 아니거나
@@ -242,7 +240,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                               ),
                             );
                         // 모여 중이라면 nowMember가 빈배열이 아니여야함.
-                        } else if (members.length<=1) {
+                        } else if (appViewModel.members.length<=1) {
                           showDialog(
                             barrierDismissible: false,
                               context: context,
@@ -278,7 +276,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                                     ],
                                   )
                           );
-                        } else if (members.length>1) {
+                        } else if (appViewModel.members.length>1) {
                           Navigator.pop(context);
                           Navigator.push(
                             context,

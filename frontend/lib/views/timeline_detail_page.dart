@@ -81,7 +81,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                   Colors.orangeAccent,
                                                 ])),
                                         child: Row(children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.group_add,
                                             color: Colors.white,
                                           ),
@@ -131,7 +131,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                   Colors.orangeAccent,
                                                 ])),
                                         child: Row(children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.group_add,
                                             color: Colors.white,
                                           ),
@@ -310,7 +310,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                     child: const Text(
                                                         "포스트를 등록하거나 모여를 시작해보세요.")),
                                                 Container(
-                                                    padding: EdgeInsets.all(10),
+                                                    padding: const EdgeInsets.all(10),
                                                     child: const Text(
                                                       "가운데 동그란 버튼을 눌러 포스트를 등록해보세요.",
                                                     )),
@@ -319,12 +319,12 @@ class TimelineDetailPage extends StatelessWidget {
                                             ? Container(
                                                 padding:
                                                     const EdgeInsets.all(10),
-                                                child: Column(children: [
-                                                  const Text(
+                                                child: Column(children: const [
+                                                  Text(
                                                       "가운데 버튼을 눌러 포스트를 등록해주세요"),
                                                 ]))
                                             : Container(
-                                                padding: EdgeInsets.all(10),
+                                                padding: const EdgeInsets.all(10),
                                                 child:
                                                     const Text("동행자를 추가해 주세요."),
                                               )
@@ -427,6 +427,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                   .postList
                                                   .length -
                                               1,
+                                          postId: viewModel.postId,
                                         );
                                       },
                                     ),

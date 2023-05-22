@@ -164,7 +164,7 @@ class UserSearchBar extends StatelessWidget {
                                                               .nickname),
                                                           trailing:
                                                           viewModel.searchedResults[index - 1].timeLineId == -1
-                                                            ? Text("휴식중")
+                                                            ? const Text("휴식중")
                                                             : Text(viewModel.searchedResults[index - 1].moyeoTimelineId == -1
                                                               ? ""
                                                               : "동행중"),

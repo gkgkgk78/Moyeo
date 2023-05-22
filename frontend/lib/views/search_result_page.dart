@@ -80,7 +80,7 @@ class SearchResultView extends StatelessWidget {
                                                               .timelineTitle!);
                                                       Navigator.pushNamed(
                                                           context,
-                                                          '/timeline/detail/${viewModel.searchedPosts[index].timelineIds[0].timelineId}');
+                                                          '/timeline/detail/${viewModel.searchedPosts[index].timelineIds[0].timelineId}/${viewModel.searchedPosts[index].postId}');
                                                     } else {
                                                       showDialog(
                                                         context: context,

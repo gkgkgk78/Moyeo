@@ -13,15 +13,19 @@ class PostListItem extends StatelessWidget {
   final timelineIndex;
   final postIndex;
   final lastIndex;
+  int? postId = null;
 
-  const PostListItem(
-      {super.key, required this.timelineIndex, required this.postIndex, required this.lastIndex});
+  PostListItem(
+      {super.key, required this.timelineIndex, required this.postIndex, required this.lastIndex, this.postId});
 
   @override
   Widget build(BuildContext context) {
     return Consumer<TimelineDetailViewModel>(builder: (_, viewModel, __) {
       return ExpansionTile(
-        initiallyExpanded:postIndex==lastIndex,
+        initiallyExpanded:
+        postId == -1
+            ? postIndex==lastIndex
+            : postId== viewModel.timelineDetails[timelineIndex].postList[postIndex].postId,
         shape: const RoundedRectangleBorder(),
         collapsedShape: const RoundedRectangleBorder(),
         tilePadding: const EdgeInsets.only(left: 5),

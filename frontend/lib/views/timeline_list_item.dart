@@ -100,7 +100,7 @@ class TimelineListItem extends StatelessWidget {
                                         ),
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,7 @@ class TimelineListItem extends StatelessWidget {
                                               width: 90,
                                             ),
                                             Expanded(
-                                                child: Container(
+                                                child: SizedBox(
                                                   width: 80,
                                                   child: Text(
                                                     '${timeline.startPlace} ~ ${timeline.finishPlace}',
@@ -143,7 +143,7 @@ class TimelineListItem extends StatelessWidget {
                                           Expanded(
                                             child:Container(
                                               width: 80,
-                                              padding: EdgeInsets.only(left: 10.0),
+                                              padding: const EdgeInsets.only(left: 10.0),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.circular(10)
@@ -173,7 +173,7 @@ class TimelineListItem extends StatelessWidget {
                                           Expanded(
                                             child:Container(
                                               width: 80,
-                                              padding: EdgeInsets.only(left: 10.0),
+                                              padding: const EdgeInsets.only(left: 10.0),
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius: BorderRadius.circular(10)
@@ -198,7 +198,7 @@ class TimelineListItem extends StatelessWidget {
                                           Expanded(
                                             child:Container(
                                               width: 80,
-                                              padding: EdgeInsets.only(left: 10.0),
+                                              padding: const EdgeInsets.only(left: 10.0),
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
                                                   borderRadius: BorderRadius.circular(10)

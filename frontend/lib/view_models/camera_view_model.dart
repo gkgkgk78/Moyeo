@@ -258,20 +258,6 @@ class CameraViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // 줌 기능
-  // Future<void> changeZoomLevel(double scale) async {
-  //   logger.d(scale);
-  //   _zoomLevel = scale;
-  //   _controller.setZoomLevel(_zoomLevel);
-  //   notifyListeners();
-  // }
-
-  // 촬영 페이지 관련 기능
-  //////////////////////////////////////////////////////////////////////////////////////
-  // 녹음 페이지 관련 기능
-
-
-
   @override
   void dispose() {
     _controller.dispose();
