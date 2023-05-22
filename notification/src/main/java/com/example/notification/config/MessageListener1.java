@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @RabbitListener(queues = "sample.queue")
-public class MessageListener {
+public class MessageListener1 {
 
 
     private final PostInsertAutogpt postInsertAutogpt;
