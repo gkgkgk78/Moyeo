@@ -11,5 +11,4 @@ import com.moyeo.main.entity.TimeLine;
 
 @Repository
 public interface MoyeoTimeLineRepository extends JpaRepository<MoyeoTimeLine, Long> {
-	// Optional<List<MoyeoTimeLine>> findAllByTimelineId(TimeLine timeLine);
 }
