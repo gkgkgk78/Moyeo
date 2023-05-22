@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RabbitListener(queues = "sample.queue")
 public class MessageListener {
 
+    //queues 라는 이름을 가진 queue에서 메시지를 받아서 넘겨온 Parameter를 구분하여 처리하는 부분입니다.
 
     private final PostInsertAutogpt postInsertAutogpt;
     private final BatchAutogpt batchAutogpt;
@@ -25,6 +26,7 @@ public class MessageListener {
 
     @RabbitHandler
     public void receiveMessage(PostInsertReq post) {
+        //받는쪽은 보낸 쪽과 같은
         log.info("비동기 post insert 후 autogpt작업 시작");
         log.info("message: 1로 들어옴");
         postInsertAutogpt.insert(post);
