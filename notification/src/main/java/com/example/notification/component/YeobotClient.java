@@ -20,6 +20,7 @@ public class YeobotClient {
     }
 
 
+    //Autogpt가 있는 Flask 서버에 날릴 데이터를 Controller 단에서 받아 처리해 주는 부분입니다.
     public String sendYeobotData(String caseType, String data) throws Exception {
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
         RequestBody requestBody = RequestBody.create(mediaType, data);

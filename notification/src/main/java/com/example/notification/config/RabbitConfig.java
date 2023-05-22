@@ -18,6 +18,7 @@ public class RabbitConfig {
         return rabbitTemplate;
     }
 
+    //해당 부분은 RabbitMQ에서 JSON타입으로 변환을 하여줍니다.
     @Bean
     public Jackson2JsonMessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
