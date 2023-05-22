@@ -40,7 +40,7 @@ public class BatchAutogptImpl implements BatchAutogpt{
         log.info("Autogpt result : {}",responseMap.get("result"));
 
 
-        String result = fcmService.pushNoti(message.getDeviceToken(), responseMap.get("result"));
+//        String result = fcmService.pushNoti(message.getDeviceToken(), responseMap.get("result"));
 
         messageBoxService.insert(message.getUserId()+"",responseMap.get("result"));
 
