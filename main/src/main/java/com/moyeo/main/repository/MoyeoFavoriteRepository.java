@@ -19,8 +19,4 @@ public interface MoyeoFavoriteRepository extends JpaRepository<MoyeoFavorite, Mo
 	// 해당 포스트에 해당 유저가 좋아요 눌렀는지 여부 검색
 	MoyeoFavorite findFirstByMoyeoPostIdAndUserId(MoyeoPost moyeoPost, User user);
 
-	Optional<List<MoyeoFavorite>> findAllByUserId(User user);
-
-	@Query(nativeQuery = true, value = "select moyeo_post_id from moyeo_favorite where user_id = :userId")
-	Optional<List<Long>> findAllMoyeoPostIdByUserId(Long userId);
 }
