@@ -81,9 +81,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         // db에 저장된 국가인 경우 가져와서 사용, 새로운 국가인 경우 nation 저장 후 사용
         Nation nation = postService.findNationOrSaveNation(addPostReq.getAddress1(), flagFile);
 
-        // timeline 객체 가져오기
-        // MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
-
 
         LocalDateTime createTime = savedPost.getCreateTime();
 
