@@ -65,7 +65,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     @Override
     public Post insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
-    // public Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
+
         Post savedPost = createPost(addPostReq);
         List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
 
@@ -159,29 +159,25 @@ public class PostServiceImpl implements PostService {
         Files.delete(target);
 
         int check_time = (int) durationInSeconds;
-        //System.out.println("Duration: " + durationInSeconds + " seconds");
+
         if (check_time > 30) {
             throw new BaseException(ErrorMessage.OVER_VOICE_TIME);
         }
 
-        // voiceFile S3에 올리고 voiceURL 가져오기
 
         // voiceFile -> text 변환 : clova speech api 요청 보내기
         final ClovaSpeechClient clovaSpeechClient = new ClovaSpeechClient();
         ClovaSpeechClient.NestRequestEntity requestEntity = new ClovaSpeechClient.NestRequestEntity();
-        //        String result = clovaSpeechClient.url(voiceUrl, requestEntity);
 
-        // String result = clovaSpeechClient.upload(multiFileToFile.transTo(voiceFile), requestEntity);
         File convertedVoiceFile = multiFileToFile.transTo(voiceFile);
         String result;
         try {
             result = clovaSpeechClient.upload(convertedVoiceFile, requestEntity);
         } finally {
-            if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제하는 로직 추가
+            if (convertedVoiceFile.exists()) { // 로컬에 저장된 파일 삭제
                 convertedVoiceFile.delete();
             }
         }
-
 
         if (result.contains("\"result\":\"FAILED\"")) {
             throw new BaseException(ErrorMessage.NOT_STT_SAVE);
@@ -198,18 +194,15 @@ public class PostServiceImpl implements PostService {
         log.info("Clova info :{}", result);
         String voiceUrl = "";
 
+        // 녹음 파일 s3에 업로드
         voiceUrl = awsS3.upload(voiceFile, "Moyeo/Voice");
-        // Files.delete(target);//파일을 삭제하는 코드임
         log.info("voiceUrl info :{}", voiceUrl);
-        // voiceFile -> text 변환 : 응답받은 json 파일에서 text 추출
-        // voiceFile S3에 올리고 voiceURL 가져오기
 
         return VoiceTextResult.builder().voiceUrl(voiceUrl).durationInSeconds(durationInSeconds).text(text).build();
     }
 
     @Override
     public Post insertPostTest(Post savedPost, List<Photo> photoList, AddPostReq addPostReq) throws Exception {
-
 
         // timeline 객체 가져오기
         TimeLine timeline = timelineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));

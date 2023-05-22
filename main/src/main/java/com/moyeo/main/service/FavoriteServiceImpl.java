@@ -44,6 +44,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Transactional
     public boolean isFavorite (Long postId, Long userUid, Boolean isMoyeo) throws Exception {
         User user = userRepository.findById(userUid).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
+        // 일반 포스트인 경우
         if(!isMoyeo) {
             Post post = postRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
             FavoriteID favoriteID = new FavoriteID(post.getPostId(), user.getUserId());
@@ -64,6 +65,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             return false;
         }
 
+        // 모여 포스트인 경우
         MoyeoPost post = moyeoPostRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_POST));
         MoyeoFavoriteID favoriteID = new MoyeoFavoriteID(post.getMoyeoPostId(), user.getUserId());
         if (moyeoFavoriteRepository.findById(favoriteID).isEmpty()) {

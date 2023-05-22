@@ -23,10 +23,6 @@ public class Nation {
      *
      * */
 
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @Column(nullable = false)
-    // private Long nationId;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, columnDefinition = "TINYINT")

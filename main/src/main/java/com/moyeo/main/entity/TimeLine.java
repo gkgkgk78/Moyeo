@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert //@DynamicInsert사용
+@DynamicInsert
 @Builder
 
 public class TimeLine extends BaseTime {
@@ -46,8 +46,5 @@ public class TimeLine extends BaseTime {
     @ColumnDefault("0")
     private Long lastPost;
 
-    public void updateTitle(String title) {
-        this.title = title;
-    }
 }
 

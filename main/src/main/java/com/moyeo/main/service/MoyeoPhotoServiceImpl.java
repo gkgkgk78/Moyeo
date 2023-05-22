@@ -33,6 +33,7 @@ public class MoyeoPhotoServiceImpl implements MoyeoPhotoService {
         log.info("createPhotoList Transaction complete");
         return photoList;
     }
+
     private MoyeoPhoto savePhoto(MultipartFile imageFile, MoyeoPost savedPost) throws Exception {
         // imageFile S3에 올리고 imageURL 가져오기
         String photoUrl = awsS3.upload(imageFile, "Moyeo/Post");

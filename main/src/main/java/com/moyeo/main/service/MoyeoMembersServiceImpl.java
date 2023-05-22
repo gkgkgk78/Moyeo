@@ -42,6 +42,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     private final UserRepository userRepository;
     private final FcmService fcmService;
 
+    // 동행 초대하기 + 푸시 알림 보내기
     @Override
     public InviteMoyeoMembersRes inviteMoyeoMembers(User inviter, Long moyeoTimelineId, List<MoyeoMembersReq> userIdList) throws BaseException {
 
@@ -77,13 +78,14 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
             throw new BaseException(ErrorMessage.NOT_EXIST_USER);
         }
 
-        log.info("동행 초대 끝...");
+        log.info("동행 초대 완료");
 
         return InviteMoyeoMembersRes.builder()
             .successInviteCount(successInviteCount)
             .totalInviteCount(totalInviteCount).build();
     }
 
+    // 동행 참여하기
     @Override
     @Transactional
     public RegistMoyeoRes registMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
@@ -98,13 +100,14 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         return joinMember(timeLine, moyeoTimeLine, user);
     }
 
+    // 동행 나가기
     @Override
     @Transactional
     public Boolean updateMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
         MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
 
         // moyeo_members에서 finish_time 기록
-        MoyeoMembers moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndMoyeoTimelineIdAndFinishTimeOrderByMoyeoMembersIdDesc(user, moyeoTimelineId, null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
+        MoyeoMembers moyeoMembers = moyeoMembersRepository.findFirstByUserIdAndMoyeoTimelineIdAndFinishTime(user, moyeoTimelineId, null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         moyeoMembers.setFinishTime(LocalDateTime.now());
         moyeoMembersRepository.save(moyeoMembers);
 
@@ -121,7 +124,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         moyeoTimeLineRepository.save(moyeoTimeLine);
 
 
-        log.info("동행 나가기 끝...");
+        log.info("동행 나가기 완료");
         return true;
     }
 

@@ -24,8 +24,8 @@ public class MoyeoTimelineController {
 	private final MoyeoTimeLineService moyeoTimeLineService;
 	@PostMapping
 	@Operation(summary = "동행 시작", description = "동행 여행 시작 -> 동행 타임라인 생성")
-	public ResponseEntity<?> registMoyeoTimeline() throws Exception { // 동행 시작
-		log.info("동행 타임라인 생성 시작...");
+	public ResponseEntity<?> registMoyeoTimeline() throws Exception {
+		log.info("동행 타임라인 생성 시작");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = null;
 		if (auth != null && auth.getPrincipal() != null)
