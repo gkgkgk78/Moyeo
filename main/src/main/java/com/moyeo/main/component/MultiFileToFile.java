@@ -1,4 +1,4 @@
-package com.moyeo.main.conponent;
+package com.moyeo.main.component;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

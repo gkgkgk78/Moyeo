@@ -1,6 +1,6 @@
 package com.moyeo.main.service;
 
-import com.moyeo.main.conponent.AwsS3;
+import com.moyeo.main.component.AwsS3;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.repository.PhotoRepository;

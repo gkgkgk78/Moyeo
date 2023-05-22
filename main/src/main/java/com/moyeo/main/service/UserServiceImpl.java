@@ -1,9 +1,7 @@
 package com.moyeo.main.service;
 
 import com.moyeo.main.config.security.JwtTokenProvider;
-import com.moyeo.main.conponent.AwsS3;
-import com.moyeo.main.dto.GetPostRes;
-import com.moyeo.main.dto.MoyeoPostStatusDto;
+import com.moyeo.main.component.AwsS3;
 import com.moyeo.main.dto.UserLoginReq;
 import com.moyeo.main.dto.TokenRes;
 import com.moyeo.main.dto.UserInfoRes;
