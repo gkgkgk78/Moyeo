@@ -28,17 +28,9 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
 
     Page<TimeLine> findAll(Pageable pageable);
 
-    //공개되지 않은 것들 중에, 완료가 된것만 찾아내야함
     Page<TimeLine> findAllByIsCompleteAndIsTimelinePublic(Boolean isComplete, Boolean public1, Pageable pageable);
-    // 2. No-Offset 방식
-    Optional<List<TimeLine>> findTop15ByIsCompleteAndIsTimelinePublicAndTimelineIdLessThanOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic, Long timeLineId);
-    Optional<List<TimeLine>> findTop16ByIsCompleteAndIsTimelinePublicAndTimelineIdLessThanOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic, Long timeLineId);
-    Optional<List<TimeLine>> findTop16ByIsCompleteAndIsTimelinePublicOrderByTimelineIdDesc(Boolean isComplete, Boolean isPublic);
-
     Page<TimeLine> findAllByUserIdOrderByCreateTimeDesc(User u, Pageable pageable);
-
     Page<TimeLine> findAllByUserIdAndIsTimelinePublicAndIsComplete(User u, Boolean isTimelinePublic, Boolean isComplete, Pageable pageable);
-
 
     @Modifying(clearAutomatically = true)
     @Transactional
@@ -54,6 +46,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
     @Query(value = "SELECT CASE WHEN is_complete = true THEN 1 ELSE 0 END FROM time_line WHERE user_id = :userId ORDER BY create_time DESC LIMIT 1", nativeQuery = true)
     int findLatestTimelineStatus(Long userId);
 
+    // 해당 모여 포스트를 가지고 있는 타임라인 가져오기
     @Query(value = "SELECT tl.*\n"
         + "FROM time_line tl\n"
         + "JOIN (\n"
@@ -64,6 +57,7 @@ public interface TimeLineRepository extends JpaRepository<TimeLine, Long> {
         + "WHERE mp.moyeo_post_id = :moyeoPostId AND tl.is_complete = true AND tl.is_timeline_public = true", nativeQuery = true)
     List<TimeLine> findAllByMoyeoPostId(Long moyeoPostId);
 
+    // 해당 모여 포스트를 가지고 있는 내 타임라인
     @Query(value = "SELECT tl.*\n"
         + "FROM time_line tl\n"
         + "JOIN (\n"

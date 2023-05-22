@@ -1,30 +1,19 @@
 package com.moyeo.main.controller;
 
 
-import com.moyeo.main.conponent.YeobotClient;
+import com.moyeo.main.component.YeobotClient;
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.ChatReq;
-import com.moyeo.main.dto.GetPostRes;
-import com.moyeo.main.dto.MainTimelinePhotoDtoRes;
 import com.moyeo.main.dto.PostInsertReq;
 import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.Photo;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
-import com.moyeo.main.exception.BaseException;
-import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.repository.PostRepository;
-import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.*;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -19,9 +19,5 @@ public interface MoyeoPublicRepository extends JpaRepository<MoyeoPublic, MoyeoP
 
 	List<MoyeoPublic> findByMoyeoPostId(MoyeoPost moyeoPostId);
 
-	@Query(nativeQuery = true, value = "SELECT SUM(is_deleted) > 0 AS isAnyDeleted, MIN(is_public) = 1 AS isAllPublic\n"
-		+ "FROM moyeo_public\n"
-		+ "WHERE moyeo_post_id = :moyeoPostId")
-	MoyeoPostStatusDto getMoyeoPostStatus(Long moyeoPostId);
 
 }

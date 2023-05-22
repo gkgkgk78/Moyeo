@@ -12,10 +12,12 @@ import com.moyeo.main.entity.User;
 
 @Repository
 public interface MoyeoMembersRepository extends JpaRepository<MoyeoMembers, Long> {
-	Optional<MoyeoMembers> findFirstByUserIdAndMoyeoTimelineIdAndFinishTimeOrderByMoyeoMembersIdDesc(User user, Long moyeoTimelineId, LocalDateTime finishTime);
-	// Optional<MoyeoMembers> findFirstByUserIdOrderByMoyeoMembersIdDesc(User user);
+	Optional<MoyeoMembers> findFirstByUserIdAndMoyeoTimelineIdAndFinishTime(User user, Long moyeoTimelineId, LocalDateTime finishTime);
+
+	// 현재 해당 모여 타임라인에 동행 중인 멤버들 (finishTime = null)
 	Optional<List<MoyeoMembers>> findAllByMoyeoTimelineIdAndFinishTime(Long moyeoTimelineId, LocalDateTime finishTime);
-	// 동행에 참여 중인지 여부. (userID와 finishTime이 null인 것을 찾았다면 동행 참여 중)
+
+	// 해당 유저가 동행 중인지 판단하기 위함. (finishTime이 null인 것을 찾았다면 해당 유저는 동행 중)
 	Optional<MoyeoMembers> findFirstByUserIdAndFinishTime(User user, LocalDateTime finishTime);
 
 }

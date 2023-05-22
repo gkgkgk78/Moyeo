@@ -35,7 +35,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     private final MoyeoMembersRepository moyeoMembersRepository;
     private final PostServiceImpl postService;
     private final MoyeoPhotoService moyeoPhotoService;
-
     private final UserRepository userRepository;
 
     private final AsyncTestService asyncTestService;
@@ -64,15 +63,17 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
             throw new BaseException(ErrorMessage.NOT_ALLOWED_MOYEO_POST_REGISTRATION);
         }
 
+        // 현재 해당 모여 타임라인에 동행 중인 멤버들
         List<MoyeoMembers> moyeoMembers = moyeoMembersRepository.findAllByMoyeoTimelineIdAndFinishTime(addPostReq.getTimelineId(), null).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MEMBERS));
 
-
+        // 빈 모여 포스트 생성
         MoyeoPost savedPost = createPost(addPostReq);
 
+        // photo 저장
         List<MoyeoPhoto> photoList = moyeoPhotoService.createPhotoList(imageFiles, savedPost);
 
 
-        //파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
+        // 파일 형식과 길이를 파악을 하여 post를 등록 시킬지 안시킬지 정하는 부분이다
         postService.checkVoiceFileValidity(voiceFile);
 
         // voiceFile 길이 추출, Clova로 text 변환, S3에 업로드
@@ -84,6 +85,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
 
         LocalDateTime createTime = savedPost.getCreateTime();
 
+        // moyeoMembers마다 해당 모여 포스트에 대한 moyeo public 생성
         for (MoyeoMembers moyeoMember : moyeoMembers) {
 
             //해당 부분은 moyeopost insert 시 관련하여
@@ -101,7 +103,7 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         }
 
 
-        // imageURL, voiceURL db에 저장하기
+        // 모여 포스트 저장하기
         log.info("Starting savePost transaction");
         savedPost.setMoyeoPhotoList(photoList);
         savedPost.setVoiceUrl(voiceResult.getVoiceUrl());
@@ -121,16 +123,17 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         return resavedPost;
     }
 
+    // 공개 여부 수정하기
     @Override
     @Transactional
     public void updateMoyeoPost(User user, Long moyeoPostId) throws Exception {
-        // 공개 여부 수정하기
         MoyeoPost moyeoPost = moyeoPostRepository.findById(moyeoPostId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_POST));
         MoyeoPublicID moyeoPublicID = new MoyeoPublicID(moyeoPostId, user.getUserId());
         MoyeoPublic moyeoPublic = moyeoPublicRepository.findById(moyeoPublicID).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_PUBLIC));
         moyeoPublic.updateIsPublic();
     }
 
+    // (update)삭제하기 (is_deleted = true)
     @Override
     @Transactional
     public void deleteMoyeoPost(User user, Long moyeoPostId) throws Exception {

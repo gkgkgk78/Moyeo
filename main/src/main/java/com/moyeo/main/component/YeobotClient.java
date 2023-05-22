@@ -1,9 +1,9 @@
-package com.moyeo.main.conponent;
+package com.moyeo.main.component;
 
 import com.google.gson.Gson;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.service.FcmService;
+
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;
