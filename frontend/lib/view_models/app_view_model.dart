@@ -372,11 +372,6 @@ class AppViewModel with ChangeNotifier {
     await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
-        if (payload.actionId == "deny") {
-          logger.d('거절');
-        } else {
-          logger.d('수락');
-        }
         // _moyeoTimelineId
         if (_pushBody.contains("동행")) {
           _fromPush = true;
