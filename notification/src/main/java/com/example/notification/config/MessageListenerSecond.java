@@ -40,7 +40,7 @@ public class MessageListenerSecond {
         log.info("From Batch to Autogpt start");
         log.info("message: 1로 들어옴");
         log.info("Message : {}", batchMessage);
-        batchAutogpt.insert(batchMessage);
+        batchAutogpt.insertSecond(batchMessage);
         log.info("From Batch to Autogpt end");
     }
 

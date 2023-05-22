@@ -19,8 +19,11 @@ import java.util.Map;
 public class BatchAutogptImpl implements BatchAutogpt{
     @Value("${flask-url}")
     private String autogpt;
+    @Value("${flask2-url}")
+    private String autogpt2;
     private final FcmService fcmService;
     private final MessageBoxService messageBoxService;
+    /* 추천 서버 1번 사용*/
     @Override
     public void insert(BatchMessage message) throws Exception {
         RestTemplate restTemplate = new RestTemplateBuilder()
@@ -44,5 +47,29 @@ public class BatchAutogptImpl implements BatchAutogpt{
 
         messageBoxService.insert(message.getUserId()+"",responseMap.get("result"));
 
+    }
+    /* 추천 서버 2번 사용*/
+    @Override
+    public void insertSecond(BatchMessage batchMessage) throws Exception {
+        RestTemplate restTemplate = new RestTemplateBuilder()
+                .errorHandler(new RestTemplateResponseErrorHandler())
+                .build();
+        String goal = "Search for a good restaurant near " + batchMessage.getAddress1() + " " + batchMessage.getAddress2() + " " + batchMessage.getAddress3()+" "+batchMessage.getAddress4() +".";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("Title",batchMessage.getTitle());
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String,Object> map = new HashMap<>();
+        map.put("data",goal);
+
+        HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
+        ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
+        Map<String, String> responseMap = mapper.readValue(response.getBody(), Map.class);
+        log.info("Autogpt result : {}",responseMap.get("result"));
+
+
+//        String result = fcmService.pushNoti(message.getDeviceToken(), responseMap.get("result"));
+
+        messageBoxService.insert(batchMessage.getUserId()+"",responseMap.get("result"));
     }
 }
