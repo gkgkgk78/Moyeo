@@ -58,7 +58,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
     @Override
     @Transactional
     public MoyeoPost insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
-    // public MoyeoPost insertPost(MoyeoPost savedPost, List<MoyeoPhoto> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception {
         // 모여타임라인에 소속된 멤버수(멤버즈카운트)가 1일 경우 post 작성이 불가능.
         MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
         if(moyeoTimeline.getMembersCount() != null && moyeoTimeline.getMembersCount() == 1) {
@@ -85,11 +84,8 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         // timeline 객체 가져오기
         // MoyeoTimeLine moyeoTimeline = moyeoTimeLineRepository.findById(addPostReq.getTimelineId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_TIMELINE));
 
-        // TODO 확인
-        LocalDateTime createTime = savedPost.getCreateTime();
-        // moyeo_public 에 등록
-        // List<MoyeoPublic> moyeoPublicList = new ArrayList<>();
 
+        LocalDateTime createTime = savedPost.getCreateTime();
 
         for (MoyeoMembers moyeoMember : moyeoMembers) {
 
@@ -105,8 +101,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
             moyeoPublic.setMoyeoPostId(savedPost);
             moyeoPublic.setCreateTime(createTime);
             moyeoPublicRepository.save(moyeoPublic);
-
-            // moyeoPublicList.add(moyeoPublic);
         }
 
 
@@ -123,7 +117,6 @@ public class MoyeoPostServiceImpl implements MoyeoPostService {
         savedPost.setMoyeoTimelineId(moyeoTimeline);
         savedPost.setNationId(nation);
         savedPost.setFavoriteCount(0L);
-        // savedPost.setMoyeoPublicList(moyeoPublicList);
         MoyeoPost resavedPost = moyeoPostRepository.save(savedPost);
         log.info("savePost Transaction complete");
 

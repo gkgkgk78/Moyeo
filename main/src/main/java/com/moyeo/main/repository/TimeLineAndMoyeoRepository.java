@@ -12,10 +12,4 @@ import com.moyeo.main.entity.TimeLineAndMoyeo;
 
 @Repository
 public interface TimeLineAndMoyeoRepository extends JpaRepository<TimeLineAndMoyeo, Long> {
-	List<TimeLineAndMoyeo> findAllByTimelineId(TimeLine timeLine);
-
-	@Query(nativeQuery = true, value = "SELECT DISTINCT moyeo_timeline_id\n"
-		+ "FROM time_line_and_moyeo\n"
-		+ "WHERE timeline_id = :timelineId")
-	Optional<List<Long>> findAllMoyeoTimelineIdByTimlineId(Long timelineId);
 }
