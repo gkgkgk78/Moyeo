@@ -151,12 +151,6 @@ class TimelineDetailViewModel extends ChangeNotifier {
     AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
     UserInfo newUserInfo = await UserRepository().getUserInfo(context);
     appVM.updateUserInfo(newUserInfo);
-    // UserInfo userInfo = await UserRepository().getUserInfo(context);
-    // userInfo.moyeoTimelineId = -1;
-    // // userInfo.nowMoyeo = false;
-    //
-    // AppViewModel appVM = Provider.of<AppViewModel>(context, listen: false);
-    // appVM.updateUserInfo(userInfo);
 
     notifyListeners();
  }

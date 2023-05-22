@@ -1,19 +1,17 @@
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+
 import 'package:moyeo/firebase_options.dart';
-import 'package:moyeo/services/firebase_repository.dart';
 import 'package:moyeo/utils/white.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:moyeo/view_models/camera_view_model.dart';
 import 'package:moyeo/views/login_page.dart';
-import 'package:provider/provider.dart';
 
 
 import 'models/UserInfo.dart';

@@ -1,5 +1,4 @@
 
-import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:moyeo/views/timeline_list_item_main.dart';
@@ -21,19 +20,6 @@ class TimelineListPageMain extends StatelessWidget {
             onRefresh: () async {
               pagingController.refresh();
             },
-            // UI 바꾸기
-            // child:Swiper(
-            //   itemCount: pagingController.itemList?.length ?? 0,
-            //   layout: SwiperLayout.STACK,
-            //   itemWidth: MediaQuery.of(context).size.width*(0.8),
-            //   itemBuilder: (BuildContext context, int index) {
-            //   final timeline = pagingController.itemList![index];
-            //     return TimelineListItemMain(
-            //       key: Key(timeline.timelineId.toString()),
-            //       timeline: timeline,
-            //     );
-            // },
-            // ),
             child: PagedListView<int, Timeline>(
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),

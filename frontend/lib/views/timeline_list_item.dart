@@ -28,10 +28,6 @@ class TimelineListItem extends StatelessWidget {
               context,
               '/timeline/detail/${timeline.timelineId}',
             );
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (BuildContext context) => TimelineDetailPage(key:Key("1")) )
-            // );
           },
           child: Card(
             margin: const EdgeInsets.only(left: 12, right:12),
@@ -115,12 +111,6 @@ class TimelineListItem extends StatelessWidget {
                                             const SizedBox(height: 15),
                                             const SizedBox(
                                               width: 90,
-                                              // child: Text(
-                                              //     "MOYEO",
-                                              //   style: TextStyle(
-                                              //       color: Colors.white,
-                                              //       fontWeight: FontWeight.bold),
-                                              // ),
                                             ),
                                             Expanded(
                                                 child: Container(
@@ -227,41 +217,6 @@ class TimelineListItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Container(
-                      //     height: cardHeight * 0.2,
-                      //     decoration: BoxDecoration(
-                      //       // color: Theme.of(context).primaryColor,
-                      //       color: Colors.transparent,
-                      //       borderRadius: const BorderRadius.only(
-                      //         bottomLeft: Radius.circular(20),
-                      //       ),
-                      //     ),
-                      //     child: Row(
-                      //       mainAxisSize: MainAxisSize.max,
-                      //       mainAxisAlignment: MainAxisAlignment.start,
-                      //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //       children: [
-                      //         const SizedBox(width: 30),
-                      //         const Text(
-                      //           "Moyeo",
-                      //           style: TextStyle(color: Colors.white),
-                      //         ),
-                      //         const SizedBox(width: 10),
-                      //         const Icon(
-                      //           Icons.flight_takeoff,
-                      //           color: Colors.white,
-                      //         ),
-                      //         Expanded(
-                      //             child: Text(
-                      //               '${timeline.startPlace} ~ ${timeline.finishPlace}',
-                      //               maxLines: 1,
-                      //               overflow: TextOverflow.ellipsis,
-                      //               textAlign: TextAlign.right,
-                      //               style: const TextStyle(color: Colors.white),
-                      //             )),
-                      //         const SizedBox(width: 30)
-                      //       ],
-                      //     )),
                     ],
                   ),
                 )

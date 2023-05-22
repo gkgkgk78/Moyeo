@@ -118,18 +118,6 @@ class CameraFloatingActionButton extends StatelessWidget {
                         );
                       },
                     ).then((_) => appViewModel.chageModalVisible());
-                    // if (appViewModel.userInfo.timeLineId == -1) {
-                    //   // 여행 중이 아닐 때 여행 시작
-                    //   appViewModel.startTravel(context);
-                    // } else {
-                    //   // 여행 중일 때 사진 촬영 화면으로 이동
-                    //   Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => CameraView(),
-                    //     ),
-                    //   );
-                    // }
                   },
             ),
             onPressed: () {},

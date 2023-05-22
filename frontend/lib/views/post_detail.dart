@@ -21,7 +21,6 @@ class PostDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSwitched = true;
     return Consumer<PostViewModel>(builder: (context, viewModel, _) {
       return Row(
         children: [
