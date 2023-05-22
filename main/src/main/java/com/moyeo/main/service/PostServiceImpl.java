@@ -2,9 +2,9 @@ package com.moyeo.main.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyeo.main.conponent.AwsS3;
-import com.moyeo.main.conponent.ClovaSpeechClient;
-import com.moyeo.main.conponent.MultiFileToFile;
+import com.moyeo.main.component.AwsS3;
+import com.moyeo.main.component.ClovaSpeechClient;
+import com.moyeo.main.component.MultiFileToFile;
 import com.moyeo.main.dto.*;
 import com.moyeo.main.entity.*;
 import com.moyeo.main.exception.BaseException;

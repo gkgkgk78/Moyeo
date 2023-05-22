@@ -2,12 +2,11 @@ package com.moyeo.main.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.moyeo.main.conponent.AwsS3;
+import com.moyeo.main.component.AwsS3;
 import com.moyeo.main.entity.MoyeoPhoto;
 import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.repository.MoyeoPhotoRepository;
