@@ -26,6 +26,7 @@ public class MessageListener1 {
     @RabbitHandler
     public void receiveMessage(PostInsertReq post) {
         log.info("비동기 post insert 후 autogpt작업 시작");
+        log.info("message: 2로 들어옴");
         postInsertAutogpt.insert(post);
         //log.info(post.toString());
 
