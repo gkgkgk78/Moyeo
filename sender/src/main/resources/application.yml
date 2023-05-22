@@ -1,0 +1,11 @@
+server:
+  port: 8086
+spring:
+  rabbitmq:
+    host: k8a107.p.ssafy.io
+    port: 8081
+    username: moyeo
+    password: moyeorabbit1234
+batch-exchange: sample.exchange
+batch-queue: sample.queue
+batch-route-key: key1
