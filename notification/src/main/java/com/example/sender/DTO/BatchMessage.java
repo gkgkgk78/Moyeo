@@ -1,13 +1,15 @@
 package com.example.sender.DTO;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
+@Getter
+@Setter
+@Builder
 public class BatchMessage {
     private String Title;
     private Long userId;
