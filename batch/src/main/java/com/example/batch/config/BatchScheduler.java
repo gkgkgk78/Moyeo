@@ -31,8 +31,6 @@ public class BatchScheduler {
                 .addString("start", UUID.randomUUID()+"")
                 .addString("end", UUID.randomUUID()+"")
                 .toJobParameters();
-        log.info("jobparameter :{}",params);
-        log.info("Job:{}", batchService.job());
         jobLauncher.run(batchService.job(),
                 params);
     }
