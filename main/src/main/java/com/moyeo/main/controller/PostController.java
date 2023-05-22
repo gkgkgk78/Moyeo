@@ -52,10 +52,6 @@ public class PostController {
                                      @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
         log.info("포스트 등록 시작...");
         if (isMoyeo == false) {
-            // Post savedPost = postService.createPost(addPostReq);
-            //
-            // List<Photo> photoList = photoService.createPhotoList(imageFiles, savedPost);
-            // postService.insertPost(savedPost, photoList, flagFile, voiceFile, addPostReq);
             postService.insertPost(imageFiles, flagFile, voiceFile, addPostReq);
 
             // addPost 요청에 대한 응답으로 timelineId 반환
@@ -64,9 +60,6 @@ public class PostController {
             log.info("포스트 등록 종료...");
             return ResponseEntity.ok(res);
         } else {
-            // MoyeoPost savedPost = moyeoPostService.createPost(addPostReq);
-            // List<MoyeoPhoto> photoList = moyeoPhotoService.createPhotoList(imageFiles, savedPost);
-            // moyeoPostService.insertPost(savedPost, photoList, flagFile, voiceFile, addPostReq);
             moyeoPostService.insertPost(imageFiles, flagFile, voiceFile, addPostReq);
 
             // addPost 요청에 대한 응답으로 timelineId 반환
