@@ -51,9 +51,6 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
         int successInviteCount = 0;
 
         for(MoyeoMembersReq moyeoMembersReq: userIdList) {
-
-            // User invitee = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-            // User invitee = userRepository.getByUserId(moyeoMembersReq.getUserId());
             Optional<User> inviteeUser = userRepository.findById(moyeoMembersReq.getUserId());
             if(inviteeUser.isEmpty()) {
                 log.info("userId {}는 존재하지 않는 유저입니다.", moyeoMembersReq.getUserId());
@@ -120,9 +117,8 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
             // moyeo_time_line에서 count - 1
             moyeoTimeLine.updateMembersCount(-1);
         }
-        // moyeoTimeLine.setTitle("여행중"); // (X)
-        moyeoTimeLineRepository.save(moyeoTimeLine);
 
+        moyeoTimeLineRepository.save(moyeoTimeLine);
 
 
         log.info("동행 나가기 끝...");
@@ -131,9 +127,8 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
 
     public TimeLine checkJoinable(User user) {
         // 여행 중이어야 한다.
-        log.info("여행 중인지 체크 중...");
         TimeLine timeLine = timeLineRepository.findFirstByUserIdAndIsComplete(user, false).orElseThrow(() -> new BaseException(ErrorMessage.NOT_TRAVELING));
-        log.info("이미 동행 중인지 체크 중...");
+
         // 다른 동행에 참여 중이면 안된다.
         if(moyeoMembersRepository.findFirstByUserIdAndFinishTime(user, null).isPresent()) {
             throw new BaseException(ErrorMessage.ALREADY_MOYEO);
@@ -143,7 +138,7 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     }
 
     public RegistMoyeoRes joinMember(TimeLine timeLine, MoyeoTimeLine moyeoTimeLine, User user) {
-        log.info("[registMoyeoMembers] 1. 타임라인_and_모여_타임라인 등록");
+        // log.info("[registMoyeoMembers] 1. 타임라인_and_모여_타임라인 등록");
         timeLineAndMoyeoRepository.save(TimeLineAndMoyeo.builder()
             .timelineId(timeLine)
             .moyeoTimelineId(moyeoTimeLine)
@@ -151,20 +146,17 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
 
         Long moyeoTimelineId = moyeoTimeLine.getMoyeoTimelineId();
 
-        log.info("[registMoyeoMembers] 2-1. 모여_멤버s 등록");
+        // log.info("[registMoyeoMembers] 2-1. 모여_멤버s 등록");
         moyeoMembersRepository.save(MoyeoMembers.builder()
             .userId(user)
             .moyeoTimelineId(moyeoTimelineId)
             .build());
 
-        log.info("[registMoyeoMembers] 2-2. 모여_타임라인 멤버s_카운트 + 1");
+        // log.info("[registMoyeoMembers] 2-2. 모여_타임라인 멤버s_카운트 + 1");
         moyeoTimeLine.updateMembersCount(1);
-        // moyeoTimeLine.setTitle("동행중"); // (X) // 현재 여행중인 타임라인 제목 "동행중"으로 수정
         moyeoTimeLineRepository.save(moyeoTimeLine);
 
-        // timeLine.updateTitle("동행중"); // 현재 여행중인 타임라인 제목 "동행중"으로 수정
-
-        log.info("동행 타임라인_생성/참여 끝...");
+        // log.info("동행 타임라인_생성/참여 끝...");
         return RegistMoyeoRes.builder()
             .timelineId(timeLine.getTimelineId())
             .moyeoTimelineId(moyeoTimelineId)
