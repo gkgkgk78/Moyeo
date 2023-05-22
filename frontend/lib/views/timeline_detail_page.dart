@@ -427,6 +427,7 @@ class TimelineDetailPage extends StatelessWidget {
                                                   .postList
                                                   .length -
                                               1,
+                                          postId: viewModel.postId,
                                         );
                                       },
                                     ),

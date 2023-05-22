@@ -107,75 +107,6 @@ class PostDetail extends StatelessWidget {
                             viewModel.post.favoriteCount.toString()
                         ),
                         Expanded(child: Container()),
-                        // 삭제 버튼 구현 할 자리
-                        // appViewModel.userInfo.moyeoTimelineId != -1
-                        // ? IconButton(
-                        //   onPressed: () {
-                        //     showDialog(
-                        //       barrierDismissible: false,
-                        //       context: context,
-                        //       builder: (ctx) => AlertDialog(
-                        //         title: const Text('포스트 삭제'),
-                        //         content: const Text('포스트를 삭제하시겠습니까?'),
-                        //         actions: [
-                        //           TextButton(
-                        //             onPressed: () {
-                        //               // 모여 포스트, 일반포스트 삭제
-                        //               viewModel.post.isMoyeo
-                        //               ? viewModel.deletePost(context, viewModel.post.postId)
-                        //               : viewModel.deleteMoyeoPost(context, viewModel.post.postId);
-                        //             },
-                        //             child: const Text(
-                        //               '삭제',
-                        //               style: TextStyle(color: Colors.red),
-                        //             ),
-                        //           ),
-                        //           TextButton(
-                        //             onPressed: () {
-                        //               Navigator.pop(ctx);
-                        //             },
-                        //             child: const Text('취소'),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
-                        //   },
-                        //   icon: const Icon(
-                        //     Icons.delete,
-                        //     color: Colors.red,
-                        //   ),
-                        // )
-                        // :Container(),
-                        // 포스트 공유 버튼 들어가는 자리
-                        // Container(
-                        //   child: Row(
-                        //     children: [
-                        //       Padding(
-                        //         padding: const EdgeInsets.only(right: 2),
-                        //         // 모여 컬럼
-                        //         child: Text(isSwitched? '공개' : ' 비공개'),
-                        //       ),
-                        //       FlutterSwitch(
-                        //           width: 50,
-                        //           height: 30,
-                        //           toggleSize: 30,
-                        //           activeColor: Colors.orangeAccent.withOpacity(0.7),
-                        //           activeIcon: Icon(Icons.share),
-                        //           inactiveColor: Colors.grey.withOpacity(0.7),
-                        //           inactiveIcon: Icon(Icons.cancel_sharp),
-                        //           value: isSwitched,
-                        //           onToggle: (_){
-                        //             viewModel.changePostPublic(
-                        //                 context,
-                        //                 viewModel.post.postId
-                        //             );
-                        //             isSwitched
-                        //             ? isSwitched = false
-                        //             : isSwitched = true;
-                        //           }),
-                        //     ],
-                        //   ),
-                        // ),
                       ],
                     ),
                   );
@@ -220,55 +151,6 @@ class PostDetail extends StatelessWidget {
                       avatarOverlap: 0.5,
                     )
                 ),
-                ///////////////////////////////////////////////////////////////////////////////////////
-                // viewModel.post.isMoyeo == false
-                //     ? Container(
-                //       padding: const EdgeInsets.all(8),
-                //     )
-                // :InkWell(
-                //   onTap: (){
-                //     // 모여 나가기 기능 구현 할 곳
-                //   //   {
-                //   //     "userId": 0,
-                //   //   "moyeoTimelineId": 0  Post에서 모여 타임라인 id 어떻게 가져오는지 물어보기
-                //   // }
-                //   },
-                //   child: Container(
-                //       width: 115,
-                //       margin: const EdgeInsets.only(top:5, bottom:5, left: 20, right: 20) ,
-                //       padding: const EdgeInsets.only(left: 10, right: 10, top:5, bottom: 5),
-                //       decoration: BoxDecoration(
-                //           boxShadow: [
-                //             BoxShadow(
-                //               color: Colors.grey.withOpacity(0.5),
-                //               blurRadius: 1.0,
-                //               spreadRadius: 1.0,
-                //               offset: const Offset(2,2),
-                //             )
-                //           ],
-                //           borderRadius: BorderRadius.circular(10),
-                //           gradient: LinearGradient(
-                //               colors: <Color>[
-                //                 Colors.redAccent,
-                //                 Colors.orangeAccent,
-                //               ]
-                //           )
-                //       ),
-                //       child: Row(
-                //           children:[
-                //             Icon(
-                //               Icons.group_remove,
-                //               color: Colors.white,
-                //             ),
-                //             Text(
-                //               "  모여 나가기",
-                //               style: TextStyle(color: Colors.white),
-                //             ),
-                //           ]
-                //       )
-                //   ),
-                // ),
-                //////////////////////////////////////////////////////////////////////////////////
                 Text(
                     viewModel.post.text,
                   textAlign: TextAlign.start,

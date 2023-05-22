@@ -180,15 +180,28 @@ class AppViewModel with ChangeNotifier {
   onHomeFeedRoute(context, settings) {
     if (settings.name!.startsWith('/timeline/detail')) {
       final timelineId = int.parse(settings.name.split('/')[3]);
-      return PageRouteBuilder(
-        pageBuilder: (context, __, ___) {
-          return ChangeNotifierProvider<TimelineDetailViewModel>(
-            create: (_) => TimelineDetailViewModel(context, timelineId),
-            child: const TimelineDetailPage(),
-          );
-        },
-        transitionDuration: Duration.zero,
-      );
+      if (settings.name.split('/').length == 4 ) {
+        return PageRouteBuilder(
+          pageBuilder: (context, __, ___) {
+            return ChangeNotifierProvider<TimelineDetailViewModel>(
+              create: (_) => TimelineDetailViewModel(context, timelineId, -1),
+              child: const TimelineDetailPage(),
+            );
+          },
+          transitionDuration: Duration.zero,
+        );
+      } else if (settings.name.split('/').length >= 5) {
+        final postId = int.parse(settings.name.split('/')[4]);
+        return PageRouteBuilder(
+          pageBuilder: (context, __, ___) {
+            return ChangeNotifierProvider<TimelineDetailViewModel>(
+              create: (_) => TimelineDetailViewModel(context, timelineId, postId),
+              child: const TimelineDetailPage(),
+            );
+          },
+          transitionDuration: Duration.zero,
+        );
+      }
     } else {
       return PageRouteBuilder(
         pageBuilder: (_, __, ___) => const HomeFeedPage(),
@@ -201,10 +214,19 @@ class AppViewModel with ChangeNotifier {
     Widget page;
     if (settings.name!.startsWith('/timeline/detail')) {
       final timelineId = int.parse(settings.name.split('/')[3]);
-      page = ChangeNotifierProvider(
-        create: (_) => TimelineDetailViewModel(context, timelineId),
-        child: const TimelineDetailPage(),
-      );
+      if (settings.name.split('/').length == 4 ) {
+        page = ChangeNotifierProvider(
+          create: (_) => TimelineDetailViewModel(context, timelineId, -1),
+          child: const TimelineDetailPage(),
+        );
+      } else {
+        int postId = int.parse(settings.name.split('/')[4]);
+        page = ChangeNotifierProvider(
+          create: (_) => TimelineDetailViewModel(context, timelineId, postId),
+          child: const TimelineDetailPage(),
+        );
+      }
+
     } else if (settings.name == '/modify/profile') {
       page = const ModifyProfile();
     } else if (settings.name == '/chatbot') {
