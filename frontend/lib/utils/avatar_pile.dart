@@ -37,10 +37,6 @@ class AvatarPile extends StatelessWidget {
               margin: EdgeInsets.only(left: 1),
               child: avatars[i],
             ),
-            // Positioned(
-            //   right: i * avatarOverlap * avatarSize,
-            //   child: avatars[i],
-            // ),
         ],
       ),
     );

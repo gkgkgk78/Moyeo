@@ -113,9 +113,6 @@ class MoyeoAddUser extends StatelessWidget{
                                             this.members
                                         );
                                         Navigator.pop(context);
-                                        // Navigator.pushReplacementNamed(
-                                        //     context,
-                                        //     'api/auth/timeline/${appViewModel.userInfo.timeLineId}');
                                       },
                                       child: Container(
                                         width: MyWidth*(0.4),
