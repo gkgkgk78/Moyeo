@@ -16,20 +16,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     // 지역명으로 post 조회(검색 기능)
     Optional<List<Post>> findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(String location1, String location2, String location3, String location4);
-
-//    List<Post> findByLocation(String location);
-
-    //Optional<List<TimeLine>> findAllByUserIdOrderByCreateTimeDesc(User u);
-
-    List<Post> findByTimelineIdOrderByCreateTimeAsc(TimeLine timeline) ;
-
-    Post findTopByTimelineIdOrderByCreateTimeAsc(TimeLine timeline) ;
-
-    List<Post> findAllByTimelineIdOrderByCreateTimeAsc(TimeLine timeLine) ;
-
-    Post findTopByTimelineIdOrderByCreateTimeDesc(TimeLine timeline) ;
     Post findTopByTimelineIdOrderByPostIdDesc(TimeLine timeline) ;
-    // Post findTopByTimelineIdAndPostIdLessThanEqualOrderByPostIdDesc(TimeLine timeline, Long postId);
     Post findTopByTimelineId(TimeLine timeline);
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
@@ -42,9 +29,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p.createTime FROM Post p WHERE p.postId = :postId")
     LocalDateTime findCreateTimeByPostId(Long postId);
-
-    @Query(nativeQuery = true, value = "select * from post where post_id in :postIdList")
-    List<Post> findAllPostIn(List<Long> postIdList);
 
     @Query(nativeQuery = true, value = "SELECT p.*\n"
         + "FROM post p\n"

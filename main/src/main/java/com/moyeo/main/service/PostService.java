@@ -14,8 +14,6 @@ import java.util.List;
 public interface PostService {
     // 포스트 등록
     Post createPost(AddPostReq addPostReq) throws Exception;
-    Post makePost() throws Exception;
-    // Post insertPost(Post savedPost, List<Photo> photoList, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception;
     Post insertPost(List<MultipartFile> imageFiles, MultipartFile flagFile, MultipartFile voiceFile, AddPostReq addPostReq) throws Exception;
 
     // 포스트 삭제
@@ -27,5 +25,4 @@ public interface PostService {
     Post insertPostTest(Post savedPost, List<Photo> photoList,AddPostReq addPostReq) throws Exception;
     List<GetPostRes> findMyPost(String location, Long userUid) throws Exception;
 
-    List<BasePostDto> addPostsWithMoyeoPosts(List<Post> posts, List<MoyeoPost> moyeoPosts) throws Exception;
 }
