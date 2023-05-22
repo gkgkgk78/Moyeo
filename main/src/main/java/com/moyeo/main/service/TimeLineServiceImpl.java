@@ -366,7 +366,8 @@ public class TimeLineServiceImpl implements TimeLineService {
     public List<MainTimelinePhotoDtoRes> getTimelineList(Long userId, Pageable pageable) {
         // 다른 유저의 타임라인 목록 조회 -> 최신순
         User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-        Page<TimeLine> timeline = timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublic(user, true, pageable);
+        // Page<TimeLine> timeline = timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublic(user, true, pageable);
+        Page<TimeLine> timeline = timeline = timeLineRepository.findAllByUserIdAndIsTimelinePublicAndIsComplete(user, true, true, pageable);
 
         //이제 얻어낸 타임라인 리스트에 해당 되는 포스트 정보를 불러오도록 한다.
         List<MainTimelinePhotoDtoRes> list = new ArrayList<>();//넘겨줄 timeline dto생성

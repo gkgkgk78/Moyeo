@@ -38,7 +38,6 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final MoyeoFavoriteRepository moyeoFavoriteRepository;
     private final MoyeoPublicRepository moyeoPublicRepository;
-    private final PostService postService;
 
     // 해당 유저가 포스트에 좋아요 누른 여부 확인하기 (좋아요 기능)
     @Override
@@ -59,7 +58,6 @@ public class FavoriteServiceImpl implements FavoriteService {
                 return true;
             }
             // 좋아요 누른 적 있는 경우 - 해당 Favorite 삭제
-            // favoriteRepository.deleteById(favorite.getFavoriteId());
             favoriteRepository.deleteById(favoriteID);
             post.updateFavoriteCount(-1);
 
@@ -79,7 +77,6 @@ public class FavoriteServiceImpl implements FavoriteService {
             return true;
         }
         // 좋아요 누른 적 있는 경우 - 해당 Favorite 삭제
-        // favoriteRepository.deleteById(favorite.getFavoriteId());
         moyeoFavoriteRepository.deleteById(favoriteID);
         post.updateFavoriteCount(-1);
 
@@ -98,8 +95,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             MoyeoPost post = moyeoPostRepository.findById(postId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_POST));
             TotalFavoriteNum = post.getFavoriteCount();
         }
-        // Long TotalFavoriteNum = favoriteRepository.countByPostId(post);
-        // Long TotalFavoriteNum = post.getFavoriteCount();
+
         return TotalFavoriteNum;
     }
 
