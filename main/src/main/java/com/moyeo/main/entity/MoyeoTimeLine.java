@@ -22,7 +22,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@DynamicInsert //@DynamicInsert사용
+@DynamicInsert
 @Builder
 
 public class MoyeoTimeLine extends BaseTime {

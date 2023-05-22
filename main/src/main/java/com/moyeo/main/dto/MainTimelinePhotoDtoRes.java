@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 public class MainTimelinePhotoDtoRes {
 
-    //10개 정도를 넘겨 준다고 생각 하면됨
-
     //타임라인 id
     private Long timelineId;
 

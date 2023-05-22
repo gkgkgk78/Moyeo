@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moyeo.main.dto.MoyeoMembersReq;
 import com.moyeo.main.entity.User;
-import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.MoyeoMembersService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +32,7 @@ public class MoyeoMembersController {
 	@PostMapping("/{moyeoTimelineId}")
 	@Operation(summary = "동행 초대, 푸시 알림 보내기 & 메시지 함에 저장")
 	public ResponseEntity<?> inviteMoyeoMembers(@PathVariable Long moyeoTimelineId, @RequestBody List<MoyeoMembersReq> userIdList) throws Exception {
-		log.info("동행 초대 시작...");
+		log.info("동행 초대 시작");
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = null;
@@ -47,7 +46,7 @@ public class MoyeoMembersController {
 	@PostMapping
 	@Operation(summary = "동행 참여")
 	public ResponseEntity<?> registMoyeoMembers(@RequestBody MoyeoMembersReq moyeoTimelineId) throws Exception {
-		log.info("동행 참여 시작...");
+		log.info("동행 참여 시작");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = null;
 		if (auth != null && auth.getPrincipal() != null)
@@ -59,7 +58,7 @@ public class MoyeoMembersController {
 	@PutMapping
 	@Operation(summary = "동행 나가기")
 	public ResponseEntity<?> updateMoyeoMembers(@RequestBody MoyeoMembersReq moyeoTimelineId) throws Exception {
-		log.info("동행 나가기 시작...");
+		log.info("동행 나가기 시작");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = null;
 		if (auth != null && auth.getPrincipal() != null)
