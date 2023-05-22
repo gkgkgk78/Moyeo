@@ -72,6 +72,14 @@ class AppViewModel with ChangeNotifier {
 
     initializeFirebase();
     _initLocalNotification(_context);
+    getMoyeoMembers(_context, _userInfo.timeLineId);
+  }
+
+  Future<void> getMoyeoMembers(BuildContext context, int moyeoTimelineId) async {
+    if (_moyeoTimelineId != -1) {
+      _members = await MoyeoRepository().getMoyeoMembers(context, moyeoTimelineId);
+    }
+    notifyListeners();
   }
 
   String _fcmToken = '';
@@ -284,6 +292,10 @@ class AppViewModel with ChangeNotifier {
               priority: Priority.high,
               styleInformation: BigTextStyleInformation(''),
               category: AndroidNotificationCategory.social,
+              actions: [
+                AndroidNotificationAction('accept', '좋아!'),
+                AndroidNotificationAction('deny', '싫거든?')
+              ]
             ),
             iOS: DarwinNotificationDetails(
               presentAlert: true,
@@ -291,10 +303,6 @@ class AppViewModel with ChangeNotifier {
               presentSound: true,
             ),
           );
-          logger.d(rm.notification?.title);
-          logger.d(rm.notification?.body);
-          _pushTitle = (rm.notification?.title)!;
-          _pushBody = (rm.notification?.body)!;
           details = buttonDetails;
           String? moyeoTimeLineId = rm.data["moyeoTimelineId"];
           _moyeoTimelineId = int.parse(moyeoTimeLineId!);
@@ -342,6 +350,11 @@ class AppViewModel with ChangeNotifier {
     await localNotification.initialize(
       initSettings,
       onDidReceiveNotificationResponse: (NotificationResponse payload) async {
+        if (payload.actionId == "deny") {
+          logger.d('거절');
+        } else {
+          logger.d('수락');
+        }
         // _moyeoTimelineId
         if (_pushBody.contains("동행")) {
           _fromPush = true;
@@ -376,17 +389,8 @@ class AppViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Map<String, dynamic>>> fetchData(BuildContext context, int timeLineId) async {
-    try{
-      final dio = await authDio(context);
-      Response response = await dio.get("api/auth/timeline/${timeLineId}");
-      Map<String, dynamic> json = response.data;
-      TimelineInfo timelineInfoMembers = TimelineInfo.fromJson(json);
-      return timelineInfoMembers.members ?? [];
-    } catch(e){
-      throw Exception('Error: $e');
-    }
-  }
+  late List<Map<String, dynamic>> _members;
+  List<Map<String, dynamic>> get members => _members;
 
   void changeFromPush() {
     if (_fromPush == true) {

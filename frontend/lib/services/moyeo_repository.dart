@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:moyeo/models/MoyeoTimeline.dart';
 import 'package:moyeo/models/UserInfo.dart';
 
+import '../models/TimelineInfo.dart';
 import '../utils/auth_dio.dart';
 var logger = Logger();
 class MoyeoRepository{
@@ -52,6 +53,18 @@ class MoyeoRepository{
       return response.data;
     } catch(e) {
       throw Exception('StartMoyeo Error $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getMoyeoMembers(BuildContext context, int timeLineId) async {
+    try{
+      final dio = await authDio(context);
+      Response response = await dio.get("api/auth/timeline/${timeLineId}");
+      Map<String, dynamic> json = response.data;
+      TimelineInfo timelineInfoMembers = TimelineInfo.fromJson(json);
+      return timelineInfoMembers.members ?? [];
+    } catch(e){
+      throw Exception('Error: $e');
     }
   }
 
