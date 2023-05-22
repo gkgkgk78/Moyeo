@@ -16,11 +16,6 @@ import com.moyeo.main.id.FavoriteID;
 @Builder
 @IdClass(FavoriteID.class)
 public class Favorite {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // @Column(nullable = false)
-    // private Long favoriteId;
-
     @Id
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -32,6 +27,5 @@ public class Favorite {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     private User userId;
-
 
 }

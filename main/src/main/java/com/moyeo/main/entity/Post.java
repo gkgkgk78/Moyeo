@@ -22,7 +22,6 @@ import java.util.List;
 public class Post extends BaseTime{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	// @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "post_id", nullable = false)
 	private Long postId;
 
@@ -46,8 +45,6 @@ public class Post extends BaseTime{
 	@Column(length = 120)
 	private String voiceUrl;
 
-	// private String nationUrl;
-
 	// Post 테이블과 Nation 테이블 FK
 	@ManyToOne
 	@JoinColumn(name="nation_id")
@@ -69,7 +66,6 @@ public class Post extends BaseTime{
 	@ColumnDefault("0")
 	private Long favoriteCount;
 
-	// private = null;
 
 	public void updateFavoriteCount(Integer amount) {
 		this.favoriteCount += amount;

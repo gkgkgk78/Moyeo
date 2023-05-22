@@ -86,16 +86,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-//    @Builder
-//    public User(Long userUid, String nickname, String clientId) {
-//        this.userUid = userUid;
-//        this.nickname = nickname;
-//        this.clientId = clientId;
-//    }
-//    void TestUser(Long userUid, String nickname, String clientId){
-//        this.userUid = userUid;
-//        this.nickname = nickname;
-//        this.clientId = clientId;
-//    }
+
 
 }

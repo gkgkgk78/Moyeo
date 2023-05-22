@@ -17,7 +17,6 @@ import lombok.*;
 @ToString
 @Builder(builderMethodName = "GetPostResBuilder")
 public class GetPostRes {
-    // private Long timelineId;
     private List<GetPostResTimelineInfo> timelineInfoList;
     private String thumbNail;
     private Long postId;
@@ -27,8 +26,6 @@ public class GetPostRes {
     private LocalDateTime createTime;
 
     public static GetPostRes.GetPostResBuilder builder(Post post, Long totalFavorite) {
-
-        // Long timelineId = post.getTimelineId().getTimelineId();
 
         TimeLine postTimeline = post.getTimelineId();
         User timelineUser = postTimeline.getUserId();
@@ -44,7 +41,6 @@ public class GetPostRes {
         String timelineTitle = post.getTimelineId().getTitle();
 
         return GetPostResBuilder()
-                // .timelineId(timelineId)
                 .timelineInfoList(timelineInfoList)
                 .thumbNail(thumbNail)
                 .postId(postId)
@@ -53,28 +49,6 @@ public class GetPostRes {
                 .createTime(post.getCreateTime())
                 .isMoyeo(false);
     }
-
-    // public static GetPostRes.GetPostResBuilder builder(MoyeoPost post) {
-    //
-    //     List<TimeLine> timeLineList =
-    //     TimeLine postTimeline = post.getTimelineId();
-    //     User timelineUser = postTimeline.getUserId();
-    //     List<GetPostResTimelineInfo> timelineInfoList = new ArrayList<>();
-    //     timelineInfoList.add(GetPostResTimelineInfo.builder()
-    //         .timelineId(postTimeline.getTimelineId())
-    //         .userNickname(timelineUser.getNickname())
-    //         .userProfileImageUrl(timelineUser.getProfileImageUrl()).build());
-    //
-    //     return GetPostResBuilder()
-    //         // .timelineId(null)
-    //         .timelineList()
-    //         .thumbNail(post.getMoyeoPhotoList().get(0).getPhotoUrl())
-    //         .postId(post.getMoyeoPostId())
-    //         .totalFavorite(post.getFavoriteCount())
-    //         .timelineTitle(null)
-    //         .createTime(post.getCreateTime())
-    //         .isMoyeo(true);
-    // }
 
     public static GetPostRes.GetPostResBuilder builder(MoyeoPost post, List<TimeLine> timeLineList) {
 
@@ -87,7 +61,6 @@ public class GetPostRes {
         }
 
         return GetPostResBuilder()
-            // .timelineId(null)
             .timelineInfoList(timelineInfoList)
             .thumbNail(post.getMoyeoPhotoList().get(0).getPhotoUrl())
             .postId(post.getMoyeoPostId())

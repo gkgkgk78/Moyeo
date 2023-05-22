@@ -1,9 +1,7 @@
 package com.moyeo.main.service;
 
 import com.moyeo.main.config.security.JwtTokenProvider;
-import com.moyeo.main.conponent.AwsS3;
-import com.moyeo.main.dto.GetPostRes;
-import com.moyeo.main.dto.MoyeoPostStatusDto;
+import com.moyeo.main.component.AwsS3;
 import com.moyeo.main.dto.UserLoginReq;
 import com.moyeo.main.dto.TokenRes;
 import com.moyeo.main.dto.UserInfoRes;
@@ -94,13 +92,6 @@ public class UserServiceImpl implements UserService {
         log.info("기기토큰", userLoginReq.getAccessToken());
 
         User user;
-
-        log.info("카카오 로그인 중... device token : {}", userLoginReq.getDeviceToken());
-        if(userLoginReq.getDeviceToken() != null){
-            log.info("카카오 로그인 중... device token 길이 : {}", userLoginReq.getDeviceToken().length());
-        } else {
-            log.info("카카오 로그인 중... device token = null...!!");
-        }
 
         // 카카오에서 받아 온 데이터(clientId)로 이미 등록된 유저인지 확인
         if (userRepository.getByClientId(clientId) != null) {

@@ -1,4 +1,4 @@
-package com.moyeo.main.conponent;
+package com.moyeo.main.component;
 
 import com.moyeo.main.dto.WordInfo;
 import com.google.gson.Gson;
@@ -60,58 +60,7 @@ public class Http {
         fileOutputStream.close();
         inputStream.close();
         log.info("file info : {}",file);
-//        if (!response.isSuccessful()) throw new ConnectException();
-//        ResponseBody body = response.body();
 
-
-        // 응답의 HttpEntity를 추출
-
-
-//        log.info("flask api info : {}", body);
-//        MultipartFile multipartFile = new MultipartFile() {
-//            @Override
-//            public String getName() {
-//                return "filter";
-//            }
-//
-//            @Override
-//            public String getOriginalFilename() {
-//                return "filter.wav";
-//            }
-//
-//            @Override
-//            public String getContentType() {
-//                return response.body().contentType().toString();
-//            }
-//
-//            @Override
-//            public boolean isEmpty() {
-//                return false;
-//            }
-//
-//            @Override
-//            public long getSize() {
-//                return response.body().contentLength();
-//            }
-//
-//            @Override
-//            public byte[] getBytes() throws IOException {
-//                return bytes;
-//            }
-//
-//            @Override
-//            public InputStream getInputStream() throws IOException {
-////                return response.body().byteStream();
-//                return new ByteArrayInputStream(bytes);
-//            }
-//
-//            @Override
-//            public void transferTo(File dest) throws IOException, IllegalStateException {
-//
-//            }
-//        };
-//        log.info("multifile info :{}",multipartFile);
-//        inputStream.close();
         return file;
     }
 }
