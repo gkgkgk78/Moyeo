@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @RabbitListener(queues = "sample.queue")
-public class MessageListener1 {
+public class MessageListenerSecond {
 
 
     private final PostInsertAutogpt postInsertAutogpt;
@@ -26,8 +26,9 @@ public class MessageListener1 {
     @RabbitHandler
     public void receiveMessage(PostInsertReq post) {
         log.info("비동기 post insert 후 autogpt작업 시작");
-        log.info("message: 2로 들어옴");
-        postInsertAutogpt.insert(post);
+        log.info("message: 2로 들어오고 끝냄");
+        //postInsertAutogpt.insert(post);
+
         //log.info(post.toString());
 
         log.info("비동기 post insert 후 autogpt작업 완료");
@@ -37,6 +38,7 @@ public class MessageListener1 {
     @RabbitHandler
     public void receiveBatchMessage(BatchMessage batchMessage) throws Exception {
         log.info("From Batch to Autogpt start");
+        log.info("message: 1로 들어옴");
         log.info("Message : {}", batchMessage);
         batchAutogpt.insert(batchMessage);
         log.info("From Batch to Autogpt end");
