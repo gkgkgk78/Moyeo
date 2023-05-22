@@ -21,7 +21,7 @@ import java.util.UUID;
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchService batchService;
-//    @Scheduled(cron = "50 * * * * *")
+    /* 매일 오전 11시, 오후 5시에 스케줄링*/
     @Scheduled(cron = "0 0 11,17 * * *",zone = "Asia/Seoul")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         long nano = System.currentTimeMillis();
