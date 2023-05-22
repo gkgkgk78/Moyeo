@@ -1,6 +1,5 @@
 package com.moyeo.main.repository;
 
-import com.moyeo.main.dto.PostWithIsFavoriteDto;
 import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.TimeLine;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,13 +9,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    // 지역명으로 post 조회(검색 기능)
-    Optional<List<Post>> findByAddress1ContainsOrAddress2ContainsOrAddress3ContainsOrAddress4Contains(String location1, String location2, String location3, String location4);
-    Post findTopByTimelineIdOrderByPostIdDesc(TimeLine timeline) ;
+    // 해당 타임라인에서 제일 마지막 포스트
+    Post findTopByTimelineIdOrderByPostIdDesc(TimeLine timeline);
+    // 해당 타임라인에서 제일 첫번째 포스트
     Post findTopByTimelineId(TimeLine timeline);
 
     List<Post>findAllByTimelineId(TimeLine timeLine);
@@ -30,12 +28,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT p.createTime FROM Post p WHERE p.postId = :postId")
     LocalDateTime findCreateTimeByPostId(Long postId);
 
+    // 좋아요 누른 포스트 가져오기
     @Query(nativeQuery = true, value = "SELECT p.*\n"
         + "FROM post p\n"
         + "JOIN favorite f ON p.post_id = f.post_id\n"
         + "WHERE f.user_id = :userId")
     List<Post> findAllFavoritePost(Long userId);
 
+    // 메인 피드에서 지역으로 검색 시 조회 결과
     @Query(nativeQuery = true, value = "SELECT p.*\n"
         + "FROM post p\n"
         + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"
@@ -44,6 +44,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         + "  AND t.is_complete = true")
     List<Post> findAllMainFeedPostByLocation(String location);
 
+    // 내 페이지에서 지역으로 검색 시 조회 결과
     @Query(nativeQuery = true, value = "SELECT p.*\n"
         + "FROM post p\n"
         + "INNER JOIN time_line t ON p.timeline_id = t.timeline_id\n"

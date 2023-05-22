@@ -1,30 +1,24 @@
 package com.moyeo.main.controller;
 
 
-import com.moyeo.main.conponent.YeobotClient;
+import com.moyeo.main.component.YeobotClient;
 import com.moyeo.main.dto.TravelRecommendRequest;
-import com.moyeo.main.entity.Chat;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
-import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.repository.UserRepository;
 import com.moyeo.main.service.ChatService;
 import com.moyeo.main.service.FcmService;
 import com.moyeo.main.service.MessageBoxService;
 import com.moyeo.main.service.YeobotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.mongodb.core.MongoTemplate;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor

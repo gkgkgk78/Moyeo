@@ -2,12 +2,11 @@ package com.moyeo.main.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.moyeo.main.conponent.AwsS3;
+import com.moyeo.main.component.AwsS3;
 import com.moyeo.main.entity.MoyeoPhoto;
 import com.moyeo.main.entity.MoyeoPost;
 import com.moyeo.main.repository.MoyeoPhotoRepository;
@@ -34,6 +33,7 @@ public class MoyeoPhotoServiceImpl implements MoyeoPhotoService {
         log.info("createPhotoList Transaction complete");
         return photoList;
     }
+
     private MoyeoPhoto savePhoto(MultipartFile imageFile, MoyeoPost savedPost) throws Exception {
         // imageFile S3에 올리고 imageURL 가져오기
         String photoUrl = awsS3.upload(imageFile, "Moyeo/Post");

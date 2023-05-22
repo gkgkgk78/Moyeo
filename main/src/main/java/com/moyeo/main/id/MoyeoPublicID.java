@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data               // equals, hashCode 생성용 Lombok Annotation
-@NoArgsConstructor  // 기본 생성자 생성용 Lombok Annotation
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class MoyeoPublicID implements Serializable {
 	private Long moyeoPostId;
