@@ -1,4 +1,4 @@
-package com.moyeo.main.conponent;
+package com.moyeo.main.component;
 
 import com.moyeo.main.dto.WordInfo;
 import com.google.gson.Gson;

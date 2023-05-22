@@ -75,9 +75,6 @@ public class MoyeoPost extends BaseTime{
 	@ColumnDefault("0")
 	private Long favoriteCount;
 
-	// @OneToMany(mappedBy = "moyeoPostId",fetch = FetchType.EAGER)
-	// @Builder.Default
-	// private List<MoyeoPublic> moyeoPublicList = new ArrayList<>();
 
 	public void updateFavoriteCount(Integer amount) {
 		this.favoriteCount += amount;

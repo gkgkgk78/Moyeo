@@ -2,16 +2,10 @@ package com.moyeo.main.controller;
 
 import com.moyeo.main.dto.AddPostReq;
 import com.moyeo.main.dto.GetPostRes;
-import com.moyeo.main.entity.MoyeoPhoto;
-import com.moyeo.main.entity.MoyeoPost;
-import com.moyeo.main.entity.Photo;
-import com.moyeo.main.entity.Post;
 import com.moyeo.main.entity.User;
 import com.moyeo.main.exception.BaseException;
 import com.moyeo.main.exception.ErrorMessage;
-import com.moyeo.main.service.MoyeoPhotoService;
 import com.moyeo.main.service.MoyeoPostService;
-import com.moyeo.main.service.PhotoService;
 import com.moyeo.main.service.PostService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,9 +31,7 @@ import java.util.Map;
 @Tag(name = "Post")
 public class PostController {
     private final PostService postService;
-    private final PhotoService photoService;
     private final MoyeoPostService moyeoPostService;
-    private final MoyeoPhotoService moyeoPhotoService;
 
 
     //포스트 등록 (Address 1 - 국가 -> Address 4 - 동네)
@@ -50,14 +42,14 @@ public class PostController {
                                      @RequestPart MultipartFile voiceFile,
                                      @Valid @ModelAttribute AddPostReq addPostReq,
                                      @RequestParam(required = false, defaultValue = "false") Boolean isMoyeo) throws Exception {
-        log.info("포스트 등록 시작...");
+        log.info("포스트 등록 시작");
         if (isMoyeo == false) {
             postService.insertPost(imageFiles, flagFile, voiceFile, addPostReq);
 
             // addPost 요청에 대한 응답으로 timelineId 반환
             Map<String, Object> res = new HashMap<>();
             res.put("timelineId", addPostReq.getTimelineId());
-            log.info("포스트 등록 종료...");
+            log.info("포스트 등록 완료");
             return ResponseEntity.ok(res);
         } else {
             moyeoPostService.insertPost(imageFiles, flagFile, voiceFile, addPostReq);
@@ -65,12 +57,11 @@ public class PostController {
             // addPost 요청에 대한 응답으로 timelineId 반환
             Map<String, Object> res = new HashMap<>();
             res.put("timelineId", addPostReq.getTimelineId());
-            log.info("포스트(모여) 등록 종료...");
+            log.info("포스트(모여) 등록 완료");
             return ResponseEntity.ok(res);
         }
     }
 
-    //포스트 삭제
     @DeleteMapping("/{postId}")
     @Operation(summary = "포스트 삭제")
     public ResponseEntity<?> deletePost(@PathVariable Long postId) throws Exception {
@@ -82,7 +73,6 @@ public class PostController {
         return ResponseEntity.ok().build();
     }
 
-    //메인페이지에서 포스트 조회
     @GetMapping("/main/{location}")
     @Operation(summary = "포스트 검색 조회 (메인 페이지에서 지역으로 검색)")
     public ResponseEntity<?> getPost(@PathVariable String location) throws Exception {
@@ -94,7 +84,6 @@ public class PostController {
         return ResponseEntity.ok(getPostResList);
     }
 
-    //내 페이지에서 포스트 조회
     @GetMapping("/mine/{myLocation}")
     @Operation(summary = "포스트 검색 조회 (내 페이지에서 지역으로 검색)")
     public ResponseEntity<?> getMyPost(@PathVariable String myLocation) throws Exception {

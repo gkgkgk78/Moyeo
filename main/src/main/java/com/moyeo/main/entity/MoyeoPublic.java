@@ -30,10 +30,12 @@ import lombok.Setter;
 public class MoyeoPublic {
     @Id
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id")
     private User userId;
     @Id
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "moyeo_post_id")
     private MoyeoPost moyeoPostId;
 
@@ -49,10 +51,6 @@ public class MoyeoPublic {
 
     public void updateIsPublic() {
         this.isPublic = !this.isPublic;
-    }
-
-    public void updateIsDeleted() {
-        this.isDeleted = !this.isDeleted;
     }
 
 }
