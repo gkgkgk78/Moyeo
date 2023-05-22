@@ -88,42 +88,6 @@ public class MoyeoMembersServiceImpl implements MoyeoMembersService {
     }
 
     @Override
-    public Boolean inviteMoyeoMembers(User user, List<MoyeoMembersReq> moyeoMembersReqList) throws BaseException {
-
-        for(MoyeoMembersReq moyeoMembersReq: moyeoMembersReqList) {
-
-            // User invitee = userRepository.findById(moyeoMembersReq.getUserId()).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_USER));
-            Optional<User> inviteeUser = userRepository.findById(moyeoMembersReq.getUserId());
-            if(inviteeUser.isEmpty()) {
-                log.info("userId {}는 존재하지 않는 유저 입니다.", moyeoMembersReq.getUserId());
-                continue;
-            }
-            User invitee = inviteeUser.get();
-
-            Long moyeoTimelineId = moyeoMembersReq.getMoyeoTimelineId();
-            // MoyeoTimeLine moyeoTimeLine = moyeoTimeLineRepository.findById(moyeoTimelineId).orElseThrow(() -> new BaseException(ErrorMessage.NOT_EXIST_MOYEO_TIMELINE));
-            if(moyeoTimeLineRepository.findById(moyeoTimelineId).isEmpty()) {
-                log.info("moyeoTimelineId {}는 존재하지 않는 모여 타임라인입니다.", moyeoTimelineId);
-                continue;
-            }
-
-            // log.info("(동행 초대 푸시 알림 보내기)");
-            fcmService.send(user, invitee, moyeoTimelineId, "동행 초대 알림", "동행에 참여하시겠습니까?");
-
-            // log.info("(메시지 함에 저장)");
-            messageBoxRepository.save(MessageBox.builder()
-                    .userId(invitee)
-                    .content(user.getNickname() + "님이 동행에 초대하셨습니다.")
-                    .createTime(LocalDateTime.now())
-                    .inviteKey(moyeoTimelineId)
-                    .build());
-        }
-
-        log.info("동행 초대 끝...");
-        return true;
-    }
-
-    @Override
     @Transactional
     public RegistMoyeoRes registMoyeoMembers(User user, Long moyeoTimelineId) throws BaseException {
         // 1. 참여 자격 체크하기: 여행 중이어야 하고, 다른 동행에 참여 중이면 안된다.

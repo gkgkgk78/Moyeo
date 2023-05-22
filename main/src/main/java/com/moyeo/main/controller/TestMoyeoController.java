@@ -87,20 +87,6 @@ public class TestMoyeoController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/main/{page}")//테스트 해보기
-    public ResponseEntity<?> getTimelineLatestWithPaging(@PathVariable Integer page) throws Exception {
-        log.info("메인피드 최신순 타임라인 조회 시작");
-        Pageable pageable = PageRequest.of(page, 15, Sort.by("createTime").descending());
-        List<MainTimelinePhotoDtoRes> timelinelist = timeLineService.searchTimelineOrderBylatestPaging(pageable);
-        log.info("메인피드 최신순 타임라인 조회 종료");
-        if (timelinelist != null) {
-            return new ResponseEntity<>(timelinelist, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
-        }
-
-    }
-
 
     @PutMapping("")
     public ResponseEntity<?> convertAll() throws Exception {

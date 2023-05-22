@@ -60,7 +60,7 @@ public class FavoriteController {
         if (userUid == null) {
             throw new BaseException(ErrorMessage.VALIDATION_FAIL_EXCEPTION);
         }
-        // List<Post> favoritePostList = favoriteService.findFavoritePost(userUid);
+
         return ResponseEntity.ok(favoriteService.findFavoritePost(userUid));
     }
 }
