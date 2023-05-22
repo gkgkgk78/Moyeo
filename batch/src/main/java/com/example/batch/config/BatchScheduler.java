@@ -27,12 +27,16 @@ public class BatchScheduler {
         long nano = System.currentTimeMillis();
         Date now = new Date(System.currentTimeMillis());
         log.info("Schedule start");
+        long beforeTime = System.currentTimeMillis();
         JobParameters params = new JobParametersBuilder()
                 .addString("start", UUID.randomUUID()+"")
                 .addString("end", UUID.randomUUID()+"")
                 .toJobParameters();
         jobLauncher.run(batchService.job(),
                 params);
+        long afterTime = System.currentTimeMillis();
+        long DiffTime = (afterTime - beforeTime)/1000;
+        log.info("10개 배치로 추천 요청했을 때 평균 시간 :{}",DiffTime/10);
     }
 
 }
