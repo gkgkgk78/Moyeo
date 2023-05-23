@@ -63,7 +63,7 @@ public class BatchAutogptImpl implements BatchAutogpt{
         map.put("data",goal);
 
         HttpEntity<String> autoGptEntity = new HttpEntity<String>(mapper.writeValueAsString(map), headers);
-        ResponseEntity<String> response = restTemplate.exchange(autogpt, HttpMethod.POST, autoGptEntity, String.class);
+        ResponseEntity<String> response = restTemplate.exchange(autogpt2, HttpMethod.POST, autoGptEntity, String.class);
         Map<String, String> responseMap = mapper.readValue(response.getBody(), Map.class);
         log.info("Autogpt result : {}",responseMap.get("result"));
 
