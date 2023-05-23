@@ -4,15 +4,15 @@
 
 ![logo](docs/img/moyeo.jpg)
 
+---
+
 ## ✈프로젝트 진행 기간✈
 
----
 
 ### Project Period : 2023.04.10 ~ 2023.05.26
 
 ## 기획 의도 및 배경
 
----
 
 **다시, 여행.**
 
@@ -34,83 +34,46 @@
 
 ## 주요기능
 
----
 
 ### 동행
 
-**동행 시작 및 초대**
+| **동행 시작 및 초대** | **동행 초대 수락** |
+| ![moyeostart](docs/img/moyeostart.gif) | ![moyeoaccept](docs/img/moyeoaccept.gif) |
+| -- | -- | 
 
-![moyeostart](docs/img/moyeostart.gif)
-
-모여 시작하기→ 모여 초대하기 → 초대 발송
-
-**동행 초대 수락**
-
-![moyeoaccept](docs/img/moyeoaccept.gif)
-
-푸시 알림 → 수락
-
-**동행 나가기**
-
-![moyeofinish](docs/img/moyeofinish.gif)
-
-**동행 중 등록된 모여 포스트**
-
-![moyeopost](docs/img/moyeopost.gif)
-
----
+| **동행 나가기** | **동행 중 등록된 모여 포스트**
+| ![moyeofinish](docs/img/moyeofinish.gif) | ![moyeopost](docs/img/moyeopost.gif) |
+| -- | -- | 
 
 ### 검색
 
-**위치 검색 : 게시글 조회**
-
-![searchlocation.gif](docs/img/searchlocation.gif)
-
-**인물 검색 : 타임라인 조회**
-
-![searchname.gif](docs/img/searchname.gif)
-
----
+| **위치 검색 : 게시글 조회** | **인물 검색 : 타임라인 조회** |
+| ![searchlocation.gif](docs/img/searchlocation.gif) | ![searchname.gif](docs/img/searchname.gif) |
+| -- | -- | 
 
 ### 포스트 등록
 
-**여행 시작하기 : 타임라인 생성**
+| **여행 시작하기 : 타임라인 생성** | **포스팅** |
+| ![start](docs/img/start.gif) | ![posting](docs/img/posting.gif) |
+| -- | -- | 
 
-![start](docs/img/start.gif)
+| **푸시알림 : 포스트 등록 후 맛집 추천** | **푸시알림 : 포스트 등록 후 액티비티 추천** | 
+| ![postingpushrestaurant](docs/img/postingpushrestaurant.gif) | ![postingpushactivity](docs/img/postingpushactivity.gif) |
+| -- | -- | 
 
-**포스팅**
+| **타임라인 조회** | **공개 설정 변경** | 
+| ![timeline](docs/img/timeline.gif) | ![showoff](docs/img/showoff.gif) | 
+| -- | -- | 
 
-![posting](docs/img/posting.gif)
-
-**푸시알림 : 포스트 등록 후 맛집 추천**
-
-![postingpushrestaurant](docs/img/postingpushrestaurant.gif)
-
-**푸시알림 : 포스트 등록 후 액티비티 추천**
-
-![postingpushactivity](docs/img/postingpushactivity.gif)
-
-**타임라인 조회**
-
-![timeline](docs/img/timeline.gif)
-
-**공개 설정 변경**
-
-![showoff](docs/img/showoff.gif)
 
 ### 챗봇 기능
 
-**여행 중 맛집 추천**
+| **여행 중 맛집 추천** | **여행 중 액티비티 추천** |
+| ![yeobotrestaurant](docs/img/yeobotrestaurant.gif) | ![yeobotactivity](docs/img/yeobotactivity.gif) |
+| -- | -- | 
 
-![yeobotrestaurant](docs/img/yeobotrestaurant.gif)
-
-**여행 중 액티비티 추천**
-
-![yeobotactivity](docs/img/yeobotactivity.gif)
 
 ## 주요기술
-
----
 
 ### FE
 
@@ -142,22 +105,17 @@
 
 ## 시스템 구조도
 
----
 
 ![structure](docs/img/structure.png)
 
 ## 협업 환경 및 툴
 
----
 
 - 활용한 툴 : GitLab, Jira ,InteliJ, Android Studio
 - 협업환경 : MatterMost, KakaoTalk , Webex
 
 ## 팀원 역할 분배
 
----
-
-(팀원 역할분배) → FE BE 상세한건 개인버전에서 알아서 수정
 
 FE : 기남석, 조은비
 
@@ -167,7 +125,6 @@ CI/CD : 송지율
 
 ## 프로젝트 산출물
 
----
 
 - 와이어프레임
 
