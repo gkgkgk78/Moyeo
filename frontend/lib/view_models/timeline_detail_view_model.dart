@@ -39,6 +39,8 @@ class TimelineDetailViewModel extends ChangeNotifier {
 
   final ScrollController _scrollController = ScrollController();
 
+  late AppViewModel _appViewModel;
+
   ScrollController get scrollController => _scrollController;
 
   changeTitle(String newTitle) {

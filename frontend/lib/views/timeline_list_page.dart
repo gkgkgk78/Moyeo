@@ -16,9 +16,11 @@ class TimelineListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
+          //
           return RefreshIndicator(
             onRefresh: () async {
               pagingController.refresh();
+              appViewModel.getTimelineInfo(context, appViewModel.userInfo.timeLineId);
             },
             child: PagedListView<int, Timeline>(
               shrinkWrap: true,

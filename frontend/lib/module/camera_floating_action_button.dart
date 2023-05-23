@@ -20,13 +20,6 @@ class CameraFloatingActionButton extends StatelessWidget {
         builder: (_, appViewModel, __) {
           return FloatingActionButton(
             child:
-                // appViewModel.userInfo.timeLineId == -1
-                //     ? Image.asset(
-                //   'assets/images/transparent_logo.png',
-                //   width: 50,
-                //   height: 50,
-                // )
-                //     :
                 GestureDetector(
               child: Container(
                 height: 70,
@@ -55,9 +48,11 @@ class CameraFloatingActionButton extends StatelessWidget {
                 ),
               ),
                   onTap: () async {
+                    // 여행 중이 아니면 여행 시작
                     if (appViewModel.userInfo.timeLineId == -1) {
                       appViewModel.startTravel(context);
-                    } else if (appViewModel.userInfo.moyeoTimelineId != -1 && appViewModel.members.length <= 1){
+                      // 여행중이고, 모여 중이고 멤버가 나 혼자면
+                    } else if (appViewModel.userInfo.moyeoTimelineId != -1 && (appViewModel.timelineInfo.members?.length)! <= 1){
                       showDialog(
                           barrierDismissible: false,
                           context: context,
@@ -78,7 +73,7 @@ class CameraFloatingActionButton extends StatelessWidget {
                                 ],
                               )
                       );
-
+                      // 여행중이고, 모여가 아니거나 모여인데 일행이 두 명 이상이면
                     } else {
                       Navigator.push(
                         context,

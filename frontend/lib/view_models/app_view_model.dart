@@ -70,15 +70,18 @@ class AppViewModel with ChangeNotifier {
       },
     );
 
+    getTimelineInfo(_context, _userInfo.timeLineId);
     initializeFirebase();
     _initLocalNotification(_context);
-    getMoyeoMembers(_context, _userInfo.timeLineId);
   }
 
-  Future<void> getMoyeoMembers(BuildContext context, int moyeoTimelineId) async {
-    if (_moyeoTimelineId != -1) {
-      _members = await MoyeoRepository().getMoyeoMembers(context, moyeoTimelineId);
-    }
+  late TimelineInfo _timelineInfo;
+
+  TimelineInfo get timelineInfo => _timelineInfo;
+
+  Future<void> getTimelineInfo(BuildContext context, int timelineId) async {
+    _timelineInfo = await TimelineRepository().getTimelineDetailsByTimelineId(context, timelineId);
+    logger.d(_timelineInfo);
     notifyListeners();
   }
 
@@ -100,7 +103,7 @@ class AppViewModel with ChangeNotifier {
       if (index == 0) {
         Navigator.popAndPushNamed(myFeedNavigatorKey.currentContext!, '/');
       } else {
-        Navigator.popAndPushNamed(homeFeedNavigatorKey.currentContext!, '/');
+        Navigator.popAndPushNamed(homeFeedNavigatorKey.currentContext!, '/ch');
       }
     }
     currentIndex = index;
@@ -109,7 +112,7 @@ class AppViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  updateUserInfo(UserInfo userInfo) {
+  updateUserInfo(UserInfo userInfo) async {
     _userInfo = userInfo;
     notifyListeners();
   }
@@ -300,8 +303,13 @@ class AppViewModel with ChangeNotifier {
 
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage rm) {
-        _messageLimitTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _pushBody = (rm.notification?.body)!;
+        _messageLimitTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
           _messageLimitSecond += 1;
+          if(_messageLimitSecond >= 61) {
+            _messageLimitSecond = 0;
+            _messageLimitTimer.cancel();
+          }
         });
 
         NotificationDetails details;
@@ -376,14 +384,19 @@ class AppViewModel with ChangeNotifier {
         if (_pushBody.contains("동행")) {
           _fromPush = true;
           if (_messageLimitSecond <= 61) {
+            logger.d("60초 이하");
+            logger.d(_messageLimitSecond);
             await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
             _messageLimitTimer.cancel();
             _messageLimitSecond = 0;
             if (context.mounted) {
               _userInfo = await UserRepository().getUserInfo(context);
             }
+            await getTimelineInfo(context, _userInfo.timeLineId);
           }
         } else {
+          logger.d("동행 없어요");
+          logger.d(_messageLimitSecond);
           _messageLimitTimer.cancel();
           _messageLimitSecond = 0;
           await goMessageListPage();

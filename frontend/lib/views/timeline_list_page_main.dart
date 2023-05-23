@@ -16,6 +16,7 @@ class TimelineListPageMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<AppViewModel>(
         builder: (_, appViewModel, __) {
+          // appViewModel.getMoyeoMembers(context, appViewModel.userInfo.moyeoTimelineId);
           return RefreshIndicator(
             onRefresh: () async {
               pagingController.refresh();

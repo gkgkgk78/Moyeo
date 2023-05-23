@@ -63,6 +63,7 @@ class SearchBarViewModel extends ChangeNotifier {
             await SearchRepository().searchToSearchBar(context, keyword!);
       }
     }
+    print(keyword);
     notifyListeners();
   }
 

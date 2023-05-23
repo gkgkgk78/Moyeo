@@ -245,10 +245,15 @@ class TimelineDetailPage extends StatelessWidget {
                             viewModel.members.length,
                             (index) {
                               var people = viewModel.members[index];
-                              return CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: NetworkImage(
-                                      people['profileImageUrl'].toString()));
+                              return GestureDetector(
+                                onTap: () {
+                                  print("test");
+                                },
+                                child: CircleAvatar(
+                                    radius: 15,
+                                    backgroundImage: NetworkImage(
+                                        people['profileImageUrl'].toString())),
+                              );
                             },
                           ),
                           title: viewModel.members.length > 1

@@ -34,6 +34,9 @@ void main() async {
               userUid: -1,
               profileImageUrl: '',
               nickname: '',
+              timeLineId: -1,
+              timelineNum: 0,
+              moyeoTimelineId: -1
             ),
             '나의 기록',
             context,

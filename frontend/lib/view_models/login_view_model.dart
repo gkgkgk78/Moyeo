@@ -30,6 +30,7 @@ class LoginViewModel extends ChangeNotifier {
     try {
       UserInfo userInfo = await UserRepository().getUserInfo(context);
       update(userInfo);
+      await _appViewModel.getTimelineInfo(context, userInfo.timeLineId);
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

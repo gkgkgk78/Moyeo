@@ -240,7 +240,7 @@ class _CustomCircularMenuState extends State<CustomCircularMenu>
                               ),
                             );
                         // 모여 중이라면 nowMember가 빈배열이 아니여야함.
-                        } else if (appViewModel.members.length<=1) {
+                        } else if ((appViewModel.timelineInfo.members?.length)! <= 1) {
                           showDialog(
                             barrierDismissible: false,
                               context: context,
