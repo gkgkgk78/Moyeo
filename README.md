@@ -1,6 +1,5 @@
 # 🧳Mo-Yeo 모여🤝
 
----
 
 ![logo](docs/img/moyeo.jpg)
 
@@ -144,8 +143,8 @@ CI/CD : 송지율
 
 - 와이어프레임
 
-[https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FA2e0l0zV9bqt6JBmlfukfb%2FMoyeo%3Ftype%3Ddesign%26node-id%3D0%253A1%26t%3DdTSzg8OwARrJa9hH-1](https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FA2e0l0zV9bqt6JBmlfukfb%2FMoyeo%3Ftype%3Ddesign%26node-id%3D0%253A1%26t%3DdTSzg8OwARrJa9hH-1)
+    [바로가기](https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FA2e0l0zV9bqt6JBmlfukfb%2FMoyeo%3Ftype%3Ddesign%26node-id%3D0%253A1%26t%3DdTSzg8OwARrJa9hH-1)
 
 - ERD
 
-![Mo-yeo.png](docs/img/Mo-yeo.png)
+    ![Mo-yeo.png](docs/img/Mo-yeo.png)
