@@ -1,17 +1,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:moyeo/services/user_repository.dart';
-import 'package:provider/provider.dart';
 
 import '../models/Timeline.dart';
 import '../models/TimelineInfo.dart';
-import '../models/UserInfo.dart';
 import '../utils/auth_dio.dart';
-import '../view_models/app_view_model.dart';
 
-var logger = Logger();
 
 class TimelineRepository {
   TimelineRepository._internal();

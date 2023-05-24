@@ -1,21 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 
 import '../utils/avatar_pile.dart';
+import '../utils/black.dart';
+import '../view_models/app_view_model.dart';
+import '../view_models/timeline_detail_view_model.dart';
 import '../views/moyeo_add_user.dart';
 import '../views/post_list_item.dart';
 
-import '../view_models/app_view_model.dart';
-import '../view_models/timeline_detail_view_model.dart';
-
-import '../utils/black.dart';
-import 'camera_screen.dart';
-
-var logger = Logger();
 
 class TimelineDetailPage extends StatelessWidget {
   const TimelineDetailPage({super.key});

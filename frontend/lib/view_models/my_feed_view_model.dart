@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:logger/logger.dart';
 
-import '../models/UserInfo.dart';
 import '../models/Timeline.dart';
+import '../models/UserInfo.dart';
 import '../services/timeline_repository.dart';
 
-var logger = Logger();
+
 
 class MyFeedViewModel extends ChangeNotifier {
   BuildContext context;

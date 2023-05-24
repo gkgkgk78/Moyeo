@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 

@@ -1,8 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_friend.dart';
-import '../services/moyeo_repository.dart';
+
 import '../models/UserInfo.dart';
+import '../services/moyeo_repository.dart';
 import 'app_view_model.dart';
 
 class SelectedUsersProvider extends ChangeNotifier{

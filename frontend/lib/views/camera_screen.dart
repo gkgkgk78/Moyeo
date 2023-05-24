@@ -1,16 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/record_view_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-import '../view_models/app_view_model.dart';
 import './record_screen.dart';
 import '../module/my_alert_dialog.dart';
+import '../view_models/app_view_model.dart';
 import '../view_models/camera_view_model.dart';
 
-var logger = Logger();
 
 class CameraView extends StatelessWidget {
   @override

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moyeo/module/gradient_circular_indicator.dart';
 import 'package:moyeo/view_models/message_list_view_model.dart';
-import 'package:moyeo/views/push_alarm_page.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
-import '../view_models/chatbot_detail_view_model.dart';
 
 class MessageListPage extends StatelessWidget {
   @override

@@ -1,17 +1,13 @@
 import 'package:animated_icon_button/animated_icon_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-
-// import 'package:flutter_face_pile/flutter_face_pile.dart';
-import '../utils/avatar_pile.dart';
-
 
 import '../module/audio_player_view.dart';
 import '../module/audio_player_view_model.dart';
 import '../module/images_page_view.dart';
+// import 'package:flutter_face_pile/flutter_face_pile.dart';
+import '../utils/avatar_pile.dart';
 import '../view_models/app_view_model.dart';
 import '../view_models/post_view_model.dart';
 

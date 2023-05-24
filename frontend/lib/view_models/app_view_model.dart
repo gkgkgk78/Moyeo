@@ -1,26 +1,20 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/services/moyeo_repository.dart';
 import 'package:moyeo/view_models/message_list_view_model.dart';
 import 'package:moyeo/view_models/search_bar_view_model.dart';
 import 'package:moyeo/view_models/timeline_detail_view_model.dart';
 import 'package:moyeo/views/message_list.dart';
-import 'package:moyeo/views/push_alarm_page.dart';
 import 'package:provider/provider.dart';
 
 import '../models/TimelineInfo.dart';
 import '../models/UserInfo.dart';
 import '../services/timeline_repository.dart';
 import '../services/user_repository.dart';
-import '../utils/auth_dio.dart';
 import '../utils/stack.dart';
 import '../views/chatbot_detail_page.dart';
 import '../views/home_feed_page.dart';
@@ -51,7 +45,6 @@ class AppViewModel with ChangeNotifier {
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) async {
         if (message.notification?.body?.contains('동행') == true) {
-          logger.d('동행수락');
           if (_messageLimitSecond <= 61) {
             await MoyeoRepository()
                 .acceptInvite(_context, message.data["moyeoTimelineId"]);
@@ -98,7 +91,6 @@ class AppViewModel with ChangeNotifier {
 
   int _localMessageId = 0;
 
-  final logger = Logger();
 
   void changePage(index) {
     pageController.jumpToPage(index);
@@ -291,7 +283,6 @@ class AppViewModel with ChangeNotifier {
     String firebaseValidKey = dotenv.env["firebaseValidKey"]!;
     _fcmToken = (await FirebaseMessaging.instance
         .getToken(vapidKey: firebaseValidKey))!;
-    logger.d(_fcmToken);
     notifyListeners();
     // 알림 권한 요청
     await FirebaseMessaging.instance.requestPermission(
@@ -387,8 +378,6 @@ class AppViewModel with ChangeNotifier {
         if (_pushBody.contains("동행")) {
           _fromPush = true;
           if (_messageLimitSecond <= 61) {
-            logger.d("60초 이하");
-            logger.d(_messageLimitSecond);
             await MoyeoRepository().acceptInvite(context, _moyeoTimelineId);
             _messageLimitTimer.cancel();
             _messageLimitSecond = 0;
@@ -400,8 +389,6 @@ class AppViewModel with ChangeNotifier {
             _getNowTimelineInfo = true;
           }
         } else {
-          logger.d("동행 없어요");
-          logger.d(_messageLimitSecond);
           _messageLimitTimer.cancel();
           _messageLimitSecond = 0;
           await goMessageListPage();

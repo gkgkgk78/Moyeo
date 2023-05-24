@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +11,6 @@ import '../view_models/app_view_model.dart';
 import '../view_models/camera_view_model.dart';
 import '../view_models/record_view_model.dart';
 
-var logger = Logger();
 
 class RecordView extends StatelessWidget {
   @override

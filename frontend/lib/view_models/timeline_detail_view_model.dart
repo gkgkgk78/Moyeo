@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../models/TimelineDetail.dart';
 import '../models/UserInfo.dart';
-import '../services/timeline_repository.dart';
 import '../services/moyeo_repository.dart';
+import '../services/timeline_repository.dart';
 import '../services/user_repository.dart';
 
 class TimelineDetailViewModel extends ChangeNotifier {

@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:moyeo/models/UserInfo.dart';
 
 import '../models/TimelineDetail.dart';
 import '../services/timeline_repository.dart';

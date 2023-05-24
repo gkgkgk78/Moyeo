@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
-var logger = Logger();
 
 class PushAlarmPage extends StatelessWidget {
   @override

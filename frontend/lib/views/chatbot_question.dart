@@ -1,6 +1,4 @@
-import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/chatbot_detail_view_model.dart';
 import 'package:provider/provider.dart';
 

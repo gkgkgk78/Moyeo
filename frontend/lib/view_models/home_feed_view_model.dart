@@ -1,13 +1,9 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:logger/logger.dart';
-import 'package:moyeo/services/firebase_repository.dart';
 
 import '../models/Timeline.dart';
 import '../services/timeline_repository.dart';
 
-var logger = Logger();
 
 class HomeFeedViewModel extends ChangeNotifier {
   int searchedUserUid;

@@ -1,10 +1,7 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/models/ChatMessage.dart';
 import 'package:moyeo/models/ChatbotRequest.dart';
 import 'package:moyeo/models/TimelineDetail.dart';
@@ -13,7 +10,6 @@ import 'package:moyeo/services/timeline_repository.dart';
 import '../models/TimelineInfo.dart';
 import '../services/chatbot_repository.dart';
 
-var logger = Logger();
 
 class ChatbotViewModel extends ChangeNotifier {
   int isTravel;

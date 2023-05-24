@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/module/circular_menu.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
 import '../views/camera_screen.dart';
 
-var logger = Logger();
 
 class CameraFloatingActionButton extends StatelessWidget {
   const CameraFloatingActionButton({super.key});

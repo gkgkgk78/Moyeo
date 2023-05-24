@@ -1,8 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
-var logger = Logger();
 
 class AudioPlayerViewModel extends ChangeNotifier {
   // 파일 경로

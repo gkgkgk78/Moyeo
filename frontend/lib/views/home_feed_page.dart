@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:moyeo/views/search_bar_view.dart';
 import 'package:moyeo/views/timeline_list_page_main.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 
 import '../view_models/app_view_model.dart';
 import '../view_models/home_feed_view_model.dart';

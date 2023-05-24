@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_face_pile/flutter_face_pile.dart';
 import 'package:moyeo/views/post_detail.dart';
-
 import 'package:provider/provider.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 

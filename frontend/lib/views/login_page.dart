@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
 import '../view_models/app_view_model.dart';
 import '../view_models/login_view_model.dart';
 

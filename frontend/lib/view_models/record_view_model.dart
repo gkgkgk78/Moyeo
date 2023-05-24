@@ -8,10 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
-import 'package:moyeo/view_models/camera_view_model.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
-import 'package:provider/provider.dart';
 import 'package:record/record.dart';
 
 import '../models/LocationInformation.dart';
@@ -21,7 +18,6 @@ import '../module/gradient_text.dart';
 import '../module/my_alert_dialog.dart';
 import '../services/upload_repository.dart';
 
-var logger = Logger();
 
 class RecordViewModel extends ChangeNotifier {
 
@@ -30,9 +26,6 @@ class RecordViewModel extends ChangeNotifier {
   AudioPlayer audioPlayer = AudioPlayer();
 
   LocationInformation get locationInfo => _locationInfo;
-
-
-
 
   late String _recordedFileName;
   String _recordedFilePath = "";

@@ -3,14 +3,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:moyeo/view_models/user_search_bar_view_model.dart';
-import 'package:moyeo/views/search_result_page.dart';
 import 'package:provider/provider.dart';
 
 import '../view_models/app_view_model.dart';
-import '../view_models/my_feed_view_model.dart';
 import '../view_models/search_bar_view_model.dart';
-import '../view_models/search_result_view_model.dart';
-import 'my_feed_view.dart';
 
 class UserSearchBar extends StatelessWidget {
   final List<Map<String, dynamic>> members;

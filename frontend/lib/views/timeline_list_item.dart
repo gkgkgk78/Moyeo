@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import '../models/Timeline.dart';
 import '../view_models/app_view_model.dart';
 
-import 'package:moyeo/views/timeline_detail_page.dart';
-
 class TimelineListItem extends StatelessWidget {
   final Timeline timeline;
 

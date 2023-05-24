@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import './audio_player_view_model.dart';
 import 'custom_track_shape.dart';
 

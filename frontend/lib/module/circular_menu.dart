@@ -1,18 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
 import 'package:provider/provider.dart';
 
-
 import '../models/UserInfo.dart';
 import '../views/camera_screen.dart';
 import '../views/login_page.dart';
-import '../views/moyeo_add_user.dart';
 
-var logger = Logger();
 
 class CustomCircularMenu extends StatefulWidget {
   final UserInfo userInfo;

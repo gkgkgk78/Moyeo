@@ -1,14 +1,11 @@
 import 'package:chat_bubbles/bubbles/bubble_special_one.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/view_models/app_view_model.dart';
-
 import 'package:provider/provider.dart';
 
 import '../view_models/chatbot_detail_view_model.dart';
 import 'chatbot_question.dart';
 
-var logger = Logger();
 
 class ChatbotPage extends StatelessWidget {
   const ChatbotPage({super.key});

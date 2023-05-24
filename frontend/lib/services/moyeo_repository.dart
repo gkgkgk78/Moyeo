@@ -2,14 +2,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/models/MoyeoTimeline.dart';
-import 'package:moyeo/models/UserInfo.dart';
 
 import '../models/TimelineInfo.dart';
 import '../utils/auth_dio.dart';
-var logger = Logger();
+
 class MoyeoRepository{
 
   MoyeoRepository._internal();
@@ -34,7 +31,6 @@ class MoyeoRepository{
       BuildContext context, int moyeoTimelineId, List<Map<String,dynamic>> userList) async {
     try {
       final dio = await authDio(context);
-      logger.d(userList);
       Response response = await dio
         .post('api/auth/moyeo/members/${moyeoTimelineId}', data:userList);
       return response.data;
@@ -67,24 +63,6 @@ class MoyeoRepository{
       throw Exception('Error: $e');
     }
   }
-
-  // Future<void> outMoyeo(context, moyeoTimelineId) async {
-  //   try {
-  //     // 이전 로직
-  //     // List<Map<String,int>> userIdList = [];
-  //     //
-  //     // for (var user in userList){
-  //     //   userIdList.add({"userId":user.userUid});
-  //     // }
-  //
-  //     final dio = await authDio(context);
-  //     Response response = await dio
-  //       .post('api/auth/moyeo/members/invite', data:userList);
-  //     return response.data;
-  //   } catch(e) {
-  //     throw Exception('AddMoyeoUser Error $e');
-  //   }
-  // }
 
   Future<Map<String, dynamic>> changeFavoritePost(
       BuildContext context, int postId, userUid) async {

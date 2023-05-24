@@ -1,12 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:moyeo/models/ChatMessage.dart';
 import 'package:moyeo/models/ChatbotRequest.dart';
 
 import '../utils/auth_dio.dart';
 
-var logger = Logger();
 
 class ChatbotRepository {
   ChatbotRepository._internal();

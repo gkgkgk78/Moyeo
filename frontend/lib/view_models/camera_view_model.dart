@@ -1,33 +1,17 @@
-import 'dart:async';
-import 'dart:io';
 import 'dart:core';
-import 'dart:typed_data';
+import 'dart:io';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:camera/camera.dart';
-
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
-import 'package:moyeo/module/gradient_text.dart';
-import 'package:multi_image_picker_view/multi_image_picker_view.dart';
-import 'package:record/record.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 
 import '../models/LocationInformation.dart';
-import '../models/UserInfo.dart';
-import '../module/audio_player_view_model.dart';
-import '../module/my_alert_dialog.dart';
-import '../services/upload_repository.dart';
 
-var logger = Logger();
 
 final deviceInfoPlugin = DeviceInfoPlugin();
 
