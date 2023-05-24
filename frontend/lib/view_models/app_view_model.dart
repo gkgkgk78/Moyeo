@@ -70,7 +70,6 @@ class AppViewModel with ChangeNotifier {
       },
     );
 
-    getTimelineInfo(_context, _userInfo.timeLineId);
     initializeFirebase();
     _initLocalNotification(_context);
   }
@@ -79,10 +78,14 @@ class AppViewModel with ChangeNotifier {
 
   TimelineInfo get timelineInfo => _timelineInfo;
 
+  bool _getNowTimelineInfo = false;
+  get getNowTimelineInfo => _getNowTimelineInfo;
+
   Future<void> getTimelineInfo(BuildContext context, int timelineId) async {
-    _timelineInfo = await TimelineRepository().getTimelineDetailsByTimelineId(context, timelineId);
-    logger.d(_timelineInfo);
-    notifyListeners();
+    if (timelineId != -1 && _getNowTimelineInfo == false) {
+      _getNowTimelineInfo = true;
+      _timelineInfo = await TimelineRepository().getTimelineDetailsByTimelineId(context, timelineId);
+    }
   }
 
   String _fcmToken = '';
@@ -392,7 +395,9 @@ class AppViewModel with ChangeNotifier {
             if (context.mounted) {
               _userInfo = await UserRepository().getUserInfo(context);
             }
+            _getNowTimelineInfo = false;
             await getTimelineInfo(context, _userInfo.timeLineId);
+            _getNowTimelineInfo = true;
           }
         } else {
           logger.d("동행 없어요");
