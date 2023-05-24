@@ -8,10 +8,8 @@ import '../view_models/app_view_model.dart';
 import '../views/login_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Function moveToModifyProfile;
-  final Function moveToYeobot;
 
-  const CustomAppBar({super.key, required this.moveToModifyProfile, required this.moveToYeobot});
+  const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {

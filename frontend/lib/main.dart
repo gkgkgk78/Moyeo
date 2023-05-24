@@ -155,14 +155,7 @@ class MyHomePage extends StatelessWidget {
           return true;
         },
         child: Scaffold(
-          appBar: CustomAppBar(
-            moveToModifyProfile: () {
-              viewModel.goModifyProfilePage();
-            },
-            moveToYeobot: () {
-              viewModel.goYeobotPage();
-            }
-          ),
+          appBar: const CustomAppBar(),
           body: PageView(
             controller: viewModel.pageController,
             physics: const NeverScrollableScrollPhysics(),

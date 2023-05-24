@@ -30,18 +30,7 @@ class RecordView extends StatelessWidget {
                     return true;
                   },
                   child: Scaffold(
-                    appBar: CustomAppBar(
-                      moveToModifyProfile: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        appViewModel.goModifyProfilePage();
-                      },
-                      moveToYeobot: () {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        appViewModel.goYeobotPage();
-                      },
-                    ),
+                    appBar: const CustomAppBar(),
                     body: Stack(
                       children: [
                         Column(
