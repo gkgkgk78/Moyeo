@@ -1,5 +1,6 @@
-package com.example.notification.service;
+package com.example.notification.errorHandle;
 
+import com.example.notification.errorHandle.CustomException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;

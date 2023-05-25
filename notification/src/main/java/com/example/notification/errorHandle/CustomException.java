@@ -1,4 +1,4 @@
-package com.example.notification.service;
+package com.example.notification.errorHandle;
 
 import lombok.Getter;
 

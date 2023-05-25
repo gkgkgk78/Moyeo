@@ -1,6 +1,7 @@
 package com.example.notification.service;
 
 
+import com.example.notification.errorHandle.RestTemplateResponseErrorHandler;
 import com.example.sender.DTO.BatchMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
