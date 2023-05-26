@@ -13,12 +13,12 @@ if (flutterRoot == null) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '3'
+    flutterVersionCode = '4'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.2'
+    flutterVersionName = '1.0.3'
 }
 
 apply plugin: 'com.android.application'
@@ -62,8 +62,8 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
         compileSdkVersion 33
-        versionCode 3
-        versionName "3"
+        versionCode 4
+        versionName "4"
         multiDexEnabled true
         manifestPlaceholders += [KakaoNativeAppKey: KakaoNativeAppKey]
     }
