@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build Gradle Project') {
+            steps {
+                sh '''
+
+                    cd batch;
+                    chmod +x gradlew;
+                    ./gradlew clean build;
+                    '''
+            }
+        }
+        stage('Jenkins To EC2 delivery *.jar file') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'Modoo', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: '''
+                                    docker stop moyeo-batch-server || true;
+                                    docker rm moyeo-batch-server
+                                    docker rmi lnacles/moyeo-batch-server || true;
+                                    cd batch
+                                    docker build -t lnacles/moyeo-batch-spring .;
+                                    docker push lnacles/moyeo-batch-spring
+                                    docker pull lnacles/moyeo-batch-spring
+                                    docker run --network host -p 2000:2000 --name moyeo-batch-server -itd lnacles/moyeo-batch-spring;
+                                    docker image prune -f
+                                    
+                                    
+                                    ''', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '/batch', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: 'batch/build/libs', 
+                                    sourceFiles: 'batch/build/libs/batch-0.0.1-SNAPSHOT.jar'
+                                )
+                            ], 
+                            usePromotionTimestamp: false, 
+                            useWorkspaceInPromotion: false, 
+                            verbose: false
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}

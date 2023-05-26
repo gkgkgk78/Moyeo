@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build Gradle Project') {
+            steps {
+                sh '''
+
+                    cd sender;
+                    chmod +x gradlew;
+                    ./gradlew clean build;
+                    '''
+            }
+        }
+        stage('Jenkins To EC2 delivery *.jar file') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'Modoo', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: '''
+                                    docker stop moyeo-sender-server || true;
+                                    docker rm moyeo-sender-server
+                                    docker rmi lnacles/moyeo-sender-spring || true;
+                                    cd sender
+                                    docker build -t lnacles/moyeo-sender-spring .;
+                                    docker push lnacles/moyeo-sender-spring
+                                    docker pull lnacles/moyeo-sender-spring
+                                    docker run --network host -p 8085:8085 --name moyeo-sender-server -itd lnacles/moyeo-sender-spring;
+                                    docker image prune -f
+                                    
+                                    
+                                    ''', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '/sender', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: 'sender/build/libs', 
+                                    sourceFiles: 'sender/build/libs/sender-0.0.1-SNAPSHOT.jar'
+                                )
+                            ], 
+                            usePromotionTimestamp: false, 
+                            useWorkspaceInPromotion: false, 
+                            verbose: false
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Jenkins To EC2 delivery *.jar file') {
+            steps {
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'Modoo', 
+                            transfers: [
+                                sshTransfer(
+                                    cleanRemote: false, 
+                                    excludes: '', 
+                                    execCommand: '''
+                                    docker stop autoGPT-server || true;
+                                    docker rm autoGPT-server
+                                    docker rmi lnacles/moyeo-autogpt-flask || true;
+
+                                    docker build -t lnacles/moyeo-autogpt-flask .;
+                                    docker push lnacles/moyeo-autogpt-flask
+                                    docker pull lnacles/moyeo-autogpt-flask
+                                    docker run --network host -p 4000:4000 --name autoGPT-server -itd lnacles/moyeo-autogpt-flask;
+                                    docker image prune -f
+                                    ''', 
+                                    execTimeout: 120000, 
+                                    flatten: false, 
+                                    makeEmptyDirs: false, 
+                                    noDefaultExcludes: false, 
+                                    patternSeparator: '[, ]+', 
+                                    remoteDirectory: '/Auto-GPT/', 
+                                    remoteDirectorySDF: false, 
+                                    removePrefix: 'Auto-GPT/', 
+                                    sourceFiles: 'Auto-GPT2/'
+                                )
+                            ], 
+                            usePromotionTimestamp: false, 
+                            useWorkspaceInPromotion: false, 
+                            verbose: false
+                        )
+                    ]
+                )
+            }
+        }
+    }
+}
