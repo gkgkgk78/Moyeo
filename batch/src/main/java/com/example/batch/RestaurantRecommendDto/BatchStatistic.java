@@ -33,4 +33,13 @@ public class BatchStatistic {
         this.address3 = address3;
         this.address4 = address4;
     }
+    public BatchStatistic ConvertToBatchStatistic(PushTable pushTable){
+        return BatchStatistic.builder().
+                deviceToken(pushTable.getDeviceToken()).
+                address1(pushTable.getAddress1()).
+                address2(pushTable.getAddress2()).
+                address3(pushTable.getAddress3()).
+                address4(pushTable.getAddress4()).
+                build();
+    }
 }

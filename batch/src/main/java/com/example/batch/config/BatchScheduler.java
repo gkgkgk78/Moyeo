@@ -18,25 +18,23 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+/* 컨트롤러에서 스케줄링 설정 하는 클래스 */
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchService batchService;
     /* 매일 오전 11시, 오후 5시에 스케줄링*/
     @Scheduled(cron = "0 0 11,17 * * *",zone = "Asia/Seoul")
     public void runJobAtEleven() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
-        long nano = System.currentTimeMillis();
-        Date now = new Date(System.currentTimeMillis());
         log.info("Schedule start");
-        long beforeTime = System.currentTimeMillis();
+        /* Job을 실행 시키기 위해 Joblauncher에 jobparameters가 제공되어야 함
+        * Jobparameter는 똑같은 값이 들어가면 안된다.
+        * 그래서 randeomUUID 값을 파라메터로 전달*/
         JobParameters params = new JobParametersBuilder()
                 .addString("start", UUID.randomUUID()+"")
                 .addString("end", UUID.randomUUID()+"")
                 .toJobParameters();
         jobLauncher.run(batchService.job(),
                 params);
-        long afterTime = System.currentTimeMillis();
-        long DiffTime = (afterTime - beforeTime)/1000;
-        log.info("10개 배치로 추천 요청했을 때 평균 시간 :{}",DiffTime/10);
     }
 
 }

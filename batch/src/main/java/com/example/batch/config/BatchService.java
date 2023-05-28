@@ -35,10 +35,12 @@ import java.util.Map;
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
+/* Joblauncher가 실행 되었을 job을 관리하는 클래스 */
 public class BatchService {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
+    private final BatchStatistic batchStatistic;
     private String JOB_NAME = "restaurantRecommendJob";
     private String STEP_NAME = "restaurantRecommendStep";
     private String CHUNK_NAME = "restaurantRecommendChunk";
@@ -94,14 +96,8 @@ public class BatchService {
                         "address4", item.getAddress4());
                 HttpEntity<String> notificationEntity = new HttpEntity<String>(mapper.writeValueAsString(map),headers);
                 ResponseEntity<String> res = restTemplate.exchange(sender,HttpMethod.POST,notificationEntity, String.class);
-
-            return BatchStatistic.builder()
-                    .deviceToken(item.getDeviceToken())
-                    .address1(item.getAddress1())
-                    .address2(item.getAddress2())
-                    .address3(item.getAddress3())
-                    .address4(item.getAddress4())
-                    .build();
+                
+            return batchStatistic.ConvertToBatchStatistic(item);
             }catch (RestClientException e){
                 log.info("Skip-AutoGpt500");
                 throw new SkipException("Skip 합니다.") {
