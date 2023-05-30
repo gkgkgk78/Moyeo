@@ -18,7 +18,9 @@ import java.util.UUID;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-/* 컨트롤러에서 스케줄링 설정 하는 클래스 */
+/* 컨트롤러에서 스케줄링 설정 하는 클래스
+*  블로그 참조 : https://devlog-jul95.tistory.com/9
+*  */
 public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final BatchService batchService;

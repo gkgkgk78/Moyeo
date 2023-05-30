@@ -35,7 +35,12 @@ import java.util.Map;
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
-/* Joblauncher가 실행 되었을 job을 관리하는 클래스 */
+/* Joblauncher가 실행 되었을 job을 관리하는 클래스
+* RPW
+* Reader(PushTable을 조회)
+* Processor(notification 서버로 넘긴다. 푸시알림이 동작)
+* Writer(BatchStatistic[통계에 활용되는 테이블]에 쓰여짐 )
+* */
 public class BatchService {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
