@@ -113,7 +113,7 @@
 - CLOVA SPEECH
 - RABBIT MQ
 - ASYNC
-- 서버분리(MSA)
+- 서버분리
 - Spring Batch
 - OK HTTP, REST TEMPLATE
 - Swagger
